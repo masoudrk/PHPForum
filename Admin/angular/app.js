@@ -16,10 +16,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             .state("dashboard", {
                 url: "/dashboard",
                 templateUrl: "partials/Admin/Dashboard/Dashboard.html",
-                controller: 'AdminCtrl',
+                controller: 'DashboardCtrl',
                 resolve: {
                     deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Admin/AdminCtrl.js']);
+                        return $ocLazyLoad.load(['partials/Admin/Dashboard/DashboardCtrl.js']);
+                    }]
+                }
+            }).state("profile", {
+                url: "/profile",
+                templateUrl: "partials/Admin/Profile/Profile.html",
+                controller: 'ProfileCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Admin/Profile/ProfileCtrl.js']);
                     }]
                 }
             });
@@ -31,6 +40,13 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         });
     }
 ]);
+
+var fixFooter = function(){
+  var o = $.AdminLTE.options.controlSidebarOptions;
+  var sidebar = $(o.selector);
+  $.AdminLTE.controlSidebar._fixForContent(sidebar);
+}
+
 /*
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
@@ -269,6 +285,12 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 */
 app.run(function ($rootScope, $templateCache, $state, $location) {
 
+    $rootScope.$on("$stateChangeSuccess", function() {
+    });
+
+    $rootScope.$on("$stateChangeStart", function (event, next, current) {
+	});
+        
 });
 
 app.filter('jalaliDate', function () {

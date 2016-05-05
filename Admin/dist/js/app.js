@@ -520,7 +520,8 @@ function _init() {
       });
     },
     _fixForContent: function (sidebar) {
-      $(".content-wrapper, .right-side").css('min-height', sidebar.height());
+	var height = sidebar.height();
+      $(".content-wrapper, .right-side").css('min-height', height);
     }
   };
 
