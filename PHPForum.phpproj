@@ -161,7 +161,9 @@
     <Folder Include="js\editor\ckeditor\skins\flat\images\hidpi\" />
     <Folder Include="js\lazyLoad\" />
     <Folder Include="js\lazyLoad\modules\" />
+    <Folder Include="js\material\" />
     <Folder Include="partials\" />
+    <Folder Include="partials\Admin\Dashboard\" />
     <Folder Include="partials\User\" />
     <Folder Include="partials\Forum\" />
     <Folder Include="partials\Admin\" />
@@ -217,6 +219,8 @@
     <Content Include="js\ADM-dateTimePicker.min.js" />
     <Content Include="js\angular-animate.js" />
     <Content Include="js\angular-animate.min.js" />
+    <Content Include="js\angular-aria.js" />
+    <Content Include="js\angular-aria.min.js" />
     <Content Include="js\angular-clipboard.js" />
     <Content Include="js\angular-confirm.js" />
     <Content Include="js\angular-confirm.min.js" />
@@ -228,6 +232,10 @@
     <Content Include="js\angular-imagefit.js" />
     <Content Include="js\angular-masonry-directive.js" />
     <Content Include="js\angular-masonry.js" />
+    <Content Include="js\angular-message-format.js" />
+    <Content Include="js\angular-message-format.min.js" />
+    <Content Include="js\angular-messages.js" />
+    <Content Include="js\angular-messages.min.js" />
     <Content Include="js\angular-nestable.js" />
     <Content Include="js\angular-recaptcha.js" />
     <Content Include="js\angular-recaptcha.min.js" />
@@ -592,6 +600,8 @@
     <Content Include="js\lazyLoad\ocLazyLoad.require.min.js" />
     <Content Include="js\loading-bar.js" />
     <Content Include="js\masonry.js" />
+    <Content Include="js\material\angular-material.js" />
+    <Content Include="js\material\angular-material.min.js" />
     <Content Include="js\menubar.js" />
     <Content Include="js\moment-jalaali.js" />
     <Content Include="js\moment.js" />
@@ -620,5 +630,11 @@
     <Content Include="js\ui-navbar.js" />
     <Content Include="js\ui-navbar.min.js" />
     <Content Include="js\unslider.js" />
+    <Content Include="partials\Admin\AdminCtrl.js" />
+    <Content Include="partials\Admin\AdminRoot.html" />
+    <Content Include="partials\Admin\Dashboard\Dashboard.html" />
+    <Content Include="partials\Admin\Sidebar.html" />
+    <Content Include="partials\Home\DefaultCtrl.js" />
+    <Content Include="partials\Home\HomeRoot.html" />
   </ItemGroup>
 </Project>

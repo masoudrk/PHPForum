@@ -1,4 +1,4 @@
-﻿var app = angular.module('myApp', ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title']);
+﻿var app = angular.module('myApp', ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
 //, 'angular-imagefit'
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'tooltipsConfProvider', 'ADMdtpProvider', 'vcRecaptchaServiceProvider',
@@ -35,7 +35,6 @@ app.config([
                         '$ocLazyLoad', function ($ocLazyLoad) {
                             return $ocLazyLoad.load([
                                 'partials/Home/DefaultCtrl.js',
-                                    'partials/Home/Main/MainService.js'
                             ]);
                         }
                     ],
@@ -55,8 +54,7 @@ app.config([
                     deps: [
                         '$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load([
-                            'partials/Home/Main/MainCtrl.js',
-                            'app/directives/Post/post.js'
+                            'partials/Home/Main/MainCtrl.js'
                         ]);
                 }
                     ]
@@ -134,106 +132,7 @@ app.config([
                     ]
                 }
             })
-            // Home english states
-            .state("homeEN", {
-                url: "/en/",
-                templateUrl: "partials/HomeEN/HomeRootEN.html",
-                controller: 'DefaultCtrlEN',
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                                'partials/HomeEN/DefaultCtrl.js', 'app/directives/MenuEN/menu.js'
-                            ]);
-                }
-                    ],
-                    $title: function () { return 'getSiteNameEN'; },
-                    $isAsyncTitle: function () { return true; }
-                }
-            })
-            .state("homeEN.home", {
-                url: "home",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/HomeEN/Main/Main.html",
-                        controller: 'MainCtrlEN'
-                    }
-                },
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            'partials/HomeEN/Main/MainCtrl.js',
-                            'app/directives/Post/post.js'
-                        ]);
-                }
-                    ]
-                }
-            })
-            .state("homeEN.about", {
-                url: "about",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/HomeEN/About/About.html",
-                        controller: 'AboutCtrl'
-                    }
-                },
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                                'partials/HomeEN/About/AboutCtrl.js'
-                            ]);
-                }
-                    ]
-                }
-            })
-            .state("homeEN.contact_us", {
-                url: "contact_us",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/HomeEN/ContactUs/ContactUsEn.html",
-                        controller: 'ContactUsCtrlEn'
-                    }
-                },
-                resolve: {
-                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            'partials/HomeEN/ContactUs/ContactUsCtrlEn.js']);
-                    }]
-                }
-            })
-            .state("homeEN.post", {
-                url: "post/:id",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/HomeEN/Post/Post.html",
-                        controller: 'PostCtrl'
-                    }
-                },
-                resolve: {
-                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/HomeEN/Post/PostCtrl.js']);
-                    }]
-                }
-            })
-            .state("homeEN.cat", {
-                url: "cat/:id",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/HomeEN/Category/Category.html",
-                        controller: 'CategoryCtrl'
-                    }
-                },
-                resolve: {
-                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            'partials/HomeEN/Category/CategoryCtrl.js',
-                            'partials/HomeEN/Category/CategoryService.js',
-                            'app/directives/Post/post.js']);
-                    }]
-                }
-            })
+            
             // User persian states
             .state("user_root", {
                 url: "/user",
@@ -280,6 +179,7 @@ app.config([
                     }]
                 }
             })
+
             // Admin states
             .state("admin_root", {
                 url: "/admin",
@@ -295,7 +195,7 @@ app.config([
                 url: "/dashboard",
                 views: {
                     "viewContent": {
-                        templateUrl: "partials/Admin/AdminDashboard.html",
+                        templateUrl: "partials/Admin/Dashboard/Dashboard.html",
                         controller: 'AdminCtrl'
                     },
                     "viewSidebar": {
@@ -577,7 +477,8 @@ app.config([
 
         $urlRouterProvider.otherwise(function ($injector, $location) {
             var $state = $injector.get('$state');
-            $state.go('home.home');
+            //$state.go('home.home');
+            $state.go('admin_root.dashboard');
         });
     }
 ]);
@@ -618,11 +519,6 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             toaster.pop(status, "", msg, delay, 'trustedHtml');
         }
 
-        obj.popEN = function (status, msg, delay) {
-            if (!delay)
-                delay = 7000;
-            toaster.pop(status, "", msg, delay, 'trustedHtml');
-        } 
         obj.popError = function (msg, delay) {
             if (!delay)
                 delay = 7000;
@@ -649,6 +545,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 return err;
             });
         };
+
         obj.getExternal = function (q) {
             obj.setBusy(true);
             return $http.get(q).then(function (results) {
@@ -682,17 +579,6 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         obj.disableLoading = function () {
             $rootScope.spinner.active = false;
         }
-
-        obj.put = function (q, object) {
-            return $http.put(serviceBase + q, object).then(function (results) {
-                return results.data;
-            });
-        };
-        obj.delete = function (q) {
-            return $http.delete(serviceBase + q).then(function (results) {
-                return results.data;
-            });
-        };
 
         obj.authUser = function (user) {
             $rootScope.authenticated = true;
@@ -744,19 +630,6 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 controller: 'authCtrl',
                 size: 'md'
             });
-        }
-
-        obj.switchLanguage = function (lang) {
-            var s = $state.current.name;
-            var nestedIndex = s.indexOf('.');
-            var nestedName = s.substr(nestedIndex);
-            var state;
-            if (lang == 'en') {
-                state = 'homeEN' + nestedName;
-            } else {
-                state = 'home' + nestedName;
-            }
-            $state.go(state, $stateParams);
         }
 
         obj.scrollTo = function (y) {
@@ -859,13 +732,13 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention) {
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
         Extention.setBusy(true);
-        $rootScope.authenticated = false;
-        $rootScope.recaptchaKey = false;
+        //$rootScope.authenticated = false;
+        //$rootScope.recaptchaKey = false;
 
-        if (typeof (next.views.viewContent) !== 'undefined') {
+        //if (typeof (next.views.viewContent) !== 'undefined') {
 
-            $templateCache.remove(next.views.viewContent.templateUrl);
-        }
+        //    $templateCache.remove(next.views.viewContent.templateUrl);
+        //}
 
         Extention.post('getSiteTitleIcon').then(function (res) {
             $rootScope.titleIcon = res.SiteTitleIcon;
@@ -874,35 +747,35 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention) {
         Extention.get('session').then(function (results) {
             
 
-            if (next.url == '/admin') {
-                $state.go("admin_root.dashboard");
-                return;
-            }
+            //if (next.url == '/admin') {
+            //    $state.go("admin_root.dashboard");
+            //    return;
+            //}
 
-            if (results && results.Status == 'success') {
-                $rootScope.authenticated = true;
-                $rootScope.user = {};
-                $rootScope.user.lastName = results.LastName;
-                $rootScope.user.firstName = results.FirstName;
+            //if (results && results.Status == 'success') {
+            //    $rootScope.authenticated = true;
+            //    $rootScope.user = {};
+            //    $rootScope.user.lastName = results.LastName;
+            //    $rootScope.user.firstName = results.FirstName;
                 
-                if (results.IsAdmin)
-                    $rootScope.isAdmin = true;
-            }
+            //    if (results.IsAdmin)
+            //        $rootScope.isAdmin = true;
+            //}
 
-            if (next.name.indexOf("en") > -1) {
-                $rootScope.lang = 'en';
-            } else {
-                $rootScope.lang = 'fa';
-            }
+            //if (next.name.indexOf("en") > -1) {
+            //    $rootScope.lang = 'en';
+            //} else {
+            //    $rootScope.lang = 'fa';
+            //}
             
-            if (next.name.indexOf("admin_root") > -1) {
-                if (results && !results.IsAdmin)
-                    $state.go("home.home");
+            //if (next.name.indexOf("admin_root") > -1) {
+            //    if (results && !results.IsAdmin)
+            //        $state.go("home.home");
 
-            }else if (next.name.indexOf("user_root") > -1) {
-                if (results && !results.UserID)
-                    $state.go("home.home");
-            }
+            //}else if (next.name.indexOf("user_root") > -1) {
+            //    if (results && !results.UserID)
+            //        $state.go("home.home");
+            //}
         });
     });
 });
@@ -913,6 +786,7 @@ app.filter('jalaliDate', function () {
         return date.fromNow() + " " + date.format(format);
     }
 });
+
 app.filter('moment', function () {
     return function (inputDate, format) {
         return moment(inputDate).format(format);
@@ -943,10 +817,10 @@ app.filter('split', function() {
     }
 });
 
-app.directive('slideable', function () {
+app.directive('slideable', function() {
     return {
         restrict: 'C',
-        compile: function (element, attr) {
+        compile: function(element, attr) {
             // wrap tag
             var contents = element.html();
             element.html('<div class="slideable_content" style="margin:0 !important; padding:0 !important" >' + contents + '</div>');
@@ -966,8 +840,9 @@ app.directive('slideable', function () {
             };
         }
     };
-})
-.directive('slideToggle', function () {
+});
+
+app.directive('slideToggle', function () {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {

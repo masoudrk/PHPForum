@@ -58,9 +58,15 @@
 <script src="js/hotkeys.min.js"></script>
 <script src="js/angular-recaptcha.js" type="text/javascript"></script>
 
+<script src="js/angular-aria.min.js"></script>
+<script src="js/angular-messages.min.js"></script>
+
+<script src="js/material/angular-material.min.js"></script>
+<script src="js/material/svg-assets-cache.js"></script>
+<link href="css/material/angular-material.min.css" rel="stylesheet">
+
 <script src="app/app.js"></script>
 <script src="js/angular-clipboard.js"></script>
-<!--<script src="app/Extention.js"></script>-->
 <script src="app/authCtrl.js"></script>
 <script src="app/directives/auto-pagination.js"></script>
 
