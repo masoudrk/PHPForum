@@ -1,8 +1,11 @@
-﻿var app = angular.module('myApp', ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
-//, 'angular-imagefit'
+﻿var app = angular.module('myApp', ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'pageslide-directive']);
+
+
 app.config([
-    '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'tooltipsConfProvider', 'ADMdtpProvider', 'vcRecaptchaServiceProvider',
-    function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfProvider, ADMdtp, vcRecaptchaServiceProvider) {
+    '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'tooltipsConfProvider', 'ADMdtpProvider', 'vcRecaptchaServiceProvider', 
+function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfProvider, ADMdtp, vcRecaptchaServiceProvider) {
+        // Add nested user links to the "foo" menu.
+        
 
         vcRecaptchaServiceProvider.setSiteKey('6LdFLB4TAAAAAH1sOhBD0ew9SQEgq6XCDytD0Slv');
 
@@ -720,6 +723,14 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
 app.run(function ($rootScope, $templateCache, $state, $location, Extention) {
 
+    document.addEventListener("keyup", function (e) {
+        if (e.keyCode === 27)
+            $rootScope.$broadcast("escapePressed", e.target);
+    });
+
+    document.addEventListener("click", function (e) {
+        $rootScope.$broadcast("documentClicked", e.target);
+    });
     //$templateCache.removeAll();
 
     $rootScope.spinner = { active: false };

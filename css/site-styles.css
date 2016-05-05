@@ -1,0 +1,57 @@
+﻿
+@font-face {
+  font-family: 'Yekan';
+  src: url('../fonts/BYekan.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/BYekan.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/BYekan.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../fonts/BYekan.ttf')  format('truetype') /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Vazir';
+  src: url('../fonts/Vazir.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/Vazir.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/Vazir.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../fonts/Vazir.ttf')  format('truetype') /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Segoe';
+  src: url('../fonts/Segoe-UI.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../fonts/Segoe-UI.ttf')  format('truetype') /* Safari, Android, iOS */
+}
+
+.vazir-font {
+    font-family: 'Vazir', Tahoma;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+.english-font {
+    font-family: 'Segoe', Tahoma;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.persian-rtl {
+    direction: rtl; 
+}
+.english-ltr {
+    direction: ltr; 
+}
+
+.english-text {
+    direction: ltr; 
+    font-family: 'Segoe', Tahoma;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.link {
+	cursor: pointer;
+}

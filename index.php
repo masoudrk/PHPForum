@@ -19,6 +19,9 @@
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/toaster.css" rel="stylesheet">
     <link href="css/angular-tooltips.css" rel="stylesheet" type="text/css" />
+    
+    <link href="css/site-styles.css" rel="stylesheet" />
+
 
     <title ng-bind="($title || 'Loading ...')">Loading ...</title>
     <link rel="icon" href="{{titleIcon}}">
@@ -28,8 +31,7 @@
     <treasure-overlay-spinner active='spinner.active' >
     </treasure-overlay-spinner>
 
-    <div ui-view></div>
-
+    <div ui-view  id="main_content_wrap" class="outer" ></div>
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 </body>
 <script src="js/angular.js"></script>
@@ -64,6 +66,13 @@
 <script src="js/material/angular-material.min.js"></script>
 <script src="js/material/svg-assets-cache.js"></script>
 <link href="css/material/angular-material.min.css" rel="stylesheet">
+<!--
+<link rel="stylesheet" href="css/eeh-navigation.css"/>
+<script src="js/eeh-nav/eeh-navigation.js"></script>
+<script src="js/eeh-nav/eeh-navigation.tpl.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.10.0/angular-translate.min.js"></script>-->
+
+    <script src="js/angular-pageslide-directive.js"></script>
 
 <script src="app/app.js"></script>
 <script src="js/angular-clipboard.js"></script>

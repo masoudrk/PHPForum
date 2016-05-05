@@ -1,0 +1,84 @@
+
+@media (max-width: 767px) {
+  .sidebar-open .content-wrapper,
+  .sidebar-open .right-side,
+  .sidebar-open .main-footer {
+    -webkit-transform: translate(-230px, 0);
+    -ms-transform: translate(-230px, 0);
+    -o-transform: translate(-230px, 0);
+    transform: translate(-230px, 0);
+  }
+}
+
+/* fix for sliding sidebar */
+.sidebar a {
+	direction : rtl;
+	text-align: right;
+}
+
+.sidebar-menu > li > a {
+  padding: 12px 15px 12px 5px;
+  cursor : pointer;
+}
+
+.sidebar-menu li > a > .pull-right {
+  /left: -5px;
+  text-align: left;
+}
+
+.sidebar-menu > li.header {
+    text-align: right;
+}
+.user-panel > .info {
+	text-align:right;
+}
+.user-panel > .info > p {
+    font-weight: initial;
+}
+
+.input-group{
+	direction : rtl;
+}
+
+/* fix for message box*/
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > div > img {
+  margin: auto auto auto 10px;
+  text-align:right;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > p {
+  margin: 0 45px 0 0 ;
+  text-align:right;
+  direction : rtl;
+  white-space: normal;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > h4 {
+  margin: 0 45px 0 0 ;
+  text-align:right;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li.header,
+.navbar-nav > .messages-menu > .dropdown-menu > li.header,
+.navbar-nav > .tasks-menu > .dropdown-menu > li.header {
+  direction : rtl;
+  text-align : center;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu,
+.navbar-nav > .tasks-menu > .dropdown-menu > li .menu {
+  direction : rtl;
+  text-align:right;
+}
+
+/* fix for content header */
+.content-header > h1 {
+	text-align: right;
+}
+.content-header > .breadcrumb {
+	direction : rtl;
+	padding-top:0px;
+}
+.content-header {
+	padding-top:5px;
+}
