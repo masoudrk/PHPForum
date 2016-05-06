@@ -1,53 +1,59 @@
-﻿var app = angular.module('myApp', ['ngRoute', 'ui.router','oc.lazyLoad', 'ngAnimate']);
+﻿var app = angular.module('myApp', ['ngRoute', 'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
 
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
 function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
-        // Add nested user links to the "foo" menu.
-        
-        $ocLazyLoadProvider.config({
-            debug: false,
-            events: true
-        });
-        
-        $stateProvider
-            // Admin states
-            .state("dashboard", {
-                url: "/dashboard",
-                templateUrl: "partials/Admin/Dashboard/Dashboard.html",
-                controller: 'DashboardCtrl',
-                resolve: {
-                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Admin/Dashboard/DashboardCtrl.js']);
-                    }]
-                }
-            }).state("profile", {
-                url: "/profile",
-                templateUrl: "partials/Admin/Profile/Profile.html",
-                controller: 'ProfileCtrl',
-                resolve: {
-                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Admin/Profile/ProfileCtrl.js']);
-                    }]
-                }
-            }).state("elements", {
-                url: "/elements",
-                templateUrl: "partials/Admin/Elements/Elements.html",
-                controller: 'ElementsCtrl',
-                resolve: {
-                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Admin/Elements/ElementsCtrl.js']);
-                    }]
-                }
-            });
+    // Add nested user links to the "foo" menu.
 
-        $urlRouterProvider.otherwise(function ($injector, $location) {
-            var $state = $injector.get('$state');
-            //$state.go('home.home');
-            $state.go('dashboard');
+    $ocLazyLoadProvider.config({
+        debug: false,
+        events: true
+    });
+
+    $stateProvider
+        // Admin states
+        .state("dashboard", {
+            url: "/dashboard",
+            templateUrl: "partials/Admin/Dashboard/Dashboard.html",
+            controller: 'DashboardCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Dashboard/DashboardCtrl.js']);
+                }],
+                $title: function () {
+                    return 'داشبورد';
+                }
+            }
+        }).state("profile", {
+            url: "/profile",
+            templateUrl: "partials/Admin/Profile/Profile.html",
+            controller: 'ProfileCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Profile/ProfileCtrl.js']);
+                }]
+            }
+        }).state("elements", {
+            url: "/elements",
+            templateUrl: "partials/Admin/Elements/_Elements.html",
+            controller: 'ElementsCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Elements/_ElementsCtrl.js']);
+                }],
+                $title: function () {
+                    return 'کنترل ها';
+                }
+            }
         });
-    }
+
+    //$urlRouterProvider.otherwise(function ($injector, $location) {
+    //    var $state = $injector.get('$state');
+    //    //$state.go('home.home');
+    //    $state.go('dashboard');
+    //});
+}
 ]);
 
 var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
@@ -64,14 +70,14 @@ var traverse = function (el) {
     }
 }
 
-var fixFooter = function(){
-  var o = $.AdminLTE.options.controlSidebarOptions;
-  var sidebar = $(o.selector);
-  $.AdminLTE.controlSidebar._fixForContent(sidebar);
-  traverse(document.body);
+var fixFooter = function () {
+    var o = $.AdminLTE.options.controlSidebarOptions;
+    var sidebar = $(o.selector);
+    $.AdminLTE.controlSidebar._fixForContent(sidebar);
+    traverse(document.body);
 }
 
-/*
+
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
@@ -306,15 +312,15 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         return obj;
     }]);
-*/
+
 app.run(function ($rootScope, $templateCache, $state, $location) {
 
-    $rootScope.$on("$stateChangeSuccess", function() {
+    $rootScope.$on("$stateChangeSuccess", function () {
     });
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
-	});
-        
+    });
+
 });
 
 app.filter('jalaliDate', function () {
@@ -332,20 +338,20 @@ app.filter('moment', function () {
 
 app.filter('subString', function () {
     return function (text, length) {
-        if (text&&text.length > length) {
+        if (text && text.length > length) {
             return text.substr(0, length) + "...";
         }
         return text;
     }
 });
 
-app.filter('split', function() {
+app.filter('split', function () {
     return function (input, splitChar, feildName) {
         if (!input)
             return "";
         var str = "";
         for (var i = 0; i < input.length; i++) {
-            if (i === input.length-1)
+            if (i === input.length - 1)
                 str += (input[i][feildName]);
             else
                 str += (input[i][feildName] + splitChar);
@@ -354,10 +360,10 @@ app.filter('split', function() {
     }
 });
 
-app.directive('slideable', function() {
+app.directive('slideable', function () {
     return {
         restrict: 'C',
-        compile: function(element, attr) {
+        compile: function (element, attr) {
             // wrap tag
             var contents = element.html();
             element.html('<div class="slideable_content" style="margin:0 !important; padding:0 !important" >' + contents + '</div>');
@@ -402,14 +408,14 @@ app.directive('slideToggle', function () {
 });
 
 app.directive('compile', [
-    '$compile', function($compile) {
-        return function(scope, element, attrs) {
+    '$compile', function ($compile) {
+        return function (scope, element, attrs) {
             scope.$watch(
-                function(scope) {
+                function (scope) {
                     // watch the 'compile' expression for changes
                     return scope.$eval(attrs.compile);
                 },
-                function(value) {
+                function (value) {
                     // when the 'compile' expression changes
                     // assign it into the current DOM
                     element.html(value);

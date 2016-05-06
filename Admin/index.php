@@ -68,7 +68,7 @@
                       <li><!-- start message -->
                         <a href="#">
                           <div class="pull-right">
-                            <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                            <img src="dist/img/masoud.jpg" class="img-circle" alt="User Image">
                           </div>
                           <h4 class="vazir-font">
                             تیم پشتیبانی
@@ -244,13 +244,13 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a  class="dropdown-toggle link" data-toggle="dropdown">
-                  <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                  <img src="dist/img/user8-128x128.jpg" class="user-image" alt="User Image">
                   <span class="hidden-xs">مسعود رضاخانلو</span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    <img src="dist/img/masoud.jpg" class="img-circle" alt="User Image">
                     <p>
                       مسعود رضاخانلو - ادمین سایت
                       <small class="vazir-font">عضویت در سال 1392</small>
@@ -631,6 +631,8 @@
 	<script src="../js/angular-animate.min.js" ></script>
 	<script src="../js/angular-ui-router.js"></script>
 	
+    <script src="../js/toaster.min.js"></script>
+    <script src="../js/ui-bootstrap-tpls-1.2.5.min.js"></script>
 	<script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript" ></script>
 	
     <script src="angular/app.js"></script>

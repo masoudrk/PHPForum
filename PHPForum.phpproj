@@ -435,7 +435,6 @@
     <Content Include="Admin\pages\UI\timeline.html" />
     <Content Include="Admin\pages\widgets.html" />
     <Content Include="Admin\partials\Admin\AdminCtrl.js" />
-    <Content Include="Admin\partials\Admin\AdminRoot.html" />
     <Content Include="Admin\partials\Admin\Dashboard\Dashboard.html" />
     <Content Include="Admin\partials\Admin\Dashboard\DashboardCtrl.js" />
     <Content Include="Admin\partials\Admin\Elements\Timeline.html" />
@@ -444,11 +443,10 @@
     <Content Include="Admin\partials\Admin\Elements\GeneralUI.html" />
     <Content Include="Admin\partials\Admin\Elements\Widgets.html" />
     <Content Include="Admin\partials\Admin\Elements\Tables.html" />
-    <Content Include="Admin\partials\Admin\Elements\Elements.html" />
-    <Content Include="Admin\partials\Admin\Elements\ElementsCtrl.js" />
+    <Content Include="Admin\partials\Admin\Elements\_Elements.html" />
+    <Content Include="Admin\partials\Admin\Elements\_ElementsCtrl.js" />
     <Content Include="Admin\partials\Admin\Profile\Profile.html" />
     <Content Include="Admin\partials\Admin\Profile\ProfileCtrl.js" />
-    <Content Include="Admin\partials\Admin\Sidebar.html" />
     <Content Include="Admin\plugins\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="Admin\plugins\bootstrap-slider\slider.css" />
     <Content Include="Admin\plugins\bootstrap-wysihtml5\bootstrap3-wysihtml5.all.js" />
