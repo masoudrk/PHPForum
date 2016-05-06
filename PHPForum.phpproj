@@ -438,7 +438,10 @@
     <Content Include="Admin\partials\Admin\AdminRoot.html" />
     <Content Include="Admin\partials\Admin\Dashboard\Dashboard.html" />
     <Content Include="Admin\partials\Admin\Dashboard\DashboardCtrl.js" />
+    <Content Include="Admin\partials\Admin\Elements\Timeline.html" />
     <Content Include="Admin\partials\Admin\Elements\Forms.html" />
+    <Content Include="Admin\partials\Admin\Elements\Buttons.html" />
+    <Content Include="Admin\partials\Admin\Elements\GeneralUI.html" />
     <Content Include="Admin\partials\Admin\Elements\Widgets.html" />
     <Content Include="Admin\partials\Admin\Elements\Tables.html" />
     <Content Include="Admin\partials\Admin\Elements\Elements.html" />
