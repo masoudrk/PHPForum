@@ -31,6 +31,15 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                         return $ocLazyLoad.load(['partials/Admin/Profile/ProfileCtrl.js']);
                     }]
                 }
+            }).state("elements", {
+                url: "/elements",
+                templateUrl: "partials/Admin/Elements/Elements.html",
+                controller: 'ElementsCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Admin/Elements/ElementsCtrl.js']);
+                    }]
+                }
             });
 
         $urlRouterProvider.otherwise(function ($injector, $location) {
@@ -41,10 +50,25 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     }
 ]);
 
+var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
+var traverse = function (el) {
+    if (el.nodeType == 3) {
+        var list = el.data.match(/[0-9]/g);
+        if (list != null && list.length != 0) {
+            for (var i = 0; i < list.length; i++)
+                el.data = el.data.replace(list[i], persian[list[i]]);
+        }
+    }
+    for (var i = 0; i < el.childNodes.length; i++) {
+        traverse(el.childNodes[i]);
+    }
+}
+
 var fixFooter = function(){
   var o = $.AdminLTE.options.controlSidebarOptions;
   var sidebar = $(o.selector);
   $.AdminLTE.controlSidebar._fixForContent(sidebar);
+  traverse(document.body);
 }
 
 /*

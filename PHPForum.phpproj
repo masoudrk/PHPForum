@@ -78,6 +78,8 @@
     <Folder Include="Admin\partials\" />
     <Folder Include="Admin\partials\Admin\" />
     <Folder Include="Admin\partials\Admin\Dashboard\" />
+    <Folder Include="Admin\partials\Admin\Elements\" />
+    <Folder Include="Admin\partials\Admin\Profile\" />
     <Folder Include="Admin\plugins\" />
     <Folder Include="Admin\plugins\bootstrap-slider\" />
     <Folder Include="Admin\plugins\bootstrap-wysihtml5\" />
@@ -336,6 +338,8 @@
     <Content Include="Admin\bootstrap\js\bootstrap.js" />
     <Content Include="Admin\bootstrap\js\bootstrap.min.js" />
     <Content Include="Admin\bootstrap\js\npm.js" />
+    <Content Include="Admin\dist\css\AdminLTE-rtl-fix.css" />
+    <Content Include="Admin\dist\css\AdminLTE-rtl.css" />
     <Content Include="Admin\dist\css\AdminLTE.css" />
     <Content Include="Admin\dist\css\AdminLTE.min.css" />
     <Content Include="Admin\dist\css\skins\skin-black-light.css" />
@@ -433,6 +437,14 @@
     <Content Include="Admin\partials\Admin\AdminCtrl.js" />
     <Content Include="Admin\partials\Admin\AdminRoot.html" />
     <Content Include="Admin\partials\Admin\Dashboard\Dashboard.html" />
+    <Content Include="Admin\partials\Admin\Dashboard\DashboardCtrl.js" />
+    <Content Include="Admin\partials\Admin\Elements\Forms.html" />
+    <Content Include="Admin\partials\Admin\Elements\Widgets.html" />
+    <Content Include="Admin\partials\Admin\Elements\Tables.html" />
+    <Content Include="Admin\partials\Admin\Elements\Elements.html" />
+    <Content Include="Admin\partials\Admin\Elements\ElementsCtrl.js" />
+    <Content Include="Admin\partials\Admin\Profile\Profile.html" />
+    <Content Include="Admin\partials\Admin\Profile\ProfileCtrl.js" />
     <Content Include="Admin\partials\Admin\Sidebar.html" />
     <Content Include="Admin\plugins\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="Admin\plugins\bootstrap-slider\slider.css" />

@@ -1,4 +1,10 @@
-
+h5 ,h4 ,h3 ,h2 ,h1 {
+    font-family: 'Vazir', Tahoma;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
 @media (max-width: 767px) {
   .sidebar-open .content-wrapper,
   .sidebar-open .right-side,
@@ -11,7 +17,7 @@
 }
 
 /* fix for sliding sidebar */
-.sidebar a {
+.sidebar a { 
 	direction : rtl;
 	text-align: right;
 }
@@ -38,6 +44,19 @@
 
 .input-group{
 	direction : rtl;
+}
+
+.input-group-ltr{
+	direction : ltr;
+}
+.checkbox label, .radio label {
+    padding-left: 0;
+    padding-right: 20px;
+	direction : rtl;
+}
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
+    
+    margin-right: -20px;
 }
 
 /* fix for message box*/
@@ -77,8 +96,72 @@
 }
 .content-header > .breadcrumb {
 	direction : rtl;
-	padding-top:0px;
+	padding-top:3px;
 }
 .content-header {
 	padding-top:5px;
+	padding-bottom:5px;
+}
+
+
+.info-box-text {
+    direction: rtl;
+    text-align: right;
+}
+
+.info-box-number {
+    /direction: rtl;
+    /text-align: right;
+    /padding-top: 5px;
+}
+
+/* fix controls */
+.table{
+    direction: rtl;
+}
+
+.table > tbody > tr > th {
+    text-align: right;
+}
+
+.box-header {
+    /direction: rtl;
+    text-align: right;
+}
+
+.progress-description {
+    direction: rtl;
+    text-align: right;
+}
+
+.small-box > .inner {
+    direction: rtl;
+    text-align: right;
+}
+
+.nav-stacked {
+    text-align: right;
+}
+
+.direct-chat-text {
+    margin: 5px 50px 0 0;
+    text-align: right;
+    direction: rtl;
+}
+
+.widget-user .widget-user-username {
+    text-align: right;
+    direction: rtl;
+}
+
+.box-comments .username {
+    text-align: right;
+    direction: rtl;
+}
+
+.attachment-block .attachment-heading {
+    text-align: right;
+}
+.attachment-block .attachment-text {
+    text-align: right;
 }

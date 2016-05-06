@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Language" content="fa" />
+	
     <title>داشبورد</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -54,7 +56,7 @@
               </li>
               <!-- Messages: style can be found in dropdown.less-->
               <li class="dropdown messages-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a class="dropdown-toggle link" data-toggle="dropdown">
                   <i class="fa fa-envelope-o"></i>
                   <span class="label label-success">4</span>
                 </a>
@@ -130,7 +132,7 @@
               </li>
               <!-- Notifications: style can be found in dropdown.less -->
               <li class="dropdown notifications-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a class="dropdown-toggle link" data-toggle="dropdown">
                   <i class="fa fa-bell-o"></i>
                   <span class="label label-warning">10</span>
                 </a>
@@ -171,7 +173,7 @@
               </li>
               <!-- Tasks: style can be found in dropdown.less -->
               <li class="dropdown tasks-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a class="dropdown-toggle link" data-toggle="dropdown">
                   <i class="fa fa-flag-o"></i>
                   <span class="label label-danger">9</span>
                 </a>
@@ -241,7 +243,7 @@
               </li>
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a  class="dropdown-toggle link" data-toggle="dropdown">
                   <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                   <span class="hidden-xs">مسعود رضاخانلو</span>
                 </a>
@@ -630,15 +632,13 @@
 	<script src="../js/angular-ui-router.js"></script>
 	
 	<script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript" ></script>
-
+	
     <script src="angular/app.js"></script>
     <script src="partials/Admin/AdminCtrl.js"></script>
 		
 	<script type="text/javascript" src="../js/moment.js"></script>
 	<script type="text/javascript" src="../js/moment-jalaali.js"></script>
 
-    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
-	
     <!-- jQuery 2.1.4 -->
     <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
     <!-- jQuery UI 1.11.4 -->

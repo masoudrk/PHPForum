@@ -1,4 +1,4 @@
-/*! AdminLTE app.js
+﻿/*! AdminLTE app.js
  * ================
  * Main JS application file for AdminLTE v2. This file
  * should be included in all pages. It controls some layout
@@ -15,6 +15,11 @@
 if (typeof jQuery === "undefined") {
   throw new Error("AdminLTE requires jQuery");
 }
+
+
+$(document).ready(function () {
+    traverse(document.body);
+});
 
 /* AdminLTE
  *
@@ -42,7 +47,7 @@ $.AdminLTE.options = {
   //General animation speed for JS animated elements such as box collapse/expand and
   //sidebar treeview slide up/down. This options accepts an integer as milliseconds,
   //'fast', 'normal', or 'slow'
-  animationSpeed: 500,
+  animationSpeed: 200,
   //Sidebar push menu toggle button selector
   sidebarToggleSelector: "[data-toggle='offcanvas']",
   //Activate sidebar push menu
