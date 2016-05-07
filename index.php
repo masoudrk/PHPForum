@@ -8,6 +8,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <link href="css/select.min.css" rel="stylesheet">
+    <link href="css/full-page-styles.css" rel="stylesheet" />
     
     <link href="css/hover-min.css" rel="stylesheet">
     <link href="css/imagehover.css" rel="stylesheet">
@@ -19,9 +20,10 @@
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/toaster.css" rel="stylesheet">
     <link href="css/angular-tooltips.css" rel="stylesheet" type="text/css" />
-    
-    <link href="css/site-styles.css" rel="stylesheet" />
 
+    <link href="css/site-styles.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.9/jquery.fullPage.css" rel="stylesheet" />
+    
 
     <title ng-bind="($title || 'Loading ...')">Loading ...</title>
     <link rel="icon" href="{{titleIcon}}">
@@ -34,6 +36,12 @@
     <div ui-view  id="main_content_wrap" class="outer" ></div>
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 </body>
+
+<!-- jqurey libs -->
+<script src="js/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.9/vendors/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.9/jquery.fullPage.min.js" type="text/javascript"></script>
+
 <script src="js/angular.js"></script>
 <script src="js/angular-route.min.js"></script>
 <script src="js/angular-animate.min.js" ></script>
@@ -56,6 +64,9 @@
 <script src="js/ng-sortable.js" type="text/javascript" ></script>
 
 <script src="js/treasure-overlay-spinner.min.js" type="text/javascript"></script>
+
+<!--<script src="js/jquery.js" type="text/javascript"></script>-->
+<script src="js/angular-fullpage.js"></script>
 
 <script src="js/hotkeys.min.js"></script>
 <script src="js/angular-recaptcha.js" type="text/javascript"></script>
@@ -84,8 +95,6 @@
 <script type="text/javascript" src="js/angular-confirm.min.js"></script>
 <script type="text/javascript" src="js/ADM-dateTimePicker.min.js"></script>
 
-<!-- jqurey libs -->
-<script src="js/jquery.js" type="text/javascript"></script>
 
 <script src="js/bootstrap-toolkit.js"></script>
 </html>

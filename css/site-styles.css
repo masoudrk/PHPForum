@@ -37,7 +37,8 @@
 }
 
 .persian-rtl {
-    direction: rtl; 
+    direction: rtl;
+    white-space: normal;
 }
 .english-ltr {
     direction: ltr; 
