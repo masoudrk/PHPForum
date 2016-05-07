@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta http-equiv="Content-Language" content="fa" />
-	
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
     <title>داشبورد</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -310,16 +311,7 @@
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-            <li class="header">پنل مدیریت</li>
-            <li class="active treeview">
-              <a >
-                <i class="fa fa-dashboard"></i> <span>داشبورد</span> <i class="fa fa-angle-right pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> نسخه اول</a></li>
-                <li><a href="index2.html"><i class="fa fa-circle-o"></i> نسخه دوم</a></li>
-              </ul>
-            </li>
+
             <li class="treeview">
               <a >
                 <i class="fa fa-files-o"></i>
@@ -341,14 +333,13 @@
             <li class="treeview">
               <a>
                 <i class="fa fa-pie-chart"></i>
-                <span>نمودار</span>
+                <span>اعضا</span>
                 <i class="fa fa-angle-right pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> نمودار</a></li>
-                <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> موریس</a></li>
-                <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> فلوت</a></li>
-                <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> نمودار در خط</a></li>
+                <li><a ui-sref="all_users"><i class="fa fa-user"></i> همه اعضا</a></li>
+                <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> اعضا تایید شده</a></li>
+                <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> اعضا تایید نشده</a></li>
               </ul>
             </li>
             <li class="treeview">
@@ -439,10 +430,6 @@
               </ul>
             </li>
             <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>مستندات</span></a></li>
-            <li class="header">برچسب ها</li>
-            <li><a ><i class="fa fa-circle-o text-red"></i> <span>ضروری</span></a></li>
-            <li><a ><i class="fa fa-circle-o text-yellow"></i> <span>اخطار</span></a></li>
-            <li><a ><i class="fa fa-circle-o text-aqua"></i> <span>اطلاع رسانی</span></a></li>
           </ul>
         </section>
         <!-- /.sidebar -->
@@ -625,18 +612,11 @@
            immediately after the control sidebar -->
       <div class="control-sidebar-bg"></div>
     </div><!-- ./wrapper -->
-    <?php
-    
-            if (!isset($_SESSION)) {
-                session_start();
-            }
-            
-            $_SESSION['user'] = "hello";
-?>
+
 	<script src="../js/angular.js"></script>
-	<script src="../js/angular-route.min.js"></script>
+    <script src="../js/angular-route.min.js"></script>
+    <script src="../js/angular-cookies.min.js"></script>
 	<script src="../js/angular-animate.min.js" ></script>
-	<script src="../js/angular-cookies.min.js" ></script>
 	<script src="../js/angular-ui-router.js"></script>
 	
 	<script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript" ></script>

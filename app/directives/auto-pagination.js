@@ -1,4 +1,4 @@
-﻿angular.module('myApp').directive('autoPaging', function () {
+﻿angular.module(appName).directive('autoPaging', function () {
 
     var regex = /\{page\}/g;
 
