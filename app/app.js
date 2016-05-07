@@ -1,11 +1,16 @@
 ﻿var app = angular.module('myApp', ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'pageslide-directive']);
 
 
+function getPage(name) {
+    window.location = name;
+}
+
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'tooltipsConfProvider', 'ADMdtpProvider', 'vcRecaptchaServiceProvider', 
 function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfProvider, ADMdtp, vcRecaptchaServiceProvider) {
         // Add nested user links to the "foo" menu.
-        
+
+    getPage("Admin");
 
         vcRecaptchaServiceProvider.setSiteKey('6LdFLB4TAAAAAH1sOhBD0ew9SQEgq6XCDytD0Slv');
 
