@@ -1,0 +1,38 @@
+﻿<nav id="top-menubar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+</nav>
+
+<div style="margin-top: 0px;min-height: 500px">
+    <div class="container">
+        <div class="col-md-12 no-padding" style="margin-top: 10px">
+            <!-- Header Content-->
+            <div class="col-md-12 col-xs-12 col-sm-12 no-padding yekan-font">
+                <div ng-repeat="m in homePageData.HeaderModules">
+                    <div compile='m.HtmlContent'></div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-xs-12 col-sm-12 no-padding">
+                <div ui-view="viewContent" style="margin-right: 10px; margin-left: 10px;"></div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="col-md-3 col-xs-12 col-sm-12 no-padding" style="margin-top: -5px">
+                <div ng-repeat="m in homePageData.RightBarModules">
+                    <div compile='m.HtmlContent'></div>
+                </div>
+            </div>
+
+            <!-- Footer Content-->
+            <div class="col-md-12 col-xs-12 col-sm-12 no-padding yekan-font">
+                <div ng-repeat="m in homePageData.FooterModules">
+                    <div compile='m.HtmlContent'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="site-footer row" style="margin-left: 0; margin-right: 0;">
+        <div class="col-md-12 no-padding" compile="homePageData.Footer.HtmlContent" style="min-height: 40px"></div>
+    </div>
+</div>
