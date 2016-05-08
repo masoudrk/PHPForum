@@ -1,5 +1,5 @@
 ﻿var appName = 'forumApp';
-var serviceBase = '../api/user';
+var serviceBaseURL = '../api/user/';
 
 var app = angular.module(appName, ['ngRoute', 'ngCookies' ,'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
 
@@ -13,7 +13,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     });
 
     $stateProvider
-        // Admin states
+        .state('home', {
+            url: "/",
+            templateUrl: "partials/Forum/Forum.html",
+            controller: 'ForumCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/ForumCtrl.js']);
+                }],
+                $title: function () {
+                    return 'انجمن';
+                }
+            }
+        })
         .state("dashboard", {
             url: "/dashboard",
             templateUrl: "partials/Dashboard/Dashboard.html",
@@ -33,40 +45,20 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load(['partials/Profile/ProfileCtrl.js']);
-                }]
-            }
-        }).state("all_users", {
-            url: "/all_users",
-            templateUrl: "partials/User/AllUsers.html",
-            controller: 'AllUsersCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/User/AllUsersCtrl.js','../app/directives/auto-pagination.js']);
                 }],
                 $title: function () {
-                    return 'همه اعضا';
-                }
-            }
-        }).state("elements", {
-            url: "/elements",
-            templateUrl: "partials/Elements/_Elements.html",
-            controller: 'ElementsCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Elements/_ElementsCtrl.js']);
-                }],
-                $title: function () {
-                    return 'کنترل ها';
+                    return 'پروفایل';
                 }
             }
         });
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');
         //$state.go('home.home');
-        $state.go('dashboard');
+        $state.go('home');
     });
 }
 ]);
+
 var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
 var traverse = function (el) {
     if (el.nodeType == 3) {
@@ -89,10 +81,26 @@ var fixFooter = function () {
 }
 
 
+
+app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention) {
+
+    $rootScope.$on("$stateChangeSuccess", function () {
+    });
+
+    $rootScope.$on("$stateChangeStart", function (event, next, current) {
+
+        Extention.post('session').then(function (res) {
+            $rootScope.user = res;
+        });
+
+    });
+
+});
+
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
-        var serviceBase = serviceBase;
+        var serviceBase = serviceBaseURL;
 
         $rootScope.spinner = {};
         var obj = {};
@@ -324,16 +332,6 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         return obj;
     }]);
-
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore) {
-
-    $rootScope.$on("$stateChangeSuccess", function () {
-    });
-
-    $rootScope.$on("$stateChangeStart", function (event, next, current) {
-    });
-
-});
 
 app.filter('jalaliDate', function () {
     return function (inputDate, format) {
