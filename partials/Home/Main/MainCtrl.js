@@ -32,6 +32,7 @@
             src: 'images/1.png'
         },
         {
+            anchors:'testSlide',
             title: 'Cool',
             description: 'It just looks cool. Impress everybody with a simple and modern web design!',
             src: 'images/2.png'
