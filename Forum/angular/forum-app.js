@@ -1,86 +1,108 @@
-﻿var appName = "forumApp";
-var app = angular.module(appName, ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title']);
+﻿var appName = 'forumApp';
+var serviceBaseURL = '../api/user/';
 
-
-function getPage(name) {
-    window.location = name;
-}
+var app = angular.module(appName, ['ngRoute', 'ngCookies' ,'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
 
 app.config([
-    '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'tooltipsConfProvider', 'ADMdtpProvider', 'vcRecaptchaServiceProvider', 
-function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfProvider, ADMdtp, vcRecaptchaServiceProvider) {
-        // Add nested user links to the "foo" menu.
+    '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
+function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
+    // Add nested user links to the "foo" menu.
+    $ocLazyLoadProvider.config({
+        debug: false,
+        events: true
+    });
 
-        vcRecaptchaServiceProvider.setSiteKey('6LdFLB4TAAAAAH1sOhBD0ew9SQEgq6XCDytD0Slv');
-
-        tooltipsConfProvider.configure({
-            'smart': true,
-            'size': 'small',
-            'speed': 'fast'
-        });
-
-        ADMdtp.setOptions({
-            calType: 'jalali',
-            format: 'YYYY/MM/DD hh:mm',
-            default: 'today'
-        });
-
-        $ocLazyLoadProvider.config({
-            debug: false,
-            events: true
-        });
-        
-        $stateProvider
-            // Home persian states
-            .state("home", {
-                url: "/",
-                templateUrl: "partials/Home/HomeRoot.html",
-                controller: 'DefaultCtrl',
-                abstract: true,
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function ($ocLazyLoad) {
-                            return $ocLazyLoad.load([
-                                'partials/DefaultCtrl.js',
-                            ]);
-                        }
-                    ],
-                    $title: function () { return 'getSiteName'; },
-                    $isAsyncTitle: function () { return true; }
+    $stateProvider
+        .state('home', {
+            url: "/",
+            templateUrl: "partials/Forum/Forum.html",
+            controller: 'ForumCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/ForumCtrl.js']);
+                }],
+                $title: function () {
+                    return 'انجمن';
                 }
-            })
-            .state("home.home", {
-                url: "home",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/Main/Main.html",
-                        controller: 'MainCtrl'
-                    }
-                },
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            'partials/Main/MainCtrl.js'
-                        ]);
+            }
+        })
+        .state("dashboard", {
+            url: "/dashboard",
+            templateUrl: "partials/Dashboard/Dashboard.html",
+            controller: 'DashboardCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Dashboard/DashboardCtrl.js']);
+                }],
+                $title: function () {
+                    return 'داشبورد';
                 }
-                    ]
+            }
+        }).state("profile", {
+            url: "/profile",
+            templateUrl: "partials/Profile/Profile.html",
+            controller: 'ProfileCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Profile/ProfileCtrl.js']);
+                }],
+                $title: function () {
+                    return 'پروفایل';
                 }
-            });
-
-        $urlRouterProvider.otherwise(function ($injector, $location) {
-            var $state = $injector.get('$state');
-            //$state.go('home.home');
-            $state.go('home.home');
+            }
         });
-    }
+    $urlRouterProvider.otherwise(function ($injector, $location) {
+        var $state = $injector.get('$state');
+        //$state.go('home.home');
+        $state.go('home');
+    });
+}
 ]);
+
+var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
+var traverse = function (el) {
+    if (el.nodeType == 3) {
+        var list = el.data.match(/[0-9]/g);
+        if (list != null && list.length != 0) {
+            for (var i = 0; i < list.length; i++)
+                el.data = el.data.replace(list[i], persian[list[i]]);
+        }
+    }
+    for (var i = 0; i < el.childNodes.length; i++) {
+        traverse(el.childNodes[i]);
+    }
+}
+
+var fixFooter = function () {
+    var o = $.AdminLTE.options.controlSidebarOptions;
+    var sidebar = $(o.selector);
+    $.AdminLTE.controlSidebar._fixForContent(sidebar);
+    traverse(document.body);
+}
+
+
+
+app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention) {
+
+    $rootScope.$on("$stateChangeSuccess", function () {
+    });
+
+    $rootScope.$on("$stateChangeStart", function (event, next, current) {
+
+        Extention.post('session').then(function (res) {
+            $rootScope.user = res;
+        });
+
+    });
+
+});
 
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
-        var serviceBase = 'api/v1/';
+        var serviceBase = serviceBaseURL;
 
+        $rootScope.spinner = {};
         var obj = {};
         obj.workers = 0;
         obj.serviceBase = serviceBase;
@@ -311,76 +333,6 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         return obj;
     }]);
 
-app.run(function ($rootScope, $templateCache, $state, $location, Extention) {
-
-    document.addEventListener("keyup", function (e) {
-        if (e.keyCode === 27)
-            $rootScope.$broadcast("escapePressed", e.target);
-    });
-
-    document.addEventListener("click", function (e) {
-        $rootScope.$broadcast("documentClicked", e.target);
-    });
-    //$templateCache.removeAll();
-
-    $rootScope.spinner = { active: false };
-
-    $rootScope.$on("$stateChangeSuccess", function() {
-        Extention.setBusy(false);
-        //$templateCache.remove('partials/Home/Main/Main.html');
-       // $templateCache.remove('partials/Home/Post/Post.html');
-    });
-
-    $rootScope.$on("$stateChangeStart", function (event, next, current) {
-        Extention.setBusy(true);
-        //$rootScope.authenticated = false;
-        //$rootScope.recaptchaKey = false;
-
-        //if (typeof (next.views.viewContent) !== 'undefined') {
-
-        //    $templateCache.remove(next.views.viewContent.templateUrl);
-        //}
-
-        Extention.post('getSiteTitleIcon').then(function (res) {
-            $rootScope.titleIcon = res.SiteTitleIcon;
-        });
-
-        Extention.get('session').then(function (results) {
-            
-
-            //if (next.url == '/admin') {
-            //    $state.go("admin_root.dashboard");
-            //    return;
-            //}
-
-            //if (results && results.Status == 'success') {
-            //    $rootScope.authenticated = true;
-            //    $rootScope.user = {};
-            //    $rootScope.user.lastName = results.LastName;
-            //    $rootScope.user.firstName = results.FirstName;
-                
-            //    if (results.IsAdmin)
-            //        $rootScope.isAdmin = true;
-            //}
-
-            //if (next.name.indexOf("en") > -1) {
-            //    $rootScope.lang = 'en';
-            //} else {
-            //    $rootScope.lang = 'fa';
-            //}
-            
-            //if (next.name.indexOf("admin_root") > -1) {
-            //    if (results && !results.IsAdmin)
-            //        $state.go("home.home");
-
-            //}else if (next.name.indexOf("user_root") > -1) {
-            //    if (results && !results.UserID)
-            //        $state.go("home.home");
-            //}
-        });
-    });
-});
-
 app.filter('jalaliDate', function () {
     return function (inputDate, format) {
         var date = moment(inputDate);
@@ -396,20 +348,20 @@ app.filter('moment', function () {
 
 app.filter('subString', function () {
     return function (text, length) {
-        if (text&&text.length > length) {
+        if (text && text.length > length) {
             return text.substr(0, length) + "...";
         }
         return text;
     }
 });
 
-app.filter('split', function() {
+app.filter('split', function () {
     return function (input, splitChar, feildName) {
         if (!input)
             return "";
         var str = "";
         for (var i = 0; i < input.length; i++) {
-            if (i === input.length-1)
+            if (i === input.length - 1)
                 str += (input[i][feildName]);
             else
                 str += (input[i][feildName] + splitChar);
@@ -418,10 +370,10 @@ app.filter('split', function() {
     }
 });
 
-app.directive('slideable', function() {
+app.directive('slideable', function () {
     return {
         restrict: 'C',
-        compile: function(element, attr) {
+        compile: function (element, attr) {
             // wrap tag
             var contents = element.html();
             element.html('<div class="slideable_content" style="margin:0 !important; padding:0 !important" >' + contents + '</div>');
@@ -466,14 +418,14 @@ app.directive('slideToggle', function () {
 });
 
 app.directive('compile', [
-    '$compile', function($compile) {
-        return function(scope, element, attrs) {
+    '$compile', function ($compile) {
+        return function (scope, element, attrs) {
             scope.$watch(
-                function(scope) {
+                function (scope) {
                     // watch the 'compile' expression for changes
                     return scope.$eval(attrs.compile);
                 },
-                function(value) {
+                function (value) {
                     // when the 'compile' expression changes
                     // assign it into the current DOM
                     element.html(value);

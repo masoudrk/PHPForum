@@ -10,7 +10,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../cms/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -18,19 +18,12 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="../css/site-styles.css">
 	
-    <link rel="stylesheet" href="dist/css/AdminLTE-rtl.css">
-    <link rel="stylesheet" href="dist/css/AdminLTE-rtl-fix.css">
+    <link rel="stylesheet" href="../cms/css/AdminLTE-rtl.css">
+    <link rel="stylesheet" href="../cms/css/AdminLTE-rtl-fix.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="dist/css/skins/_all-skins-srtl.css">
-    <!-- iCheck -->
-    <!--<link rel="stylesheet" href="plugins/iCheck/flat/blue.css">-->
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" href="../cms/css/skins/_all-skins-srtl.css">
+
   </head>
   <body class="hold-transition skin-blue sidebar-mini vazir-font">
     <div class="wrapper">
@@ -69,7 +62,7 @@
                       <li><!-- start message -->
                         <a href="#">
                           <div class="pull-right">
-                            <img src="dist/img/masoud.jpg" class="img-circle" alt="User Image">
+                            <img src="../images/masoud.jpg" class="img-circle" alt="User Image">
                           </div>
                           <h4 class="vazir-font">
                             تیم پشتیبانی
@@ -81,7 +74,7 @@
                       <li>
                         <a href="#">
                           <div class="pull-right">
-                            <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                            <img src="../images/user3-128x128.jpg" class="img-circle" alt="User Image">
                           </div>
                           <h4 class="vazir-font">
                             تیم طراحی
@@ -93,7 +86,7 @@
                       <li>
                         <a href="#">
                           <div class="pull-right">
-                            <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                            <img src="../images/user4-128x128.jpg" class="img-circle" alt="User Image">
                           </div>
                           <h4 class="vazir-font">
                             برنامه نویس
@@ -105,7 +98,7 @@
                       <li>
                         <a href="#">
                           <div class="pull-right">
-                            <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                            <img src="../images/user3-128x128.jpg" class="img-circle" alt="User Image">
                           </div>
                           <h4 class="vazir-font">
                             فروشندگان
@@ -117,7 +110,7 @@
                       <li>
                         <a href="#">
                           <div class="pull-right">
-                            <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                            <img src="../images/user4-128x128.jpg" class="img-circle" alt="User Image">
                           </div>
                           <h4 class="vazir-font">
                             بینندگان
@@ -245,13 +238,13 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a  class="dropdown-toggle link" data-toggle="dropdown">
-                  <img src="dist/img/user8-128x128.jpg" class="user-image" alt="User Image">
+                  <img src="../images/user8-128x128.jpg" class="user-image" alt="User Image">
                   <span class="hidden-xs">مسعود رضاخانلو</span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="dist/img/masoud.jpg" class="img-circle" alt="User Image">
+                    <img src="../images/masoud.jpg" class="img-circle" alt="User Image">
                     <p>
                       مسعود رضاخانلو - ادمین سایت
                       <small class="vazir-font">عضویت در سال 1392</small>
@@ -292,7 +285,7 @@
           <!-- Sidebar user panel -->
           <div class="user-panel">
             <div class="pull-right image">
-              <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+              <img src="../images/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
               <p>مسعود رضاخانلو</p>
@@ -630,26 +623,26 @@
 	<script type="text/javascript" src="../js/moment-jalaali.js"></script>
 
     <!-- jQuery 2.1.4 -->
-    <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script src="../cms/js/jQuery/jQuery-2.1.4.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
-    <script src="plugins/jQueryUI/jquery-ui.min.js"></script>
+    <script src="../cms/js/jQueryUI/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
       $.widget.bridge('uibutton', $.ui.button);
     </script>
     <!-- Bootstrap 3.3.5 -->
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="../cms/js/bootstrap.min.js"></script>
     <!-- Bootstrap WYSIHTML5 
     <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
     <!-- Slimscroll -->
-    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="../cms/js/slimScroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
-    <script src="plugins/fastclick/fastclick.min.js"></script>
+    <script src="../cms/js/fastclick/fastclick.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="dist/js/app.js"></script>
+    <script src="../cms/js/app.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes)
     <script src="dist/js/pages/dashboard.js"></script> -->
     <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/demo.js"></script>
+    <script src="../cms/js/demo.js"></script>
   </body>
 </html>
