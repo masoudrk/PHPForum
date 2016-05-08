@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="myApp">
+<html ng-app="adminApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -625,17 +625,25 @@
            immediately after the control sidebar -->
       <div class="control-sidebar-bg"></div>
     </div><!-- ./wrapper -->
-
+    <?php
+    
+            if (!isset($_SESSION)) {
+                session_start();
+            }
+            
+            $_SESSION['user'] = "hello";
+?>
 	<script src="../js/angular.js"></script>
 	<script src="../js/angular-route.min.js"></script>
 	<script src="../js/angular-animate.min.js" ></script>
+	<script src="../js/angular-cookies.min.js" ></script>
 	<script src="../js/angular-ui-router.js"></script>
 	
-    <script src="../js/toaster.min.js"></script>
-    <script src="../js/ui-bootstrap-tpls-1.2.5.min.js"></script>
 	<script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript" ></script>
+	<script src="../js/toaster.js" type="text/javascript" ></script>
+	<script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript" ></script>
 	
-    <script src="angular/app.js"></script>
+    <script src="angular/admin-app.js"></script>
     <script src="partials/Admin/AdminCtrl.js"></script>
 		
 	<script type="text/javascript" src="../js/moment.js"></script>

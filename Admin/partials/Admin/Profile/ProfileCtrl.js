@@ -1,5 +1,5 @@
 
-angular.module('myApp').controller('ProfileCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log) {
+angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log) {
 
     $scope.messages = [];
     $scope.messages.push({});

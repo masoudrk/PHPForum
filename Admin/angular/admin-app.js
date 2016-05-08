@@ -1,5 +1,5 @@
-﻿var app = angular.module('myApp', ['ngRoute', 'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
-
+﻿var appName = 'adminApp';
+var app = angular.module(appName, ['ngRoute', 'ngCookies','ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -47,7 +47,6 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         });
-
     //$urlRouterProvider.otherwise(function ($injector, $location) {
     //    var $state = $injector.get('$state');
     //    //$state.go('home.home');
@@ -55,7 +54,6 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     //});
 }
 ]);
-
 var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
 var traverse = function (el) {
     if (el.nodeType == 3) {
@@ -313,7 +311,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         return obj;
     }]);
 
-app.run(function ($rootScope, $templateCache, $state, $location) {
+app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore) {
 
     $rootScope.$on("$stateChangeSuccess", function () {
     });
