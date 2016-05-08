@@ -1,11 +1,10 @@
 ﻿var appName = 'adminApp';
-var app = angular.module(appName, ['ngRoute', 'ngCookies','ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
+var app = angular.module(appName, ['ngRoute', 'ngCookies' ,'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
 function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     // Add nested user links to the "foo" menu.
-
     $ocLazyLoadProvider.config({
         debug: false,
         events: true
@@ -34,6 +33,18 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return $ocLazyLoad.load(['partials/Admin/Profile/ProfileCtrl.js']);
                 }]
             }
+        }).state("all_users", {
+            url: "/all_users",
+            templateUrl: "partials/Admin/User/AllUsers.html",
+            controller: 'AllUsersCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/User/AllUsersCtrl.js','../app/directives/auto-pagination.js']);
+                }],
+                $title: function () {
+                    return 'همه اعضا';
+                }
+            }
         }).state("elements", {
             url: "/elements",
             templateUrl: "partials/Admin/Elements/_Elements.html",
@@ -47,11 +58,11 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         });
-    //$urlRouterProvider.otherwise(function ($injector, $location) {
-    //    var $state = $injector.get('$state');
-    //    //$state.go('home.home');
-    //    $state.go('dashboard');
-    //});
+    $urlRouterProvider.otherwise(function ($injector, $location) {
+        var $state = $injector.get('$state');
+        //$state.go('home.home');
+        $state.go('dashboard');
+    });
 }
 ]);
 var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
@@ -79,8 +90,9 @@ var fixFooter = function () {
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
-        var serviceBase = 'api/v1/';
+        var serviceBase = '../api/admin/';
 
+        $rootScope.spinner = {};
         var obj = {};
         obj.workers = 0;
         obj.serviceBase = serviceBase;
