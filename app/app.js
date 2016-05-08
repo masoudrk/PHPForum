@@ -10,7 +10,6 @@ app.config([
 function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfProvider, ADMdtp, vcRecaptchaServiceProvider) {
         // Add nested user links to the "foo" menu.
 
-    getPage("Admin");
 
         vcRecaptchaServiceProvider.setSiteKey('6LdFLB4TAAAAAH1sOhBD0ew9SQEgq6XCDytD0Slv');
 

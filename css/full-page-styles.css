@@ -63,7 +63,6 @@ h1{
 	font-size: 6em;
 }
 p{
-	font-size: 20px;
     text-align: right;
     color: darkslategrey;
 }
@@ -234,7 +233,14 @@ p{
 	padding: 0 0 5px 0;
 }
 
-
+.hr{margin-top:20px;margin-bottom:20px; content:""; height:1px; width:100%; background:#272727; background:-webkit-gradient(linear,left top,right top,color-stop(0%,transparent),color-stop(50%,#272727),color-stop(100%,#dfecaf)); background:-webkit-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%); background:-moz-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%); background:-ms-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%); background:-o-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%); background:linear-gradient(left,transparent 0%,#272727 50%,transparent 100%)}
+/*.forum-items {
+    border-radius: 22px 22px 22px 22px;
+    -moz-border-radius: 22px 22px 22px 22px;
+    -webkit-border-radius: 22px 22px 22px 22px;
+    border: 3px dotted #000000;
+    opacity:0.8;
+}*/
 
 /* Demos Menu
  * --------------------------------------- */
