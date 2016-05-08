@@ -1,0 +1,140 @@
+﻿<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header vazir-font text-right">
+        <h3 class="modal-title">قوانین سایت</h3>
+    </div>
+    <div class="modal-body vazir-font text-right">
+        سلام
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
+<div id="menu" ng-click="moog('asd')" class="vazir-font hidden-xs">
+    <div tabindex="-1" data-menuanchor="firstPage" class="pull-right"><a>خانه <i class="fa fa-home" aria-hidden="true"></i></a>
+    </div>
+    <div tabindex="-1" data-menuanchor="secondPage" class="pull-right"><a>انجمن <i class="fa fa-users" aria-hidden="true"></i></a>
+    </div>
+    <div tabindex="-1" data-menuanchor="3rdPage" class="pull-right"><a>Third slide</a>
+    </div>
+    <div tabindex="-1" data-menuanchor="4thpage" class="pull-right"><a>Fourth slide</a>
+    </div>
+</div>
+<div full-page options="mainOptions">
+    <div class="section" id="section0">
+        <div class="col-sm-4 hidden-xs">
+            <form ng-submit="savePerson()" class="vazir-font">
+                <div class="col-sm-12">
+                    <div class="text-right">
+                        <label style="font-size:30px">ثبت نام <i class="fa fa-sign-in" aria-hidden="true"></i></label>
+                    </div>
+                    <hr style="border-color:dimgray"/>
+                </div>
+                <div class="form-group col-sm-12">
+                    <div class="col-sm-12">
+                        <input type="text" dir="rtl" class="form-control" name="name" id="name" placeholder="نام کامل" required>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <div class="col-sm-12">
+                        <input type="text" dir="rtl" class="form-control" name="userName" id="userName" placeholder="نام کاربری" required>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <div class="col-sm-12">
+                        <input type="email" dir="rtl" class="form-control" name="email" id="email" placeholder="ایمیل" required>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <div class="col-sm-12">
+                        <input type="password" dir="rtl" class="form-control" name="password" placeholder="پسورد" required>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <div class="col-sm-12">
+                        <input type="password" dir="rtl" class="form-control" name="passwordRe" placeholder="تکرار پسورد" required>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="col-sm-12">
+                        <input type="tel" dir="rtl" class="form-control" name="telephone" placeholder="تلفن ثابت" required>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="col-sm-12">
+                        <input type="tel" dir="rtl" class="form-control" name="phone" placeholder="تلفن همراه" required>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <div class="col-sm-12 text-right">
+                        <label class="control-label"><a ng-click="openRoleModal()">قوانین </a> سایت را قبول دارم</label>
+                        <input class="pull-right" type="checkbox" value="true" name="roles" required style="margin-left: 20px">
+                    </div>
+                </div>
+                <div class="form-group col-sm-6 pull-right">
+                    <div class="col-sm-12">
+                        <button type="submit" dir="rtl" class="form-control btn btn-success" name="submit">ثبت نام</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-8 col-xs-12 vazir-font">
+            <div class="text-right">
+                <label style="font-size:30px">ارتباطات</label>
+            </div>
+            <hr style="border-color:dimgray"/>
+            <div>
+                <p class="persian-rtl">
+                    ارتباطات فرایند انتقال پیام از فرستنده به گیرنده به شرط همسان بودن معانی بین آنها است. معنا در علم ارتباط شامل مفاهیم ذهنی و احساسات هر دو می شود.ارتباطات فرایندی ست که در آن معنا بین موجودات زنده تعریف و به اشتراک گذاشته می شود. ارتباط به یک فرستنده، پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد حضور داشته باشد یا از منظورفرستنده برای برقراری ارتباط در زمان ارتباط آگاه باشد‌‌‍؛ بنابراین ارتباطات می‌تواند درسرتاسر مسافتهای گسترده ی زمانی و مکانی رخ دهد. ارتباطات نیازمند آن است که بخش های ارتباط ناحیه ای از مشترکات ارتباطی را به اشتراک بگذارند.‍‍‌‍‌
+                </p>
+            </div>
+        </div>
+    </div>
+    <div tabindex="-1" class="section active" id="section1">
+        <div class="slide">
+            <div class="col-sm-6 hidden-xs vazir-font" style="border-left:50px">
+                <div class="text-right">
+                    <label style="font-size: 30px">آمار انجمن</label>
+                </div>
+                <hr style="border-color: dimgray" />
+                <div>
+                    <p class="persian-rtl">
+                        ارتباطات فرایند انتقال پیام از فرستنده به گیرنده به شرط همسان بودن معانی بین آنها است. معنا در علم ارتباط شامل مفاهیم ذهنی و احساسات هر دو می شود.ارتباطات فرایندی ست که در آن معنا بین موجودات زنده تعریف و به اشتراک گذاشته می شود. ارتباط به یک فرستنده، پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد حضور داشته باشد یا از منظورفرستنده برای برقراری ارتباط در زمان ارتباط آگاه باشد‌‌‍؛ بنابراین ارتباطات می‌تواند درسرتاسر مسافتهای گسترده ی زمانی و مکانی رخ دهد. ارتباطات نیازمند آن است که بخش های ارتباط ناحیه ای از مشترکات ارتباطی را به اشتراک بگذارند.‍‍‌‍‌
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 vazir-font" style="border-right:50px">
+                <div class="text-right">
+                    <label style="font-size: 30px">زیر شاخه ها</label>
+                </div>
+                <hr style="border-color: dimgray"/>
+                <div>
+                    <p class="persian-rtl">
+                        ارتباطات فرایند انتقال پیام از فرستنده به گیرنده به شرط همسان بودن معانی بین آنها است. معنا در علم ارتباط شامل مفاهیم ذهنی و احساسات هر دو می شود.ارتباطات فرایندی ست که در آن معنا بین موجودات زنده تعریف و به اشتراک گذاشته می شود. ارتباط به یک فرستنده، پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد حضور داشته باشد یا از منظورفرستنده برای برقراری ارتباط در زمان ارتباط آگاه باشد‌‌‍؛ بنابراین ارتباطات می‌تواند درسرتاسر مسافتهای گسترده ی زمانی و مکانی رخ دهد. ارتباطات نیازمند آن است که بخش های ارتباط ناحیه ای از مشترکات ارتباطی را به اشتراک بگذارند.‍‍‌‍‌
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div tabindex="-1" ng-repeat="slide in slides" class="slide">
+            <div tabindex="-1" class="intro" ng-click="moog('ddd')">
+                <h1>{{ slide.title }}</h1>
+                <p>{{ slide.description }}</p>
+            </div>
+        </div>
+    </div>
+    <div tabindex="-1" class="section" id="section2">
+        <div class="intro">
+            <h1 tabindex="-1" ng-click="moog('sss')">Example</h1>
+            <p>HTML markup example to define 4 sections.</p>
+        </div>
+    </div>
+    <div tabindex="-1" class="section" id="section3">
+        <div class="intro">
+            <h1>Working On Tablets</h1>
+            <p>
+                Designed to fit to different screen sizes as well as tablet and mobile devices.
+                <br/><br/><br/><br/><br/><br/>
+            </p>
+        </div>
+    </div>
+
+</div>
