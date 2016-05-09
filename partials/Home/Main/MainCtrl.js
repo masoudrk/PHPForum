@@ -1,5 +1,6 @@
 ﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache,$uibModal, $state, $rootScope, $routeParams, $uibModal, Extention) {
-    
+    $scope.user = {};
+
     $scope.openRoleModal = function() {
         $uibModal.open({
             animation: true,
@@ -17,6 +18,12 @@
         });
     }
 
+    $scope.savePerson = function () {
+        if ($scope.user.roleAccepted && $scope.singInForm.$valid) {
+            
+        }
+    }
+
     $scope.mainOptions = {
         sectionsColor: ['#1BBC9B', '#4BBFC3', '#7BAABE', 'whitesmoke', '#ccddff'],
         anchors: ['firstPage', 'secondPage', '3rdPage', '4thpage', 'lastPage'],
@@ -27,6 +34,8 @@
 
     $scope.slides = [
         {
+            subject: 'رادیویی',
+            image: 'Images/broadcast.png',
             title: 'Simple',
             description: 'Easy to use. Configurable and customizable.',
             src: 'images/1.png'

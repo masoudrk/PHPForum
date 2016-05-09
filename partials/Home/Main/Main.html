@@ -22,53 +22,56 @@
 <div full-page options="mainOptions">
     <div class="section" id="section0">
         <div class="col-sm-4 hidden-xs">
-            <form ng-submit="savePerson()" class="vazir-font">
+            <form ng-submit="savePerson()" name="singInForm" class="vazir-font">
                 <div class="col-sm-12">
                     <div class="text-right">
                         <label style="font-size:30px">ثبت نام <i class="fa fa-sign-in" aria-hidden="true"></i></label>
                     </div>
                     <div class="hr"></div>
                 </div>
-                <div class="form-group col-sm-12">
+                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!singInForm.name.$valid && singInForm.name.$touched]">
                     <div class="col-sm-12">
-                        <input type="text" dir="rtl" class="form-control" name="name" id="name" placeholder="نام کامل" required>
+                        <input type="text" dir="rtl" class="form-control" name="name" ng-model="user.FullName" id="name" placeholder="نام کامل" required>
                     </div>
                 </div>
-                <div class="form-group col-sm-12">
+                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!singInForm.userName.$valid && singInForm.userName.$touched]">
                     <div class="col-sm-12">
-                        <input type="text" dir="rtl" class="form-control" name="userName" id="userName" placeholder="نام کاربری" required>
+                        <input type="text" dir="rtl" class="form-control" ng-model="user.Username" name="userName" id="userName" placeholder="نام کاربری" required>
                     </div>
                 </div>
-                <div class="form-group col-sm-12">
+                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!singInForm.email.$valid && singInForm.email.$touched]">
                     <div class="col-sm-12">
-                        <input type="email" dir="rtl" class="form-control" name="email" id="email" placeholder="ایمیل" required>
+                        <input type="email" dir="rtl" class="form-control" ng-model="user.Email" name="email" id="email" placeholder="ایمیل" required>
                     </div>
                 </div>
-                <div class="form-group col-sm-12">
+                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!singInForm.password.$valid && singInForm.password.$touched]">
                     <div class="col-sm-12">
-                        <input type="password" dir="rtl" class="form-control" name="password" placeholder="پسورد" required>
+                        <input type="password" dir="rtl" class="form-control" ng-model="user.Password" name="password" placeholder="پسورد" required>
                     </div>
                 </div>
-                <div class="form-group col-sm-12">
+                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!singInForm.passwordRe.$valid && singInForm.passwordRe.$touched || user.PasswordRe != user.Password]">
                     <div class="col-sm-12">
-                        <input type="password" dir="rtl" class="form-control" name="passwordRe" placeholder="تکرار پسورد" required>
+                        <input type="password" dir="rtl" class="form-control" ng-model="user.PasswordRe" name="passwordRe" placeholder="تکرار پسورد" required>
                     </div>
                 </div>
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!singInForm.telephone.$valid && singInForm.telephone.$touched]">
                     <div class="col-sm-12">
-                        <input type="tel" dir="rtl" class="form-control" name="telephone" placeholder="تلفن ثابت" required>
+                        <input type="tel" dir="rtl" class="form-control" ng-model="user.Tel" name="telephone" placeholder="تلفن ثابت" required  ng-minlength="6">
                     </div>
                 </div>
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!singInForm.phone.$valid && singInForm.phone.$touched]" >
                     <div class="col-sm-12">
-                        <input type="tel" dir="rtl" class="form-control" name="phone" placeholder="تلفن همراه" required>
+                        <input type="tel" ng-model="user.PhoneNumber" dir="rtl" class="form-control" name="phone" placeholder="تلفن همراه" ng-required="true" ng-minlength="11">
                     </div>
                 </div>
                 <div class="form-group col-sm-12">
                     <div class="col-sm-12 text-right">
                         <label class="control-label"><a ng-click="openRoleModal()">قوانین </a> سایت را قبول دارم</label>
-                        <input class="pull-right" type="checkbox" value="true" name="roles" required style="margin-left: 20px">
+                        <input class="pull-right" type="checkbox" ng-model="user.roleAccepted" value="true" style="margin-left: 20px">
                     </div>
+                </div>
+                <div ng-show="user.roleAccepted" class="form-group col-sm-12" >
+                    <div vc-recaptcha  ng-model="user.myRecaptchaResponse"></div>
                 </div>
                 <div class="form-group col-sm-6 pull-right">
                     <div class="col-sm-12">
@@ -163,9 +166,89 @@
             </div>
         </div>
         <div tabindex="-1" ng-repeat="slide in slides" class="slide">
-            <div tabindex="-1" class="intro">
-                <h1>{{ slide.title }}</h1>
-                <p>{{ slide.description }}</p>
+            <div tabindex="-1">
+
+
+
+
+                
+                <div class="col-sm-6 col-xs-12 vazir-font" style="padding-left: 55px">
+                    <div class="text-right">
+                        <label style="font-size: 30px">زیر شاخه ها</label>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="col-xs-6">
+                        <div class="col-sm-6 col-xs-12">
+                            <img ng-src="Images/broadcast.png" data-menuanchor="testSlide" class="img-responsive" style="width: 80px; cursor: pointer"/>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <strong>رادیویی : </strong>
+                            <span class="hidden-xs">است که بخش های ارتباط ناحیه ای از مشترکات</span>
+                        </div>
+                        <div class="col-xs-12">
+                            <p class="text-center">
+                                پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-sm-6 col-xs-12">
+                            <img ng-src="Images/data-transference-by-internet.png" class="img-responsive" style="width: 80px; cursor: pointer"/>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <strong>دیتا سوییج : </strong>
+                            <span class="hidden-xs">است که بخش های ارتباط ناحیه ای از مشترکات</span>
+                        </div>
+                        <div class="col-xs-12">
+                            <p class="text-center">
+                                پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد
+                            </p>
+                        </div>
+                    </div>
+                    <div class="hr col-xs-12"></div>
+                    <div class="col-xs-6">
+                        <div class="col-sm-6 col-xs-12">
+                            <img ng-src="Images/global-management.png" class="img-responsive" style="width: 80px; cursor: pointer"/>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <strong>نظارت بر سیستم های انتقال : </strong>
+                            <span class="hidden-xs">است که بخش های ارتباط ناحیه ای از مشترکات</span>
+                        </div>
+                        <div class="col-xs-12">
+                            <p class="text-center">
+                                پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-sm-6 col-xs-12">
+                            <img ng-src="Images/wifi-signal.png" class="img-responsive" style="width: 80px; cursor: pointer"/>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <strong>خطوط انتقال : </strong>
+                            <span class="hidden-xs">است که بخش های ارتباط ناحیه ای از مشترکات</span>
+                        </div>
+                        <div class="col-xs-12">
+                            <p class="text-center">
+                                پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 vazir-font" style="padding-right: 55px">
+                    <div class="text-right">
+                        <label style="font-size: 30px">آمار انجمن {{slide.subject}}</label>
+                    </div>
+                    <div class="hr col-xs-12"></div>
+                    <div class="text-right">
+                        <img ng-src="{{slide.image}}" class="img-responsive  pull-right" style="width: 80px; cursor: pointer;margin:0px 0px 15px 15px" />
+                        <p class="persian-rtl">
+                            ارتباطات فرایند انتقال پیام از فرستنده به گیرنده به شرط همسان بودن معانی بین آنها است. معنا در علم ارتباط شامل مفاهیم ذهنی و احساسات هر دو می شود.ارتباطات فرایندی ست که در آن معنا بین موجودات زنده تعریف و به اشتراک گذاشته می شود. ارتباط به یک فرستنده، پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد حضور داشته باشد یا از منظورفرستنده برای برقراری ارتباط در زمان ارتباط آگاه باشد‌‌‍؛ بنابراین ارتباطات می‌تواند درسرتاسر مسافتهای گسترده ی زمانی و مکانی رخ دهد. ارتباطات نیازمند آن است که بخش های ارتباط ناحیه ای از مشترکات ارتباطی را به اشتراک بگذارند.‍‍‌‍‌
+                        </p>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
