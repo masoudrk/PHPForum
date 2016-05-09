@@ -7,7 +7,7 @@ class Session {
 	    	session_start();
 	    }
 	    $sess = [];
-        
+
         if(isset($_SESSION['UserID'])){
 	        $sess['Status'] = "success";
 	        $sess["LastName"] = $_SESSION['LastName'];
@@ -21,7 +21,15 @@ class Session {
         if (isset($_SESSION["AdminID"])) {
          	$sess["AdminID"] = $_SESSION['AdminID'];
         }
-	    return $sess;
+
+		$db = new DbHandler();
+
+		$resQ = $db->makeQuery("SELECT  `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, `SignupDate`, `Gender` , FullPath as 
+AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = 1");
+
+		$res = $resQ->fetch_assoc();
+		$res['Valid'] = true;
+	    return $res;
 	}
 	
 	public function destroySession(){

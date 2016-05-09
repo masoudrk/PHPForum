@@ -90,7 +90,7 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
 
         Extention.post('session').then(function (res) {
-            $rootScope.user = res;
+            Extention.authUser(res);
         });
 
     });
@@ -123,10 +123,6 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 //$rootScope.progressbar.complete();
             }
         };
-
-        obj.toast = function (data) {
-            toaster.pop(data.status, "", data.message, 10000, 'trustedHtml');
-        }
 
         obj.pop = function (status, msg, delay) {
             if (!delay)
@@ -196,17 +192,16 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         }
 
         obj.authUser = function (user) {
-            $rootScope.authenticated = true;
-            $rootScope.user = {};
-            $rootScope.user.UserID = user.UserID;
-            $rootScope.user.lastName = user.LastName;
-            $rootScope.user.firstName = user.FirstName;
+            if(user.Valid == undefined){
+                obj.unAuthUser();
+                return;
+            }
+
+            $rootScope.user = user;
         }
 
         obj.unAuthUser = function () {
-            $rootScope.authenticated = false;
-            $rootScope.isAdmin = false;
-            $rootScope.user = {};
+            $rootScope.user = undefined;
         }
 
         obj.isAdmin = function () {
