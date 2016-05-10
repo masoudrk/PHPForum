@@ -18,6 +18,7 @@
   <ItemGroup>
     <Compile Include="Admin\index.php" />
     <Compile Include="api\admin\index.php" />
+    <Compile Include="api\functions.php" />
     <Compile Include="api\libs\Slim\Environment.php" />
     <Compile Include="api\libs\Slim\Exception\Pass.php" />
     <Compile Include="api\libs\Slim\Exception\Stop.php" />
@@ -48,6 +49,7 @@
     <Compile Include="api\public\index.php" />
     <Compile Include="api\passwordHash.php" />
     <Compile Include="api\admin\update_service.php" />
+    <Compile Include="api\sessionHandler.php" />
     <Compile Include="api\user\user_service.php" />
     <Compile Include="api\user\index.php" />
     <Compile Include="config.php" />

@@ -1,5 +1,23 @@
 ﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache,$uibModal, $state, $rootScope, $routeParams, $uibModal, Extention) {
     $scope.user = {};
+    $scope.emailError = false;
+    $scope.userNameError = false;
+
+    $scope.checkEmail = function(value) {
+        Extention.postAsync('checkEmail', { value: value }).then(function (msg) {
+            $scope.emailError = !msg;
+            if ($scope.emailError)
+                Extention.popError('این ایمیل قبلا ثبت شده است');
+        });
+    }
+
+    $scope.checkUserName = function (value) {
+        Extention.postAsync('checkUserName', { value: value }).then(function (msg) {
+            $scope.userNameError = !msg;
+            if ($scope.userNameError)
+                Extention.popError('این نام کاربری قبلا ثبت شده است');
+        });
+    }
 
     $scope.openRoleModal = function() {
         $uibModal.open({
@@ -19,8 +37,29 @@
     }
 
     $scope.savePerson = function () {
-        if ($scope.user.roleAccepted && $scope.singInForm.$valid) {
-            
+        if ($scope.user.roleAccepted && $scope.signUpForm.$valid && !$scope.emailError && !$scope.userNameError) {
+            Extention.post('savePerson', $scope.user).then(function (msg) {
+                console.log(msg);
+                if (msg.Status == 'success') {
+                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد.');
+                } else {
+                    Extention.popError('اطلاعات شما نا معتبر است.');
+                }
+            });
+        }
+    }
+
+    $scope.signInFunc = function () {
+        if ($scope.signInForm.$valid) {
+            Extention.post('signInUser', $scope.signIn).then(function (msg) {
+                //console.log(msg);
+                if (msg.Status == 'success') {
+                    getPage('Forum');
+                } else {
+                    console.log(msg);
+                    Extention.popError('اطلاعات شما نا معتبر است.');
+                }
+            });
         }
     }
 
@@ -30,8 +69,10 @@
         menu: '#menu'
     };
 
-    $scope.moog = function (merg) { console.log(merg); };
+    //$scope.moog = function (merg) { console.log(merg); };
+    
 
+    //TODO slide properties : 
     $scope.slides = [
         {
             subject: 'رادیویی',

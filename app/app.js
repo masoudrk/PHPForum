@@ -1,4 +1,5 @@
 ﻿var appName = 'myApp';
+var serviceBaseURL = 'api/public/';
 var app = angular.module(appName, ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'fullPage.js', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'pageslide-directive']);
 
 
@@ -151,7 +152,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfP
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
-        var serviceBase = 'api/v1/';
+        var serviceBase = serviceBaseURL;
 
         var obj = {};
         obj.workers = 0;
