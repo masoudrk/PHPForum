@@ -1,4 +1,158 @@
 <?php
+$app->post('/savePerson', function() use ($app) {
+
+    $r = json_decode($app->request->getBody());
+
+	$url = 'https://www.google.com/recaptcha/api/siteverify';
+	$postfields = array('secret'=>'6LdFLB4TAAAAAGqRYQeB5dBPiLq-XeJJreomcQpA',
+						'response'=>$r->myRecaptchaResponse);
+
+	$ch = curl_init( $url );
+
+    if (FALSE === $ch)
+        throw new Exception('failed to initialize');
+
+	curl_setopt( $ch, CURLOPT_POST, 1);
+	curl_setopt( $ch, CURLOPT_POSTFIELDS, $postfields);
+	curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt( $ch, CURLOPT_HEADER, 0);
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
+
+    $response = array();
+	$googleResponse = curl_exec( $ch );
+	if(!$googleResponse){
+        $response["Status"] = "error-captcha-response";
+        echoResponse(201, $response);
+        return;
+	}else{
+    	$resG = json_decode($googleResponse);
+    	if($resG->success == FALSE){
+        	$response["Status"] = "error-captcha";
+	        echoResponse(201, $response);
+	    	return ;
+		}
+	}
+
+    require_once '../passwordHash.php';
+    $password = $r->Password;
+    $r->Password = passwordHash::hash($password);
+
+    $db = new DbHandler();
+
+    $resq = $db->makeQuery("select COUNT(*) as resp FROM user WHERE Email = '$r->Email'");
+    $res = $resq->fetch_assoc();
+
+    if ($res['resp'] > 0 )
+    {
+        $response["Status"] = "error-captcha";
+        echoResponse(201, $response);
+    }
+
+    $resq = $db->makeQuery("select COUNT(*) as resp FROM user WHERE Username = '$r->Username'");
+    $res = $resq->fetch_assoc();
+
+    if ($res['resp'] > 0 )
+    {
+        $response["Status"] = "error-captcha";
+        echoResponse(201, $response);
+    }
+
+    $res = $db->insertToTable('user','FullName,Username,Email,Password,Tel,PhoneNumber,SignupDate'
+        ,"'$r->FullName','$r->Username','$r->Email','$r->Password','$r->Tel','$r->PhoneNumber',now()");
+    
+    $result = [];
+    if($res){
+        $result['Status'] = 'success';
+    }else{
+        $result['Status'] = 'error';
+    }
+
+    echoResponse(200, $result);
+});
+
+$app->post('/checkEmail', function() use ($app)  {
+    $r = json_decode($app->request->getBody());
+    $db = new DbHandler();
+    $resq = $db->makeQuery("select COUNT(*) as resp FROM user WHERE Email = '$r->value'");
+    $res = $resq->fetch_assoc();
+    if ($res['resp'] > 0 )
+    {
+        echoResponse(200, false);
+    }else
+        echoResponse(200, true);
+});
+
+$app->post('/checkUserName', function() use ($app)  {
+    $r = json_decode($app->request->getBody());
+    $db = new DbHandler();
+    $resq = $db->makeQuery("select COUNT(*) as resp FROM user WHERE Username = '$r->value'");
+    $res = $resq->fetch_assoc();
+    if ($res['resp'] > 0 )
+    {
+        echoResponse(200, false);
+    }else
+        echoResponse(200, true);
+});
+
+$app->post('/signInUser', function() use ($app)  {
+    require_once '../passwordHash.php';
+    $r = json_decode($app->request->getBody());
+    $response = array();
+    $db = new DbHandler();
+    $password = $r->Password;
+    $email = $r->Username;
+
+    $user = $db->getOneRecord("select ID,FullName,Email,Password,Username from user where Username='$email' or Email='$email'");
+
+    if ($user != NULL) {
+        if(passwordHash::check_password($user['Password'],$password)){
+
+        	$sessionID = generateSessionID(100);
+        	$resSessionIDQ = $db->updateRecord('user',"SessionID='".$sessionID."',ValidSessionID=1","ID='".$user['ID']."'");
+
+            $IsAdmin=false;
+            $admin = $db->getOneRecord("select * from admin where UserID=".$user['ID']);
+            if($admin){
+                $IsAdmin=true;
+            }
+
+            $response['Status'] = "success";
+            $response['SSN'] = $sessionID;
+            $response['FullName'] = $user['FullName'];
+            $response['Email'] = $user['Email'];
+            $response['IsAdmin'] = $IsAdmin;
+            $response['UserID'] = $user['ID'];
+            if($IsAdmin){
+            	$response['AdminID'] = $admin['ID'];
+            }
+
+            if (!isset($_SESSION)) {
+                session_start();
+            }
+
+            $_SESSION['Status'] = "success";
+            $_SESSION['SSN'] = $sessionID;
+            $_SESSION['FullName'] = $user['FullName'];
+            $_SESSION['IsAdmin'] = $IsAdmin;
+            $_SESSION['Email'] = $email;
+            $_SESSION['UserID'] = $user['ID'];
+            $_SESSION['AdminID'] = $admin['ID'];
+
+            if($IsAdmin){
+            	$_SESSION['AdminID'] = $admin['ID'];
+            }
+        } else {
+            $response['Status'] = "error";
+            $response['Message'] = 'Login failed. Incorrect credentials';
+        }
+    }else {
+            $response['Status'] = "error";
+            $response['Message'] = 'No such user is registered';
+        }
+    echoResponse(200, $response);
+});
+
 $app->post('/getSiteTitleIcon', function() use ($app)  {
     $db = new DbHandler();
     //$data = json_decode($app->request->getBody());
