@@ -17,6 +17,16 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
             }
         });
     }
+
+    $scope.saveUserAddintionalInfo = function () {
+        Extention.post('saveUserAddintionalInfo', $scope.curUser).then(function (res) {
+            if(res && res.Status=='success'){
+                Extention.popSuccess('با موفقیت تغییر کرد!');
+            }else{
+                Extention.popError('مشکل در تغییر اطلاعات ، لطفا دوباره تلاش کنید.');
+            }
+        });
+    }
     
     $scope.passwordChanged = function () {
         if(!$scope.curUser.Password && !$scope.curUser.VerifyPassword)
