@@ -1,3 +1,22 @@
+
+<?php
+if (!isset($_SESSION)) {
+    session_start();
+    if(!isset($_SESSION['UserID'])){?>
+        <script>
+         //     window.location ="../";
+        </script>
+        <?php
+    }else{?>
+
+        <script>
+            var session = {};
+            session.var = 'hjvhjhjvhjvjhv';
+        </script>
+        <?php
+    }
+}
+?>
 <!DOCTYPE html>
 <html ng-app="forumApp">
 <head>
@@ -588,4 +607,6 @@
 <!-- AdminLTE for demo purposes -->
 <script src="../cms/js/demo.js"></script>
 </body>
+{{session}}
 </html>
+

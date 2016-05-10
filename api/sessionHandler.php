@@ -15,7 +15,9 @@ class Session {
 	        $sess["Email"] = $_SESSION['Email'];
 	        $sess["SSN"] = $_SESSION['SSN'];
 	        $sess["UserID"] = $_SESSION['UserID'];
-	        $sess["IsAdmin"] = $_SESSION['IsAdmin'];
+			$sess["IsAdmin"] = $_SESSION['IsAdmin'];
+			$sess["SignupDate"] = $_SESSION['SignupDate'];
+			$sess["Image"] = $_SESSION['Image'];
 		}else
         {
             $res['Valid'] = false;
