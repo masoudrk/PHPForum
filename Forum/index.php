@@ -1,24 +1,19 @@
 
-<?php
-if (!isset($_SESSION)) {
-    session_start();
-    if(!isset($_SESSION['UserID'])){?>
-        <script>
-         //     window.location ="../";
-        </script>
-        <?php
-    }else{?>
-
-        <script>
-            var session = {};
-        </script>
-        <?php
-    }
-}
-?>
 <!DOCTYPE html>
 <html ng-app="forumApp">
 <head>
+    <?php
+    if (!isset($_SESSION)) {
+        session_start();
+        if(!isset($_SESSION['UserID'])){?><script>
+                //     window.location ="../";
+            </script><?php
+        }else{?><script>
+                var session = {};
+            </script><?php
+        }
+    }
+    ?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="fa"/>
