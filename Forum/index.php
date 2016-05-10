@@ -10,6 +10,12 @@
     <link rel="icon" href="{{titleIcon}}">
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+
+    <link rel="stylesheet" href="../css/toaster.css">
+    <link rel="stylesheet" href="../css/treasure-overlay-spinner.css">
+    <link rel="stylesheet" href="../cms/css/select/select.css">
+
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="../cms/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -441,6 +447,17 @@
         <!-- /.sidebar -->
     </aside>
 
+    <script  id="notifyModal.html" type="text/ng-template">
+        <div class="modal-header">
+            <h3 class="modal-title">Error in XHR request </h3>
+        </div>
+        <div class="modal-body">
+            <data compile="data"></data>
+        </div>
+    </script>
+
+    <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" ui-view style="min-height:981">
     </div><!-- /.content-wrapper -->
@@ -629,6 +646,7 @@
 <script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript"></script>
 <script src="../js/toaster.js" type="text/javascript"></script>
 <script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript"></script>
+<script src="../cms/js/select/select.min.js" type="text/javascript"></script>
 
 <script src="angular/forum-app.js"></script>
 <script src="partials/MainCtrl.js"></script>

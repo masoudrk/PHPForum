@@ -20,8 +20,8 @@ class Session {
         {
             $res['Valid'] = false;
             return $res;
-        }
-
+		}
+        
         if (isset($_SESSION["AdminID"])) {
          	$sess["AdminID"] = $_SESSION['AdminID'];
              $res['Valid'] = true;

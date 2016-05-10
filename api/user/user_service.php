@@ -8,14 +8,49 @@ $app->post('/session', function() use ($app)  {
 
 $app->post('/getUserProfile', function() use ($app)  {
     //adminRequire();
+    require_once '../db/education.php';
     $db = new DbHandler();
     $session = new Session();
 
+    $res = [];
     $resQ = $db->makeQuery("SELECT user.`ID`, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, `SignupDate`, `Gender` , FullPath as 
 AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = 1");
 
-    echoResponse(200, $resQ->fetch_assoc());
+    $user = $resQ->fetch_assoc();
+
+    $user['Educations'] = getUserEducations($db,1);
+    $user['AllEducations'] = getAllEducations($db);
+
+    echoResponse(200, $user);
 });
+
+$app->post('/saveUserInfo', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler();
+    $sess = new Session();
+    $session = $sess->getSession();
+
+    $resQ = null;
+
+    if(isset($data->Password)){
+        $pass = passwordHash::hash($data->Password);
+
+        $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+`Tel`='$data->Tel',`Password`='$pass'","user.ID='".$session['ID']."'");
+    }else{
+
+        $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+`Tel`='$data->Tel'","user.ID='".$session['ID']."'");
+    }
+
+    $res = [];
+    if($resQ){
+        $res["Status"] = "success";
+    }
+    echoResponse(200, $res);
+});
+
 
 $app->post('/sfasf', function() use ($app)  {
     adminRequire();
