@@ -103,7 +103,9 @@ $app->post('/signInUser', function() use ($app)  {
     $password = $r->Password;
     $email = $r->Username;
 
-    $user = $db->getOneRecord("select ID,FullName,Email,Password,Username from user where Username='$email' or Email='$email'");
+    $user = $db->getOneRecord("select ID,FullName,Email,Password,Username,file_storage.FullPath as Image from user LEFT JOIN 
+    file_storage ON 
+            file_storage.ID=user.AvatarID where Username='$email' or Email='$email'");
 
     if ($user != NULL) {
         if(passwordHash::check_password($user['Password'],$password)){
@@ -123,6 +125,8 @@ $app->post('/signInUser', function() use ($app)  {
             $response['Email'] = $user['Email'];
             $response['IsAdmin'] = $IsAdmin;
             $response['UserID'] = $user['ID'];
+            $response['Image'] = $user['Image'];
+            $response['SignupDate'] = $user['SignupDate'];
             if($IsAdmin){
             	$response['AdminID'] = $admin['ID'];
             }
@@ -138,6 +142,8 @@ $app->post('/signInUser', function() use ($app)  {
             $_SESSION['Email'] = $email;
             $_SESSION['UserID'] = $user['ID'];
             $_SESSION['AdminID'] = $admin['ID'];
+            $_SESSION['SignupDate'] = $user['SignupDate'];
+            $_SESSION['Image'] = $user['Image'];
 
             if($IsAdmin){
             	$_SESSION['AdminID'] = $admin['ID'];

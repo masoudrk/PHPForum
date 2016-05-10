@@ -99,7 +99,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
         var serviceBase = serviceBaseURL;
-
+        //$rootScope.session = session;
         $rootScope.spinner = {};
         var obj = {};
         obj.workers = 0;
@@ -218,7 +218,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         }
 
         obj.authUser = function (user) {
-            if(user.Valid == undefined){
+            if(!user.Valid){
                 obj.unAuthUser();
                 return;
             }

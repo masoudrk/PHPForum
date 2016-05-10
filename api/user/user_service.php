@@ -63,7 +63,7 @@ $app->post('/saveUserAddintionalInfo', function() use ($app)  {
     $db = new DbHandler();
     $sess = new Session();
     $session = $sess->getSession();
-    $userID = $session['ID'];
+    $userID = $session['UserID'];
 
     $d = $db->deleteFromTable('user_skill','UserID='.$userID);
 
