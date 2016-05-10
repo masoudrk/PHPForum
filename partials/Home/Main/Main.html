@@ -46,12 +46,12 @@
                 </div>
                 <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.password.$valid && signUpForm.password.$touched]">
                     <div class="col-sm-12">
-                        <input type="password" dir="rtl" class="form-control" ng-minlength="7" ng-model="user.Password" name="password" placeholder="پسورد" required>
+                        <input type="password" dir="rtl" class="form-control" ng-model="user.Password" name="password" placeholder="پسورد" required>
                     </div>
                 </div>
                 <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.passwordRe.$valid && signUpForm.passwordRe.$touched || user.PasswordRe != user.Password]">
                     <div class="col-sm-12">
-                        <input type="password" dir="rtl" class="form-control" ng-minlength="7" ng-model="user.PasswordRe" name="passwordRe" placeholder="تکرار پسورد" required>
+                        <input type="password" dir="rtl" class="form-control" ng-model="user.PasswordRe" name="passwordRe" placeholder="تکرار پسورد" required>
                     </div>
                 </div>
                 <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.telephone.$valid && signUpForm.telephone.$touched]">
@@ -119,7 +119,7 @@
                         <button tabindex="3" type="submit" dir="rtl" class="form-control btn btn-success">ورود</button>
                     </div>
                     <div class="form-group col-md-5 col-sm-12" ng-class="{false: '', true: 'has-error'}[!signInForm.password.$valid && signInForm.password.$touched]">
-                        <input tabindex="2" type="password" ng-pattern="passwordRegix" dir="rtl" class="form-control" name="password" ng-model="signIn.Password" placeholder="پسورد" required>
+                        <input tabindex="2" type="password" dir="rtl" class="form-control" name="password" ng-model="signIn.Password" placeholder="پسورد" required>
                     </div>
                     <div class="form-group col-md-5 col-sm-12" ng-class="{false: '', true: 'has-error'}[!signInForm.username.$valid && signInForm.username.$touched]">
                         <input tabindex="1" type="text" dir="rtl" ng-pattern="userNameRegex" class="form-control" name="username" ng-model="signIn.Username" placeholder="نام کاربری یا ایمیل" required>

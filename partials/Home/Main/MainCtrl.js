@@ -4,7 +4,6 @@
     $scope.userNameError = false;
     $scope.userID = $cookies.get('UserID');
     $scope.userNameRegex = (/^(?=.*[a-z])[0-9a-zA-Z]{3,}$/);
-    $scope.passwordRegix = (/^(?=.*[a-z])[0-9a-zA-Z]{6,}$/);
 
     var setUserCookie;
     (setUserCookie =  function () {
@@ -16,7 +15,7 @@
         }
     })();
 
-    $scope.checkEmail = function(value) {
+    $scope.checkEmail = function (value) {
         Extention.postAsync('checkEmail', { value: value }).then(function (msg) {
             $scope.emailError = !msg;
             if ($scope.emailError)
@@ -25,6 +24,8 @@
     }
 
     $scope.checkUserName = function (value) {
+        if (!value)
+            Extention.popError('نام کاربری باید حداقل 3 کاراکتر باشد');
         Extention.postAsync('checkUserName', { value: value }).then(function (msg) {
             $scope.userNameError = !msg;
             if ($scope.userNameError)
