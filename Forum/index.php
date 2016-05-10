@@ -342,106 +342,17 @@
                     </a>
                 </li>
                 <li class="treeview">
-                    <a>
-                        <i class="fa fa-pie-chart"></i>
-                        <span>اعضا</span>
-                        <i class="fa fa-angle-right pull-right"></i>
+                    <a class="link">
+                        <i class="fa fa-laptop"></i>
+                        <span>فروم</span>
                     </a>
-                    <ul class="treeview-menu">
-                        <li><a ui-sref="all_users"><i class="fa fa-circle-o"></i> همه اعضا</a></li>
-                        <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> اعضا تایید شده</a></li>
-                        <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> اعضا تایید نشده</a></li>
-                    </ul>
                 </li>
                 <li class="treeview">
                     <a class="link">
-                        <i class="fa fa-laptop"></i>
-                        <span>کنترل ها</span>
-                        <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> اصلی</a></li>
-                        <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> آیکون ها</a></li>
-                        <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> دکمه ها</a></li>
-                        <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> اسلایدر</a></li>
-                        <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> ورودی</a></li>
-                        <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> مدال ها</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a>
-                        <i class="fa fa-edit"></i> <span>فرم ها</span>
-                        <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-circle-o"></i> کنترل های اصلی</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i> کنترل های ویژه</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i> ویرایشگرها</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a>
-                        <i class="fa fa-table"></i> <span>جداول</span>
-                        <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> جداول ساده</a></li>
-                        <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> جداول داده</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a>
-                        <i class="fa fa-calendar"></i> <span>تقویم</span>
-                        <small class="label pull-right bg-red">3</small>
+                        <i class="fa fa-envelope"></i>
+                        <span>پیام ها</span>
                     </a>
                 </li>
-                <li>
-                    <a>
-                        <i class="fa fa-envelope"></i> <span>ایمیل باکس</span>
-                        <small class="label pull-right bg-yellow">12</small>
-                    </a>
-                </li>
-                <li class="treeview">
-                    <a>
-                        <i class="fa fa-folder"></i> <span>مثال ها</span>
-                        <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/examples/invoice.html"><i class="fa fa-circle-o"></i> صدای شما</a></li>
-                        <li><a href="pages/examples/profile.html"><i class="fa fa-circle-o"></i> پروفایل</a></li>
-                        <li><a href="pages/examples/login.html"><i class="fa fa-circle-o"></i> ورود</a></li>
-                        <li><a href="pages/examples/register.html"><i class="fa fa-circle-o"></i> ثبت نام</a></li>
-                        <li><a href="pages/examples/lockscreen.html"><i class="fa fa-circle-o"></i> قفل صفحه</a></li>
-                        <li><a href="pages/examples/404.html"><i class="fa fa-circle-o"></i> خطا 404</a></li>
-                        <li><a href="pages/examples/500.html"><i class="fa fa-circle-o"></i> خطا 500</a></li>
-                        <li><a href="pages/examples/blank.html"><i class="fa fa-circle-o"></i> صفحه خالی</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a>
-                        <i class="fa fa-share"></i> <span>چند مرحله ای</span>
-                        <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-circle-o"></i> سطح اول</a></li>
-                        <li>
-                            <a><i class="fa fa-circle-o"></i> سطح دوم <i class="fa fa-angle-right pull-right"></i></a>
-                            <ul class="treeview-menu">
-                                <li><a><i class="fa fa-circle-o"></i> سطح دوم</a></li>
-                                <li>
-                                    <a><i class="fa fa-circle-o"></i> سطح دوم <i
-                                            class="fa fa-angle-right pull-right"></i></a>
-                                    <ul class="treeview-menu">
-                                        <li><a><i class="fa fa-circle-o"></i> سطح سوم</a></li>
-                                        <li><a><i class="fa fa-circle-o"></i> سطح سوم</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="#"><i class="fa fa-circle-o"></i> سطح اول</a></li>
-                    </ul>
-                </li>
-                <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>مستندات</span></a></li>
             </ul>
         </section>
         <!-- /.sidebar -->

@@ -9,6 +9,8 @@ $app->post('/session', function() use ($app)  {
 $app->post('/getUserProfile', function() use ($app)  {
     //adminRequire();
     require_once '../db/education.php';
+    require_once '../db/skill.php';
+
     $db = new DbHandler();
     $session = new Session();
 
@@ -20,6 +22,9 @@ AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID W
 
     $user['Educations'] = getUserEducations($db,1);
     $user['AllEducations'] = getAllEducations($db);
+
+    $user['Skills'] = getUserSkills($db,1);
+    $user['AllSkills'] = getAllSkills($db);
 
     echoResponse(200, $user);
 });
@@ -51,6 +56,30 @@ $app->post('/saveUserInfo', function() use ($app)  {
     echoResponse(200, $res);
 });
 
+
+$app->post('/saveUserAddintionalInfo', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler();
+    $sess = new Session();
+    $session = $sess->getSession();
+    $userID = $session['ID'];
+
+    $d = $db->deleteFromTable('user_skill','UserID='.$userID);
+
+    foreach($data->Skills as &$s){
+        $cq = $db->insertToTable('user_skill',"UserID,SkillID","'$userID','$s->ID'");
+    }
+    $d = $db->deleteFromTable('user_education','UserID='.$userID);
+
+    foreach($data->Educations as &$e){
+        $cq = $db->insertToTable('user_education',"UserID,EducationID","'$userID','$e->ID'");
+    }
+
+    $res = [];
+    $res["Status"] = "success";
+    echoResponse(200, $res);
+});
 
 $app->post('/sfasf', function() use ($app)  {
     adminRequire();
