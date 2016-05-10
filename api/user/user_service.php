@@ -12,18 +12,20 @@ $app->post('/getUserProfile', function() use ($app)  {
     require_once '../db/skill.php';
 
     $db = new DbHandler();
-    $session = new Session();
+    $sess = new Session();
+    $session = $sess->getSession();
+    $userID = $session['Session']['UserID'];
 
     $res = [];
     $resQ = $db->makeQuery("SELECT user.`ID`, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, `SignupDate`, `Gender` , FullPath as 
-AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = 1");
+AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = $userID");
 
     $user = $resQ->fetch_assoc();
 
-    $user['Educations'] = getUserEducations($db,1);
+    $user['Educations'] = getUserEducations($db,$userID);
     $user['AllEducations'] = getAllEducations($db);
 
-    $user['Skills'] = getUserSkills($db,1);
+    $user['Skills'] = getUserSkills($db,$userID);
     $user['AllSkills'] = getAllSkills($db);
 
     echoResponse(200, $user);

@@ -214,3 +214,7 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .nav-tabs>li {
     float: right;
 }
+
+.full-width-fixer{
+    width: 100% !important;
+}
