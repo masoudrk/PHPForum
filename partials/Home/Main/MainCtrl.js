@@ -3,8 +3,8 @@
     $scope.emailError = false;
     $scope.userNameError = false;
     $scope.userID = $cookies.get('UserID');
-    $scope.userNameRegex = /^[a-zA-Z\-]+$/;
-    $scope.passwordRegix = (/^(?=.*[a-z])[0-9a-zA-Z]{8,}$/);
+    $scope.userNameRegex = (/^(?=.*[a-z])[0-9a-zA-Z]{3,}$/);
+    $scope.passwordRegix = (/^(?=.*[a-z])[0-9a-zA-Z]{6,}$/);
 
     var setUserCookie;
     (setUserCookie =  function () {
