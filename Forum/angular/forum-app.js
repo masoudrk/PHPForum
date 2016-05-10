@@ -98,6 +98,10 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
+        $rootScope.logout = function () {
+            
+        }
+        
         var serviceBase = serviceBaseURL;
         //$rootScope.session = session;
         $rootScope.spinner = {};
@@ -217,13 +221,13 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             $rootScope.spinner.active = false;
         }
 
-        obj.authUser = function (user) {
-            if(!user.Valid){
+        obj.authUser = function (sess) {
+            if(!sess.Valid){
                 obj.unAuthUser();
                 return;
             }
 
-            $rootScope.user = user;
+            $rootScope.user = sess.Session;
         }
 
         obj.unAuthUser = function () {

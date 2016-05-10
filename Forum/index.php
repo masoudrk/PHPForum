@@ -11,7 +11,6 @@ if (!isset($_SESSION)) {
 
         <script>
             var session = {};
-            session.var = 'hjvhjhjvhjvjhv';
         </script>
         <?php
     }
@@ -280,13 +279,13 @@ if (!isset($_SESSION)) {
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
-                            <img ng-src="{{user.AvatarImagePath}}" class="user-image" alt="User Image">
+                            <img ng-src="{{user.Image}}" class="user-image" alt="User Image">
                             <span class="hidden-xs" ng-bind="user.FullName"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
-                            <li class="user-header">
-                                <img ng-src="{{user.AvatarImagePath}}" class="img-circle" alt="User Image">
+                            <li class="user-header">{{user}}
+                                <img ng-src="{{user.Image}}" class="img-circle" alt="User Image">
                                 <p>
                                     <span ng-bind="user.FullName"> </span> - ادمین
                                     <small class="vazir-font">عضویت در سال 1392</small>
@@ -316,7 +315,7 @@ if (!isset($_SESSION)) {
                                     <a href="#" class="btn btn-default btn-flat">پروفایل</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">خروج</a>
+                                    <a ng-click="logout()" class="btn btn-default btn-flat">خروج</a>
                                 </div>
                             </li>
                         </ul>
@@ -333,7 +332,7 @@ if (!isset($_SESSION)) {
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-right image">
-                    <img  ng-src="{{user.AvatarImagePath}}" class="img-circle" alt="User Image">
+                    <img  ng-src="{{user.Image}}" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p ng-bind="user.FullName"></p>

@@ -103,7 +103,9 @@ $app->post('/signInUser', function() use ($app)  {
     $password = $r->Password;
     $email = $r->Username;
 
-    $user = $db->getOneRecord("select ID,FullName,Email,Password,Username,file_storage.FullPath as Image from user LEFT JOIN 
+    $user = $db->getOneRecord("select user.ID,FullName,Email,Password,Username,SignupDate,file_storage.FullPath as Image from 
+    user 
+    LEFT JOIN 
     file_storage ON 
             file_storage.ID=user.AvatarID where Username='$email' or Email='$email'");
 
