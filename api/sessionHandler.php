@@ -24,7 +24,7 @@ class Session {
 
 		$db = new DbHandler();
 
-		$resQ = $db->makeQuery("SELECT  `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, `SignupDate`, `Gender` , FullPath as 
+		$resQ = $db->makeQuery("SELECT  user.`ID`,`FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, `SignupDate`, `Gender` , FullPath as 
 AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = 1");
 
 		$res = $resQ->fetch_assoc();

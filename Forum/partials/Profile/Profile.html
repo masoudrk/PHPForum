@@ -124,6 +124,15 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
+                                    <input type="text" ng-model="curUser.Username" ng-disabled="true"
+                                           class="form-control"
+                                           id="inputPhone"
+                                           placeholder="نام کاربری ...">
+                                </div>
+                                <label for="inputPhone" class="col-sm-3 control-label">نام کاربری</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
                                     <input type="text" ng-model="curUser.Tel" class="form-control" id="inputTel"
                                            placeholder="شماره تلفن ثابت ... ">
                                 </div>
@@ -132,14 +141,30 @@
                             <div class="form-group">
                                 <div class="col-sm-9">
                                     <input type="text" ng-model="curUser.PhoneNumber" class="form-control"
-                                           id="inputPhone"
+                                           id="inputPhone1"
                                            placeholder="شماره تلفن همراه ... ">
                                 </div>
-                                <label for="inputPhone" class="col-sm-3 control-label">موبایل</label>
+                                <label for="inputPhone1" class="col-sm-3 control-label">موبایل</label>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <button type="submit" ng-click="" class="btn btn-success pull-left">بروزرسانی</button>
+                                    <input type="password" ng-model="curUser.Password" class="form-control"
+                                           id="pass" ng-change="passwordChanged()" ng-model-options="{debounce:100}"
+                                           placeholder="رمز جدید ...">
+                                </div>
+                                <label for="pass" class="col-sm-3 control-label">رمز جدید</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9" ng-class="(isEqualWithVerify)?'':'has-error'">
+                                    <input type="password" ng-model="curUser.VerifyPassword" class="form-control"
+                                           id="passVerify" ng-change="passwordChanged()" ng-model-options="{debounce:100}"
+                                           placeholder="تکرار رمز جدید ...">
+                                </div>
+                                <label for="passVerify" class="col-sm-3 control-label">تکرار رمز جدید</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <button type="submit" ng-click="saveUserInfo()" class="btn btn-success pull-left">بروزرسانی</button>
                                 </div>
                             </div>
                         </form>
@@ -153,6 +178,30 @@
                                               placeholder="درباره من ... " rows="5"></textarea>
                                 </div>
                                 <label for="inputExperience" class="col-sm-3 control-label">درباره من</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <ui-select multiple ng-model="curUser.Educations" theme="bootstrap" ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
+                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Name}}</ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in curUser.AllEducations | propsFilter: {Name: $select.search}">
+                                            <div compile="edu.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label for="inputExperience" class="col-sm-3 control-label">رشته تحصیلی</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <ui-select multiple ng-model="curUser.Educations" theme="bootstrap" ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
+                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Name}}</ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in curUser.AllEducations | propsFilter: {Name: $select.search}">
+                                            <div compile="edu.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label for="inputExperience" class="col-sm-3 control-label">مهارت ها</label>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">

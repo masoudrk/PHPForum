@@ -1,7 +1,7 @@
 ﻿var appName = 'forumApp';
 var serviceBaseURL = '../api/user/';
 
-var app = angular.module(appName, ['ngRoute', 'ngCookies' ,'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
+var app = angular.module(appName, ['ngRoute', 'ngCookies' ,'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title','ui.select']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -80,8 +80,6 @@ var fixFooter = function () {
     traverse(document.body);
 }
 
-
-
 app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention) {
 
     $rootScope.$on("$stateChangeSuccess", function () {
@@ -146,6 +144,22 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             toaster.pop('info', "", msg, delay, 'trustedHtml');
         }
 
+        obj.popModal = function (data) {
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'notifyModal.html',
+                controller: function ($scope , $uibModalInstance , data) {
+                    $scope.data =  data;
+                },
+                size: 'md',
+                resolve: {
+                    data: function () {
+                        return data;
+                    }
+                }
+            });
+        }
+
         obj.get = function (q) {
             obj.setBusy(true);
             return $http.get(serviceBase + q).then(function (results) {
@@ -171,9 +185,15 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         obj.post = function (q, object) {
             obj.setBusy(true);
             return $http.post(serviceBase + q, object).then(function (results) {
+
+                if(obj.debugMode && results.status != 200){
+                    obj.popModal(results);
+                }
                 obj.setBusy(false);
                 return results.data;
             }, function (err) {
+                if(obj.debugMode)
+                    obj.popModal(err.data);
                 obj.setBusy(false);
                 return err;
             });
@@ -181,8 +201,14 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.postAsync = function (q, object) {
             return $http.post(serviceBase + q, object).then(function (results) {
+
+                if(obj.debugMode && results.status != 200){
+                    obj.popModal(results);
+                }
                 return results.data;
             }, function (err) {
+                if(obj.debugMode)
+                    obj.popModal(err.data);
                 return err;
             });
         };
@@ -327,6 +353,38 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         return obj;
     }]);
+
+app.filter('propsFilter', function() {
+    return function(items, props) {
+        var out = [];
+
+        if (angular.isArray(items)) {
+            var keys = Object.keys(props);
+
+            items.forEach(function(item) {
+                var itemMatches = false;
+
+                for (var i = 0; i < keys.length; i++) {
+                    var prop = keys[i];
+                    var text = props[prop].toLowerCase();
+                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                        itemMatches = true;
+                        break;
+                    }
+                }
+
+                if (itemMatches) {
+                    out.push(item);
+                }
+            });
+        } else {
+            // Let the output be the input untouched
+            out = items;
+        }
+
+        return out;
+    };
+});
 
 app.filter('jalaliDate', function () {
     return function (inputDate, format) {
