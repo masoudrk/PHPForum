@@ -284,7 +284,7 @@ if (!isset($_SESSION)) {
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
-                            <li class="user-header">{{user}}
+                            <li class="user-header">
                                 <img ng-src="{{user.Image}}" class="img-circle" alt="User Image">
                                 <p>
                                     <span ng-bind="user.FullName"> </span> - ادمین
