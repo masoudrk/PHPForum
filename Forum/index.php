@@ -6,12 +6,19 @@
         session_start();
         if(!isset($_SESSION['UserID'])){?>
             <script>
-                //     window.location ="../";
+                     window.location ="../";
             </script>
         <?php
         }else{?>
             <script>
                 var session = {};
+                session.UserID = '<?php echo $_SESSION['UserID']; ?>';
+                session.FullName = '<?php echo $_SESSION['FullName']; ?>';
+                session.Email = '<?php echo $_SESSION['Email']; ?>';
+                session.SSN = '<?php echo $_SESSION['SSN']; ?>';
+                session.IsAdmin = '<?php echo $_SESSION['IsAdmin']; ?>';
+                session.Image = '<?php echo $_SESSION['Image']; ?>';
+                session.SignupDate = '<?php echo $_SESSION['SignupDate']; ?>';
             </script>
             <?php
         }
@@ -286,7 +293,7 @@
                                 <img ng-src="{{user.Image}}" class="img-circle" alt="User Image">
                                 <p>
                                     <span ng-bind="user.FullName"> </span> - ادمین
-                                    <small class="vazir-font">عضویت در سال 1392</small>
+                                    <small class="vazir-font">عضویت در سال {{user.SignupDate |  jalaliDateSimple:'jYYYY'}}</small>
                                 </p>
                             </li>
                             <!-- Menu Body -->
@@ -298,7 +305,7 @@
                                 </div>
                                 <div class="col-xs-3 text-center no-padding">
                                     <a href="#">
-                                        <small class="vazir-font">فروش ها</small>
+                                        <small class="vazir-font">پیام ها</small>
                                     </a>
                                 </div>
                                 <div class="col-xs-4 text-center no-padding">
@@ -310,7 +317,7 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">پروفایل</a>
+                                    <a ui-sref="profile" class="btn btn-default btn-flat">پروفایل</a>
                                 </div>
                                 <div class="pull-right">
                                     <a ng-click="logout()" class="btn btn-default btn-flat">خروج</a>
@@ -351,6 +358,67 @@
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
 
+
+                <li id="SForum" class="treeview">
+                    <a class="link">
+                        <i class="fa fa-users"></i> <span>انجمن</span>
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="SForumHome"><a ui-sref="forum_home"><i class="fa fa-circle-o"></i>
+                                خانه </a></li>
+                        <li id="SDataSwitch"><a ui-sref="forum_data_switch"><i class="fa fa-circle-o"></i>
+مراکز خودکار و دیتا سوئیچ</a></li>
+                        <li id="STransition"><a ui-sref="forum_transition"><i class="fa fa-circle-o"></i>
+                                رادیوئی</a></li>
+                        <li id="STransportManagement"><a ui-sref="forum_transport_management"><i class="fa
+                        fa-circle-o"></i> نظارت بر سیستم ها انتقال
+                            </a></li>
+                        <li id="SRadio"><a ui-sref="forum_radio"><i class="fa fa-circle-o"></i> خطوط انتقال</a></li>
+                    </ul>
+                </li>
+
+                <li id="SQuestion" class="treeview">
+                    <a class="link">
+                        <i class="fa fa-question-circle"></i> <span>مدیریت سوال ها</span>
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="SQuestionNew">
+                            <a ui-sref="new_question">
+                                <i class="fa fa-circle-o"></i>ایجاد سوال جدید
+                            </a>
+                        </li>
+                        <li id="SQuestions">
+                            <a ui-sref="questions">
+                                <i class="fa fa-circle-o"></i>سوالات شما
+                            </a>
+                        </li>
+                        <li>
+                            <a ui-sref="forum_home">
+                                <i class="fa fa-circle-o"></i>جواب های شما
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a class="link">
+                        <i class="fa fa-envelope"></i> <span>مدیریت پیام ها</span>
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a ui-sref="forum_home">
+                                <i class="fa fa-circle-o"></i>ارسال پیام
+                            </a>
+                        </li>
+                        <li>
+                            <a ui-sref="forum_home">
+                                <i class="fa fa-circle-o"></i>پیام های دریافتی
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li>
                     <a ui-sref="profile">
                         <i class="fa fa-male"></i><span>  پروفایل من </span>
@@ -359,14 +427,8 @@
                 </li>
                 <li class="treeview">
                     <a class="link">
-                        <i class="fa fa-laptop"></i>
-                        <span>فروم</span>
-                    </a>
-                </li>
-                <li class="treeview">
-                    <a class="link">
-                        <i class="fa fa-envelope"></i>
-                        <span>پیام ها</span>
+                        <i class="fa fa-power-off"></i>
+                        <span>خارج شدن</span>
                     </a>
                 </li>
             </ul>

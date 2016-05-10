@@ -32,6 +32,10 @@ h5 ,h4 ,h3 ,h2 ,h1 {
   text-align: left;
 }
 
+.sidebar-menu .treeview-menu > li > a {
+    padding: 5px 15px 5px 5px;
+}
+
 .sidebar-menu > li.header {
     text-align: right;
 }
@@ -217,4 +221,8 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 
 .full-width-fixer{
     width: 100% !important;
+}
+
+.list-group-unbordered > .list-group-item {
+    padding-left: 8px;
 }

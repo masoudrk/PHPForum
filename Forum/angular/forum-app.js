@@ -15,11 +15,11 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     $stateProvider
         .state('home', {
             url: "/",
-            templateUrl: "partials/Forum/Forum.html",
-            controller: 'ForumCtrl',
+            templateUrl: "partials/Forum/_Home/Home.html",
+            controller: 'HomeCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/ForumCtrl.js']);
+                    return $ocLazyLoad.load(['partials/Forum/_Home/HomeCtrl.js']);
                 }],
                 $title: function () {
                     return 'انجمن';
@@ -50,10 +50,100 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'پروفایل';
                 }
             }
+        })
+        .state("forum_home", {
+            url: "/home",
+            templateUrl: "partials/Forum/_Home/Home.html",
+            controller: 'HomeCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/_Home/HomeCtrl.js']);
+                }],
+                $title: function () {
+                    return 'انجمن خانه';
+                }
+            }
+        })
+        .state("forum_data_switch", {
+            url: "/data_switch",
+            templateUrl: "partials/Forum/DataSwitch/DataSwitch.html",
+            controller: 'DataSwitchCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/DataSwitch/DataSwitchCtrl.js']);
+                }],
+                $title: function () {
+                    return 'انجمن دیتا سوئیچ';
+                }
+            }
+        })
+        .state("forum_transition", {
+            url: "/transition",
+            templateUrl: "partials/Forum/Transition/Transition.html",
+            controller: 'TransitionCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/Transition/TransitionCtrl.js']);
+                }],
+                $title: function () {
+                    return 'پروفایل';
+                }
+            }
+        })
+        .state("forum_transport_management", {
+            url: "/transport_management",
+            templateUrl: "partials/Forum/TransportManagement/TransportManagement.html",
+            controller: 'TransportManagementCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/TransportManagement/TransportManagementCtrl.js']);
+                }],
+                $title: function () {
+                    return 'انجمن نظارت بر سیستم انتقال';
+                }
+            }
+        })
+        .state("forum_radio", {
+            url: "/radio",
+            templateUrl: "partials/Forum/Radio/Radio.html",
+            controller: 'RadioCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/Radio/RadioCtrl.js']);
+                }],
+                $title: function () {
+                    return 'انجمن رادیو';
+                }
+            }
+        })
+        .state("new_question", {
+            url: "/new_question",
+            templateUrl: "partials/Question/NewQuestion/NewQuestion.html",
+            controller: 'NewQuestionCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Question/NewQuestion/NewQuestionCtrl.js']);
+                }],
+                $title: function () {
+                    return 'سوال جدید';
+                }
+            }
+        })
+        .state("questions", {
+            url: "/questions",
+            templateUrl: "partials/Question/Questions/Questions.html",
+            controller: 'QuestionsCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Question/Questions/QuestionsCtrl.js']);
+                }],
+                $title: function () {
+                    return 'سوالات شما';
+                }
+            }
         });
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');
-        //$state.go('home.home');
         $state.go('home');
     });
 }
@@ -80,16 +170,19 @@ var fixFooter = function () {
     traverse(document.body);
 }
 
+var activeElement = function (parent , name) {
+    var elem = $(name);
+    var elemP = $(parent);
+    elem.addClass('active').siblings().removeClass('active');
+    elemP.addClass('active').siblings().removeClass('active');
+}
+
 app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention) {
 
     $rootScope.$on("$stateChangeSuccess", function () {
     });
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
-
-        Extention.post('session').then(function (res) {
-            Extention.authUser(res);
-        });
 
     });
 
@@ -99,9 +192,11 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
         $rootScope.logout = function () {
-            
+
         }
-        
+
+        $rootScope.user = session;
+
         var serviceBase = serviceBaseURL;
         //$rootScope.session = session;
         $rootScope.spinner = {};
@@ -394,6 +489,13 @@ app.filter('jalaliDate', function () {
     return function (inputDate, format) {
         var date = moment(inputDate);
         return date.fromNow() + " " + date.format(format);
+    }
+});
+
+app.filter('jalaliDateSimple', function () {
+    return function (inputDate, format) {
+        var date = moment(inputDate);
+        return date.format(format);
     }
 });
 
