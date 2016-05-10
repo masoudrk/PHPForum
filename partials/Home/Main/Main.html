@@ -106,9 +106,15 @@
                 </div>
                 <div class="hr"></div>
                 <div class="text-right col-xs-12">
-                    <label style="font-size: 20px;margin-bottom: 20px;">ورود به انجمن</label>
+                    <label style="font-size: 20px; margin-bottom: 20px;">ورود به انجمن</label>
                 </div>
-                <form name="signInForm" ng-submit="signInFunc()">
+                <div class="form-group col-md-4 col-sm-12 pull-left" ng-show="userCookie.UserID">
+                    <button tabindex="0" type="button" dir="rtl" ng-click="logInUser()" class="form-control btn btn-success pull-right">ورود به انجمن <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                </div>
+                <div class="text-right col-xs-8">
+                    <label style="font-size: 15px;margin-bottom: 20px;">سلام <b class="text-warning">{{userCookie.FullName}}</b></label>
+                </div>
+                <form name="signInForm" ng-submit="signInFunc()" ng-hide="userCookie.UserID">
                     <div class="form-group col-md-2 col-sm-12 pull-left">
                         <button tabindex="3" type="submit" dir="rtl" class="form-control btn btn-success">ورود</button>
                     </div>

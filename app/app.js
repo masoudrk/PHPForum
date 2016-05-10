@@ -1,6 +1,6 @@
 ﻿var appName = 'myApp';
 var serviceBaseURL = 'api/public/';
-var app = angular.module(appName, ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'fullPage.js', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'pageslide-directive']);
+var app = angular.module(appName, ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'fullPage.js', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'pageslide-directive', 'ngCookies']);
 
 
 function getPage(name) {
@@ -418,38 +418,17 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention) {
             $rootScope.titleIcon = res.SiteTitleIcon;
         });
 
-        Extention.get('session').then(function (results) {
-            
-
-            //if (next.url == '/admin') {
-            //    $state.go("admin_root.dashboard");
-            //    return;
-            //}
-
-            //if (results && results.Status == 'success') {
-            //    $rootScope.authenticated = true;
-            //    $rootScope.user = {};
-            //    $rootScope.user.lastName = results.LastName;
-            //    $rootScope.user.firstName = results.FirstName;
-                
-            //    if (results.IsAdmin)
-            //        $rootScope.isAdmin = true;
-            //}
-
-            //if (next.name.indexOf("en") > -1) {
-            //    $rootScope.lang = 'en';
-            //} else {
-            //    $rootScope.lang = 'fa';
-            //}
-            
-            //if (next.name.indexOf("admin_root") > -1) {
-            //    if (results && !results.IsAdmin)
-            //        $state.go("home.home");
-
-            //}else if (next.name.indexOf("user_root") > -1) {
-            //    if (results && !results.UserID)
-            //        $state.go("home.home");
-            //}
+        Extention.post('session').then(function (results) {
+            if (results.Valid) {
+                $rootScope.userCookie = {
+                    UserID: results.Session.UserID,
+                    IsAdmin: results.Session.IsAdmin,
+                    FullName: results.Session.FullName,
+                    Email: results.Session.Email
+                }
+            } else {
+                $rootScope.userCookie = {};
+            }
         });
     });
 });

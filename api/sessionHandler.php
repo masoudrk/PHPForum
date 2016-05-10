@@ -9,26 +9,26 @@ class Session {
 	    $sess = [];
 
         if(isset($_SESSION['UserID'])){
+            $res['Valid'] = true;
 	        $sess['Status'] = "success";
-	        $sess["LastName"] = $_SESSION['LastName'];
-	        $sess["FirstName"] = $_SESSION['FirstName'];
+	        $sess["FullName"] = $_SESSION['FullName'];
 	        $sess["Email"] = $_SESSION['Email'];
 	        $sess["SSN"] = $_SESSION['SSN'];
 	        $sess["UserID"] = $_SESSION['UserID'];
 	        $sess["IsAdmin"] = $_SESSION['IsAdmin'];
-		}
-        
-        if (isset($_SESSION["AdminID"])) {
-         	$sess["AdminID"] = $_SESSION['AdminID'];
+		}else
+        {
+            $res['Valid'] = false;
+            return $res;
         }
 
-		$db = new DbHandler();
+        if (isset($_SESSION["AdminID"])) {
+         	$sess["AdminID"] = $_SESSION['AdminID'];
+             $res['Valid'] = true;
+        }elseif(!isset($_SESSION['UserID']))
+            $res['Valid'] = false;
 
-		$resQ = $db->makeQuery("SELECT  `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, `SignupDate`, `Gender` , FullPath as 
-AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = 1");
-
-		$res = $resQ->fetch_assoc();
-		$res['Valid'] = true;
+        $res['Session'] = $sess;
 	    return $res;
 	}
 	

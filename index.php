@@ -45,6 +45,7 @@
 
 <script src="js/angular.js"></script>
 <script src="js/angular-route.min.js"></script>
+<script src="js/angular-cookies.min.js"></script>
 <script src="js/angular-animate.min.js" ></script>
 <script src="js/angular-ui-router.js"></script>
 

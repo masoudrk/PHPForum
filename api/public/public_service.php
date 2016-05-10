@@ -153,6 +153,12 @@ $app->post('/signInUser', function() use ($app)  {
     echoResponse(200, $response);
 });
 
+$app->post('/session', function() use ($app)  {
+    $sess = new Session();
+    $s = $sess->getSession();
+    echoResponse(200, $s);
+});
+
 $app->post('/getSiteTitleIcon', function() use ($app)  {
     $db = new DbHandler();
     //$data = json_decode($app->request->getBody());
