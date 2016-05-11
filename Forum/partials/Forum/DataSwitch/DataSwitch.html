@@ -1,15 +1,109 @@
 ﻿<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
-        <small>خانه</small>
-        انجمن
+        <small>دیتا سوئیچ</small>
+           انجمن
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> دیتا سوئیچ</a></li>
         <li class="active">انجمن</li>
     </ol>
 </section>
 <div class="row">
     <div class="col-xs-12">
+
+        <div class="col-md-8 col-xs-12 pull-right">
+
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">انجمن دیتا سویچ</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    مرکز داده (Data Center) به مجموعه‌ای از سرویس گرها، زیرساخت‌های ارتباطی ، امنیتی و تجهیزات الکترونیکی
+                    گفته می‌شود که برای ارایه، نگهداری و پشتیبانی از سرویس‌های تحت شبکه (اینترنت ، اینترانت، اکسترانت) بکار گماشته می‌شوند.<br><br> سازمان‌ها، شرکت‌ها، و افراد می‌توانند با به کارگیری سرویس‌های ارایه شده از طرف مرکز داده وب‌گاه‌ها، اطلاعات و سرویس‌های مبنتی بر شبکه خود را بر روی اینترنت (اینترانت،اکسترانت) راه‌اندازی کنند.
+                    <br><br>
+                    مرکز داده، بسته به نوع کاربردی که برای آن تعریف شده است، می‌تواند به عنوان یک مرکز پردازشی، مرکز ذخیره داده، مرکز جمع آوری داده و یا تمامی این موارد عمل کند.<br><br> مراکز داده بسیار عظیم و متنوعی در سرتاسر شبکه جهانی اینترنت در حال سرویس دهی هستند که برخی از این مراکز استفاده تجاری محدود درون سازمانی دارند و برخی دیگر در اینترنت به صورت تجاری و یا عمومی قابل استفاده هستند.
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+
+            <div class="box box-info">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">سوالات انجمن</h3>
+                    <div class="box-tools">
+                        <div class="input-group" style="width: 200px;">
+                            <input type="text" name="table_search" class="form-control input-sm pull-right " placeholder="جستجو...">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default left-radius-btn"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>شماره</th>
+                            <th>یوزر</th>
+                            <th>تاریخ</th>
+                            <th>وضعیت</th>
+                            <th>دلیل</th>
+                        </tr>
+                        <tr>
+                            <td>۱۸۳</td>
+                            <td>علی کریمی</td>
+                            <td>۱۷ اردیبهشت ۱۳۹۵</td>
+                            <td><span class="label label-success">ثبت نام شده</span></td>
+                            <td>رنگ بایکون ها میتواند تغییر کند</td>
+                        </tr>
+                        <tr>
+                            <td>۲۱۹</td>
+                            <td>میلاد بنکدار</td>
+                            <td>۱۷ اردیبهشت ۱۳۹۵</td>
+                            <td><span class="label label-warning">در حال ثبت نام</span></td>
+                            <td>رنگ بایکون ها میتواند تغییر کند</td>
+                        </tr>
+                        <tr>
+                            <td>۶۵۷</td>
+                            <td>مسعود خانلو</td>
+                            <td>۱۷ اردیبهشت ۱۳۹۵</td>
+                            <td><span class="label label-primary">ثبت نام شده</span></td>
+                            <td>رنگ بایکون ها میتواند تغییر کند</td>
+                        </tr>
+                        <tr>
+                            <td>۱۷۵</td>
+                            <td>مایک</td>
+                            <td>۱۷ اردیبهشت ۱۳۹۵</td>
+                            <td><span class="label label-danger">فوت شده</span></td>
+                            <td>رنگ بایکون ها میتواند تغییر کند</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllUsers"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 items="user.all">
+                    </auto-paging>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4 col-xs-12 pull-right">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">آمار انجمن دیتا سویچ</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+        </div>
     </div>
 </div>

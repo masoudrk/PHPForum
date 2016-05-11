@@ -104,7 +104,7 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 }
 .content-header {
 	padding-top:5px;
-	padding-bottom:5px;
+	padding-bottom:10px;
 }
 
 
@@ -227,5 +227,8 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     padding-left: 8px;
 }
 
-.treasure-overlay-spinner {
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+
+    background-color: #2C3B41;
+    border-color: #2C3B41;
 }

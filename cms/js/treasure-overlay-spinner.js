@@ -26,9 +26,9 @@
   var TEMPLATE = '';
   TEMPLATE += '<div class="treasure-overlay-spinner-content">';
   TEMPLATE +=   '<div class="treasure-overlay-spinner-container" style="height: 10000000px;">';
-  TEMPLATE +=     '<div class="loader">'+
+  TEMPLATE +=     '<div class="loader" style="width:{{spinnerSize}}px">'+
                     '<svg class="circular" viewBox="25 25 50 50">'+
-                    '<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>'+
+                    '<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="{{spinnerStorkeWidth}}" stroke-miterlimit="10"/>'+
                     '</svg>'+
                   '</div>';
   TEMPLATE +=   '</div>';
@@ -44,7 +44,11 @@
   function overlaySpinner ($animate) {
     return {
       templateUrl: TEMPLATE_PATH,
-      scope: {active: '='},
+      scope: {
+          active: '=',
+          spinnerStorkeWidth : '@',
+          spinnerSize : '@'
+      },
       transclude: true,
       restrict: 'E',
       link: link
