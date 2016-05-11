@@ -23,7 +23,7 @@
             <?php
         }
     }
-    ?>
+            ?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="fa"/>
@@ -34,7 +34,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-
+    <link href="../cms/css/angular-chart.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/toaster.css">
     <link rel="stylesheet" href="../cms/css/treasure-overlay-spinner.min.css">
     <link rel="stylesheet" href="../cms/css/select/select.css">
@@ -657,6 +657,8 @@
 <script>
     $.widget.bridge('uibutton', $.ui.button);
 </script>
+<script src="../cms/js/Chart.1.1.1.js"></script>
+<script src="../cms/js/angular-chart.js"></script>
 <!-- Bootstrap 3.3.5 -->
 <script src="../cms/js/bootstrap.min.js"></script>
 <!-- Bootstrap WYSIHTML5
