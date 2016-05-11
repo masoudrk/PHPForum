@@ -447,13 +447,13 @@
 
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
 
-        <treasure-overlay-spinner active='spinner.active' >
+        <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60">
         </treasure-overlay-spinner>
-        <div ui-view >
-        </div><!-- /.content-wrapper -->
+        <!-- Content Wrapper. Contains page content -->
+        <div ui-view ></div>
+        <!-- /.content-wrapper -->
     </div>
 
     <footer class="main-footer persian-rtl">
@@ -645,6 +645,7 @@
 
 <script src="angular/forum-app.js"></script>
 <script src="partials/MainCtrl.js"></script>
+<script src="../app/directives/auto-pagination.js"></script>
 
 <script type="text/javascript" src="../js/moment.js"></script>
 <script type="text/javascript" src="../js/moment-jalaali.js"></script>
