@@ -1,4 +1,5 @@
-angular.module(appName).controller('QuestionsCtrl', function ($scope, $element, $rootScope, $routeParams, $state, $location, $timeout, Extention) {
+angular.module(appName).controller('QuestionsCtrl', function ($scope, $element, $rootScope, $routeParams, $state, 
+															  $location, $timeout, Extention) {
 
 	// Extention.post('').then(function (res) {
 	//
@@ -6,4 +7,4 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $element, 
 
 	activeElement('#SQuestion','#SQuestionNew');
 	fixFooter();
-});
+}); 

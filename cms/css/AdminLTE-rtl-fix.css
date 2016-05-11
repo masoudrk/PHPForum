@@ -226,3 +226,6 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .list-group-unbordered > .list-group-item {
     padding-left: 8px;
 }
+
+.treasure-overlay-spinner {
+}

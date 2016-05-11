@@ -1,7 +1,7 @@
 ﻿var appName = 'forumApp';
 var serviceBaseURL = '../api/user/';
 
-var app = angular.module(appName, ['ngRoute', 'ngCookies' ,'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title','ui.select']);
+var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner','ngCookies' ,'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title','ui.select']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -179,11 +179,15 @@ var activeElement = function (parent , name) {
 
 app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention) {
 
+    $rootScope.spinner ={};
+
     $rootScope.$on("$stateChangeSuccess", function () {
+        Extention.setBusy(false);
     });
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
 
+        Extention.setBusy(true);
     });
 
 });

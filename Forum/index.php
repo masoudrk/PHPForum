@@ -36,7 +36,7 @@
 
 
     <link rel="stylesheet" href="../css/toaster.css">
-    <link rel="stylesheet" href="../css/treasure-overlay-spinner.css">
+    <link rel="stylesheet" href="../cms/css/treasure-overlay-spinner.min.css">
     <link rel="stylesheet" href="../cms/css/select/select.css">
 
     <!-- Bootstrap 3.3.5 -->
@@ -448,15 +448,20 @@
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" ui-view style="min-height:981">
-    </div><!-- /.content-wrapper -->
+    <div class="content-wrapper">
+
+        <treasure-overlay-spinner active='spinner.active' >
+        </treasure-overlay-spinner>
+        <div ui-view >
+        </div><!-- /.content-wrapper -->
+    </div>
 
     <footer class="main-footer persian-rtl">
         <div class="pull-left hidden-xs">
             <b>نسخه</b> 2.3.0
         </div>
         <strong class="persian-rtl"></strong> تمام حقوق مادی و معنوی این وبسایت برای سازنده محفوظ است.Copyright &copy;
-        2014-2015 <a class="persian-rtl" href="http://almsaeedstudio.com">طراحی شده توسط MagicCube.ir</a>.
+        2014-2015 <a class="persian-rtl">طراحی شده توسط MagicCube.ir</a>.
     </footer>
 
     <!-- Control Sidebar -->
@@ -632,6 +637,7 @@
 <script src="../js/angular-animate.min.js"></script>
 <script src="../js/angular-ui-router.js"></script>
 
+<script src="../cms/js/treasure-overlay-spinner.js" type="text/javascript"></script>
 <script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript"></script>
 <script src="../js/toaster.js" type="text/javascript"></script>
 <script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript"></script>
