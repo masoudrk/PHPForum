@@ -142,13 +142,9 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         }).state("question", {
-            url: "/question/:id",
-            views: {
-                "viewContent": {
-                    templateUrl: "partials/Forum/Question/Question.html",
-                    controller: 'QuestionCtrl'
-                }
-            },
+        url: "/question/:id",
+            templateUrl: "partials/Forum/Question/Question.html",
+            controller: 'QuestionCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
