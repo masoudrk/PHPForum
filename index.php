@@ -22,8 +22,8 @@
     <link href="css/angular-tooltips.css" rel="stylesheet" type="text/css" />
 
     <link href="css/site-styles.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.9/jquery.fullPage.css" rel="stylesheet" />
-    
+
+    <link href="css/jquery-fullPage.css" rel="stylesheet" />
 
     <title ng-bind="($title || 'Loading ...')">Loading ...</title>
     <link rel="icon" href="{{titleIcon}}">
@@ -40,8 +40,8 @@
         async defer></script>
 <!-- jqurey libs -->
 <script src="js/jquery.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.9/vendors/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.9/jquery.fullPage.js" type="text/javascript"></script>
+<script src="js/jquery.slimscroll.min.js"></script>
+<script src="js/jquery.fullPage.js"></script>
 
 <script src="js/angular.js"></script>
 <script src="js/angular-route.min.js"></script>
@@ -85,7 +85,7 @@
 <script src="js/eeh-nav/eeh-navigation.tpl.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.10.0/angular-translate.min.js"></script>-->
 
-    <script src="js/angular-pageslide-directive.js"></script>
+<script src="js/angular-pageslide-directive.js"></script>
 
 <script src="app/app.js"></script>
 <script src="js/angular-clipboard.js"></script>
