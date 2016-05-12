@@ -34,7 +34,8 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <link href="../cms/css/angular-chart.min.css" rel="stylesheet" />
+    <!--<link href="../cms/css/angular-chart.min.css" rel="stylesheet" />-->
+    <link rel="stylesheet" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css"/>
     <link rel="stylesheet" href="../css/toaster.css">
     <link rel="stylesheet" href="../cms/css/treasure-overlay-spinner.min.css">
     <link rel="stylesheet" href="../cms/css/select/select.css">
@@ -658,8 +659,12 @@
 <script>
     $.widget.bridge('uibutton', $.ui.button);
 </script>
-<script src="../cms/js/Chart.1.1.1.js"></script>
-<script src="../cms/js/angular-chart.js"></script>
+<script src="../cms/js/d3.js"></script>
+<!--<script src="../cms/js/d3.min.js"></script>-->
+<script src="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.7/angular-nvd3.min.js"></script>
+<!--<script src="../cms/js/Chart.1.1.1.js"></script>-->
+<!--<script src="../cms/js/angular-chart.js"></script>-->
 <!-- Bootstrap 3.3.5 -->
 <script src="../cms/js/bootstrap.min.js"></script>
 <!-- Bootstrap WYSIHTML5

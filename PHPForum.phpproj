@@ -401,6 +401,8 @@
     <Content Include="cms\js\bootstrap.min.js" />
     <Content Include="cms\js\Chart.1.1.1.js" />
     <Content Include="cms\js\chart.js" />
+    <Content Include="cms\js\d3.js" />
+    <Content Include="cms\js\d3.min.js" />
     <Content Include="cms\js\demo.js" />
     <Content Include="cms\js\fastclick\fastclick.js" />
     <Content Include="cms\js\fastclick\fastclick.min.js" />

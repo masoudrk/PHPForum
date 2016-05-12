@@ -72,30 +72,26 @@
                 </div>
         </div><!-- ./col -->
 
-        <div class="col-md-6 col-xs-12 pull-right">
+        <div class="col-md-7 col-xs-12 pull-right">
             <div class="box box-warning">
                 <div class="box-header with-border">
                     <h3 class="box-title vazir-font">آمار کل انجمن</h3>
                 </div>
                 <div class="box-body persian-rtl">
                     <div class="col-xs-12">
-                        <canvas id="line" class="chart chart-line vazir-font" chart-data="data"
-                                chart-labels="labels" chart-legend="true" chart-series="series"
-                                chart-click="onClick">
-                        </canvas>        
+                        <nvd3 options="forumOptions" data="forumData"></nvd3>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xs-12 pull-left">
+        <div class="col-md-5 col-xs-12 pull-left">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title vazir-font">مقایسه انجمن ها</h3>
                 </div>
                 <div class="box-body persian-rtl">
                     <div class="col-xs-12">
-                        <canvas id="radar" class="chart chart-radar"
-                                chart-data="datas" chart-series="seriess" chart-labels="labelss"></canvas>
+                        <nvd3 options="forumDetailOptions" data="forumDetailData"></nvd3>
                     </div>
                 </div>
             </div>
@@ -136,14 +132,14 @@
                         </table>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <auto-paging page="1"
+                        <!--<auto-paging page="1"
                                      page-size="20"
                                      ul-class="pagination pagination-sm no-margin"
                                      action-name="getAllUsers"
                                      data-params="pagingParams"
                                      ng-control="pagingController"
                                      items="user.all">
-                        </auto-paging>
+                        </auto-paging>-->
                     </div>
                 </div>
             </div>
@@ -183,14 +179,14 @@
                         </table>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <auto-paging page="1"
+                        <!--<auto-paging page="1"
                                      page-size="20"
                                      ul-class="pagination pagination-sm no-margin"
                                      action-name="getAllUsers"
                                      data-params="pagingParams"
                                      ng-control="pagingController"
                                      items="user.all">
-                        </auto-paging>
+                        </auto-paging>-->
                     </div>
                 </div>
             </div>
@@ -230,14 +226,14 @@
                         </table>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <auto-paging page="1"
+                        <!--<auto-paging page="1"
                                      page-size="20"
                                      ul-class="pagination pagination-sm no-margin"
                                      action-name="getAllUsers"
                                      data-params="pagingParams"
                                      ng-control="pagingController"
                                      items="user.all">
-                        </auto-paging>
+                        </auto-paging>-->
                     </div>
                 </div>
             </div>
