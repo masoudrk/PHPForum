@@ -116,6 +116,7 @@
     <Folder Include="Forum\partials\Elements\" />
     <Folder Include="Forum\partials\Forum\" />
     <Folder Include="Forum\partials\Forum\DataSwitch\" />
+    <Folder Include="Forum\partials\Forum\Question\" />
     <Folder Include="Forum\partials\Forum\Radio\" />
     <Folder Include="Forum\partials\Forum\Transition\" />
     <Folder Include="Forum\partials\Forum\TransportManagement\" />
@@ -476,6 +477,8 @@
     <Content Include="Forum\partials\Elements\_ElementsCtrl.js" />
     <Content Include="Forum\partials\Forum\DataSwitch\DataSwitch.html" />
     <Content Include="Forum\partials\Forum\DataSwitch\DataSwitchCtrl.js" />
+    <Content Include="Forum\partials\Forum\Question\Question.html" />
+    <Content Include="Forum\partials\Forum\Question\QuestionCtrl.js" />
     <Content Include="Forum\partials\Forum\Radio\Radio.html" />
     <Content Include="Forum\partials\Forum\Radio\RadioCtrl.js" />
     <Content Include="Forum\partials\Forum\Transition\Transition.html" />

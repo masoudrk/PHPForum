@@ -141,6 +141,24 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'سوالات شما';
                 }
             }
+        }).state("question", {
+            url: "/question/:id",
+            views: {
+                "viewContent": {
+                    templateUrl: "partials/Forum/Question/Question.html",
+                    controller: 'QuestionCtrl'
+                }
+            },
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Forum/Question/QuestionCtrl.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'سوال ';
+                }
+            }
         });
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');

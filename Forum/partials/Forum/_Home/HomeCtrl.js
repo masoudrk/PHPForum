@@ -8,7 +8,7 @@
             y: function (d) { return d.value; },
             showControls: true,
             showValues: true,
-            duration: 500,
+            duration: 1500,
             xAxis: {
                 showMaxMin: false
             },
@@ -79,7 +79,7 @@
             },
             clipEdge: true,
             //staggerLabels: true,
-            duration: 500,
+            duration: 1500,
             stacked: true,
             xAxis: {
                 axisLabel: 'Time (ms)',
