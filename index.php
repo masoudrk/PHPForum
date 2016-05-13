@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="fa" ng-app="myApp">
 <head>
+    <?php
+        require_once 'session_generator.php';
+        generateSessionAsJavascriptVariable();
+    ?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">

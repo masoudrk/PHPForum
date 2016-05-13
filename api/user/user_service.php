@@ -1,5 +1,11 @@
 <?php
 
+$app->post('/logout', function() use ($app)  {
+    $sess = new Session();
+    $res = $sess->destroySession();
+    echoResponse(200, $res);
+});
+
 $app->post('/deleteQuestion', function() use ($app)  {
 
     require_once '../db/question.php';

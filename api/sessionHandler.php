@@ -66,27 +66,33 @@ class Session {
 	}
 	
 	public function destroySession(){
+		$res = [];
 	    if (!isset($_SESSION)) {
 	    session_start();
 	    }
 	    if(isSet($_SESSION['UserID']))
 	    {
-			unset($_SESSION['AdminID']);
-	        unset($_SESSION['UserID']);
-	        unset($_SESSION['LastName']);
-	        unset($_SESSION['FirstName']);
+			unset($_SESSION['UserID']);
+			unset($_SESSION['FullName']);
+			unset($_SESSION['Email']);
+			unset($_SESSION['SSN']);
+	        unset($_SESSION['IsAdmin']);
+			unset($_SESSION['SignupDate']);
+			unset($_SESSION['Image']);
+			unset($_SESSION['FirstName']);
 	        $info='info';
 	        if(isSet($_COOKIE[$info]))
 	        {
 	            setcookie ($info, '', time() - $cookie_time);
 	        }
-	        $msg="Logged Out Successfully...";
+			$res['Status'] = 'success';
 	    }
 	    else
 	    {
-	        $msg = "Not logged in...";
+			$res['Status'] = 'error';
 	    }
-	    return $msg;
+
+	    return $res;
 	}
  
 }

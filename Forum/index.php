@@ -2,6 +2,7 @@
 <html ng-app="forumApp">
 <head>
     <?php
+
     if (!isset($_SESSION)) {
         session_start();
         if(!isset($_SESSION['UserID'])){?>
@@ -9,22 +10,11 @@
                      window.location ="../";
             </script>
         <?php
-        }else{?>
-            <script>
-                var session = {};
-                session.UserID = '<?php echo $_SESSION['UserID']; ?>';
-                session.FullName = '<?php echo $_SESSION['FullName']; ?>';
-                session.Email = '<?php echo $_SESSION['Email']; ?>';
-                session.SSN = '<?php echo $_SESSION['SSN']; ?>';
-                session.IsAdmin = '<?php echo $_SESSION['IsAdmin']; ?>';
-                session.Image = '<?php echo $_SESSION['Image']; ?>';
-                session.SignupDate = '<?php echo $_SESSION['SignupDate']; ?>';
-
-            </script>
-            <?php
+        }else{
+            require_once  '../session_generator.php';
+            generateSessionAsJavascriptVariable();
         }
-    }
-            ?>
+    }?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="fa"/>
@@ -398,11 +388,11 @@
                                 <i class="fa fa-circle-o"></i>سوالات شما
                             </a>
                         </li>
-                        <li>
-                            <a ui-sref="forum_home">
-                                <i class="fa fa-circle-o"></i>جواب های شما
-                            </a>
-                        </li>
+<!--                        <li>-->
+<!--                            <a ui-sref="forum_home">-->
+<!--                                <i class="fa fa-circle-o"></i>جواب های شما-->
+<!--                            </a>-->
+<!--                        </li>-->
                     </ul>
                 </li>
                 <li class="treeview">
@@ -430,7 +420,7 @@
                     </a>
                 </li>
                 <li class="treeview">
-                    <a class="link">
+                    <a class="link" ng-click="logout()">
                         <i class="fa fa-power-off"></i>
                         <span>خارج شدن</span>
                     </a>
