@@ -74,13 +74,18 @@ function getIPAddress(){
 function userRequire($db){
     $sess = new Session();
     $session = $sess->getSession()['Session'];
-    $rq = $db->query("SELECT ID FROM user where user.ID='".$session["UserID"]."' AND user.SessionID='".$session["SSN"]
-        ."' AND SessionValid=1");
-
-    if($rq){
+    $rq = $db->makeQuery("SELECT count(*) as Count FROM user where user.ID='".$session["UserID"]."' AND user.SessionID='"
+        .$session["SSN"]
+        ."' AND 
+ValidSessionID=1");
+    $c = $rq->fetch_assoc()['Count'];
+    if($c > 0){
         return TRUE;
     }
-    die('Encrypted media , User auth has been failed.');
+    die('['.$rq.'] Encrypted media , User auth has been failed.'."SELECT ID FROM user where user.ID='".$session["UserID"]
+        ."' 
+    AND user.SessionID='".$session["SSN"]
+        ."' AND ValidSessionID=1");
 }
 
 function adminRequire(){

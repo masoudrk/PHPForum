@@ -232,3 +232,14 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     background-color: #2C3B41;
     border-color: #2C3B41;
 }
+
+.table-action-icons{
+    font-size: 21px;
+}
+.table-action-icons i{
+    padding-left: 3px;
+    padding-right: 3px;
+}
+.table > thead > tr > th, .table > tbody > tr > th,.table > thead > tr > td, .table > tbody > tr > td{
+    vertical-align: middle;
+}

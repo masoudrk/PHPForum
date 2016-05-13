@@ -1,7 +1,38 @@
 <?php
 
 class Session {
-	
+
+	public $Valid;
+
+	public $Status;
+	public $FullName;
+	public $Email;
+	public $SSN;
+	public $UserID;
+	public $IsAdmin;
+	public $SignupDate;
+	public $Image;
+
+	function __construct() {
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		if(isset($_SESSION['UserID'])){
+			$this->Valid = true;
+			$this->UserID = $_SESSION['UserID'];
+			$this->FullName = $_SESSION['FullName'];
+			$this->Email = $_SESSION['Email'];
+			$this->SSN = $_SESSION['SSN'];
+			$this->IsAdmin = $_SESSION['IsAdmin'];
+			$this->SignupDate = $_SESSION['SignupDate'];
+			$this->Image = $_SESSION['Image'];
+		}
+		else
+		{
+			$this->Valid = false;
+		}
+	}
+
 	public function getSession(){
 	    if (!isset($_SESSION)) {
 	    	session_start();
