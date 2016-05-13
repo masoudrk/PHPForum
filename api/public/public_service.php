@@ -71,6 +71,15 @@ $app->post('/savePerson', function() use ($app) {
     echoResponse(200, $result);
 });
 
+$app->post('/getAllPositions', function() use ($app)  {
+    $db = new DbHandler();
+    $resq = $db->makeQuery("SELECT * FROM `organ_position` WHERE 1");
+    $res=[];
+        while($r = $resq->fetch_assoc())
+            $res[] = $r;
+    echoResponse(200, $res);
+});
+
 $app->post('/checkEmail', function() use ($app)  {
     $r = json_decode($app->request->getBody());
     $db = new DbHandler();

@@ -4,6 +4,12 @@
     $scope.userNameError = false;
     $scope.userID = $cookies.get('UserID');
     $scope.userNameRegex = (/^(?=.*[a-z])[0-9a-zA-Z]{3,}$/);
+    $scope.allPositions = [];
+
+    Extention.postAsync('getAllPositions', {}).then(function (msg) {
+        $scope.allPositions = msg;
+        console.log($scope.allPositions);
+    });
 
     var setUserCookie;
     (setUserCookie =  function () {
@@ -23,15 +29,15 @@
         });
     }
 
-    $scope.checkUserName = function (value) {
-        if (!value)
-            Extention.popError('نام کاربری باید حداقل 3 کاراکتر باشد');
-        Extention.postAsync('checkUserName', { value: value }).then(function (msg) {
-            $scope.userNameError = !msg;
-            if ($scope.userNameError)
-                Extention.popError('این نام کاربری قبلا ثبت شده است');
-        });
-    }
+    //$scope.checkUserName = function (value) {
+    //    if (!value)
+    //        Extention.popError('نام کاربری باید حداقل 3 کاراکتر باشد');
+    //    Extention.postAsync('checkUserName', { value: value }).then(function (msg) {
+    //        $scope.userNameError = !msg;
+    //        if ($scope.userNameError)
+    //            Extention.popError('این نام کاربری قبلا ثبت شده است');
+    //    });
+    //}
 
     $scope.openRoleModal = function() {
         $uibModal.open({

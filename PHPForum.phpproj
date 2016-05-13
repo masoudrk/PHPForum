@@ -18,6 +18,9 @@
   <ItemGroup>
     <Compile Include="Admin\index.php" />
     <Compile Include="api\admin\index.php" />
+    <Compile Include="api\db\education.php" />
+    <Compile Include="api\db\organ_position.php" />
+    <Compile Include="api\db\skill.php" />
     <Compile Include="api\functions.php" />
     <Compile Include="api\libs\Slim\Environment.php" />
     <Compile Include="api\libs\Slim\Exception\Pass.php" />
@@ -83,6 +86,7 @@
     <Folder Include="Admin\plugins\jQuery\" />
     <Folder Include="Admin\plugins\slimScroll\" />
     <Folder Include="api\" />
+    <Folder Include="api\db\" />
     <Folder Include="api\user\" />
     <Folder Include="api\admin\" />
     <Folder Include="app\" />

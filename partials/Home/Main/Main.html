@@ -22,7 +22,9 @@
 <div full-page options="mainOptions">
 <div class="section bg-fix" id="section0">
     <div class="col-xs-12 vazir-font"><img src="Images/Logo.png" width="80"/>
-        <label style="font-size: 20px">
+    </div>
+    <div class="text-center col-xs-12  vazir-font">
+        <label style="font-size: 14px">
             اداره کل ارتباطات و علائم الکتریکی
         </label>
     </div>
@@ -30,15 +32,16 @@
         <label style="font-size: 25px">
             سامانه پویای نگهداشت تجهیزات ارتباطی
         </label>
+        <div class="hr"></div>
     </div>
     <div class="col-sm-4 col-sm-offset-2 col-xs-12">
         <form ng-submit="savePerson()" name="signUpForm" class="vazir-font">
-            <div class="col-sm-12">
+            <!--<div class="col-sm-12">
                 <div class="text-center">
                     <label style="font-size: 20px">ثبت نام <i class="fa fa-sign-in" aria-hidden="true"></i></label>
                 </div>
                 <div class="hr"></div>
-            </div>
+            </div>-->
             <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.name.$valid && signUpForm.name.$touched]">
                 <div class="col-sm-12">
                     <input type="text" dir="rtl" class="form-control" name="name" ng-model="user.FullName" id="name" placeholder="نام کامل" required>
@@ -59,31 +62,31 @@
                     <input type="password" dir="rtl" class="form-control" ng-model="user.Password" name="password" placeholder="پسورد" required>
                 </div>
             </div>
-            <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.passwordRe.$valid && signUpForm.passwordRe.$touched || user.PasswordRe != user.Password]">
+            <!--<div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.passwordRe.$valid && signUpForm.passwordRe.$touched || user.PasswordRe != user.Password]">
                 <div class="col-sm-12">
                     <input type="password" dir="rtl" class="form-control" ng-model="user.PasswordRe" name="passwordRe" placeholder="تکرار پسورد" required>
                 </div>
-            </div>
+            </div>-->
             <div class="form-group col-sm-12">
                 <div class="col-sm-12">
-                    <ui-select ng-model="user.position" theme="bootstrap" ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
-                        <ui-select-match placeholder="منطقه">{{$item.Name}}</ui-select-match>
-                        <ui-select-choices repeat="edu in curUser.AllEducations | propsFilter: {Name: $select.search}">
-                            <div compile="edu.Name | highlight: $select.search"></div>
+                    <ui-select ng-model="user.position" theme="bootstrap" sortable="true" close-on-select="true">
+                        <ui-select-match placeholder="منطقه">{{$item.OrganizationName}}</ui-select-match>
+                        <ui-select-choices repeat="edu in allPositions | propsFilter: {OrganizationName: $select.search}">
+                            <div compile="edu.OrganizationName | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
             </div>
-            <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.telephone.$valid && signUpForm.telephone.$touched]">
+            <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.telephone.$valid && signUpForm.telephone.$touched]">
                 <div class="col-sm-12">
-                    <input type="tel" dir="rtl" class="form-control" ng-model="user.Tel" name="telephone" placeholder="تلفن ثابت" required ng-minlength="6">
+                    <input type="tel" dir="rtl" class="form-control" ng-model="user.Tel" name="telephone" placeholder="تلفن سازمانی : 0910-2222" required ng-minlength="6">
                 </div>
             </div>
-            <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.phone.$valid && signUpForm.phone.$touched]">
+            <!--<div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.phone.$valid && signUpForm.phone.$touched]">
                 <div class="col-sm-12">
                     <input type="tel" ng-model="user.PhoneNumber" dir="rtl" class="form-control" name="phone" placeholder="تلفن همراه" ng-required="true" ng-minlength="11">
                 </div>
-            </div>
+            </div>-->
             <div class="form-group col-sm-12">
                 <div class="col-sm-12 text-right">
                     <label style="color: white" class="control-label"><a ng-click="openRoleModal()">قوانین </a> سایت را قبول دارم</label>
@@ -93,33 +96,34 @@
             <div ng-show="user.roleAccepted" class="form-group col-sm-12">
                 <div vc-recaptcha ng-model="user.myRecaptchaResponse"></div>
             </div>
-            <div class="form-group col-sm-6 pull-right">
+            <div class="form-group col-sm-12 pull-right">
                 <div class="col-sm-12">
-                    <button type="submit" dir="rtl" class="form-control btn btn-success" name="submit">ثبت نام</button>
+                    <button type="submit" dir="rtl" class="form-control btn btn-block btn-success" name="submit">ثبت نام</button>
                 </div>
             </div>
         </form>
     </div>
     <div class="col-sm-4 hidden-xs vazir-font">
-        <div class="text-center">
+        <!--<div class="text-center">
             <label style="font-size: 20px">ورود به انجمن</label>
-        </div>
-        <div class="hr"></div>
-        <div class="form-group col-md-6 col-sm-12 pull-left" ng-show="userCookie.UserID">
-            <button tabindex="0" type="button" dir="rtl" ng-click="logInUser()" class="form-control btn btn-success pull-right">ورود به انجمن <i class="fa fa-sign-in" aria-hidden="true"></i></button>
-        </div>
-        <div class="text-right col-xs-6" ng-show="userCookie.UserID">
+        </div>-->
+        <!--<div class="hr"></div>-->
+
+        <div class="text-center col-xs-12" ng-show="userCookie.UserID">
             <label style="font-size: 15px; margin-bottom: 20px;">سلام <b>{{userCookie.FullName}}</b></label>
+        </div>
+        <div class="form-group col-xs-12" ng-show="userCookie.UserID">
+            <button tabindex="0" type="button" dir="rtl" ng-click="logInUser()" class="form-control btn btn-success pull-right">ورود به انجمن <i class="fa fa-sign-in" aria-hidden="true"></i></button>
         </div>
         <form name="signInForm" ng-submit="signInFunc()" ng-hide="userCookie.UserID">
 
-            <div class="form-group col-md-6 col-sm-12" ng-class="{false: '', true: 'has-error'}[!signInForm.password.$valid && signInForm.password.$touched]">
+            <div class="form-group col-xs-12" ng-class="{false: '', true: 'has-error'}[!signInForm.username.$valid && signInForm.username.$touched]">
+                <input tabindex="1" type="text" dir="rtl" class="form-control" name="username" ng-model="signIn.Username" placeholder="ایمیل" required>
+            </div>
+            <div class="form-group col-xs-12" ng-class="{false: '', true: 'has-error'}[!signInForm.password.$valid && signInForm.password.$touched]">
                 <input tabindex="2" type="password" dir="rtl" class="form-control" name="password" ng-model="signIn.Password" placeholder="پسورد" required>
             </div>
-            <div class="form-group col-md-6 col-sm-12" ng-class="{false: '', true: 'has-error'}[!signInForm.username.$valid && signInForm.username.$touched]">
-                <input tabindex="1" type="text" dir="rtl" ng-pattern="userNameRegex" class="form-control" name="username" ng-model="signIn.Username" placeholder="نام کاربری یا ایمیل" required>
-            </div>
-            <div class="form-group col-md-4 col-sm-12 pull-left">
+            <div class="form-group col-xs-12">
                 <button tabindex="3" type="submit" dir="rtl" class="form-control btn btn-success">ورود</button>
             </div>
         </form>
