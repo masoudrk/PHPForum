@@ -1,40 +1,57 @@
 <?php
 
+class PaginationInput
+{
+	public $PageIndex = 1;
+	public $PageSize = 200;
+
+	function __construct($data) {
+		if($data && isset($data->pageSize) && isset($data->pageIndex)){
+			$this->PageSize = $data->pageSize;
+			$this->PageIndex = $data->pageIndex;
+		}
+	}
+}
 class Pagination {
 
     public $PageIndex = 1;
     public $PageSize = 200;
 
-    function __construct($data) {  
-	    if(isset($data->pageSize) && isset($data->pageIndex)){
-	        $this->PageSize = $data->pageSize;
-	        $this->PageIndex = $data->pageIndex;
-	    }
-    }
-    
-    public function getPage($db,$query){
+	function __construct($data = null) {
+		if($data && isset($data->pageSize) && isset($data->pageIndex)){
+			$this->PageSize = $data->pageSize;
+			$this->PageIndex = $data->pageIndex;
+		}
+	}
+
+	public function setParams($pin){
+		$this->PageSize = $pin->PageSize;
+		$this->PageIndex = $pin->PageIndex;
+	}
+
+	public function getPage($db,$query){
 		$startFromStr = strstr($query, 'FROM');
 		$countQ = $db->makeQuery("SELECT count(*) as Total ".$startFromStr);
 		$countRes = $countQ->fetch_assoc();
 		$total = $countRes['Total'];
-		
-    	$offset = ($this->PageIndex-1) * $this->PageSize;
-		
+
+		$offset = ($this->PageIndex-1) * $this->PageSize;
+
 		$q = $db->makeQuery($query." LIMIT $offset, $this->PageSize");
-		
+
 		$items = [];
 		while($r = $q->fetch_assoc()){
-            $items[] = $r;
-        }
-        
+			$items[] = $r;
+		}
+
 		$res = [];
 		$res['Items'] = $items;
 		$res['PageSize'] = $this->PageSize;
 		$res['PageIndex'] = $this->PageIndex;
 		$res['Total'] = $total;
-		
+
 		return $res;
-		
+
 	}
 
 }

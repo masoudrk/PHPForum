@@ -19,7 +19,7 @@
                 session.IsAdmin = '<?php echo $_SESSION['IsAdmin']; ?>';
                 session.Image = '<?php echo $_SESSION['Image']; ?>';
                 session.SignupDate = '<?php echo $_SESSION['SignupDate']; ?>';
-                
+
             </script>
             <?php
         }
@@ -40,6 +40,8 @@
     <link rel="stylesheet" href="../css/toaster.css">
     <link rel="stylesheet" href="../cms/css/treasure-overlay-spinner.min.css">
     <link rel="stylesheet" href="../cms/css/select/select.css">
+
+    <link rel="stylesheet" href="../css/hover-min.css">
 
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="../cms/css/bootstrap.min.css">
@@ -651,6 +653,7 @@
 
 <script type="text/javascript" src="../js/moment.js"></script>
 <script type="text/javascript" src="../js/moment-jalaali.js"></script>
+<script type="text/javascript" src="../js/angular-confirm.min.js"></script>
 
 <!-- jQuery 2.1.4 -->
 <script src="../cms/js/jQuery/jQuery-2.1.4.min.js"></script>

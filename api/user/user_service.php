@@ -1,11 +1,43 @@
 <?php
 
+$app->post('/deleteQuestion', function() use ($app)  {
+
+    require_once '../db/question.php';
+    $db = new DbHandler(true);
+
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+    $res = deleteQuestion($db, $data->QuestionID, $sess->UserID);
+
+    if($res){
+        $d = [];
+        $d['Status'] = "success";
+        $d['DeleteQID'] = $data->QuestionID;
+        echoResponse(200,$d);
+        return ;
+    }
+    echoResponse(201, "Error:".$data->QuestionID);
+});
+
+$app->post('/getAllQuestions', function() use ($app)  {
+
+    require_once '../db/question.php';
+    $db = new DbHandler(true);
+
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+
+    $pin = new PaginationInput($data);
+    $res = getPageAuthorQuestions($db,$sess->UserID,$pin);
+
+    echoResponse(200, $res);
+});
+
 $app->post('/saveQuestion', function() use ($app)  {
     
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler();
+    $db = new DbHandler(true);
     $sess = new Session();
-    $session = $sess->getSession()['Session'];
 
     $qID = -1;
 
@@ -16,8 +48,9 @@ $app->post('/saveQuestion', function() use ($app)  {
             "ID='$qID'");
         $d = $db->deleteFromTable('tag_question','QuestionID='.$qID);
     }else{
-        $qID = $db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID',"'$data->QuestionText',
-        '$data->Title','".$data->Subject->ID."','".$session['UserID']."'",true);
+        $qID = $db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID,CreationDate',
+            "'$data->QuestionText',
+        '$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW()",true);
     }
 
     foreach($data->Tags as $tag){
@@ -112,19 +145,17 @@ $app->post('/getUserProfile', function() use ($app)  {
 
     $db = new DbHandler();
     $sess = new Session();
-    $session = $sess->getSession();
-    $userID = $session['Session']['UserID'];
 
-    $res = [];
+
     $resQ = $db->makeQuery("SELECT user.`ID`, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, `SignupDate`, `Gender` , FullPath as 
-AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = $userID");
+AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = $sess->UserID");
 
     $user = $resQ->fetch_assoc();
 
-    $user['Educations'] = getUserEducations($db,$userID);
+    $user['Educations'] = getUserEducations($db,$sess->UserID);
     $user['AllEducations'] = getAllEducations($db);
 
-    $user['Skills'] = getUserSkills($db,$userID);
+    $user['Skills'] = getUserSkills($db,$sess->UserID);
     $user['AllSkills'] = getAllSkills($db);
 
     echoResponse(200, $user);

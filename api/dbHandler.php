@@ -14,7 +14,7 @@ class DbHandler {
         $this->conn->query('SET CHARACTER SET utf8') or die($this->conn->error.__LINE__);
 
         if($userRequire)
-            userRequire($this->conn);
+            userRequire($this);
     }
     /**
      * Fetching single record

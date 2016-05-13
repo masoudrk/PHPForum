@@ -1,15 +1,71 @@
 ﻿<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
-        <small>خانه</small>
+        <small>سوالات شما</small>
         انجمن
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> خانه</a></li>
-        <li class="active">انجمن</li>
+        <li class="active">سوالات شما</li>
     </ol>
 </section>
 <div class="row">
     <div class="col-xs-12">
+
+        <div class="col-xs-12">
+            <div class="box box-warning">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">سوالات شما</h3>
+                    <i class="fa fa-question text-muted"></i>
+                    <div class="box-tools">
+                        <button class="btn btn-sm btn-success" ui-sref="new_question">پرسیدن سوال جدید</button>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>خلاصه سوال</th>
+                            <th>موضوع</th>
+                            <th>تاریخ درج سوال</th>
+                            <th>وضعیت تایید ادمین</th>
+                            <th style="width: 100px"></th>
+                        </tr>
+                        <tr ng-repeat="q in question.all">
+                            <td >{{q.Title| subString :50}}</td>
+                            <td >{{q.SubjectTitle| subString :50}}</td>
+                            <td>
+                                <span class="persian-rtl text-muted">{{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'}}</span>
+                            </td>
+                            <td ng-switch="q.AdminAccepted">
+                                <span class="label label-danger" ng-switch-when="-1" >رد شده</span>
+                                <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
+                                <span class="label label-success" ng-switch-when="1" >تایید شده</span>
+                            </td>
+                            <td >
+                                <div class="table-action-icons">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow-rotate" ng-click="removeQuestion(q.ID)"></i>
+                                    <i class="fa fa-pencil text-success link hvr-grow-rotate"
+                                       ui-sref="new_question({id:'{{q.ID}}' })" ></i>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllQuestions"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 on-load-finish="loadFinishPageData()"
+                                 items="question.all">
+                    </auto-paging>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
