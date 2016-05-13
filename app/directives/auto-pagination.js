@@ -14,6 +14,7 @@
             //This variable used for send custom and optional parameters to WebApi method.
             params: '=',
             ngControl: '=',
+            onLoadFinish: '&',
             //This variable defained for fetched items from database.
             items: '=',
             lang : '@',
@@ -79,9 +80,11 @@
         scope.$watchCollection('[actionName,params,page,pageSize]', function () {
             scope.getItems();
             build(scope, attrs);
+            scope.onLoadFinish();
         });
         scope.$watch('[total]', function () {
             build(scope, attrs);
+            scope.onLoadFinish();
         });
 
         scope.internalControl = scope.ngControl || {};

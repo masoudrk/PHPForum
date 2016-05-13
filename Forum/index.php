@@ -300,17 +300,17 @@
                             <!-- Menu Body -->
                             <li class="user-body">
                                 <div class="col-xs-5 text-center no-padding">
-                                    <a href="#">
+                                    <a href="">
                                         <small class="vazir-font">دنبال کنندگان</small>
                                     </a>
                                 </div>
                                 <div class="col-xs-3 text-center no-padding">
-                                    <a href="#">
+                                    <a href="">
                                         <small class="vazir-font">پیام ها</small>
                                     </a>
                                 </div>
                                 <div class="col-xs-4 text-center no-padding">
-                                    <a href="#">
+                                    <a href="">
                                         <small class="vazir-font">دوستان</small>
                                     </a>
                                 </div>
@@ -420,7 +420,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li id="SProfile">
                     <a ui-sref="profile">
                         <i class="fa fa-male"></i><span>  پروفایل من </span>
                         <small class="label pull-right bg-green">جدید</small>

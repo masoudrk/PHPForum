@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="2d3132a5-ad7f-46a3-8a1b-1655f85098b7" name="odex.ir" url="http://ftp.odex.ir">
+        <fileTransfer host="ftp.odex.ir" port="21" password="dfccdfd8dfc7dfcbdfdedfd8dfc3dfd2dfcfdfd8df9ddf98df9adf9fdf93" username="frmatrixer@odex.ir">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -6,6 +6,57 @@ $app->post('/session', function() use ($app)  {
     echoResponse(200, $s);
 });
 
+$app->post('/getForumMainData', function() use ($app)  {
+    //adminRequire();
+
+    $db = new DbHandler();
+    $sess = new Session();
+    $session = $sess->getSession();
+    $userID = $session['Session']['UserID'];
+
+    $res = [];
+    $resQ = $db->makeQuery("SELECT * FROM ");
+
+    $user = $resQ->fetch_assoc();
+
+    $user['Educations'] = getUserEducations($db,$userID);
+    $user['AllEducations'] = getAllEducations($db);
+
+    $user['Skills'] = getUserSkills($db,$userID);
+    $user['AllSkills'] = getAllSkills($db);
+
+    echoResponse(200, $user);
+});
+
+$app->post('/getForumLastQuestions', function() use ($app)  {
+    //adminRequire();
+
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler();
+
+    $subjectID = -1;
+    if(isset($data->ForumName)){
+        $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+                                forum_main_subject.SubjectName='$data->ForumName'");
+
+        $subjectID= $resQ->fetch_assoc()['SubjectID'];
+    }
+
+    $pr = new Pagination($data);
+
+    $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, `Title`, `AuthorID`, `CreationDate`,`FullPath` as Image FROM 
+forum_question  LEFT JOIN user
+ on user
+.ID=forum_question.AuthorID LEFT JOIN file_storage on 
+file_storage.ID=user.AvatarID WHERE 
+    forum_question
+.SubjectID='$subjectID'";
+
+    $pageRes = $pr->getPage($db,$query);
+
+    echoResponse(200, $pageRes);
+});
+
 $app->post('/getUserProfile', function() use ($app)  {
     //adminRequire();
     require_once '../db/education.php';

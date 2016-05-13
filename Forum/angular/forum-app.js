@@ -8,11 +8,11 @@ app.config([
 function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     // Add nested user links to the "foo" menu.
     $ocLazyLoadProvider.config({
-        debug: false,
+        debug: true,
         events: true
     });
 
-    $stateProvider
+    $stateProvider 
         .state('home', {
             url: "/",
             templateUrl: "partials/Forum/_Home/Home.html",
@@ -156,7 +156,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     }
                 ],
                 $title: function () {
-                    return 'سوال ';
+                    return 'سوال';
                 }
             }
         });
@@ -181,6 +181,10 @@ var traverse = function (el) {
     }
 }
 
+var fixPersianNumbers = function () {
+    traverse(document.body);
+}
+
 var fixFooter = function () {
     var o = $.AdminLTE.options.controlSidebarOptions;
     var sidebar = $(o.selector);
@@ -189,9 +193,11 @@ var fixFooter = function () {
 }
 
 var activeElement = function (parent , name) {
-    var elem = $(name);
+    if(name){
+        var elem = $(name);
+        elem.addClass('active').siblings().removeClass('active');
+    }
     var elemP = $(parent);
-    elem.addClass('active').siblings().removeClass('active');
     elemP.addClass('active').siblings().removeClass('active');
 }
 
@@ -202,11 +208,19 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
     $rootScope.$on("$stateChangeSuccess", function () {
         Extention.setBusy(false);
     });
+    $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error){
+        Extention.setBusy(false);
+    });
+    $rootScope.$on('$stateNotFound',
+        function(event, unfoundState, fromState, fromParams){
+        Extention.setBusy(false);
+    })
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
-
         Extention.setBusy(true);
     });
+
 
 });
 
@@ -511,6 +525,13 @@ app.filter('jalaliDate', function () {
     return function (inputDate, format) {
         var date = moment(inputDate);
         return date.fromNow() + " " + date.format(format);
+    }
+});
+
+app.filter('fromNow', function () {
+    return function (inputDate, format) {
+        var date = moment(inputDate);
+        return date.fromNow() ;
     }
 });
 

@@ -37,5 +37,6 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
         $scope.isEqualWithVerify = $scope.curUser.VerifyPassword == $scope.curUser.Password;
     }
 
+    activeElement('#SProfile');
 	fixFooter();
 });
