@@ -519,11 +519,13 @@
     <Content Include="Images\default-50x50.gif" />
     <Content Include="Images\global-management.png" />
     <Content Include="Images\icons.png" />
+    <Content Include="Images\Logo.png" />
     <Content Include="Images\masoud.JPG" />
     <Content Include="Images\photo1.png" />
     <Content Include="Images\photo2.png" />
     <Content Include="Images\photo3.jpg" />
     <Content Include="Images\photo4.jpg" />
+    <Content Include="Images\bgFullPage.jpg" />
     <Content Include="Images\user1-128x128.jpg" />
     <Content Include="Images\user2-160x160.jpg" />
     <Content Include="Images\user3-128x128.jpg" />

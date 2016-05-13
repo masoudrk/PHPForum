@@ -5,6 +5,14 @@
  *
  * Copyright (C) 2013 alvarotrigo.com - A project by Alvaro Trigo
  */
+html { 
+  background: url(../images/bgFullPage.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 html.fp-enabled,
 .fp-enabled body {
     margin: 0;

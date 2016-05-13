@@ -9,7 +9,7 @@
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
     </div>
 </script>
-<div id="menu" ng-click="moog('asd')" class="vazir-font hidden-xs">
+<!--<div id="menu" ng-click="moog('asd')" class="vazir-font hidden-xs">
     <div tabindex="-1" data-menuanchor="firstPage" class="pull-right"><a>خانه <i class="fa fa-home" aria-hidden="true"></i></a>
     </div>
     <div tabindex="-1" data-menuanchor="secondPage" class="pull-right"><a>انجمن <i class="fa fa-users" aria-hidden="true"></i></a>
@@ -18,81 +18,114 @@
     </div>
     <div tabindex="-1" data-menuanchor="4thpage" class="pull-right"><a>Fourth slide</a>
     </div>
-</div>
+</div>-->
 <div full-page options="mainOptions">
-    <div class="section" id="section0">
-        <div class="col-sm-4 hidden-xs">
-            <form ng-submit="savePerson()" name="signUpForm" class="vazir-font">
-                <div class="col-sm-12">
-                    <div class="text-right">
-                        <label style="font-size:30px">ثبت نام <i class="fa fa-sign-in" aria-hidden="true"></i></label>
-                    </div>
-                    <div class="hr"></div>
-                </div>
-                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.name.$valid && signUpForm.name.$touched]">
-                    <div class="col-sm-12">
-                        <input type="text" dir="rtl" class="form-control" name="name" ng-model="user.FullName" id="name" placeholder="نام کامل" required>
-                    </div>
-                </div>
-                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.userName.$valid && signUpForm.userName.$touched || userNameError]">
-                    <div class="col-sm-12">
-                        <input type="text" dir="rtl" ng-pattern="userNameRegex" ng-change="checkUserName(user.Username)" ng-model-options="{debounce :1500}" class="form-control" ng-model="user.Username" name="userName" id="userName" placeholder="نام کاربری" required>
-                    </div>
-                </div>
-                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.email.$valid && signUpForm.email.$touched || emailError]">
-                    <div class="col-sm-12">
-                        <input type="email" dir="rtl" ng-change="checkEmail(user.Email)" ng-model-options="{debounce :1500}" class="form-control" ng-model="user.Email" name="email" id="email" placeholder="ایمیل" required>
-                    </div>
-                </div>
-                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.password.$valid && signUpForm.password.$touched]">
-                    <div class="col-sm-12">
-                        <input type="password" dir="rtl" class="form-control" ng-model="user.Password" name="password" placeholder="پسورد" required>
-                    </div>
-                </div>
-                <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.passwordRe.$valid && signUpForm.passwordRe.$touched || user.PasswordRe != user.Password]">
-                    <div class="col-sm-12">
-                        <input type="password" dir="rtl" class="form-control" ng-model="user.PasswordRe" name="passwordRe" placeholder="تکرار پسورد" required>
-                    </div>
-                </div>
-                <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.telephone.$valid && signUpForm.telephone.$touched]">
-                    <div class="col-sm-12">
-                        <input type="tel" dir="rtl" class="form-control" ng-model="user.Tel" name="telephone" placeholder="تلفن ثابت" required  ng-minlength="6">
-                    </div>
-                </div>
-                <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.phone.$valid && signUpForm.phone.$touched]" >
-                    <div class="col-sm-12">
-                        <input type="tel" ng-model="user.PhoneNumber" dir="rtl" class="form-control" name="phone" placeholder="تلفن همراه" ng-required="true" ng-minlength="11">
-                    </div>
-                </div>
-                <div class="form-group col-sm-12">
-                    <div class="col-sm-12 text-right">
-                        <label class="control-label"><a ng-click="openRoleModal()">قوانین </a> سایت را قبول دارم</label>
-                        <input class="pull-right" type="checkbox" ng-model="user.roleAccepted" value="true" style="margin-left: 20px">
-                    </div>
-                </div>
-                <div ng-show="user.roleAccepted" class="form-group col-sm-12" >
-                    <div vc-recaptcha  ng-model="user.myRecaptchaResponse"></div>
-                </div>
-                <div class="form-group col-sm-6 pull-right">
-                    <div class="col-sm-12">
-                        <button type="submit" dir="rtl" class="form-control btn btn-success" name="submit">ثبت نام</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="col-sm-8 col-xs-12 vazir-font">
-            <div class="text-right">
-                <label style="font-size:30px">ارتباطات</label>
-            </div>
-            <div class="hr"></div>
-            <div>
-                <p class="persian-rtl">
-                    ارتباطات فرایند انتقال پیام از فرستنده به گیرنده به شرط همسان بودن معانی بین آنها است. معنا در علم ارتباط شامل مفاهیم ذهنی و احساسات هر دو می شود.ارتباطات فرایندی ست که در آن معنا بین موجودات زنده تعریف و به اشتراک گذاشته می شود. ارتباط به یک فرستنده، پیام و گیرنده درنظرگرفته شده نیازدارد، هرچند گیرنده نیاز ندارد حضور داشته باشد یا از منظورفرستنده برای برقراری ارتباط در زمان ارتباط آگاه باشد‌‌‍؛ بنابراین ارتباطات می‌تواند درسرتاسر مسافتهای گسترده ی زمانی و مکانی رخ دهد. ارتباطات نیازمند آن است که بخش های ارتباط ناحیه ای از مشترکات ارتباطی را به اشتراک بگذارند.‍‍‌‍‌
-                </p>
-            </div>
-        </div>
+<div class="section bg-fix" id="section0">
+    <div class="col-xs-12 vazir-font"><img src="Images/Logo.png" width="80"/>
+        <label style="font-size: 20px">
+            اداره کل ارتباطات و علائم الکتریکی
+        </label>
     </div>
-    <div tabindex="-1" class="section active" id="section1">
+    <div class="col-xs-12 text-center vazir-font">
+        <label style="font-size: 25px">
+            سامانه پویای نگهداشت تجهیزات ارتباطی
+        </label>
+    </div>
+    <div class="col-sm-4 col-sm-offset-2 col-xs-12">
+        <form ng-submit="savePerson()" name="signUpForm" class="vazir-font">
+            <div class="col-sm-12">
+                <div class="text-center">
+                    <label style="font-size: 20px">ثبت نام <i class="fa fa-sign-in" aria-hidden="true"></i></label>
+                </div>
+                <div class="hr"></div>
+            </div>
+            <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.name.$valid && signUpForm.name.$touched]">
+                <div class="col-sm-12">
+                    <input type="text" dir="rtl" class="form-control" name="name" ng-model="user.FullName" id="name" placeholder="نام کامل" required>
+                </div>
+            </div>
+            <!--<div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.userName.$valid && signUpForm.userName.$touched || userNameError]">
+                <div class="col-sm-12">
+                    <input type="text" dir="rtl" ng-pattern="userNameRegex" ng-change="checkUserName(user.Username)" ng-model-options="{debounce :1500}" class="form-control" ng-model="user.Username" name="userName" id="userName" placeholder="نام کاربری" required>
+                </div>
+            </div>-->
+            <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.email.$valid && signUpForm.email.$touched || emailError]">
+                <div class="col-sm-12">
+                    <input type="email" dir="rtl" ng-change="checkEmail(user.Email)" ng-model-options="{debounce :1500}" class="form-control" ng-model="user.Email" name="email" id="email" placeholder="ایمیل" required>
+                </div>
+            </div>
+            <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.password.$valid && signUpForm.password.$touched]">
+                <div class="col-sm-12">
+                    <input type="password" dir="rtl" class="form-control" ng-model="user.Password" name="password" placeholder="پسورد" required>
+                </div>
+            </div>
+            <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.passwordRe.$valid && signUpForm.passwordRe.$touched || user.PasswordRe != user.Password]">
+                <div class="col-sm-12">
+                    <input type="password" dir="rtl" class="form-control" ng-model="user.PasswordRe" name="passwordRe" placeholder="تکرار پسورد" required>
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <div class="col-sm-12">
+                    <ui-select ng-model="user.position" theme="bootstrap" ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
+                        <ui-select-match placeholder="منطقه">{{$item.Name}}</ui-select-match>
+                        <ui-select-choices repeat="edu in curUser.AllEducations | propsFilter: {Name: $select.search}">
+                            <div compile="edu.Name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.telephone.$valid && signUpForm.telephone.$touched]">
+                <div class="col-sm-12">
+                    <input type="tel" dir="rtl" class="form-control" ng-model="user.Tel" name="telephone" placeholder="تلفن ثابت" required ng-minlength="6">
+                </div>
+            </div>
+            <div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.phone.$valid && signUpForm.phone.$touched]">
+                <div class="col-sm-12">
+                    <input type="tel" ng-model="user.PhoneNumber" dir="rtl" class="form-control" name="phone" placeholder="تلفن همراه" ng-required="true" ng-minlength="11">
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <div class="col-sm-12 text-right">
+                    <label style="color: white" class="control-label"><a ng-click="openRoleModal()">قوانین </a> سایت را قبول دارم</label>
+                    <input class="pull-right" type="checkbox" ng-model="user.roleAccepted" value="true" style="margin-left: 20px">
+                </div>
+            </div>
+            <div ng-show="user.roleAccepted" class="form-group col-sm-12">
+                <div vc-recaptcha ng-model="user.myRecaptchaResponse"></div>
+            </div>
+            <div class="form-group col-sm-6 pull-right">
+                <div class="col-sm-12">
+                    <button type="submit" dir="rtl" class="form-control btn btn-success" name="submit">ثبت نام</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-4 hidden-xs vazir-font">
+        <div class="text-center">
+            <label style="font-size: 20px">ورود به انجمن</label>
+        </div>
+        <div class="hr"></div>
+        <div class="form-group col-md-6 col-sm-12 pull-left" ng-show="userCookie.UserID">
+            <button tabindex="0" type="button" dir="rtl" ng-click="logInUser()" class="form-control btn btn-success pull-right">ورود به انجمن <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+        </div>
+        <div class="text-right col-xs-6" ng-show="userCookie.UserID">
+            <label style="font-size: 15px; margin-bottom: 20px;">سلام <b>{{userCookie.FullName}}</b></label>
+        </div>
+        <form name="signInForm" ng-submit="signInFunc()" ng-hide="userCookie.UserID">
+
+            <div class="form-group col-md-6 col-sm-12" ng-class="{false: '', true: 'has-error'}[!signInForm.password.$valid && signInForm.password.$touched]">
+                <input tabindex="2" type="password" dir="rtl" class="form-control" name="password" ng-model="signIn.Password" placeholder="پسورد" required>
+            </div>
+            <div class="form-group col-md-6 col-sm-12" ng-class="{false: '', true: 'has-error'}[!signInForm.username.$valid && signInForm.username.$touched]">
+                <input tabindex="1" type="text" dir="rtl" ng-pattern="userNameRegex" class="form-control" name="username" ng-model="signIn.Username" placeholder="نام کاربری یا ایمیل" required>
+            </div>
+            <div class="form-group col-md-4 col-sm-12 pull-left">
+                <button tabindex="3" type="submit" dir="rtl" class="form-control btn btn-success">ورود</button>
+            </div>
+        </form>
+    </div>
+</div>
+    <!--<div tabindex="-1" class="section active" id="section1">
         <div class="slide">
             <div class="col-sm-6 hidden-xs vazir-font" style="padding-left:55px">
                 <div class="text-right">
@@ -272,21 +305,6 @@
 
             </div>
         </div>
-    </div>
-    <div tabindex="-1" class="section" id="section2">
-        <div class="intro">
-            <h1 tabindex="-1" ng-click="moog('sss')">Example</h1>
-            <p>HTML markup example to define 4 sections.</p>
-        </div>
-    </div>
-    <div tabindex="-1" class="section" id="section3">
-        <div class="intro">
-            <h1>Working On Tablets</h1>
-            <p>
-                Designed to fit to different screen sizes as well as tablet and mobile devices.
-                <br/><br/><br/><br/><br/><br/>
-            </p>
-        </div>
-    </div>
+    </div>-->
 
 </div>
