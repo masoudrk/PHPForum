@@ -29,7 +29,7 @@
     <link rel="icon" href="{{titleIcon}}">
 </head>
 
-<body>
+<body style="background-color:transparent">
     <treasure-overlay-spinner active='spinner.active' >
     </treasure-overlay-spinner>
 
