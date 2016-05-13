@@ -337,6 +337,7 @@
     <Content Include="api\public\.htaccess" />
     <Content Include="cms\css\angular-chart.css" />
     <Content Include="cms\css\angular-chart.min.css" />
+    <Content Include="cms\css\nv.d3.css" />
     <Content Include="cms\js\angular-chart.js" />
     <Content Include="cms\js\angular-chart.min.js" />
     <Content Include="cms\css\AdminLTE-rtl-fix.css" />
@@ -396,6 +397,7 @@
     <Content Include="cms\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="cms\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="cms\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="cms\js\angular-nvd3.min.js" />
     <Content Include="cms\js\app.js" />
     <Content Include="cms\js\app.min.js" />
     <Content Include="cms\js\bootstrap.js" />
@@ -411,6 +413,7 @@
     <Content Include="cms\js\jQueryUI\jquery-ui.min.js" />
     <Content Include="cms\js\jQuery\jQuery-2.1.4.min.js" />
     <Content Include="cms\js\npm.js" />
+    <Content Include="cms\js\nv.d3.js" />
     <Content Include="cms\js\pages\dashboard.js" />
     <Content Include="cms\js\pages\dashboard2.js" />
     <Content Include="cms\js\select\select.js" />
@@ -435,6 +438,7 @@
     <Content Include="css\hover-min.css" />
     <Content Include="css\imagehover.css" />
     <Content Include="css\imagehover.min.css" />
+    <Content Include="css\jquery-fullPage.css" />
     <Content Include="css\material\angular-material.min.css" />
     <Content Include="css\select.css" />
     <Content Include="css\select.min.css" />
@@ -906,7 +910,9 @@
     <Content Include="js\eeh-nav\eeh-navigation.tpl.min.js" />
     <Content Include="js\hotkeys.js" />
     <Content Include="js\hotkeys.min.js" />
+    <Content Include="js\jquery.fullPage.js" />
     <Content Include="js\jquery.js" />
+    <Content Include="js\jquery.slimscroll.min.js" />
     <Content Include="js\lazyLoad\modules\ocLazyLoad.core.js" />
     <Content Include="js\lazyLoad\modules\ocLazyLoad.directive.js" />
     <Content Include="js\lazyLoad\modules\ocLazyLoad.loaders.common.js" />
