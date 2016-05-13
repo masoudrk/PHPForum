@@ -225,7 +225,13 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
         $rootScope.logout = function () {
-
+            obj.post('logout').then(function (res) {
+                if(res&&res.Status=='success'){
+                    window.location = "../";
+                }else{
+                    obj.popError('مشکل ، لطفا دوباره امتحان کنید.');
+                }
+            });
         }
 
         $rootScope.user = session;

@@ -152,13 +152,12 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfP
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
+
         var serviceBase = serviceBaseURL;
 
         var obj = {};
         obj.workers = 0;
-        obj.serviceBase = serviceBase;
         obj.debugMode = true;
-
         obj.noImageClass = 'fa fa-2x fa-user';
 
         obj.setBusy = function (en) {
