@@ -49,17 +49,8 @@ $app->post('/savePerson', function() use ($app) {
         echoResponse(201, $response);
     }
 
-    $resq = $db->makeQuery("select COUNT(*) as resp FROM user WHERE Username = '$r->Username'");
-    $res = $resq->fetch_assoc();
-
-    if ($res['resp'] > 0 )
-    {
-        $response["Status"] = "error-captcha";
-        echoResponse(201, $response);
-    }
-
-    $res = $db->insertToTable('user','FullName,Username,Email,Password,Tel,PhoneNumber,SignupDate'
-        ,"'$r->FullName','$r->Username','$r->Email','$r->Password','$r->Tel','$r->PhoneNumber',now()");
+    $res = $db->insertToTable('user','FullName,Email,Password,Tel,SignupDate,OrganizationID'
+        ,"'$r->FullName','$r->Email','$r->Password','$r->Tel',now(),'$r->OrganizationID'");
     
     $result = [];
     if($res){
