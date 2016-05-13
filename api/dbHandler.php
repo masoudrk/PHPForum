@@ -12,6 +12,8 @@ class DbHandler {
         $this->conn = $db->connect();
 
         $this->conn->query('SET CHARACTER SET utf8') or die($this->conn->error.__LINE__);
+
+        userRequire($this->conn);
     }
     /**
      * Fetching single record
@@ -125,10 +127,15 @@ class DbHandler {
 		$res = $r->fetch_assoc();
         return $res["Total"];
     }
-    public function insertToTable($table_name , $col_names,$values ) {
+    public function insertToTable($table_name , $col_names,$values , $return_id = false) {
         
         $query = "INSERT INTO `".$table_name."` (".$col_names.") VALUES(".$values.")";
         $r = $this->conn->query($query) or die($this->conn->error.__LINE__);
+
+        if ($return_id) {
+            $new_row_id = $this->conn->insert_id;
+            return $new_row_id;
+        }
 
         if ($r) {
             return $r;

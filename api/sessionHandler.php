@@ -40,7 +40,7 @@ class Session {
 	    }
 	    if(isSet($_SESSION['UserID']))
 	    {
-	        unset($_SESSION['AdminID']);
+			unset($_SESSION['AdminID']);
 	        unset($_SESSION['UserID']);
 	        unset($_SESSION['LastName']);
 	        unset($_SESSION['FirstName']);

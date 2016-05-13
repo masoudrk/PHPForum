@@ -1,9 +1,57 @@
 <?php
 
-$app->post('/session', function() use ($app)  {
+$app->post('/saveQuestion', function() use ($app)  {
+    
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler();
     $sess = new Session();
-    $s = $sess->getSession();
-    echoResponse(200, $s);
+    $session = $sess->getSession()['Session'];
+
+    $qID = -1;
+
+    if(isset($data->ID)){
+        $qID = $data->ID;
+        $db->updateRecord('forum_question',"SubjectID='".$data->Subject->ID."',QuestionText='$data->QuestionText',
+        Title='$data->Title'",
+            "ID='$qID'");
+        $d = $db->deleteFromTable('tag_question','QuestionID='.$qID);
+    }else{
+        $qID = $db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID',"'$data->QuestionText',
+        '$data->Title','".$data->Subject->ID."','".$session['UserID']."'",true);
+    }
+
+    foreach($data->Tags as $tag){
+        $cq = $db->insertToTable('tag_question',"TagID,QuestionID","'$tag->ID','$qID'");
+    }
+
+    $res = [];
+    $res['Status'] ='success';
+    $res['QuestionID'] = $qID;
+
+    echoResponse(200, $res);
+});
+
+$app->post('/getQuestionMetaEdit', function() use ($app)  {
+    //userRequire();
+    require_once '../db/tag.php';
+    require_once '../db/forum_subject.php';
+    $data = json_decode($app->request->getBody());
+
+    $db = new DbHandler();
+    $res = [];
+
+    if(isset($data)) {
+        $resQ = $db->makeQuery("select * from forum_question where forum_question.ID='$data->QuestionID'");
+        $res['Question'] = $resQ->fetch_assoc();
+
+        $res['Question']['Subject'] = getQuestionSubject($db , $data->QuestionID);
+        $res['Question']['Tags'] = getQuestionTags($db , $data->QuestionID);
+    }
+
+    $res['AllTags'] = getAllTags($db);
+    $res['AllSubjects'] = getAllForumSubjects($db);
+
+    echoResponse(200, $res);
 });
 
 $app->post('/getForumMainData', function() use ($app)  {
@@ -108,7 +156,6 @@ $app->post('/saveUserInfo', function() use ($app)  {
     }
     echoResponse(200, $res);
 });
-
 
 $app->post('/saveUserAddintionalInfo', function() use ($app)  {
     //adminRequire();

@@ -71,15 +71,16 @@ function getIPAddress(){
     }
 }
 
-function userRequire(){
-    $db = new DbHandler();
-    $sess = $db->getSession();
-    $rq = $db->makeQuery("SELECT ID FROM user where user.SessionID='".$sess["SSN"]."' AND SessionValid=1");
-    $r = $rq->fetch_assoc();
-    if($r){
+function userRequire($db){
+    $sess = new Session();
+    $session = $sess->getSession()['Session'];
+    $rq = $db->query("SELECT ID FROM user where user.ID='".$session["UserID"]."' AND user.SessionID='".$session["SSN"]
+        ."' AND SessionValid=1");
+
+    if($rq){
         return TRUE;
     }
-    die('Encrypted media , Admininistrator auth has been failed.');
+    die('Encrypted media , User auth has been failed.');
 }
 
 function adminRequire(){

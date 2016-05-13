@@ -19,6 +19,7 @@
                 session.IsAdmin = '<?php echo $_SESSION['IsAdmin']; ?>';
                 session.Image = '<?php echo $_SESSION['Image']; ?>';
                 session.SignupDate = '<?php echo $_SESSION['SignupDate']; ?>';
+                
             </script>
             <?php
         }

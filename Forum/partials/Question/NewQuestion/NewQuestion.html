@@ -2,41 +2,91 @@
 <section class="content-header">
     <h1 class="content-header vazir-font">
         <small>خانه</small>
-        ایجاد سوال جدید
+        {{form.header}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> انجمن</a></li>
-        <li class="active">ایجاد سوال جدید</li>
+        <li class="active">{{form.header}}</li>
     </ol>
 </section>
 <div class="row">
     <div class="col-xs-12">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-md-4">
             <div class="box box-danger">
                 <div class="box-header with-border">
-                    <h3 class="box-title vazir-font">سوال جدید</h3>
+                    <h3 class="box-title vazir-font">پیوست سوال</h3>
                     <i class="fa fa-plus fa-2x text-muted"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
-                    <div class="form-horizontal row">
-                        <div class="form-group col-md-12">
-                            <div class="col-md-5 col-md-offset-4">
-                                <input id="title" class="form-control" ng-model="question.Title"
-                                       placeholder="خلاصه سوال ... " />
+                    <div class="form">
+                        <div class="form-group row" ng-class="errForum.subject? 'has-error':''">
+                            <label class="col-xs-12 control-labe">موضوع سوال :</label>
+                            <div class="col-xs-12">
+                                <ui-select ng-model="question.Subject"
+                                           theme="bootstrap"
+                                           title="انتخاب نشده ..."
+                                            on-select="subjectChanged()">
+                                    <ui-select-match placeholder="انتخاب نشده ...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="t in allSubjects track by $index"
+                                                       refresh="refreshAddresses($select.search)"
+                                                       refresh-delay="0">
+                                        <div ng-bind="t.Title" class="text-right"></div>
+                                    </ui-select-choices>
+                                </ui-select>
                             </div>
-                            <label for="title" class="col-md-3 control-label">خلاصه سوال</label>
                         </div>
-                        <div class="form-group col-xs-12">
-                            <div class="col-xs-9">
-                                <textarea rows="15" id="body" class="form-control" ng-model="question.Title"
-                                       placeholder="سوال کامل ... " ></textarea>
+                        <div class="form-group  row" style="margin-top: 5px">
+                            <label class="col-xs-12 control-labe">تگ سوال :</label>
+                            <div class="col-xs-12">
+                                <ui-select multiple ng-model="question.Tags" theme="bootstrap"
+                                           ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
+                                    <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Text}}</ui-select-match>
+                                    <ui-select-choices
+                                            repeat="t in allTags | filter: {Text: $select.search}">
+                                        <div compile="t.Text" class="text-right"></div>
+                                    </ui-select-choices>
+                                </ui-select>
                             </div>
-                            <label for="body" class="col-xs-3 control-label">سوال کامل</label>
+                        </div>
+                        <div class="form-gro p row" style="margin-top: 5px">
+                            <div class="col-xs-12">
+                                <button class="btn btn-success pull-left" type="submit" ng-click="saveQuestion()" >
+                                  {{form.submitButton}}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div>
 
+        <div class="col-xs-12 col-md-8">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">متن سوال</h3>
+                    <i class="fa fa-plus fa-2x text-muted"></i>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="form-horizontal row">
+                        <div class="form-group col-xs-12" ng-class="errForum.title? 'has-error':''">
+                            <div class="col-md-10 col-xs-12">
+                                <input id="title" class="form-control" ng-model="question.Title"
+                                       placeholder="خلاصه سوال ... " ng-change="fieldChanged('title',question.Title)"
+                                        ng-model-options="{debounce:100}" />
+                            </div>
+                            <label for="title" class="col-md-2 col-xs-12 control-label">خلاصه سوال</label>
+                        </div>
+                        <div class="form-group col-xs-12" ng-class="errForum.text? 'has-error':''">
+                            <div class="col-xs-10">
+                                <textarea rows="15" id="body" class="form-control" ng-model="question.QuestionText"
+                                          placeholder="سوال کامل ... " ng-change="fieldChanged('text',question.QuestionText)"
+                                          ng-model-options="{debounce:100}"></textarea>
+                            </div>
+                            <label for="body" class="col-xs-2 control-label">سوال کامل</label>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
     </div>
 </div>

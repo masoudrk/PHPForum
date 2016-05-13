@@ -117,7 +117,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         })
         .state("new_question", {
-            url: "/new_question",
+            url: "/new_question/:id",
             templateUrl: "partials/Question/NewQuestion/NewQuestion.html",
             controller: 'NewQuestionCtrl',
             resolve: {
