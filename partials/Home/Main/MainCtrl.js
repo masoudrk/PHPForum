@@ -5,10 +5,10 @@
     $scope.userID = $cookies.get('UserID');
     $scope.userNameRegex = (/^(?=.*[a-z])[0-9a-zA-Z]{3,}$/);
     $scope.allPositions = [];
+    $scope.Position = {};
 
     Extention.postAsync('getAllPositions', {}).then(function (msg) {
         $scope.allPositions = msg;
-        console.log($scope.allPositions);
     });
 
     var setUserCookie;
@@ -22,22 +22,14 @@
     })();
 
     $scope.checkEmail = function (value) {
-        Extention.postAsync('checkEmail', { value: value }).then(function (msg) {
-            $scope.emailError = !msg;
-            if ($scope.emailError)
-                Extention.popError('این ایمیل قبلا ثبت شده است');
-        });
+        if (value) {
+            Extention.postAsync('checkEmail', { value: value }).then(function (msg) {
+                $scope.emailError = !msg;
+                if ($scope.emailError)
+                    Extention.popError('این ایمیل قبلا ثبت شده است');
+            });
+        }
     }
-
-    //$scope.checkUserName = function (value) {
-    //    if (!value)
-    //        Extention.popError('نام کاربری باید حداقل 3 کاراکتر باشد');
-    //    Extention.postAsync('checkUserName', { value: value }).then(function (msg) {
-    //        $scope.userNameError = !msg;
-    //        if ($scope.userNameError)
-    //            Extention.popError('این نام کاربری قبلا ثبت شده است');
-    //    });
-    //}
 
     $scope.openRoleModal = function() {
         $uibModal.open({
@@ -57,7 +49,9 @@
     }
 
     $scope.savePerson = function () {
-        if ($scope.user.roleAccepted && $scope.signUpForm.$valid && !$scope.emailError && !$scope.userNameError) {
+        console.log($scope.Position);
+        if ($scope.user.roleAccepted && $scope.signUpForm.$valid && !$scope.user.emailError) {
+            $scope.user.OrganizationID = $scope.Position.selected.ID;
             Extention.post('savePerson', $scope.user).then(function (msg) {
                 console.log(msg);
                 if (msg.Status == 'success') {

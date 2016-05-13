@@ -20,7 +20,8 @@
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/toaster.css" rel="stylesheet">
     <link href="css/angular-tooltips.css" rel="stylesheet" type="text/css" />
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.17.0/select.css" rel="stylesheet">
+    
     <link href="css/site-styles.css" rel="stylesheet" />
 
     <link href="css/jquery-fullPage.css" rel="stylesheet" />
@@ -69,6 +70,7 @@
 
 <!--<script src="js/jquery.js" type="text/javascript"></script>-->
 <script src="js/angular-fullpage.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.17.0/select.js"></script>
 
 <script src="js/hotkeys.min.js"></script>
 <script src="js/angular-recaptcha.js" type="text/javascript"></script>
