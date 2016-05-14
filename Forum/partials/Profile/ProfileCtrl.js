@@ -8,6 +8,23 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
         $scope.curUser = res;
     });
 
+    $scope.getRandomSpan = function(){
+        var i = Math.floor((Math.random()*6)+1);
+
+        switch (i){
+            case 1:
+                return 'danger';
+            case 2:
+                return 'success';
+            case 3:
+                return 'info';
+            case 4:
+                return 'warning';
+            case 5:
+                return 'primary';
+        }
+    }
+    
     $scope.saveUserInfo = function () {
         Extention.post('saveUserInfo', $scope.curUser).then(function (res) {
             if(res && res.Status=='success'){

@@ -243,3 +243,37 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .table > thead > tr > th, .table > tbody > tr > th,.table > thead > tr > td, .table > tbody > tr > td{
     vertical-align: middle;
 }
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.nvd3 .nv-axis .nv-axisMaxMin text {
+    font-weight: bold;
+    font-family: 'Vazir',tahoma;
+    text-anchor: start ;
+    direction: rtl;
+}
+
+.nvd3 text {
+    font: normal 12px Arial;
+    font-family: 'Vazir',tahoma;
+    text-anchor: start !important;
+    direction: rtl;
+}

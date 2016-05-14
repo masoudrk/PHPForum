@@ -284,7 +284,7 @@
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img ng-src="{{user.Image}}" class="img-circle" alt="User Image">
+                                <img ng-src="{{user.Image}}" class="img-circle link" alt="User Image" ui-sref="profile">
                                 <p>
                                     <span ng-bind="user.FullName"> </span> - ادمین
                                     <small class="vazir-font">عضویت در سال {{user.SignupDate |  jalaliDateSimple:'jYYYY'}}</small>
@@ -330,12 +330,12 @@
         <section class="sidebar">
             <!-- Sidebar user panel -->
             <div class="user-panel">
-                <div class="pull-right image">
+                <a ui-sref="profile" class="pull-right image">
                     <img  ng-src="{{user.Image}}" class="img-circle" alt="User Image">
-                </div>
+                </a>
                 <div class="pull-left info">
-                    <p ng-bind="user.FullName"></p>
-                    <a ui-sref="profile">آنلاین <i class="fa fa-circle text-success"></i></a>
+                    <p><a ui-sref="profile" ng-bind="user.FullName"></a></p>
+                    <a>آنلاین <i class="fa fa-circle text-success"></i></a>
                 </div>
             </div>
             <!-- search form -->

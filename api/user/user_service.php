@@ -76,7 +76,7 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
     require_once '../db/forum_subject.php';
     $data = json_decode($app->request->getBody());
 
-    $db = new DbHandler();
+    $db = new DbHandler(true);
     $res = [];
 
     if(isset($data)) {
@@ -96,7 +96,7 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
 $app->post('/getForumMainData', function() use ($app)  {
     //adminRequire();
 
-    $db = new DbHandler();
+    $db = new DbHandler(true);
     $sess = new Session();
     $session = $sess->getSession();
     $userID = $session['Session']['UserID'];
@@ -119,7 +119,7 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
     //adminRequire();
 
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler();
+    $db = new DbHandler(true);
 
     $subjectID = -1;
     if(isset($data->ForumName)){
@@ -149,7 +149,7 @@ $app->post('/getUserProfile', function() use ($app)  {
     require_once '../db/education.php';
     require_once '../db/skill.php';
 
-    $db = new DbHandler();
+    $db = new DbHandler(true);
     $sess = new Session();
 
 
@@ -170,7 +170,7 @@ AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID W
 $app->post('/saveUserInfo', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler();
+    $db = new DbHandler(true);
     $sess = new Session();
     $session = $sess->getSession();
 
@@ -197,20 +197,17 @@ $app->post('/saveUserInfo', function() use ($app)  {
 $app->post('/saveUserAddintionalInfo', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler();
+    $db = new DbHandler(true);
     $sess = new Session();
-    $session = $sess->getSession();
-    $userID = $session['UserID'];
-
-    $d = $db->deleteFromTable('user_skill','UserID='.$userID);
+    $d = $db->deleteFromTable('user_skill','UserID='.$sess->UserID);
 
     foreach($data->Skills as &$s){
-        $cq = $db->insertToTable('user_skill',"UserID,SkillID","'$userID','$s->ID'");
+        $cq = $db->insertToTable('user_skill',"UserID,SkillID","'$sess->UserID','$s->ID'");
     }
-    $d = $db->deleteFromTable('user_education','UserID='.$userID);
+    $d = $db->deleteFromTable('user_education','UserID='.$sess->UserID);
 
     foreach($data->Educations as &$e){
-        $cq = $db->insertToTable('user_education',"UserID,EducationID","'$userID','$e->ID'");
+        $cq = $db->insertToTable('user_education',"UserID,EducationID","'$sess->UserID','$e->ID'");
     }
 
     $res = [];
@@ -221,7 +218,7 @@ $app->post('/saveUserAddintionalInfo', function() use ($app)  {
 $app->post('/sfasf', function() use ($app)  {
     adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler();
+    $db = new DbHandler(true);
     $pr = new Pagination($data);
 
     $query = "SELECT comment.*, post.Title , concat(user.LastName ,' ', user.FirstName) as FullName, concat(up.LastName ,' ', up.FirstName) as AnswerToFullName ,cp.Identity AS AnswerToIdentity ,up.ID as AnswerToUserID FROM comment LEFT JOIN user on user.ID=comment.UserID LEFT JOIN post on post.ID=comment.PostID LEFT JOIN comment AS cp on comment.ParentID=cp.ID LEFT JOIN user AS up on up.ID=cp.UserID ORDER BY comment.Date Desc";

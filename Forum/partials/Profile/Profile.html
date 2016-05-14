@@ -193,7 +193,8 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <ui-select multiple ng-model="curUser.Skills" theme="bootstrap" ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
+                                    <ui-select multiple id="" ng-model="curUser.Skills" theme="bootstrap"
+                                               ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
                                         <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Skill}}</ui-select-match>
                                         <ui-select-choices
                                                 repeat="edu in curUser.AllSkills | propsFilter: {Skill: $select.search}">
@@ -202,6 +203,15 @@
                                     </ui-select>
                                 </div>
                                 <label for="inputExperience" class="col-sm-3 control-label">مهارت ها</label>
+                            </div>
+                            <div class="form-group">
+                                <!--<input class="col-sm-9 control-label" type="file" id="exampleInputFile">-->
+                                <div class="col-sm-9">
+                                <span class="btn btn-primary btn-file ">
+                                    انتخاب فایل  <input type="file" id="inputFile">
+                                </span>
+                                </div>
+                                <label class="col-sm-3 control-label" for="inputFile">تصویر پروفایل</label>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
@@ -234,8 +244,6 @@
                             <a class="">13,287</a> <b class="pull-right">دوستان</b>
                         </li>
                     </ul>
-
-                    <a href="#" class="btn btn-primary btn-block"><b>دنبال کردن</b></a>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 
@@ -257,9 +265,9 @@
 
                     <hr>
 
-                    <strong><i class="fa fa-pencil margin-r-5"></i> مهارات</strong>
+                    <strong><i class="fa fa-pencil margin-r-5"></i> مهارت ها</strong>
                     <p style="font-family:'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px">
-                        <span class="label label-danger">UI Design</span>
+                        <span ng-repeat="s in curUser.Skills" class="label label-">{{s.Skill}}</span>
                         <span class="label label-success">Coding</span>
                         <span class="label label-info">Javascript</span>
                         <span class="label label-warning">PHP</span>
