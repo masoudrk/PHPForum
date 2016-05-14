@@ -167,6 +167,62 @@ AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID W
     echoResponse(200, $user);
 });
 
+$app->post('/getQuestionByID', function() use ($app)  {
+
+    $r = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+
+    $resQ = $db->makeQuery("select q.* , u.FullName , u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainTitle , o.OrganizationName ,
+(SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
+(SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
+(SELECT count(*) FROM question_view where QuestionID = q.ID) as ViewCount ,
+(SELECT q.RateValue FROM question_rate as q where q.UserID = '$r->UserID') as PersonQuestionRate ,
+(SELECT count(*) FROM question_follow where QuestionID = q.ID) as FollowCount ,
+(SELECT sum(RateValue) FROM question_rate where QuestionID = q.ID) as QuestionScore ,
+(SELECT count(*) FROM question_follow where QuestionID = q.ID and UserID = '$r->UserID') as PersonFollow
+from forum_question as q
+inner join user as u on u.ID = q.AuthorID
+inner join file_storage as f on f.ID = u.AvatarID
+inner join forum_subject as s on q.SubjectID = s.ID
+inner join forum_main_subject as ms on ms.ID = s.ParentSubjectID
+left join organ_position as o on u.OrganizationID = o.ID
+where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
+
+    $resp = $resQ->fetch_assoc();
+    $resQ = $db->makeQuery("select t.Text from tag as t
+inner join tag_question as tg on tg.tagID = t.ID
+where tg.QuestionID = '$r->QuestionID'");
+
+    $tags = [];
+    while($item = $resQ->fetch_assoc())
+            $tags[] = $item;
+    $resp['Tags'] = $tags;
+
+        $resQ = $db->makeQuery("select a.* , u.FullName , u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
+(SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
+(SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
+(SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID') as PersonAnswerRate ,
+(SELECT sum(RateValue) FROM answer_rate where AnswerID = a.ID) as AnswerScore ,
+(SELECT count(*) FROM person_follow where TargetUserID = a.ID and UserID = '$r->UserID') as PersonFollow
+from forum_answer as a
+inner join user as u on u.ID = a.AuthorID
+inner join file_storage as f on f.ID = u.AvatarID
+left join organ_position as o on u.OrganizationID = o.ID
+where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1");
+
+    $Answers = [];
+    while($item = $resQ->fetch_assoc())
+            $Answers[] = $item;
+    $resp['Answers'] = $Answers;
+
+    //$resp['AllEducations'] = getAllEducations($db);
+
+    //$resp['Skills'] = getUserSkills($db,$sess->UserID);
+    //$resp['AllSkills'] = getAllSkills($db);
+
+    echoResponse(200, $resp);
+});
+
 $app->post('/saveUserInfo', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());

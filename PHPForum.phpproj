@@ -19,8 +19,11 @@
     <Compile Include="Admin\index.php" />
     <Compile Include="api\admin\index.php" />
     <Compile Include="api\db\education.php" />
+    <Compile Include="api\db\forum_subject.php" />
     <Compile Include="api\db\organ_position.php" />
+    <Compile Include="api\db\question.php" />
     <Compile Include="api\db\skill.php" />
+    <Compile Include="api\db\tag.php" />
     <Compile Include="api\functions.php" />
     <Compile Include="api\libs\Slim\Environment.php" />
     <Compile Include="api\libs\Slim\Exception\Pass.php" />
