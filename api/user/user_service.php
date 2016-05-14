@@ -6,6 +6,47 @@ $app->post('/logout', function() use ($app)  {
     echoResponse(200, $res);
 });
 
+$app->post('/globalSearch', function() use ($app)  {
+    $db = new DbHandler(true);
+    $data = json_decode($app->request->getBody());
+    $searchValue = $data->searchValue;
+    $searchType = $data->searchType;
+
+    $sRes = [];
+    $sRes['Items'] = [];
+    $sRes['Total'] = 0;
+    $sRes['SearchType'] = $searchType;
+    $p = new Pagination();
+    if($searchType == 0){
+
+        $res = $p->getPage($db,'SELECT * FROM `forum_question` WHERE (Title LIKE N\'%"'.$searchValue.'%\') OR 
+    (QuestionText LIKE N\'%'.$searchValue.'%\')');
+
+        $sRes['Total'] =$res['Total'];
+
+        foreach ($res['Items'] as &$s){
+            $sr = [];
+            $sr['ID'] = $s['ID'];
+            $sr['Text'] = $s['Title'];
+            $sRes['Items'][] = $sr;
+        }
+    }else if($searchType == 1){
+
+        $res = $p->getPage($db,'SELECT user.* , file_storage.FullPath as Image FROM `user` LEFT JOIN file_storage on 
+        file_storage.ID=user.AvatarID WHERE 
+FullName LIKE
+         N\'%'
+            .$searchValue
+            .'%\'');
+
+        $res['SearchType'] = $searchType;
+        echoResponse(200, $res);
+        return;
+    }
+
+    echoResponse(200, $sRes);
+});
+
 $app->post('/deleteQuestion', function() use ($app)  {
 
     require_once '../db/question.php';

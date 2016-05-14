@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="forumApp">
+<html ng-app="forumApp" ng-controller="MainCtrl">
 <head>
     <?php
 
@@ -339,13 +339,45 @@
                 </div>
             </div>
             <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
-                <div class="input-group persian-rtl">
-                    <input type="text" name="q" class="form-control vazir-font" placeholder="جستجو ...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
+            <form class="sidebar-form" style="overflow: visible">
+<!--                <div class="input-group persian-rtl">-->
+<!--                    <input type="text" name="q" class="form-control vazir-font" placeholder="جستجو ...">-->
+<!--              <span class="input-group-btn">-->
+<!--                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>-->
+<!--                </button>-->
+<!--              </span>-->
+<!--                </div>-->
+
+                <div class="input-group input-group input-group-ltr">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-search" style="padding-right: 5px"></i>
+                            <span class="fa fa-caret-down"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li ng-class="{'active':pagingParams.searchType==0}">
+                                <a ng-click="searchTypeChanges(0)" class="link">
+                                    <i class="fa fa-question-circle"></i>
+                                    جستجو در انجمن
+                                </a>
+                            </li>
+                            <li ng-class="{'active':pagingParams.searchType==1}">
+                                <a ng-click="searchTypeChanges(1)" class="link">
+                                    <i class="fa fa-user"></i>
+                                    جستجو کاربر
+                                </a>
+                            </li>
+                            <li ng-class="{'active':pagingParams.searchType==2}">
+                                <a ng-click="searchTypeChanges(2)" class="link">
+                                    <i class="fa fa-bullhorn"></i>
+                                    جستجو کامل
+                                </a>
+                            </li>
+                        </ul>
+                    </div><!-- /btn-group -->
+                    <input type="text" class="form-control persian-rtl" ng-model="pagingParams.searchValue"
+                           placeholder="جستجو ..." ng-change="searchBoxChanged()" ng-enter="search()"
+                           ng-model-options="{debounce : 100}" >
                 </div>
             </form>
             <!-- /.search form -->
@@ -446,7 +478,8 @@
         <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60">
         </treasure-overlay-spinner>
         <!-- Content Wrapper. Contains page content -->
-        <div ui-view ></div>
+        <div ui-view ng-hide="globalSearchActive" id="mainContent" ></div>
+        <div ng-show="globalSearchActive" ng-include src="'partials/GlobalSearch.html'" id="searchContent" ></div>
         <!-- /.content-wrapper -->
     </div>
 
@@ -625,26 +658,6 @@
     <div class="control-sidebar-bg"></div>
 </div><!-- ./wrapper -->
 
-<script src="../js/angular.js"></script>
-<script src="../js/angular-route.min.js"></script>
-<script src="../js/angular-cookies.min.js"></script>
-<script src="../js/angular-animate.min.js"></script>
-<script src="../js/angular-ui-router.js"></script>
-
-<script src="../cms/js/treasure-overlay-spinner.js" type="text/javascript"></script>
-<script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript"></script>
-<script src="../js/toaster.js" type="text/javascript"></script>
-<script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript"></script>
-<script src="../cms/js/select/select.min.js" type="text/javascript"></script>
-
-<script src="angular/forum-app.js"></script>
-<script src="partials/MainCtrl.js"></script>
-<script src="../app/directives/auto-pagination.js"></script>
-
-<script type="text/javascript" src="../js/moment.js"></script>
-<script type="text/javascript" src="../js/moment-jalaali.js"></script>
-<script type="text/javascript" src="../js/angular-confirm.min.js"></script>
-
 <!-- jQuery 2.1.4 -->
 <script src="../cms/js/jQuery/jQuery-2.1.4.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -653,12 +666,6 @@
 <script>
     $.widget.bridge('uibutton', $.ui.button);
 </script>
-<script src="../cms/js/d3.js"></script>
-<!--<script src="../cms/js/d3.min.js"></script>-->
-    <script src="../cms/js/nv.d3.js"></script>
-    <script src="../cms/js/angular-nvd3.min.js"></script>
-<!--<script src="../cms/js/Chart.1.1.1.js"></script>-->
-<!--<script src="../cms/js/angular-chart.js"></script>-->
 <!-- Bootstrap 3.3.5 -->
 <script src="../cms/js/bootstrap.min.js"></script>
 <!-- Bootstrap WYSIHTML5
@@ -673,6 +680,33 @@
 <script src="dist/js/pages/dashboard.js"></script> -->
 <!-- AdminLTE for demo purposes -->
 <script src="../cms/js/demo.js"></script>
+
+<script src="../cms/js/d3.js"></script>
+<!--<script src="../cms/js/d3.min.js"></script>-->
+<script src="../cms/js/nv.d3.js"></script>
+
+<script src="../js/angular.js"></script>
+<script src="../js/angular-route.min.js"></script>
+<script src="../js/angular-cookies.min.js"></script>
+<script src="../js/angular-animate.min.js"></script>
+<script src="../js/angular-ui-router.js"></script>
+
+<script src="../cms/js/angular-nvd3.min.js"></script>
+<script src="../cms/js/treasure-overlay-spinner.js" type="text/javascript"></script>
+<script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript"></script>
+<script src="../js/toaster.js" type="text/javascript"></script>
+<script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript"></script>
+<script src="../cms/js/select/select.min.js" type="text/javascript"></script>
+
+<script src="angular/forum-app.js"></script>
+<script src="partials/MainCtrl.js"></script>
+<script src="../app/directives/auto-pagination.js"></script>
+
+<script type="text/javascript" src="../js/moment.js"></script>
+<script type="text/javascript" src="../js/moment-jalaali.js"></script>
+<script type="text/javascript" src="../js/angular-confirm.min.js"></script>
+
+
 </body>
 {{session}}
 </html>
