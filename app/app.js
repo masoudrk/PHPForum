@@ -152,6 +152,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfP
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
 
+        $rootScope.userSession = session;
 
         var serviceBase = serviceBaseURL;
 
@@ -416,19 +417,19 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention) {
         Extention.post('getSiteTitleIcon').then(function (res) {
             $rootScope.titleIcon = res.SiteTitleIcon;
         });
-
-        Extention.post('session').then(function (results) {
-            if (results.Valid) {
-                $rootScope.userCookie = {
-                    UserID: results.Session.UserID,
-                    IsAdmin: results.Session.IsAdmin,
-                    FullName: results.Session.FullName,
-                    Email: results.Session.Email
-                }
-            } else {
-                $rootScope.userCookie = {};
-            }
-        });
+        //
+        // Extention.post('session').then(function (results) {
+        //     if (results.Valid) {
+        //         $rootScope.userCookie = {
+        //             UserID: results.Session.UserID,
+        //             IsAdmin: results.Session.IsAdmin,
+        //             FullName: results.Session.FullName,
+        //             Email: results.Session.Email
+        //         }
+        //     } else {
+        //         $rootScope.userCookie = {};
+        //     }
+        // });
     });
 });
 

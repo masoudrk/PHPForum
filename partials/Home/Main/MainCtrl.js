@@ -1,8 +1,7 @@
-﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache, $state, $rootScope, $routeParams, $uibModal, Extention ,$cookies) {
+﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache, $state, $rootScope, $routeParams, $uibModal, Extention ) {
     $scope.user = {};
     $scope.emailError = false;
     $scope.userNameError = false;
-    $scope.userID = $cookies.get('UserID');
     $scope.userNameRegex = (/^(?=.*[a-z])[0-9a-zA-Z]{3,}$/);
     $scope.allPositions = [];
     $scope.Position = {};
@@ -10,16 +9,6 @@
     Extention.postAsync('getAllPositions', {}).then(function (msg) {
         $scope.allPositions = msg;
     });
-
-    var setUserCookie;
-    (setUserCookie =  function () {
-        $rootScope.userCookie = {
-            UserID: $cookies.get('UserID'),
-            IsAdmin: $cookies.get('IsAdmin'),
-            FullName: $cookies.get('FullName'),
-            Email: $cookies.get('Email')
-        }
-    })();
 
     $scope.checkEmail = function (value) {
         if (value) {
@@ -72,10 +61,6 @@
             Extention.post('signInUser', $scope.signIn).then(function (msg) {
                 //console.log(msg);
                 if (msg.Status == 'success') {
-                    $cookies.put('IsAdmin', msg.IsAdmin);
-                    $cookies.put('UserID', msg.UserID);
-                    $cookies.put('FullName', msg.FullName);
-                    $cookies.put('Email', msg.Email);
                     getPage('Forum');
                 } else {
                     console.log(msg);

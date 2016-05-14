@@ -29,10 +29,10 @@ angular.module(appName).controller('DataSwitchCtrl', function ($scope, $element,
             "useInteractiveGuideline": true,
             "dispatch": {},
             "xAxis": {
-                "axisLabel": "Time (ms)"
+                "axisLabel": "روز"
             },
             "yAxis": {
-                "axisLabel": "Voltage (v)",
+                "axisLabel": "سوالات",
                 "axisLabelDistance": -10,
                 tickFormat: function(d){
                     return d3.format('.02f')(d);
@@ -56,7 +56,8 @@ angular.module(appName).controller('DataSwitchCtrl', function ($scope, $element,
 
         //Data is represented as an array of {x,y} pairs.
         for (var i = 0; i < 100; i++) {
-            sin2.push({x: i, y: Math.sin(i/10)});
+            var t = Math.sin(i/10);
+            sin2.push({x: i, y: (t < 0)?-t:t});
         }
 
         //Line chart data should be sent as an array of series objects.
