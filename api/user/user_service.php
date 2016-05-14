@@ -208,6 +208,48 @@ AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID W
     echoResponse(200, $user);
 });
 
+$app->post('/getProfile', function() use ($app)  {
+
+    $r = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+
+    if(!$r->UserID || !$r->TargetUserID)
+        echoResponse(201, 'bad request');
+        
+    $resQ = $db->makeQuery("select u.FullName , u.Email ,u.PhoneNumber, u.Tel , u.SignupDate ,u.Gender, u.Description ,u.score, f.FullPath , o.OrganizationName,
+(SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
+(SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
+(SELECT count(*) FROM person_follow where TargetUserID = '$r->TargetUserID' and UserID = '$r->UserID' ) as PersonFollow
+from user as u
+inner join file_storage as f on f.ID = u.AvatarID
+left join organ_position as o on u.OrganizationID = o.ID
+where u.UserAccepted = 1 and u.ID = '$r->TargetUserID'");
+
+    $resp = $resQ->fetch_assoc();
+    $resQ = $db->makeQuery("select distinct s.Skill from skill as s
+inner join user_skill as us on us.UserID = s.ID
+where us.UserID = '$r->UserID'");
+
+    $skills = [];
+    while($item = $resQ->fetch_assoc())
+            $skills[] = $item;
+    $resp['Skills'] = $skills;
+
+    $resQ = $db->makeQuery("select * from forum_question as q where q.AuthorID = '$r->TargetUserID' order by q.CreationDate desc");
+
+    $resp['LastQuestion'] = $resQ->fetch_assoc();
+
+    $resQ = $db->makeQuery("select q.* ,(SELECT sum(RateValue) FROM question_rate where QuestionID = q.ID) as QuestionRate
+from forum_question as q
+where q.AuthorID = '$r->TargetUserID' and q.AdminAccepted = 1
+order by QuestionRate desc
+");
+
+    $resp['BestQuestion'] = $resQ->fetch_assoc();
+
+    echoResponse(200, $resp);
+});
+
 $app->post('/getQuestionByID', function() use ($app)  {
 
     $r = json_decode($app->request->getBody());
@@ -255,11 +297,6 @@ where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1")
     while($item = $resQ->fetch_assoc())
             $Answers[] = $item;
     $resp['Answers'] = $Answers;
-
-    //$resp['AllEducations'] = getAllEducations($db);
-
-    //$resp['Skills'] = getUserSkills($db,$sess->UserID);
-    //$resp['AllSkills'] = getAllSkills($db);
 
     echoResponse(200, $resp);
 });

@@ -131,7 +131,7 @@
                 </div><!-- /.box-body -->
                 <div class="box-footer">
                     <i class="fa fa-thumbs-o-up" style="font-size: 20px; cursor: pointer" aria-hidden="true"></i>
-                    <span class="badge bg-yellow" style="margin-bottom: 5px;">{{answer.AnswerScore}}</span>
+                    <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(answer.AnswerScore)?answer.AnswerScore:0}}</span>
                     <i class="fa fa-thumbs-o-down" style="font-size: 20px; cursor: pointer" aria-hidden="true"></i>
                 </div>
             </div>

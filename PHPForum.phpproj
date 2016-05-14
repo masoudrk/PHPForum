@@ -133,6 +133,7 @@
     <Folder Include="Forum\partials\Question\NewQuestion\" />
     <Folder Include="Forum\partials\Question\Questions\" />
     <Folder Include="Forum\partials\User\" />
+    <Folder Include="Forum\partials\User\UserProfile\" />
     <Folder Include="Images\credit\" />
     <Folder Include="js\" />
     <Folder Include="js\editor\" />
@@ -507,6 +508,8 @@
     <Content Include="Forum\partials\Question\Questions\QuestionsCtrl.js" />
     <Content Include="Forum\partials\User\AllUsers.html" />
     <Content Include="Forum\partials\User\AllUsersCtrl.js" />
+    <Content Include="Forum\partials\User\UserProfile\UserProfile.html" />
+    <Content Include="Forum\partials\User\UserProfile\UserProfileCtrl.js" />
     <Content Include="Images\avatar.png" />
     <Content Include="Images\avatar04.png" />
     <Content Include="Images\avatar2.png" />

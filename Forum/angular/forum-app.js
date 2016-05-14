@@ -156,7 +156,21 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'سوال';
                 }
             }
-        });
+        }).state("UserProfile", {
+            url: "/UserProfile/:id",
+            templateUrl: "partials/User/UserProfile/UserProfile.html",
+            controller: 'UserProfileCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/User/UserProfile/UserProfileCtrl.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'پروفایل من';
+                }
+            }
+        }); 
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');
         $state.go('home');
