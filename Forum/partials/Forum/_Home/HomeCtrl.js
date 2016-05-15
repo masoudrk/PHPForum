@@ -1,5 +1,11 @@
 ﻿angular.module(appName).controller('HomeCtrl', function ($scope, $element, $rootScope, $routeParams, $state, $location, $timeout, Extention) {
 
+	hideCMS(true);
+
+	$scope.show = function () {
+		hideCMS(false);
+	}
+
     //$scope.forumDetailOptions = {
     //    chart: {
     //        type: 'multiBarHorizontalChart',

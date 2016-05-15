@@ -700,6 +700,5 @@
 
 
 </body>
-{{session}}
 </html>
 
