@@ -99,8 +99,11 @@ $app->post('/saveQuestion', function() use ($app)  {
         '$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW()",true);
     }
 
-    foreach($data->Tags as $tag){
-        $cq = $db->insertToTable('tag_question',"TagID,QuestionID","'$tag->ID','$qID'");
+    if(isset($data->Tags)){
+
+        foreach($data->Tags as $tag){
+            $cq = $db->insertToTable('tag_question',"TagID,QuestionID","'$tag->ID','$qID'");
+        }
     }
 
     $res = [];
@@ -199,8 +202,13 @@ $app->post('/getUserProfile', function() use ($app)  {
     $sess = new Session();
 
 
-    $resQ = $db->makeQuery("SELECT user.`ID`, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, `SignupDate`, `Gender` , FullPath as 
-AvatarImagePath FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = $sess->UserID");
+    $resQ = $db->makeQuery("SELECT user.`ID`,user.Description, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, 
+    `SignupDate`,
+ `Gender` , FullPath as AvatarImagePath ,
+ (SELECT count(*) FROM forum_question where forum_question.AuthorID='$sess->UserID') as QuestionsCount,
+ (SELECT count(*) FROM forum_answer where forum_answer.AuthorID='$sess->UserID') as AnswersCount,
+ (SELECT count(*) FROM person_follow where person_follow.TargetUserID='$sess->UserID') as FollowersCount
+ FROM user LEFT JOIN file_storage on file_storage.ID = AvatarID WHERE user.ID = $sess->UserID");
 
     $user = $resQ->fetch_assoc();
 
@@ -520,15 +528,21 @@ $app->post('/saveUserAddintionalInfo', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
     $sess = new Session();
+
+    $db->updateRecord('user',"Description='$data->Description'",'ID='.$sess->UserID);
+
     $d = $db->deleteFromTable('user_skill','UserID='.$sess->UserID);
-
-    foreach($data->Skills as &$s){
-        $cq = $db->insertToTable('user_skill',"UserID,SkillID","'$sess->UserID','$s->ID'");
+    if(isset($data->Skills)){
+        foreach($data->Skills as &$s){
+            $cq = $db->insertToTable('user_skill',"UserID,SkillID","'$sess->UserID','$s->ID'");
+        }
     }
-    $d = $db->deleteFromTable('user_education','UserID='.$sess->UserID);
 
-    foreach($data->Educations as &$e){
-        $cq = $db->insertToTable('user_education',"UserID,EducationID","'$sess->UserID','$e->ID'");
+    $d = $db->deleteFromTable('user_education','UserID='.$sess->UserID);
+    if(isset($data->Educations)){
+        foreach($data->Educations as &$e){
+            $cq = $db->insertToTable('user_education',"UserID,EducationID","'$sess->UserID','$e->ID'");
+        }
     }
 
     $res = [];
@@ -536,25 +550,64 @@ $app->post('/saveUserAddintionalInfo', function() use ($app)  {
     echoResponse(200, $res);
 });
 
-$app->post('/sfasf', function() use ($app)  {
-    adminRequire();
+$app->post('/saveUserInfo', function() use ($app)  {
+    //adminRequire();
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
-    $pr = new Pagination($data);
+    $sess = new Session();
 
-    $query = "SELECT comment.*, post.Title , concat(user.LastName ,' ', user.FirstName) as FullName, concat(up.LastName ,' ', up.FirstName) as AnswerToFullName ,cp.Identity AS AnswerToIdentity ,up.ID as AnswerToUserID FROM comment LEFT JOIN user on user.ID=comment.UserID LEFT JOIN post on post.ID=comment.PostID LEFT JOIN comment AS cp on comment.ParentID=cp.ID LEFT JOIN user AS up on up.ID=cp.UserID ORDER BY comment.Date Desc";
+    $resQ = null;
 
-    $pageRes = $pr->getPage($db,$query);
-    /*
-    foreach($pageRes['Items'] as &$c){
-        $cq = $db->makeQuery($query.' WHERE Accepted=1 AND comment.ParentID='.$c['ID'].' ORDER BY ID ASC');
-        $c['Childs'] = [];
-        while($cc = $cq->fetch_assoc()){
-            $c['Childs'][] = $cc;
-        }
+    if(isset($data->Password)){
+        $pass = passwordHash::hash($data->Password);
+
+        $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+`Tel`='$data->Tel',`Password`='$pass'","user.ID='$sess->UserID'");
+    }else{
+
+        $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+`Tel`='$data->Tel'","user.ID='$sess->UserID'");
     }
-*/
-    echoResponse(200, $pageRes);
+
+    $sess->updateFullName($data->FullName);
+
+    $res = [];
+    if($resQ){
+        $res["Status"] = "success";
+        $res["FullName"] = $data->FullName;
+    }
+    echoResponse(200, $res);
 });
 
+$app->post('/updateAvatar', function() use ($app)  {
+    $filename = $_FILES['file']['name'];
+
+    $rand = generateRandomString(18);
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+    $absPath =  '../content/avatars/';
+    if (!file_exists('../'.$absPath)) {
+        mkdir('../'.$absPath, 0777, true);
+    }
+
+    $destination =$absPath.$rand.'.'.$ext;
+    move_uploaded_file( $_FILES['file']['tmp_name'] , '../'.$destination );
+
+    $sess = new Session();
+    $db = new DbHandler(true);
+    $fileID = $db->insertToTable('file_storage','FullPath,UploadDate,UserID',"'$destination',NOW(),'$sess->UserID'");
+    $resUpdate = $db->updateRecord('user',"AvatarID='$fileID'","ID='$sess->UserID'");
+
+    if($resUpdate){
+        $sess->updateImage($destination);
+
+        $res = [];
+        $res['Status'] = 'success';
+        $res['Image'] = $destination;
+        echoResponse(200, $res);
+        return;
+    }
+
+    echoError("Error");
+});
 ?>

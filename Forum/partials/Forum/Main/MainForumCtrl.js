@@ -1,4 +1,5 @@
-angular.module(appName).controller('MainForumCtrl', function ($scope, $element, $rootScope, $stateParams, $state, $timeout, $timeout, Extention) {
+angular.module(appName).controller('MainForumCtrl', 
+    function ($scope, $element, $rootScope, $stateParams, $state, $timeout, $timeout, Extention) {
 
     if(!$stateParams.id || $stateParams.id ==''){
         $state.go('forum_home');
@@ -58,7 +59,13 @@ angular.module(appName).controller('MainForumCtrl', function ($scope, $element, 
 
         //Data is represented as an array of {x,y} pairs.
         for (var i = 0; i < 100; i++) {
-            var t = Math.sin(i/10);
+            var  t = 0;
+            if(i>70)
+                t=i/2;
+            else if(i  > 50)
+                t= 5;
+            else
+                t= i;
             sin2.push({x: i, y: (t < 0)?-t:t});
         }
 
