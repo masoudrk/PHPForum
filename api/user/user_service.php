@@ -255,6 +255,14 @@ $app->post('/getQuestionByID', function() use ($app)  {
     $r = json_decode($app->request->getBody());
     $db = new DbHandler(true);
 
+    if(!isset($r->UserID) || !isset($r->QuestionID))
+        {echoResponse(201, 'bad request');return;}
+
+    $resQ =$db->makeQuery("select count(*) as val from question_view where UserID = '$r->UserID' and QuestionID = '$r->QuestionID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        {$resQ =$db->makeQuery("insert into question_view (UserID, QuestionID , ViewDate) values ('$r->UserID','$r->QuestionID',now())");}
+
     $resQ = $db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainTitle , o.OrganizationName ,
 (SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
