@@ -3,7 +3,13 @@
     $scope.forumDetailOptions = {
         chart: {
             type: 'multiBarHorizontalChart',
-            height: 300,
+            height: 250,
+            margin: {
+                top: 20,
+                right: 20,
+                bottom: 45,
+                left: 130
+            },
             x: function (d) { return d.label; },
             y: function (d) { return d.value; },
             showControls: true,
@@ -22,45 +28,61 @@
     };
     $scope.forumDetailData = [
         {
-            "key": "Series1",
+            "key": "جواب ها",
             "color": "#d62728",
             "values": [
                 {
-                    "label": "Group A",
-                    "value": -1.8746444827653
+                    "label": "مباحث مشترک",
+                    "value": 25.307646510375
                 },
                 {
-                    "label": "Group B",
-                    "value": -8.0961543492239
+                    "label": "سیستم های انتقال",
+                    "value": 16.756779544553
                 },
                 {
-                    "label": "Group C",
-                    "value": -0.57072943117674
+                    "label": "گروه خطوط ارتباطی",
+                    "value": 18.451534877007
                 },
                 {
-                    "label": "Group D",
-                    "value": -2.4174010336624
+                    "label": "مراکز خودکار و دیتا سوئیچ",
+                    "value": 8.6142352811805
+                },
+                {
+                    "label": "گروه رادیویی",
+                    "value": 8.6142352811805
+                },
+                {
+                    "label": "سوپروایزری",
+                    "value": 8.6142352811805
                 }
             ]
         },
         {
-            "key": "Series2",
+            "key": "سوال ها",
             "color": "#1f77b4",
             "values": [
                 {
-                    "label": "Group A",
+                    "label": "مباحث مشترک",
                     "value": 25.307646510375
                 },
                 {
-                    "label": "Group B",
+                    "label": "سیستم های انتقال",
                     "value": 16.756779544553
                 },
                 {
-                    "label": "Group C",
+                    "label": "گروه خطوط ارتباطی",
                     "value": 18.451534877007
                 },
                 {
-                    "label": "Group D",
+                    "label": "مراکز خودکار و دیتا سوئیچ",
+                    "value": 8.6142352811805
+                },
+                {
+                    "label": "گروه رادیویی",
+                    "value": 8.6142352811805
+                },
+                {
+                    "label": "سوپروایزری",
                     "value": 8.6142352811805
                 }
             ]
@@ -70,7 +92,7 @@
     $scope.forumOptions = {
         chart: {
             type: 'multiBarChart',
-            height: 300,
+            height: 250,
             margin: {
                 top: 20,
                 right: 20,
@@ -82,17 +104,17 @@
             duration: 1500,
             stacked: true,
             xAxis: {
-                axisLabel: 'Time (ms)',
+                axisLabel: 'تاریخ',
                 showMaxMin: false,
                 tickFormat: function (d) {
                     return d3.format(',f')(d);
                 }
             },
             yAxis: {
-                axisLabel: 'Y Axis',
+                axisLabel: 'تعداد',
                 axisLabelDistance: -20,
                 tickFormat: function (d) {
-                    return d3.format(',.1f')(d);
+                    return d3.format(',f')(d);
                 }
             }
         }

@@ -260,11 +260,19 @@ $app->post('/getQuestionByID', function() use ($app)  {
     $r = json_decode($app->request->getBody());
     $db = new DbHandler(true);
 
-    $resQ = $db->makeQuery("select q.* , u.FullName , u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainTitle , o.OrganizationName ,
+    if(!isset($r->UserID) || !isset($r->QuestionID))
+        {echoResponse(201, 'bad request');return;}
+
+    $resQ =$db->makeQuery("select count(*) as val from question_view where UserID = '$r->UserID' and QuestionID = '$r->QuestionID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        {$resQ =$db->makeQuery("insert into question_view (UserID, QuestionID , ViewDate) values ('$r->UserID','$r->QuestionID',now())");}
+
+    $resQ = $db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainTitle , o.OrganizationName ,
 (SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT count(*) FROM question_view where QuestionID = q.ID) as ViewCount ,
-(SELECT q.RateValue FROM question_rate as q where q.UserID = '$r->UserID') as PersonQuestionRate ,
+(SELECT q.RateValue FROM question_rate as q where q.UserID = '$r->UserID' and q.QuestionID = '$r->QuestionID' limit 1) as PersonQuestionRate ,
 (SELECT count(*) FROM question_follow where QuestionID = q.ID) as FollowCount ,
 (SELECT sum(RateValue) FROM question_rate where QuestionID = q.ID) as QuestionScore ,
 (SELECT count(*) FROM question_follow where QuestionID = q.ID and UserID = '$r->UserID') as PersonFollow
@@ -277,7 +285,7 @@ left join organ_position as o on u.OrganizationID = o.ID
 where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
-    $resQ = $db->makeQuery("select t.Text from tag as t
+    $resQ = $db->makeQuery("select t.* from tag as t
 inner join tag_question as tg on tg.tagID = t.ID
 where tg.QuestionID = '$r->QuestionID'");
 
@@ -286,17 +294,17 @@ where tg.QuestionID = '$r->QuestionID'");
             $tags[] = $item;
     $resp['Tags'] = $tags;
 
-        $resQ = $db->makeQuery("select a.* , u.FullName , u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
+        $resQ = $db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
 (SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
-(SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID') as PersonAnswerRate ,
+(SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID' and q.AnswerID = a.ID limit 1) as PersonAnswerRate ,
 (SELECT sum(RateValue) FROM answer_rate where AnswerID = a.ID) as AnswerScore ,
 (SELECT count(*) FROM person_follow where TargetUserID = a.ID and UserID = '$r->UserID') as PersonFollow
 from forum_answer as a
 inner join user as u on u.ID = a.AuthorID
 inner join file_storage as f on f.ID = u.AvatarID
 left join organ_position as o on u.OrganizationID = o.ID
-where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1");
+where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 order by a.CreationDate");
 
     $Answers = [];
     while($item = $resQ->fetch_assoc())
@@ -306,7 +314,181 @@ where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1")
     echoResponse(200, $resp);
 });
 
-$app->post('/saveUserInfo', function() use ($app)  {
+$app->post('/followMainSubject', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->MainSubjectID))
+        {echoResponse(201, 'bad request');return;}
+
+    $resQ =$db->makeQuery("select count(*) as val from main_subject_follow where UserID = '$data->UserID' and MainSubjectID = '$data->MainSubjectID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] > 0)
+        {echoResponse(200, false);return;}
+    $resQ =$db->makeQuery("insert into main_subject_follow (UserID, MainSubjectID , MainSubjectFollowDate) values ('$data->UserID','$data->MainSubjectID',now())");
+    echoResponse(200, true);
+});
+
+$app->post('/followQuestion', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->QuestionID))
+        {echoResponse(201, 'bad request');return;}
+
+    $resQ =$db->makeQuery("select count(*) as val from question_follow where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] > 0)
+    {echoResponse(200, false);return;}
+    $resQ =$db->makeQuery("insert into question_follow (UserID, QuestionID , QuestionFollowDate) values ('$data->UserID','$data->QuestionID',now())");
+    echoResponse(200, true);
+    return;
+});
+
+$app->post('/followPerson', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->TargetUserID))
+        {echoResponse(201, 'bad request');return;}
+
+    $resQ =$db->makeQuery("select count(*) as val from person_follow where UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] > 0)
+        {echoResponse(200, false);return;}
+    $resQ =$db->makeQuery("insert into person_follow (UserID, TargetUserID , PersonFollowDate) values ('$data->UserID','$data->TargetUserID',now())");
+    echoResponse(200, true);
+});
+
+$app->post('/followSubject', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->SubjectID))
+        {echoResponse(201, 'bad request');return;}
+
+    $resQ =$db->makeQuery("select count(*) as val from subject_follow where UserID = '$data->UserID' and SubjectID = '$data->SubjectID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] > 0)
+        {echoResponse(200, false);return;}
+    $resQ =$db->makeQuery("insert into subject_follow (UserID, SubjectID , SubjectFollowDate) values ('$data->UserID','$data->SubjectID',now())");
+    echoResponse(200, true);
+});
+
+$app->post('/unFollowSubject', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->SubjectID))
+        {echoResponse(201, 'bad request');return;}
+
+    $db->deleteFromTable('subject_follow',"UserID = '$data->UserID' and SubjectID = '$data->SubjectID'");
+    echoResponse(200, true);
+});
+
+$app->post('/unFollowMainSubject', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->MainSubjectID))
+        {echoResponse(201, 'bad request');return;}
+
+    $db->deleteFromTable('main_subject_follow',"UserID = '$data->UserID' and MainSubjectID = '$data->MainSubjectID'");
+    echoResponse(200, true);
+});
+
+$app->post('/unFollowPerson', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->TargetUserID))
+        {echoResponse(201, 'bad request');return;}
+
+    $db->deleteFromTable('person_follow',"UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
+    echoResponse(200, true);
+});
+
+$app->post('/unFollowQuestion', function() use ($app)  {
+    //adminRequire();
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->QuestionID))
+        {echoResponse(201, 'bad request');return;}
+
+    $db->deleteFromTable('Question_follow',"UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    echoResponse(200, true);
+});
+
+$app->post('/rateQuestion', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->QuestionID) || !isset($data->RateValue)|| !isset($data->TargetUserID) || $data->RateValue ==0)
+        {echoResponse(201, 0);return;}
+
+    if($data->RateValue > 1)
+        $data->RateValue = 1;
+    else if($data->RateValue < -1)
+        $data->RateValue = -1;
+
+    $resQ =$db->makeQuery("select count(*) as val from question_rate where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] > 0)
+    {
+        $db->updateRecord('question_rate',"RateValue='$data->RateValue' , QuestionRateDate = now()" , "UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+        echoResponse(200, $data->RateValue);
+        return;
+    }
+    else
+    {
+        if($data->RateValue == 1)
+            $db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
+    	$db->insertToTable('question_rate',"UserID,QuestionID,RateValue,QuestionRateDate","'$data->UserID','$data->QuestionID','$data->RateValue',now()");
+        echoResponse(200, $data->RateValue);
+        return;
+    }
+});
+
+$app->post('/rateAnswer', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->UserID) || !isset($data->AnswerID) || !isset($data->RateValue)|| !isset($data->TargetUserID) || $data->RateValue==0)
+        {echoResponse(201, 0);return;}
+
+    if($data->RateValue > 1)
+        $data->RateValue = 1;
+    else if($data->RateValue < -1)
+        $data->RateValue = -1;
+
+    $resQ =$db->makeQuery("select count(*) as val from answer_rate where UserID = '$data->UserID' and AnswerID = '$data->AnswerID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] > 0)
+    {
+        $db->updateRecord('answer_rate',"RateValue='$data->RateValue' , AnswerRateDate = now()" , "UserID = '$data->UserID' and AnswerID = '$data->AnswerID'");
+        echoResponse(200, $data->RateValue);
+        return;
+    }
+    else
+    {
+        if($data->RateValue == 1)
+            $db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
+    	$db->insertToTable('answer_rate',"UserID,AnswerID,RateValue,AnswerRateDate","'$data->UserID','$data->AnswerID','$data->RateValue',now()");
+        echoResponse(200, $data->RateValue);
+        return;
+    }
+});
+
+$app->post('/saveAnswer', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    if(!isset($data->AuthorID) || !isset($data->QuestionID) || !isset($data->AnswerText))
+        {echoResponse(201, 'bad Request');return;}
+
+    $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate","'$data->AuthorID','$data->QuestionID','$data->AnswerText',now()");
+    echoResponse(200, true);
+    return;
+});
+
+$app->post('/saveMainSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
