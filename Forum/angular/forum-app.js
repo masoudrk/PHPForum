@@ -65,55 +65,16 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
-        .state("forum_data_switch", {
-            url: "/data_switch",
-            templateUrl: "partials/Forum/DataSwitch/DataSwitch.html",
-            controller: 'DataSwitchCtrl',
+        .state("main_forum", {
+            url: "/MainForum/:id",
+            templateUrl: "partials/Forum/Main/MainForum.html",
+            controller: 'MainForumCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/DataSwitch/DataSwitchCtrl.js']);
+                    return $ocLazyLoad.load(['partials/Forum/Main/MainForumCtrl.js']);
                 }],
                 $title: function () {
-                    return 'انجمن دیتا سوئیچ';
-                }
-            }
-        })
-        .state("forum_transition", {
-            url: "/transition",
-            templateUrl: "partials/Forum/Transition/Transition.html",
-            controller: 'TransitionCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/Transition/TransitionCtrl.js']);
-                }],
-                $title: function () {
-                    return 'پروفایل';
-                }
-            }
-        })
-        .state("forum_transport_management", {
-            url: "/transport_management",
-            templateUrl: "partials/Forum/TransportManagement/TransportManagement.html",
-            controller: 'TransportManagementCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/TransportManagement/TransportManagementCtrl.js']);
-                }],
-                $title: function () {
-                    return 'انجمن نظارت بر سیستم انتقال';
-                }
-            }
-        })
-        .state("forum_radio", {
-            url: "/radio",
-            templateUrl: "partials/Forum/Radio/Radio.html",
-            controller: 'RadioCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/Radio/RadioCtrl.js']);
-                }],
-                $title: function () {
-                    return 'انجمن رادیو';
+                    return 'انجمن';
                 }
             }
         })
@@ -197,23 +158,8 @@ var fixPersianNumbers = function () {
 }
 
 var fixFooter = function () {
-    var o = $.AdminLTE.options.controlSidebarOptions;
-    var sidebar = $(o.selector);
-    $.AdminLTE.controlSidebar._fixForContent(sidebar);
-    // var h1 = $("#searchContent").height();
-    // var h2 = $("#mainContent").height();
-    // if(h1 > h2)
-    //     $(".content-wrapper, .right-side").css('min-height', h1);
-    // else
-    //     $(".content-wrapper, .right-side").css('min-height', h2);
-
     traverse(document.body);
 }
-//
-// $("#searchContent").bind("resize", function() {
-//     alert("Box was resized from 100x100 to 200x200");
-// });
-// $("#searchContent").trigger("resize");
 
 var activeElement = function (parent , name) {
     if(name){

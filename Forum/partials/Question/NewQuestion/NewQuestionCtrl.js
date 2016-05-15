@@ -18,6 +18,16 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			$scope.allTags = res.AllTags;
 			$scope.allSubjects = res.AllSubjects;
 			$scope.question = res.Question;
+			$timeout(function () {
+				var ms = $scope.question.MainSubject;
+				for(var i = 0; i<res.AllSubjects.length ; i++){
+					if(ms.SubjectID == res.AllSubjects[i].SubjectID){
+						$scope.question.MainSubject = res.AllSubjects[i];
+						break;
+					}
+				}
+				$scope.allChildSubjects = $scope.question.MainSubject.Childs ;
+			})
 		});
 	}else{
 		$scope.form.header = 'ایجاد سوال جدید';
@@ -37,6 +47,10 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 		}
 		if(!$scope.question.QuestionText){
 			$scope.errForum.text = true;
+			hasError = true;
+		}
+		if(!$scope.question.MainSubject){
+			$scope.errForum.mainSubject = true;
 			hasError = true;
 		}
 		if(!$scope.question.Subject){
@@ -61,8 +75,17 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 	$scope.fieldChanged = function (name , value) {
 		$scope.errForum[name] = value == undefined || value == '';
 	}
-	
+
 	$scope.subjectChanged = function () {
+		$scope.errForum.mainSubject = false;
+
+		$scope.allChildSubjects = $scope.question.Subject = undefined;
+		$timeout(function () {
+			$scope.allChildSubjects = $scope.question.MainSubject.Childs;
+		});
+	}
+
+	$scope.childSubjectChanged = function () {
 		$scope.errForum.subject = false;
 	}
 

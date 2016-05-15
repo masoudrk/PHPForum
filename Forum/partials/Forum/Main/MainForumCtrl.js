@@ -1,13 +1,15 @@
-angular.module(appName).controller('DataSwitchCtrl', function ($scope, $element, $rootScope, $routeParams, $state, $timeout, $timeout, Extention) {
+angular.module(appName).controller('MainForumCtrl', function ($scope, $element, $rootScope, $stateParams, $state, $timeout, $timeout, Extention) {
 
-    $scope.pagingParams = { ForumName : 'DataSwitch' };
+    if(!$stateParams.id || $stateParams.id ==''){
+        $state.go('forum_home');
+    }
+
+    $scope.pagingParams = { MainSubjectName : $stateParams.id };
     $scope.question = {};
-    
-    
-    
-	Extention.post('getForumMainData',{ForumName:'DataSwitch'})
-		.then(function (res) {
 
+	Extention.post('getForumMainData',{MainSubjectName: $stateParams.id})
+		.then(function (res) {
+        $scope.forumData = res;
 	});
     
     $scope.loadFinishPageData = function () {
@@ -71,6 +73,6 @@ angular.module(appName).controller('DataSwitchCtrl', function ($scope, $element,
         ];
     };
 
-	activeElement('#SForum','#SDataSwitch');
+	activeElement('#SForum','#S' + $stateParams.id);
 	fixFooter();
 });

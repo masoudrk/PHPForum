@@ -33,6 +33,12 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         }
     }
 
+    $scope.fixPage = function () {
+        $timeout(function () {
+            fixFooter();
+        })
+    }
+
     $scope.searchTypeChanges = function (type) {
         $scope.pagingParams.searchType = type;
         $scope.search();
@@ -44,12 +50,6 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     $scope.getRandomColorClass = function(id){
         var i = id % $scope.bgColorArray.length;
         return $scope.bgColorArray[i];
-    }
-    
-    $scope.fixPage = function () {
-        $timeout(function () {
-            fixFooter();
-        },2000);
     }
 
 });

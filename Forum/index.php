@@ -393,14 +393,20 @@
                     <ul class="treeview-menu">
                         <li id="SForumHome"><a ui-sref="forum_home"><i class="fa fa-circle-o"></i>
                                 خانه </a></li>
-                        <li id="SDataSwitch"><a ui-sref="forum_data_switch"><i class="fa fa-circle-o"></i>
+                        <li id="SDataSwitch"><a ui-sref="main_forum({id:'DataSwitch'})"><i class="fa fa-circle-o"></i>
 مراکز خودکار و دیتا سوئیچ</a></li>
-                        <li id="STransition"><a ui-sref="forum_transition"><i class="fa fa-circle-o"></i>
+                        <li id="SRadio"><a ui-sref="main_forum({id:'Radio'})"><i class="fa fa-circle-o"></i>
                                 رادیوئی</a></li>
-                        <li id="STransportManagement"><a ui-sref="forum_transport_management"><i class="fa
+                        <li id="STransportManagement"><a ui-sref="main_forum({id:'TransportManagement'})"><i class="fa
                         fa-circle-o"></i> نظارت بر سیستم ها انتقال
                             </a></li>
-                        <li id="SRadio"><a ui-sref="forum_radio"><i class="fa fa-circle-o"></i> خطوط انتقال</a></li>
+                        <li id="STransition"><a ui-sref="main_forum({id:'Transition'})"><i class="fa fa-circle-o"></i>
+                                خطوط انتقال</a></li>
+                        <li id="SCommunicationEquipments"><a ui-sref="main_forum({id:'CommunicationEquipments'})"><i class="fa
+                        fa-circle-o"></i>
+                                تجهیزات ارتباطی</a></li>
+                        <li id="SCommonTopics"><a ui-sref="main_forum({id:'CommonTopics'})"><i class="fa fa-circle-o"></i>
+                                مباحث مشترک</a></li>
                     </ul>
                 </li>
 

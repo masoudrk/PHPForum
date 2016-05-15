@@ -30,27 +30,57 @@ class Pagination {
 	}
 
 	public function getPage($db,$query){
-		$startFromStr = strstr($query, 'FROM');
-		$countQ = $db->makeQuery("SELECT count(*) as Total ".$startFromStr);
-		$countRes = $countQ->fetch_assoc();
-		$total = $countRes['Total'];
+		$countFroms = substr_count($query, 'FROM');
+		if($countFroms == 1){
 
-		$offset = ($this->PageIndex-1) * $this->PageSize;
+			$startFromStr = strstr($query, 'FROM');
+			$countQ = $db->makeQuery("SELECT count(*) as Total ".$startFromStr);
+			$countRes = $countQ->fetch_assoc();
+			$total = $countRes['Total'];
 
-		$q = $db->makeQuery($query." LIMIT $offset, $this->PageSize");
+			$offset = ($this->PageIndex-1) * $this->PageSize;
 
-		$items = [];
-		while($r = $q->fetch_assoc()){
-			$items[] = $r;
+			$q = $db->makeQuery($query." LIMIT $offset, $this->PageSize");
+
+			$items = [];
+			while($r = $q->fetch_assoc()){
+				$items[] = $r;
+			}
+
+			$res = [];
+			$res['Items'] = $items;
+			$res['PageSize'] = $this->PageSize;
+			$res['PageIndex'] = $this->PageIndex;
+			$res['Total'] = $total;
+
+			return $res;
+		}else{
+
+			$startFromStr = strrpos($query, 'FROM');
+
+			$rest = substr($query,$startFromStr);
+			
+			$countQ = $db->makeQuery("SELECT count(*) as Total ".$rest);
+			$countRes = $countQ->fetch_assoc();
+			$total = $countRes['Total'];
+
+			$offset = ($this->PageIndex-1) * $this->PageSize;
+
+			$q = $db->makeQuery($query." LIMIT $offset, $this->PageSize");
+
+			$items = [];
+			while($r = $q->fetch_assoc()){
+				$items[] = $r;
+			}
+
+			$res = [];
+			$res['Items'] = $items;
+			$res['PageSize'] = $this->PageSize;
+			$res['PageIndex'] = $this->PageIndex;
+			$res['Total'] = $total;
+
+			return $res;
 		}
-
-		$res = [];
-		$res['Items'] = $items;
-		$res['PageSize'] = $this->PageSize;
-		$res['PageIndex'] = $this->PageIndex;
-		$res['Total'] = $total;
-
-		return $res;
 
 	}
 

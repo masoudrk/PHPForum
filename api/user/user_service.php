@@ -32,12 +32,11 @@ $app->post('/globalSearch', function() use ($app)  {
         }
     }else if($searchType == 1){
 
-        $res = $p->getPage($db,'SELECT user.* , file_storage.FullPath as Image FROM `user` LEFT JOIN file_storage on 
-        file_storage.ID=user.AvatarID WHERE 
-FullName LIKE
-         N\'%'
-            .$searchValue
-            .'%\'');
+        $res = $p->getPage($db,'SELECT u.* , fs.FullPath as Image, 
+( SELECT count(*) FROM forum_Answer where AuthorID = u.ID ) as AnswersCount, 
+( SELECT count(*) FROM forum_Question where AuthorID = u.ID ) as QuestionsCount 
+FROM `user` as u LEFT JOIN file_storage as fs on fs.ID=u.AvatarID 
+WHERE u.FullName LIKE N\'%'.$searchValue.'%\'');
 
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);
@@ -125,35 +124,41 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
         $res['Question'] = $resQ->fetch_assoc();
 
         $res['Question']['Subject'] = getQuestionSubject($db , $data->QuestionID);
+        $res['Question']['MainSubject'] = getSubjectParent($db , $res['Question']['Subject']['ID']);
         $res['Question']['Tags'] = getQuestionTags($db , $data->QuestionID);
+
     }
 
     $res['AllTags'] = getAllTags($db);
-    $res['AllSubjects'] = getAllForumSubjects($db);
+    $res['AllSubjects'] = getAllMainSubjectsWithChilds($db);
 
     echoResponse(200, $res);
 });
 
 $app->post('/getForumMainData', function() use ($app)  {
-    //adminRequire();
 
+    $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
     $sess = new Session();
-    $session = $sess->getSession();
-    $userID = $session['Session']['UserID'];
 
     $res = [];
-    $resQ = $db->makeQuery("SELECT * FROM ");
+    $resQ = $db->makeQuery("SELECT * FROM forum_main_subject WHERE SubjectName='$data->MainSubjectName'");
+    $mainSubject = $resQ->fetch_assoc();
+    $res['MainSubject'] = $mainSubject;
 
-    $user = $resQ->fetch_assoc();
+    $resQ = $db->makeQuery("SELECT forum_subject.*,
+(SELECT Count(*) FROM forum_question WHERE SubjectID=forum_subject.ID) as TotalQuestions
+FROM forum_subject WHERE forum_subject
+    .ParentSubjectID='".$mainSubject['SubjectID']."'");
+    $subjectChilds = [];
+    while($r = $resQ->fetch_assoc()){
+        $subjectChilds[] = $r;
+    }
 
-    $user['Educations'] = getUserEducations($db,$userID);
-    $user['AllEducations'] = getAllEducations($db);
+    $res['SubjectChilds'] = $subjectChilds;
 
-    $user['Skills'] = getUserSkills($db,$userID);
-    $user['AllSkills'] = getAllSkills($db);
 
-    echoResponse(200, $user);
+    echoResponse(200, $res);
 });
 
 $app->post('/getForumLastQuestions', function() use ($app)  {
@@ -163,9 +168,9 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
     $db = new DbHandler(true);
 
     $subjectID = -1;
-    if(isset($data->ForumName)){
+    if(isset($data->MainSubjectName)){
         $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
-                                forum_main_subject.SubjectName='$data->ForumName'");
+                                forum_main_subject.SubjectName='$data->MainSubjectName'");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
     }
