@@ -63,6 +63,7 @@
     <Compile Include="index.php" />
     <Compile Include="js\editor\ckeditor\samples\old\assets\posteddata.php" />
     <Compile Include="js\editor\ckeditor\samples\old\sample_posteddata.php" />
+    <Compile Include="session_generator.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Admin\" />
@@ -83,6 +84,7 @@
     <Folder Include="Admin\partials\Admin\Dashboard\" />
     <Folder Include="Admin\partials\Admin\Elements\" />
     <Folder Include="Admin\partials\Admin\Profile\" />
+    <Folder Include="Admin\partials\Admin\User\" />
     <Folder Include="Admin\plugins\" />
     <Folder Include="Admin\plugins\fastclick\" />
     <Folder Include="Admin\plugins\jQueryUI\" />
@@ -123,6 +125,7 @@
     <Folder Include="Forum\partials\Elements\" />
     <Folder Include="Forum\partials\Forum\" />
     <Folder Include="Forum\partials\Forum\DataSwitch\" />
+    <Folder Include="Forum\partials\Forum\Main\" />
     <Folder Include="Forum\partials\Forum\Question\" />
     <Folder Include="Forum\partials\Forum\Radio\" />
     <Folder Include="Forum\partials\Forum\Transition\" />
@@ -330,6 +333,8 @@
     <Content Include="Admin\partials\Admin\Elements\_ElementsCtrl.js" />
     <Content Include="Admin\partials\Admin\Profile\Profile.html" />
     <Content Include="Admin\partials\Admin\Profile\ProfileCtrl.js" />
+    <Content Include="Admin\partials\Admin\User\AllUsers.html" />
+    <Content Include="Admin\partials\Admin\User\AllUsersCtrl.js" />
     <Content Include="Admin\plugins\fastclick\fastclick.js" />
     <Content Include="Admin\plugins\fastclick\fastclick.min.js" />
     <Content Include="Admin\plugins\jQueryUI\jquery-ui.js" />
@@ -489,6 +494,8 @@
     <Content Include="Forum\partials\Elements\_ElementsCtrl.js" />
     <Content Include="Forum\partials\Forum\DataSwitch\DataSwitch.html" />
     <Content Include="Forum\partials\Forum\DataSwitch\DataSwitchCtrl.js" />
+    <Content Include="Forum\partials\Forum\Main\MainForum.html" />
+    <Content Include="Forum\partials\Forum\Main\MainForumCtrl.js" />
     <Content Include="Forum\partials\Forum\Question\Question.html" />
     <Content Include="Forum\partials\Forum\Question\QuestionCtrl.js" />
     <Content Include="Forum\partials\Forum\Radio\Radio.html" />
@@ -499,6 +506,7 @@
     <Content Include="Forum\partials\Forum\TransportManagement\TransportManagementCtrl.js" />
     <Content Include="Forum\partials\Forum\_Home\Home.html" />
     <Content Include="Forum\partials\Forum\_Home\HomeCtrl.js" />
+    <Content Include="Forum\partials\GlobalSearch.html" />
     <Content Include="Forum\partials\MainCtrl.js" />
     <Content Include="Forum\partials\Profile\Profile.html" />
     <Content Include="Forum\partials\Profile\ProfileCtrl.js" />
@@ -543,6 +551,7 @@
     <Content Include="Images\photo33333.png" />
     <Content Include="Images\photo4.jpg" />
     <Content Include="Images\bgFullPage.jpg" />
+    <Content Include="Images\Avatar.jpg" />
     <Content Include="Images\title.png" />
     <Content Include="Images\user1-128x128.jpg" />
     <Content Include="Images\user2-160x160.jpg" />
@@ -592,6 +601,8 @@
     <Content Include="js\angular.min.js" />
     <Content Include="js\angularjs-dropdown-multiselect.js" />
     <Content Include="js\angularjs-dropdown-multiselect.min.js" />
+    <Content Include="js\angularpersian.js" />
+    <Content Include="js\angularpersian.min.js" />
     <Content Include="js\bootstrap-plus.js" />
     <Content Include="js\bootstrap-plus.min.js" />
     <Content Include="js\bootstrap-toolkit-1.5.0.js" />
@@ -950,6 +961,7 @@
     <Content Include="js\masonry.js" />
     <Content Include="js\material\angular-material.js" />
     <Content Include="js\material\angular-material.min.js" />
+    <Content Include="js\material\svg-assets-cache.js" />
     <Content Include="js\menubar.js" />
     <Content Include="js\moment-jalaali.js" />
     <Content Include="js\moment.js" />
@@ -965,6 +977,8 @@
     <Content Include="js\ngprogress.js" />
     <Content Include="js\ngprogress.min.js" />
     <Content Include="js\persian-datepicker-tpls.js" />
+    <Content Include="js\persian.js" />
+    <Content Include="js\persian.min.js" />
     <Content Include="js\persiandate.js" />
     <Content Include="js\select.js" />
     <Content Include="js\select.min.js" />
