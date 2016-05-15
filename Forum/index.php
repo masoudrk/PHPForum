@@ -388,7 +388,7 @@
                 <li id="SForum" class="treeview">
                     <a class="link">
                         <i class="fa fa-users"></i> <span>انجمن</span>
-                        <i class="fa fa-angle-right pull-right"></i>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
                         <li id="SForumHome"><a ui-sref="forum_home"><i class="fa fa-circle-o"></i>
@@ -413,7 +413,7 @@
                 <li id="SQuestion" class="treeview">
                     <a class="link">
                         <i class="fa fa-question-circle"></i> <span>مدیریت سوال ها</span>
-                        <i class="fa fa-angle-right pull-right"></i>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
                         <li id="SQuestionNew">
@@ -431,24 +431,6 @@
 <!--                                <i class="fa fa-circle-o"></i>جواب های شما-->
 <!--                            </a>-->
 <!--                        </li>-->
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a class="link">
-                        <i class="fa fa-envelope"></i> <span>مدیریت پیام ها</span>
-                        <i class="fa fa-angle-right pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a ui-sref="forum_home">
-                                <i class="fa fa-circle-o"></i>ارسال پیام
-                            </a>
-                        </li>
-                        <li>
-                            <a ui-sref="forum_home">
-                                <i class="fa fa-circle-o"></i>پیام های دریافتی
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <li id="SProfile">
