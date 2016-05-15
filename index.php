@@ -30,8 +30,8 @@
 
     <link href="css/jquery-fullPage.css" rel="stylesheet" />
 
-    <title ng-bind="($title || 'Loading ...')">Loading ...</title>
-    <link rel="icon" href="{{titleIcon}}">
+    <title>سپنتا</title>
+    <link rel="icon" href="Images/title.png">
 </head>
 
 <body style="background-color:transparent">
@@ -102,7 +102,6 @@
 <script type="text/javascript" src="js/moment-jalaali.js"></script>
 <script type="text/javascript" src="js/angular-confirm.min.js"></script>
 <script type="text/javascript" src="js/ADM-dateTimePicker.min.js"></script>
-
 
 <script src="js/bootstrap-toolkit.js"></script>
 </html>

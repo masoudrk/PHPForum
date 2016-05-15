@@ -10,7 +10,11 @@
     </ol>
 </section>
 
-<div class="row">
+<section class="text-center col-xs-12" ng-show="question==null">
+    <h1 style="font-size: 90px;">404<small><small> not found</small></small></h1>
+</section>
+
+<div class="row" ng-show="question!=null">
     <div class="col-xs-12">
         <div class="col-md-8">
             <div class="box box-solid">
@@ -86,7 +90,7 @@
                         <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o" aria-hidden="true"></i>   {{question.CreationDate | jalaliDate :'jYYYY/jMM/jDD'}}</span>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <div class="box-body text-right">
+                    <div class="persian-rtl box-body text-right">
                         {{question.QuestionText}}
                     </div><!-- /.box-body -->
 

@@ -289,7 +289,6 @@
             </div>
             <div class="pull-left info">
               <p>مسعود رضاخانلو</p>
-              <a ui-sref="profile">آنلاین <i class="fa fa-circle text-success"></i></a>
             </div>
           </div>
           <!-- search form -->
@@ -304,20 +303,6 @@
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-
-            <li class="treeview">
-              <a >
-                <i class="fa fa-files-o"></i>
-                <span>تنظیمات صفحه بندی</span>
-                <span class="label label-primary pull-right">4</span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> منوی بالا</a></li>
-                <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> جعبه</a></li>
-                <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> ثابت</a></li>
-                <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> سایدبار بسته</a></li>
-              </ul>
-            </li>
             <li>
               <a >
                 <i class="fa fa-th"></i> <span>ویجت ها</span> <small class="label pull-right bg-green">جدید</small>

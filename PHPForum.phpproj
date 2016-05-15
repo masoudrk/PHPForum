@@ -527,6 +527,11 @@
     <Content Include="Images\credit\visa.png" />
     <Content Include="Images\data-transference-by-internet.png" />
     <Content Include="Images\default-50x50.gif" />
+    <Content Include="Images\final-carier.png" />
+    <Content Include="Images\final-fiber.png" />
+    <Content Include="Images\final-markaz.png" />
+    <Content Include="Images\final-radio.png" />
+    <Content Include="Images\final-supervizer.png" />
     <Content Include="Images\global-management.png" />
     <Content Include="Images\icons.png" />
     <Content Include="Images\Logo.png" />
@@ -538,6 +543,7 @@
     <Content Include="Images\photo33333.png" />
     <Content Include="Images\photo4.jpg" />
     <Content Include="Images\bgFullPage.jpg" />
+    <Content Include="Images\title.png" />
     <Content Include="Images\user1-128x128.jpg" />
     <Content Include="Images\user2-160x160.jpg" />
     <Content Include="Images\user3-128x128.jpg" />

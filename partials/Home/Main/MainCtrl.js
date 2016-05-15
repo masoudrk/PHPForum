@@ -44,7 +44,7 @@
             Extention.post('savePerson', $scope.user).then(function (msg) {
                 console.log(msg);
                 if (msg.Status == 'success') {
-                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد.');
+                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد . بعد از تایید شما می توانید وارد انجمن شوید');
                 } else {
                     Extention.popError('اطلاعات شما نا معتبر است.');
                 }
@@ -61,7 +61,12 @@
             Extention.post('signInUser', $scope.signIn).then(function (msg) {
                 //console.log(msg);
                 if (msg.Status == 'success') {
-                    getPage('Forum');
+                    if (msg.IsAdmin) {
+                        getPage('Admin');
+                    } else {
+                        getPage('Forum');
+                    }
+                    
                 } else {
                     console.log(msg);
                     Extention.popError('اطلاعات شما نا معتبر است.');

@@ -220,6 +220,11 @@ $app->post('/getProfile', function() use ($app)  {
 
     if(!$r->UserID || !$r->TargetUserID)
         echoResponse(201, 'bad request');
+
+    $resQ =$db->makeQuery("select count(*) as val from user where ID = '$r->TargetUserID' and UserAccepted = 1");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        {echoResponse(200, null);return;}
         
     $resQ = $db->makeQuery("select u.FullName , u.Email ,u.PhoneNumber, u.Tel , u.SignupDate ,u.Gender, u.Description ,u.score, f.FullPath , o.OrganizationName,
 (SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
@@ -263,6 +268,12 @@ $app->post('/getQuestionByID', function() use ($app)  {
     if(!isset($r->UserID) || !isset($r->QuestionID))
         {echoResponse(201, 'bad request');return;}
 
+
+    $resQ =$db->makeQuery("select count(*) as val from forum_question where ID = '$r->QuestionID' and AdminAccepted = 1");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        {echoResponse(200, null);return;}
+
     $resQ =$db->makeQuery("select count(*) as val from question_view where UserID = '$r->UserID' and QuestionID = '$r->QuestionID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
@@ -285,6 +296,7 @@ left join organ_position as o on u.OrganizationID = o.ID
 where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
+
     $resQ = $db->makeQuery("select t.* from tag as t
 inner join tag_question as tg on tg.tagID = t.ID
 where tg.QuestionID = '$r->QuestionID'");

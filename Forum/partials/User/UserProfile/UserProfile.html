@@ -2,14 +2,18 @@
 <section class="content-header">
     <h1 class="content-header vazir-font">
         <small>مدیریت</small>
-       پروفایل من
+        پروفایل من
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> خانه</a></li>
         <li class="active">پروفایل من</li>
     </ol>
 </section>
-<section class="row">
+<section class="text-center col-xs-12"  ng-show="profile==null">
+    <h1 style="font-size: 90px;">404<small><small> not found</small></small></h1>
+</section>
+
+<section class="row" ng-show="profile!=null">
     <div class="col-xs-12">
         <div class="col-sm-3 col-xs-12 pull-right">
             <!-- Profile Image -->
