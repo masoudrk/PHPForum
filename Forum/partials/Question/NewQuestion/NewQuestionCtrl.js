@@ -65,7 +65,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 		Extention.post('saveQuestion',$scope.question).then(function (res) {
 			if(res && res.Status=='success'){
 				Extention.popSuccess('سوال شما با موفقیت در انجمن ثبت شد!');
-				$state.go('new_question',{id : res.QuestionID},true);
+				$state.go('new_question',{},{reload:true});
 			}else{
 				Extention.popError('مشکل در ثبت سوال سوال ، لطفا دوباره تلاش کنید!');
 			}

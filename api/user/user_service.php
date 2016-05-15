@@ -150,7 +150,7 @@ $app->post('/getForumMainData', function() use ($app)  {
     $res['MainSubject'] = $mainSubject;
 
     $resQ = $db->makeQuery("SELECT forum_subject.*,
-(SELECT Count(*) FROM forum_question WHERE SubjectID=forum_subject.ID) as TotalQuestions
+(SELECT Count(*) FROM forum_question WHERE SubjectID=forum_subject.ID AND AdminAccepted=1) as TotalQuestions
 FROM forum_subject WHERE forum_subject
     .ParentSubjectID='".$mainSubject['SubjectID']."'");
 
@@ -179,9 +179,13 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
 
     $pr = new Pagination($data);
 
-    $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, `Title`, `AuthorID`, `CreationDate`,`FullPath` as Image FROM 
+    $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,`FullPath` as Image FROM 
 forum_question  LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on 
-file_storage.ID=user.AvatarID WHERE forum_question.AdminAccepted=1 AND forum_question.SubjectID='$subjectID'";
+file_storage.ID=user.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
+.AdminAccepted='1' 
+AND 
+forum_subject
+.ParentSubjectID='$subjectID'";
 
     $pageRes = $pr->getPage($db,$query);
 
