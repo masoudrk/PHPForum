@@ -200,8 +200,20 @@ var fixFooter = function () {
     var o = $.AdminLTE.options.controlSidebarOptions;
     var sidebar = $(o.selector);
     $.AdminLTE.controlSidebar._fixForContent(sidebar);
+    // var h1 = $("#searchContent").height();
+    // var h2 = $("#mainContent").height();
+    // if(h1 > h2)
+    //     $(".content-wrapper, .right-side").css('min-height', h1);
+    // else
+    //     $(".content-wrapper, .right-side").css('min-height', h2);
+
     traverse(document.body);
 }
+//
+// $("#searchContent").bind("resize", function() {
+//     alert("Box was resized from 100x100 to 200x200");
+// });
+// $("#searchContent").trigger("resize");
 
 var activeElement = function (parent , name) {
     if(name){
@@ -711,3 +723,17 @@ angular.module("ui.router.title", ["ui.router"])
 	    }
 
 	}]);
+
+app.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if (event.which === 13) {
+                scope.$apply(function () {
+                    scope.$eval(attrs.ngEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});

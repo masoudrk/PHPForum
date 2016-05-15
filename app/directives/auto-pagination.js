@@ -15,6 +15,9 @@
             params: '=',
             ngControl: '=',
             onLoadFinish: '&',
+            onlyGetResultWhenUpdate : '@',
+            fullResult : '=',
+            returnFullResult : '=',
             //This variable defained for fetched items from database.
             items: '=',
             lang : '@',
@@ -65,6 +68,10 @@
                 .then(function (results) {
                     $scope.items = results.Items;
                     $scope.total = results.Total;
+
+                    if($scope.returnFullResult)
+                        $scope.fullResult = results;
+                    $scope.onLoadFinish();
                 });
             }
 
@@ -77,15 +84,19 @@
 
     function fieldLink(scope, el, attrs) {
 
-        scope.$watchCollection('[actionName,params,page,pageSize]', function () {
-            scope.getItems();
-            build(scope, attrs);
-            scope.onLoadFinish();
-        });
-        scope.$watch('[total]', function () {
-            build(scope, attrs);
-            scope.onLoadFinish();
-        });
+
+            scope.$watchCollection('[actionName,params,page,pageSize]', function () {
+
+                if(!scope.onlyGetResultWhenUpdate) {
+                    scope.getItems();
+                }
+                build(scope, attrs);
+                scope.onLoadFinish();
+            });
+            scope.$watch('[total]', function () {
+                build(scope, attrs);
+                scope.onLoadFinish();
+            });
 
         scope.internalControl = scope.ngControl || {};
 

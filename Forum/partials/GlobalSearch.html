@@ -1,0 +1,109 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        جستجو
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ng-click="backFromSearch()" class="link"><i class="fa fa-dashboard"></i>{{pageTitle}}</a></li>
+        <li class="active">جستجو</li>
+    </ol>
+</section>
+
+<div class="col-xs-12" >
+
+    <div ng-show="fullSearchData.SearchType == 0 && searchResult.length > 0" >
+        <div class="box box-warning">
+            <div class="box-header">
+                <h3 class="box-title vazir-font">نتایج جستجو</h3>
+                <i class="fa fa-filter text-muted"></i>
+                <div class="box-tools">
+                    <button class="btn btn-sm btn-success" ng-click="backFromSearch()">بازگشت</button>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+
+                <table class="table table-hover">
+                    <tbody>
+                    <tr ng-repeat="s in searchResult" class="link" ui-sref="question({id:'{{s.ID}}'})">
+                        <td>{{s.Text}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div><!-- /.box -->
+        </div>
+    </div><!-- /.box-body -->
+
+    <div class="row" ng-show="fullSearchData.SearchType == 1 && searchResult.length > 0" >
+
+        <div class="col-md-4 col-sm-6 col-xs-12" ng-repeat="u in searchResult">
+            <!-- Widget: user widget style 1 -->
+            <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes ng-class="getRandomColorClass()"-->
+                <div class="widget-user-header" ng-class="getRandomColorClass(u.ID)" >
+                    <h3 class="widget-user-username" ui-sref="profile">{{u.FullName}}</h3>
+                    <h5 class="widget-user-desc">توسعه دهنده وب</h5>
+                </div>
+                <div class="widget-user-image">
+                    <img class="img-circle" ng-src="{{u.Image}}" ui-sref="profile" alt="User Avatar">
+                </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-sm-4 border-left">
+                            <div class="description-block">
+                                <h5 class="description-header">۳,۲۰۰</h5>
+                                <span class="description-text">سوال ها</span>
+                            </div><!-- /.description-block -->
+                        </div><!-- /.col -->
+                        <div class="col-sm-4 border-left">
+                            <div class="description-block">
+                                <h5 class="description-header">۱۳,۰۰۰</h5>
+                                <span class="description-text">جواب ها</span>
+                            </div><!-- /.description-block -->
+                        </div><!-- /.col -->
+                        <div class="col-sm-4">
+                            <div class="description-block">
+                                <h5 class="description-header">۳۵</h5>
+                                <span class="description-text">امتیاز</span>
+                            </div><!-- /.description-block -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div>
+            </div><!-- /.widget-user -->
+        </div>
+    </div>
+
+
+    <div class="row" >
+        <div class="col-xs-12">
+
+            <div class="box" ng-show="searchResult.length > 0">
+                <div class="box-body text-center">
+
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 only-get-result-when-update="true"
+                                 return-full-result="true"
+                                 action-name="globalSearch"
+                                 data-params="pagingParams"
+                                 ng-control="pagingControllerSearch"
+                                 full-result="fullSearchData"
+                                 on-load-finish="fixPage()"
+                                 items="searchResult">
+                    </auto-paging>
+                </div><!-- /.box -->
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+
+    <div class="row"  ng-show="searchResult.length == 0">
+        <h2 class="col-xs-12 text-center persian-rtl">
+
+            نتیجه ای یافت نشد!
+        </h2>
+    </div>
+
+
+</div>
+
