@@ -534,6 +534,8 @@
     <Content Include="Images\photo1.png" />
     <Content Include="Images\photo2.png" />
     <Content Include="Images\photo3.jpg" />
+    <Content Include="Images\photo332.png" />
+    <Content Include="Images\photo33333.png" />
     <Content Include="Images\photo4.jpg" />
     <Content Include="Images\bgFullPage.jpg" />
     <Content Include="Images\user1-128x128.jpg" />

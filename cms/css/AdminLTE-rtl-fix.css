@@ -264,7 +264,7 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     display: block;
 }
 
-.nvd3 .nv-axis .nv-axisMaxMin text {
+/*.nvd3 .nv-axis .nv-axisMaxMin text {
     font-weight: bold;
     font-family: 'Vazir',tahoma;
     text-anchor: start ;
@@ -276,4 +276,4 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     font-family: 'Vazir',tahoma;
     text-anchor: start !important;
     direction: rtl;
-}
+}*/
