@@ -718,6 +718,5 @@
 
 
 </body>
-{{session}}
 </html>
 
