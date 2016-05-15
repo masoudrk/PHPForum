@@ -19,8 +19,8 @@ $app->post('/globalSearch', function() use ($app)  {
     $p = new Pagination();
     if($searchType == 0){
 
-        $res = $p->getPage($db,'SELECT * FROM `forum_question` WHERE (Title LIKE N\'%"'.$searchValue.'%\') OR 
-    (QuestionText LIKE N\'%'.$searchValue.'%\')');
+        $res = $p->getPage($db,'SELECT * FROM `forum_question` WHERE forum_question.AdminAccepted=\'1\' AND ((Title LIKE N\'%"'.$searchValue.'%\') OR 
+    (QuestionText LIKE N\'%'.$searchValue.'%\'))');
 
         $sRes['Total'] =$res['Total'];
 
@@ -36,7 +36,7 @@ $app->post('/globalSearch', function() use ($app)  {
 ( SELECT count(*) FROM forum_Answer where AuthorID = u.ID ) as AnswersCount, 
 ( SELECT count(*) FROM forum_Question where AuthorID = u.ID ) as QuestionsCount 
 FROM `user` as u LEFT JOIN file_storage as fs on fs.ID=u.AvatarID 
-WHERE u.FullName LIKE N\'%'.$searchValue.'%\'');
+WHERE u.UserAccepted=\'1\' AND u.FullName LIKE N\'%'.$searchValue.'%\'');
 
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);
@@ -153,6 +153,7 @@ $app->post('/getForumMainData', function() use ($app)  {
 (SELECT Count(*) FROM forum_question WHERE SubjectID=forum_subject.ID) as TotalQuestions
 FROM forum_subject WHERE forum_subject
     .ParentSubjectID='".$mainSubject['SubjectID']."'");
+
     $subjectChilds = [];
     while($r = $resQ->fetch_assoc()){
         $subjectChilds[] = $r;
@@ -165,8 +166,6 @@ FROM forum_subject WHERE forum_subject
 });
 
 $app->post('/getForumLastQuestions', function() use ($app)  {
-    //adminRequire();
-
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
 
@@ -181,12 +180,8 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
     $pr = new Pagination($data);
 
     $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, `Title`, `AuthorID`, `CreationDate`,`FullPath` as Image FROM 
-forum_question  LEFT JOIN user
- on user
-.ID=forum_question.AuthorID LEFT JOIN file_storage on 
-file_storage.ID=user.AvatarID WHERE 
-    forum_question
-.SubjectID='$subjectID'";
+forum_question  LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on 
+file_storage.ID=user.AvatarID WHERE forum_question.AdminAccepted=1 AND forum_question.SubjectID='$subjectID'";
 
     $pageRes = $pr->getPage($db,$query);
 
