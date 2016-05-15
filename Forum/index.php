@@ -76,79 +76,13 @@
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="label label-success">4</span>
+                            <span class="label label-success">0</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما 4 پیام جدید دارید!</li>
+                            <li class="header">شما 0 پیام جدید دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li><!-- start message -->
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="../images/masoud.jpg" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4 class="vazir-font">
-                                                تیم پشتیبانی
-                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i> 5 دقیق پیش
-                                                </small>
-                                            </h4>
-                                            <p>چرا شما یک تم جدید خریداری نمی کنید؟</p>
-                                        </a>
-                                    </li><!-- end message -->
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="../images/user3-128x128.jpg" class="img-circle"
-                                                     alt="User Image">
-                                            </div>
-                                            <h4 class="vazir-font">
-                                                تیم طراحی
-                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i> 2 ساعت</small>
-                                            </h4>
-                                            <p>لطفا به پیشنهاد من توجه کنید!</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="../images/user4-128x128.jpg" class="img-circle"
-                                                     alt="User Image">
-                                            </div>
-                                            <h4 class="vazir-font">
-                                                برنامه نویس
-                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i> امروز</small>
-                                            </h4>
-                                            <p>بهترین نسخه این cms در حال بروزرسانیست! به من یک پیام بدهید.</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="../images/user3-128x128.jpg" class="img-circle"
-                                                     alt="User Image">
-                                            </div>
-                                            <h4 class="vazir-font">
-                                                فروشندگان
-                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i> دیروز</small>
-                                            </h4>
-                                            <p>لطفا یک پیام به من بدهید</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="../images/user4-128x128.jpg" class="img-circle"
-                                                     alt="User Image">
-                                            </div>
-                                            <h4 class="vazir-font">
-                                                بینندگان
-                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i> 2 روز پیش
-                                                </small>
-                                            </h4>
-                                            <p>ممنون از انتقاد شما دوست عزیز</p>
-                                        </a>
-                                    </li>
                                 </ul>
                             </li>
                             <li class="footer"><a href="#">نمایش همه پیام ها</a></li>
@@ -158,40 +92,13 @@
                     <li class="dropdown notifications-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">10</span>
+                            <span class="label label-warning">0</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما 10 اعلان جدید دارید!</li>
+                            <li class="header">شما 0 اعلان جدید دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> 5 عضو جدید به ما پیوستند!
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-warning text-yellow"></i> در حال حاضر سایت به صورت فعال عمل
-                                            میکند اما اخیرا به مشکلی در سرور برخورده ایم
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-red"></i> 12 عضو جدید به ما پیوستند
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-shopping-cart text-green"></i> سوالات شما در حال منقضی شدن
-                                            هستند
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-user text-red"></i> شما رمز خود را عوض کردید
-                                        </a>
-                                    </li>
                                 </ul>
                             </li>
                             <li class="footer"><a href="#">نمایش همه</a></li>
@@ -201,77 +108,17 @@
                     <li class="dropdown tasks-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-flag-o"></i>
-                            <span class="label label-danger">9</span>
+                            <span class="label label-danger">0</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما 9 کار انجام نشده دارید!</li>
+                            <li class="header">شما 0 کار انجام نشده دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li><!-- Task item -->
-                                        <a href="#">
-                                            <h3 class="vazir-font">
-                                                طراحی دکمه ها
-                                                <small class="pull-left">20%</small>
-                                            </h3>
-                                            <div class="progress xs">
-                                                <div class="progress-bar progress-bar-aqua" style="width: 20%"
-                                                     role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                                                     aria-valuemax="100">
-                                                    <span class="sr-only">20% انجام شده</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li><!-- end task item -->
-                                    <li><!-- Task item -->
-                                        <a href="#">
-                                            <h3 class="vazir-font">
-                                                ایجاد تم زیبا
-                                                <small class="pull-left">40%</small>
-                                            </h3>
-                                            <div class="progress xs">
-                                                <div class="progress-bar progress-bar-green" style="width: 40%"
-                                                     role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                                                     aria-valuemax="100">
-                                                    <span class="sr-only">40% انجام شده</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li><!-- end task item -->
-                                    <li><!-- Task item -->
-                                        <a href="#">
-                                            <h3 class="vazir-font">
-                                                برخی از کارها که باید انجام شوند
-                                                <small class="pull-left">60%</small>
-                                            </h3>
-                                            <div class="progress xs">
-                                                <div class="progress-bar progress-bar-red" style="width: 60%"
-                                                     role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                                                     aria-valuemax="100">
-                                                    <span class="sr-only">60% انجام شده</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li><!-- end task item -->
-                                    <li><!-- Task item -->
-                                        <a href="#">
-                                            <h3 class="vazir-font">
-                                                ایجاد انیمیشن های زیبا
-                                                <small class="pull-left">80%</small>
-                                            </h3>
-                                            <div class="progress xs">
-                                                <div class="progress-bar progress-bar-yellow" style="width: 80%"
-                                                     role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                                                     aria-valuemax="100">
-                                                    <span class="sr-only">80% انجام شده</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li><!-- end task item -->
                                 </ul>
                             </li>
                             <li class="footer">
-                                <a href="#">نمایش همه وظایف</a>
+                                <a href="#/">نمایش همه وظایف</a>
                             </li>
                         </ul>
                     </li>
