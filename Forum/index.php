@@ -690,6 +690,7 @@
 <script src="../cms/js/d3.js"></script>
 <!--<script src="../cms/js/d3.min.js"></script>-->
 <script src="../cms/js/nv.d3.js"></script>
+<script src="../js/persian.min.js"></script>
 
 <script src="../js/angular.js"></script>
 <script src="../js/angular-route.min.js"></script>
@@ -697,6 +698,9 @@
 <script src="../js/angular-animate.min.js"></script>
 <script src="../js/angular-ui-router.js"></script>
 
+<script src="../js/ng-file-upload-shim.min.js"></script>
+<script src="../js/ng-file-upload.min.js"></script>
+<script src="../js/angularpersian.min.js"></script>
 <script src="../cms/js/angular-nvd3.min.js"></script>
 <script src="../cms/js/treasure-overlay-spinner.js" type="text/javascript"></script>
 <script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript"></script>

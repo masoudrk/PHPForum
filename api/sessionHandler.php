@@ -64,7 +64,21 @@ class Session {
         $res['Session'] = $sess;
 	    return $res;
 	}
-	
+
+	public function updateImage($value){
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		$_SESSION['Image'] = $value;
+	}
+
+	public function updateFullName($fullName){
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		$_SESSION['FullName'] = $fullName;
+	}
+
 	public function destroySession(){
 		$res = [];
 	    if (!isset($_SESSION)) {
