@@ -12,7 +12,7 @@ app.config([
 function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfProvider, ADMdtp, vcRecaptchaServiceProvider) {
         // Add nested user links to the "foo" menu.
 
-        vcRecaptchaServiceProvider.setSiteKey('6LdFLB4TAAAAAH1sOhBD0ew9SQEgq6XCDytD0Slv');
+        vcRecaptchaServiceProvider.setSiteKey('6LcPBSATAAAAAE9InyEnMt9Y5BNCVJqspU9N1bsR');
 
         tooltipsConfProvider.configure({
             'smart': true,
