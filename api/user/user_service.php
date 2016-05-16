@@ -350,7 +350,7 @@ where tg.QuestionID = '$r->QuestionID'");
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID' and q.AnswerID = a.ID limit 1) as PersonAnswerRate ,
 (SELECT sum(RateValue) FROM answer_rate where AnswerID = a.ID) as AnswerScore ,
-(SELECT count(*) FROM person_follow where TargetUserID = a.ID and UserID = '$r->UserID') as PersonFollow
+(SELECT count(*) FROM person_follow where TargetUserID = a.AuthorID and UserID = '$r->UserID') as PersonFollow
 from forum_answer as a
 inner join user as u on u.ID = a.AuthorID
 inner join file_storage as f on f.ID = u.AvatarID
