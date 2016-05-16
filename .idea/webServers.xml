@@ -10,6 +10,14 @@
           <option name="port" value="21" />
         </fileTransfer>
       </webServer>
+      <webServer id="16f3c61a-0043-43b4-beff-3d7b94e8ad99" name="sepantari.com" url="http://sepantarai.com">
+        <fileTransfer host="sepantarai.com" port="21" rootFolder="/sepantarai" username="sepantarai">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

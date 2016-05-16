@@ -208,6 +208,7 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
         Extention.setBusy(true);
+        $rootScope.globalSearchActive = false;
     });
 
 
@@ -316,14 +317,32 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             obj.setBusy(true);
             return $http.post(serviceBase + q, object).then(function (results) {
 
-                if(obj.debugMode && results.status != 200){
-                    obj.popModal(results);
+                if(obj.debugMode ){
+                    console.log(results.data);
+
+                    if(results.status != 200)
+                        obj.popModal(results);
                 }
                 obj.setBusy(false);
+
+                if(results.data.AuthState && results.data.AuthState == 'UN_AUTH'){
+                    console.log('State : UN_AUTHORIZED_USER');
+                    window.location = '../';
+                }
+
                 return results.data;
             }, function (err) {
-                if(obj.debugMode)
+
+                if(obj.debugMode){
+                    console.log(results.data);
                     obj.popModal(err.data);
+                }
+
+                if(err.data.AuthState && err.data.AuthState == 'UN_AUTH'){
+                    console.log('State : UN_AUTHORIZED_USER');
+                    window.location = '../';
+                }
+
                 obj.setBusy(false);
                 return err;
             });

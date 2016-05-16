@@ -286,6 +286,6 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     color: #444 !important;
 }
 .user-panel > .image > img {
-    min-height: 45px;
-    min-width: 45px;
+    /*min-height: 45px;*/
+    /*min-width: 45px;*/
 }

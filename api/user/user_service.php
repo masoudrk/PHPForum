@@ -185,7 +185,7 @@ file_storage.ID=user.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum
 .AdminAccepted='1' 
 AND 
 forum_subject
-.ParentSubjectID='$subjectID'";
+.ParentSubjectID='$subjectID' order by forum_question.CreationDate desc";
 
     $pageRes = $pr->getPage($db,$query);
 
