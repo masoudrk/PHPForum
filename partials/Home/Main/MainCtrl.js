@@ -87,7 +87,7 @@
     //$scope.slides = [
     //    {
     //        subject: 'رادیویی',
-    //        image: 'Images/broadcast.png',
+    //        image: 'images/broadcast.png',
     //        title: 'Simple',
     //        description: 'Easy to use. Configurable and customizable.',
     //        src: 'images/1.png'

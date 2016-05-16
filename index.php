@@ -31,7 +31,7 @@
     <link href="css/jquery-fullPage.css" rel="stylesheet" />
 
     <title>سپنتا</title>
-    <link rel="icon" href="Images/title.png">
+    <link rel="icon" href="images/title.png">
 </head>
 
 <body style="background-color:transparent">

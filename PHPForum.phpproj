@@ -124,7 +124,6 @@
     <Folder Include="Forum\partials\Dashboard\" />
     <Folder Include="Forum\partials\Elements\" />
     <Folder Include="Forum\partials\Forum\" />
-    <Folder Include="Forum\partials\Forum\DataSwitch\" />
     <Folder Include="Forum\partials\Forum\Main\" />
     <Folder Include="Forum\partials\Forum\Question\" />
     <Folder Include="Forum\partials\Forum\Radio\" />
@@ -492,8 +491,6 @@
     <Content Include="Forum\partials\Elements\Widgets.html" />
     <Content Include="Forum\partials\Elements\_Elements.html" />
     <Content Include="Forum\partials\Elements\_ElementsCtrl.js" />
-    <Content Include="Forum\partials\Forum\DataSwitch\DataSwitch.html" />
-    <Content Include="Forum\partials\Forum\DataSwitch\DataSwitchCtrl.js" />
     <Content Include="Forum\partials\Forum\Main\MainForum.html" />
     <Content Include="Forum\partials\Forum\Main\MainForumCtrl.js" />
     <Content Include="Forum\partials\Forum\Question\Question.html" />
