@@ -1,4 +1,11 @@
 <?php
+
+$app->post('/logout', function() use ($app)  {
+$sess = new Session();
+$res = $sess->destroySession();
+echoResponse(200, $res);
+});
+
 $app->post('/savePerson', function() use ($app) {
 
     $r = json_decode($app->request->getBody());

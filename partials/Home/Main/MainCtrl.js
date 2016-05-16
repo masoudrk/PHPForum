@@ -52,8 +52,14 @@
         }
     }
 
-    $scope.logInUser = function() {
+    $scope.logInUser = function () {
         getPage('Forum');
+    }
+
+    $scope.signOutUser = function () {
+        Extention.post('logout', {}).then(function (msg) {
+            $rootScope.userSession = {};
+        });
     }
 
     $scope.signInFunc = function () {
