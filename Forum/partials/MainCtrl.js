@@ -17,18 +17,18 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
 
     $scope.search = function () {
         if(!$scope.pagingParams.searchValue){
-            $scope.globalSearchActive = false;
+            $rootScope.globalSearchActive = false;
             return;
         }
         $scope.pagingControllerSearch.update();
-        $scope.globalSearchActive = true;
+        $rootScope.globalSearchActive = true;
         $scope.pageTitle = $state.current.resolve.$title();
 
     }
 
     $scope.searchBoxChanged = function () {
-        if(!$scope.pagingParams.searchValue && $scope.globalSearchActive){
-            $scope.globalSearchActive = false;
+        if(!$scope.pagingParams.searchValue && $rootScope.globalSearchActive){
+            $rootScope.globalSearchActive = false;
             return;
         }
     }
@@ -45,7 +45,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     }
 
     $scope.backFromSearch = function () {
-        $scope.globalSearchActive = false;
+        $rootScope.globalSearchActive = false;
     }
     $scope.getRandomColorClass = function(id){
         var i = id % $scope.bgColorArray.length;

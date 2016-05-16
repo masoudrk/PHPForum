@@ -273,11 +273,6 @@
                                 <i class="fa fa-circle-o"></i>سوالات شما
                             </a>
                         </li>
-<!--                        <li>-->
-<!--                            <a ui-sref="forum_home">-->
-<!--                                <i class="fa fa-circle-o"></i>جواب های شما-->
-<!--                            </a>-->
-<!--                        </li>-->
                     </ul>
                 </li>
                 <li id="SProfile">

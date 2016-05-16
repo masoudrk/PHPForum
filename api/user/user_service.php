@@ -33,8 +33,8 @@ $app->post('/globalSearch', function() use ($app)  {
     }else if($searchType == 1){
 
         $res = $p->getPage($db,'SELECT u.* , fs.FullPath as Image, 
-( SELECT count(*) FROM forum_Answer where AuthorID = u.ID ) as AnswersCount, 
-( SELECT count(*) FROM forum_Question where AuthorID = u.ID ) as QuestionsCount 
+( SELECT count(*) FROM forum_answer where AuthorID = u.ID ) as AnswersCount, 
+( SELECT count(*) FROM forum_question where AuthorID = u.ID ) as QuestionsCount 
 FROM `user` as u LEFT JOIN file_storage as fs on fs.ID=u.AvatarID 
 WHERE u.UserAccepted=\'1\' AND u.FullName LIKE N\'%'.$searchValue.'%\'');
 
@@ -185,7 +185,7 @@ file_storage.ID=user.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum
 .AdminAccepted='1' 
 AND 
 forum_subject
-.ParentSubjectID='$subjectID'";
+.ParentSubjectID='$subjectID' order by forum_question.CreationDate desc";
 
     $pageRes = $pr->getPage($db,$query);
 
@@ -234,8 +234,8 @@ $app->post('/getProfile', function() use ($app)  {
         {echoResponse(200, null);return;}
         
     $resQ = $db->makeQuery("select u.FullName , u.Email ,u.PhoneNumber, u.Tel , u.SignupDate ,u.Gender, u.Description ,u.score, f.FullPath , o.OrganizationName,
-(SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
-(SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
+(SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
+(SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT count(*) FROM person_follow where TargetUserID = '$r->TargetUserID' and UserID = '$r->UserID' ) as PersonFollow
 from user as u
 inner join file_storage as f on f.ID = u.AvatarID
@@ -287,8 +287,8 @@ $app->post('/getQuestionByID', function() use ($app)  {
         {$resQ =$db->makeQuery("insert into question_view (UserID, QuestionID , ViewDate) values ('$r->UserID','$r->QuestionID',now())");}
 
     $resQ = $db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainTitle , o.OrganizationName ,
-(SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
-(SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
+(SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
+(SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT count(*) FROM question_view where QuestionID = q.ID) as ViewCount ,
 (SELECT q.RateValue FROM question_rate as q where q.UserID = '$r->UserID' and q.QuestionID = '$r->QuestionID' limit 1) as PersonQuestionRate ,
 (SELECT count(*) FROM question_follow where QuestionID = q.ID) as FollowCount ,
@@ -314,8 +314,8 @@ where tg.QuestionID = '$r->QuestionID'");
     $resp['Tags'] = $tags;
 
         $resQ = $db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
-(SELECT count(*) FROM forum_Question where AuthorID = u.ID) as QuestionsCount ,
-(SELECT count(*) FROM forum_Answer where AuthorID = u.ID) as AnswerCount ,
+(SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
+(SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID' and q.AnswerID = a.ID limit 1) as PersonAnswerRate ,
 (SELECT sum(RateValue) FROM answer_rate where AnswerID = a.ID) as AnswerScore ,
 (SELECT count(*) FROM person_follow where TargetUserID = a.ID and UserID = '$r->UserID') as PersonFollow

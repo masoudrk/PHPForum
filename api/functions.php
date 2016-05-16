@@ -82,8 +82,12 @@ ValidSessionID=1");
     if($c > 0){
         return TRUE;
     }
-
-    die('Encrypted media , User auth has been failed.');
+    
+    $sess->destroySession();
+    $res = [];
+    $res['AuthState'] = 'UN_AUTH';
+    echoResponse(201,$res);
+    die();
 }
 
 function adminRequire(){
