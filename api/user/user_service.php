@@ -179,7 +179,10 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
 
     $pr = new Pagination($data);
 
-    $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,`FullPath` as Image FROM 
+    $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
+`FullPath` as Image ,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' 
+ FROM 
 forum_question  LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on 
 file_storage.ID=user.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
 .AdminAccepted='1' 
@@ -189,6 +192,35 @@ forum_subject
 
     $pageRes = $pr->getPage($db,$query);
 
+    echoResponse(200, $pageRes);
+});
+
+$app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+
+    $subjectID = -1;
+    if(isset($data->MainSubjectName)){
+        $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+                                forum_main_subject.SubjectName='$data->MainSubjectName'");
+
+        $subjectID= $resQ->fetch_assoc()['SubjectID'];
+    }
+
+    $pr = new Pagination($data);
+
+
+    $query = "SELECT user.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
+ forum_question.`CreationDate`,`FullPath` as Image ,AnswersCount FROM forum_question 
+ LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=user.AvatarID 
+ LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
+ LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID from forum_answer group by forum_answer.QuestionID) s on 
+ s.QuestionID=forum_question.ID 
+ WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' AND s.AnswersCount > 0 order 
+ by s.AnswersCount 
+ desc";
+
+    $pageRes = $pr->getPage($db,$query);
     echoResponse(200, $pageRes);
 });
 

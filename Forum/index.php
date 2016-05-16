@@ -249,9 +249,7 @@
                             </a></li>
                         <li id="STransition"><a ui-sref="main_forum({id:'Transition'})"><i class="fa fa-circle-o"></i>
                                 خطوط انتقال</a></li>
-                        <li id="SCommunicationEquipments"><a ui-sref="main_forum({id:'CommunicationEquipments'})"><i class="fa
-                        fa-circle-o"></i>
-                                تجهیزات ارتباطی</a></li>
+
                         <li id="SCommonTopics"><a ui-sref="main_forum({id:'CommonTopics'})"><i class="fa fa-circle-o"></i>
                                 مباحث مشترک</a></li>
                     </ul>
@@ -322,7 +320,7 @@
     </footer>
 
     <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
+    <aside class="control-sidebar control-sidebar-dark" id="side-bar-fixer">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
             <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
