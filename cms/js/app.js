@@ -277,7 +277,7 @@ function _init() {
         //   if (307 > postSetWidth)
         //     $(".content-wrapper, .right-side").css('min-height', 307);
         // }
-        $(".content-wrapper, .right-side").css('min-height', 'auto');
+        //$(".content-wrapper, .right-side").css('min-height', 'auto');
 
       }
     },

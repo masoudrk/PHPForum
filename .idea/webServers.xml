@@ -11,7 +11,7 @@
         </fileTransfer>
       </webServer>
       <webServer id="16f3c61a-0043-43b4-beff-3d7b94e8ad99" name="sepantari.com" url="http://sepantarai.com">
-        <fileTransfer host="sepantarai.com" port="21" rootFolder="/sepantarai" username="sepantarai">
+        <fileTransfer host="sepantarai.com" port="21" rootFolder="/sepantarai" password="df9adfe7dfcbdfc6df8cdf9adfc9df9d" username="sepantarai">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>

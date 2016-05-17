@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html ng-app="adminApp">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta http-equiv="Content-Language" content="fa" />
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <?php
+      require  '../cms/functions.php';
+
+      if (!isset($_SESSION)) {
+        session_start();
+        if(!isset($_SESSION['UserID'])){?>
+          <script>
+            window.location ="../";
+          </script>
+          <?php
+        }else{
+          require_once  '../session_generator.php';
+          generateSessionAsJavascriptVariable();
+        }
+      }
+      generateMetas();
+      generateRequiredCMSCssFiles();
+    ?>
 
     <title>داشبورد</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="../cms/css/bootstrap.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="../css/font-awesome.min.css">
-    <!-- Ionicons -->
-    <!--<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">-->
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../css/site-styles.css">
-	
-    <link rel="stylesheet" href="../cms/css/AdminLTE-rtl.css">
-    <link rel="stylesheet" href="../cms/css/AdminLTE-rtl-fix.css">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="../cms/css/skins/_all-skins-srtl.css">
-
   </head>
   <body class="hold-transition skin-blue sidebar-mini vazir-font">
     <div class="wrapper">
@@ -303,120 +302,92 @@
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-            <li>
-              <a >
-                <i class="fa fa-th"></i> <span>ویجت ها</span> <small class="label pull-right bg-green">جدید</small>
-              </a>
-            </li>
+
             <li class="treeview">
               <a>
-                <i class="fa fa-pie-chart"></i>
+                <i class="fa fa-user"></i>
                 <span>اعضا</span>
                 <i class="fa fa-angle-right pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a ui-sref="all_users"><i class="fa fa-user"></i> همه اعضا</a></li>
-                <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> اعضا تایید شده</a></li>
-                <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> اعضا تایید نشده</a></li>
+                <li><a ui-sref="all_users"><i class="fa fa-circle-o"></i> همه اعضا</a></li>
+                <li><a ><i class="fa fa-circle-o"></i> اعضا تایید شده</a></li>
+                <li><a ><i class="fa fa-circle-o"></i> اعضا تایید نشده</a></li>
               </ul>
             </li>
-            <li class="treeview">
-              <a class="link" >
-				<i class="fa fa-laptop"></i>
-				<span>کنترل ها</span>
-				<i class="fa fa-angle-right pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> اصلی</a></li>
-                <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> آیکون ها</a></li>
-                <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> دکمه ها</a></li>
-                <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> اسلایدر</a></li>
-                <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> ورودی</a></li>
-                <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> مدال ها</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-              <a >
-                <i class="fa fa-edit"></i> <span>فرم ها</span>
+            <li id="SQuestion" class="treeview">
+              <a class="link">
+                <i class="fa fa-question-circle"></i> <span>مدیریت سوال ها</span>
                 <i class="fa fa-angle-right pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="pages/forms/general.html"><i class="fa fa-circle-o"></i> کنترل های اصلی</a></li>
-                <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i> کنترل های ویژه</a></li>
-                <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i> ویرایشگرها</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-              <a >
-                <i class="fa fa-table"></i> <span>جداول</span>
-                <i class="fa fa-angle-right pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> جداول ساده</a></li>
-                <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> جداول داده</a></li>
-              </ul>
-            </li>
-            <li>
-              <a >
-                <i class="fa fa-calendar"></i> <span>تقویم</span>
-                <small class="label pull-right bg-red">3</small>
-              </a>
-            </li>
-            <li>
-              <a >
-                <i class="fa fa-envelope"></i> <span>ایمیل باکس</span>
-                <small class="label pull-right bg-yellow">12</small>
-              </a>
-            </li>
-            <li class="treeview">
-              <a>
-                <i class="fa fa-folder"></i> <span>مثال ها</span>
-                <i class="fa fa-angle-right pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="pages/examples/invoice.html"><i class="fa fa-circle-o"></i> صدای شما</a></li>
-                <li><a href="pages/examples/profile.html"><i class="fa fa-circle-o"></i> پروفایل</a></li>
-                <li><a href="pages/examples/login.html"><i class="fa fa-circle-o"></i> ورود</a></li>
-                <li><a href="pages/examples/register.html"><i class="fa fa-circle-o"></i> ثبت نام</a></li>
-                <li><a href="pages/examples/lockscreen.html"><i class="fa fa-circle-o"></i> قفل صفحه</a></li>
-                <li><a href="pages/examples/404.html"><i class="fa fa-circle-o"></i> خطا 404</a></li>
-                <li><a href="pages/examples/500.html"><i class="fa fa-circle-o"></i> خطا 500</a></li>
-                <li><a href="pages/examples/blank.html"><i class="fa fa-circle-o"></i> صفحه خالی</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-              <a >
-                <i class="fa fa-share"></i> <span>چند مرحله ای</span>
-                <i class="fa fa-angle-right pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle-o"></i> سطح اول</a></li>
-                <li>
-                  <a><i class="fa fa-circle-o"></i> سطح دوم <i class="fa fa-angle-right pull-right"></i></a>
-                  <ul class="treeview-menu">
-                    <li><a><i class="fa fa-circle-o"></i> سطح دوم</a></li>
-                    <li>
-                      <a ><i class="fa fa-circle-o"></i> سطح دوم <i class="fa fa-angle-right pull-right"></i></a>
-                      <ul class="treeview-menu">
-                        <li><a ><i class="fa fa-circle-o"></i> سطح سوم</a></li>
-                        <li><a><i class="fa fa-circle-o"></i> سطح سوم</a></li>
-                      </ul>
-                    </li>
-                  </ul>
+                <li id="SQuestionNew">
+                  <a ui-sref="new_question">
+                    <i class="fa fa-circle-o"></i>سوال های جدید
+                  </a>
                 </li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> سطح اول</a></li>
+                <li id="SQuestions">
+                  <a ui-sref="questions">
+                    <i class="fa fa-circle-o"></i>لیست سوالات
+                  </a>
+                </li>
               </ul>
             </li>
-            <li><a href="documentation/index.html"><i class="fa fa-book"></i> <span>مستندات</span></a></li>
+            <li id="SSubjects" class="treeview">
+              <a class="link">
+                <i class="fa fa-bookmark"></i> <span>مدیریت موضوعات</span>
+              </a>
+            </li>
+            <li id="STags" class="treeview">
+              <a class="link">
+                <i class="fa fa-tag"></i> <span>مدیریت تگ ها</span>
+              </a>
+            </li>
+            <li id="SProfile">
+              <a href="../Forum/#/profile">
+                <i class="fa fa-male"></i><span>  پروفایل من </span>
+                <small class="label pull-right bg-green">جدید</small>
+              </a>
+            </li>
+            <li >
+              <a href="../Forum/#/">
+                <i class="fa fa-group"></i><span> ورود به فروم </span>
+              </a>
+            </li>
+            <li class="treeview">
+              <a class="link" ng-click="logout()">
+                <i class="fa fa-power-off"></i>
+                <span>خارج شدن</span>
+              </a>
+            </li>
           </ul>
         </section>
         <!-- /.sidebar -->
       </aside>
 
+      <script  id="notifyModal.html" type="text/ng-template">
+        <div class="modal-header">
+          <h3 class="modal-title">Error in XHR request </h3>
+        </div>
+        <div class="modal-body">
+          <data compile="data"></data>
+        </div>
+      </script>
+
+      <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
+
       <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper" ui-view  style="min-height:981">
-      </div><!-- /.content-wrapper -->
-	  
+      <div class="content-wrapper">
+
+        <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60">
+        </treasure-overlay-spinner>
+        <!-- Content Wrapper. Contains page content -->
+        <div ui-view ng-hide="globalSearchActive" id="mainContent" data-anim-speed="600"
+             class="anim-in-out anim-slide-below-fade" data-anim-sync="false" style="min-height: 600px;" ></div>
+<!--        <div ng-show="globalSearchActive" ng-include src="'partials/GlobalSearch.html'" id="searchContent" ></div>-->
+        <!-- /.content-wrapper -->
+      </div>
+
       <footer class="main-footer persian-rtl" >
         <div class="pull-left hidden-xs">
           <b>نسخه</b> 2.3.0
@@ -591,43 +562,10 @@
       <div class="control-sidebar-bg"></div>
     </div><!-- ./wrapper -->
 
-	<script src="../js/angular.js"></script>
-    <script src="../js/angular-route.min.js"></script>
-    <script src="../js/angular-cookies.min.js"></script>
-	<script src="../js/angular-animate.min.js" ></script>
-	<script src="../js/angular-ui-router.js"></script>
-	
-	<script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript" ></script>
-	<script src="../js/toaster.js" type="text/javascript" ></script>
-	<script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript" ></script>
-	
+    <?php generateRequiredCMSJavaFiles() ?>
     <script src="angular/admin-app.js"></script>
     <script src="partials/Admin/AdminCtrl.js"></script>
-		
-	<script type="text/javascript" src="../js/moment.js"></script>
-	<script type="text/javascript" src="../js/moment-jalaali.js"></script>
+    <script src="../app/directives/auto-pagination.js"></script>
 
-    <!-- jQuery 2.1.4 -->
-    <script src="../cms/js/jQuery/jQuery-2.1.4.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="../cms/js/jQueryUI/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-      $.widget.bridge('uibutton', $.ui.button);
-    </script>
-    <!-- Bootstrap 3.3.5 -->
-    <script src="../cms/js/bootstrap.min.js"></script>
-    <!-- Bootstrap WYSIHTML5 
-    <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
-    <!-- Slimscroll -->
-    <script src="../cms/js/slimScroll/jquery.slimscroll.min.js"></script>
-    <!-- FastClick -->
-    <script src="../cms/js/fastclick/fastclick.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../cms/js/app.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes)
-    <script src="dist/js/pages/dashboard.js"></script> -->
-    <!-- AdminLTE for demo purposes -->
-    <script src="../cms/js/demo.js"></script>
   </body>
 </html>

@@ -2,7 +2,8 @@
 var serviceBaseURL = '../api/user/';
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
-    'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'nvd3', 'ngPersian','ngFileUpload']);
+    'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'nvd3', 'ngPersian',
+    'ngFileUpload','anim-in-out']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -72,6 +73,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                     return $ocLazyLoad.load(['partials/Forum/Main/MainForumCtrl.js']);
+                }],
+                $title: function () {
+                    return 'انجمن';
+                }
+            }
+        })
+        .state("forum", {
+            url: "/Forum/:id",
+            templateUrl: "partials/Forum/Main/Forum.html",
+            controller: 'ForumCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/Main/ForumCtrl.js']);
                 }],
                 $title: function () {
                     return 'انجمن';
