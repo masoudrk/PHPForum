@@ -114,7 +114,7 @@ $app->post('/signInUser', function() use ($app)  {
     user 
     LEFT JOIN 
     file_storage ON 
-            file_storage.ID=user.AvatarID where Username='$email' or Email='$email'");
+            file_storage.ID=user.AvatarID where Email='$email' and UserAccepted = 1");
 
     if ($user != NULL) {
         if(passwordHash::check_password($user['Password'],$password)){
