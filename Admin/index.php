@@ -18,7 +18,7 @@
       }
       generateMetas();
       generateRequiredCMSCssFiles();
-    ?>
+          ?>
 
     <title>داشبورد</title>
     <!-- Tell the browser to be responsive to screen width -->
@@ -392,7 +392,8 @@
         <div class="pull-left hidden-xs">
           <b>نسخه</b> 2.3.0
         </div>
-        <strong class="persian-rtl"></strong> تمام حقوق مادی و معنوی این وبسایت برای سازنده محفوظ است.Copyright &copy; 2014-2015 <a class="persian-rtl" href="http://almsaeedstudio.com">طراحی شده توسط MagicCube.ir</a>.
+            <strong class="persian-rtl"></strong>
+            حقوق مادی و معنوی مطعلق به اداره کل علائم و ارتباطات راه آهن جمهوری اسلامی ایران است
       </footer>
 
       <!-- Control Sidebar -->
