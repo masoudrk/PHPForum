@@ -1,5 +1,7 @@
 ﻿var appName = 'adminApp';
-var app = angular.module(appName, ['ngRoute', 'ngCookies' ,'ui.router', 'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title']);
+var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
+    'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'nvd3', 'ngPersian',
+    'ngFileUpload','anim-in-out' ]);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -65,6 +67,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     });
 }
 ]);
+
 var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
 var traverse = function (el) {
     if (el.nodeType == 3) {
@@ -79,16 +82,58 @@ var traverse = function (el) {
     }
 }
 
-var fixFooter = function () {
-    var o = $.AdminLTE.options.controlSidebarOptions;
-    var sidebar = $(o.selector);
-    $.AdminLTE.controlSidebar._fixForContent(sidebar);
+var fixPersianNumbers = function () {
     traverse(document.body);
+}
+
+var fixFooter = function () {
+    traverse(document.body);
+}
+
+var activeElement = function (parent , name) {
+    if(name){
+        var elem = $(name);
+        elem.addClass('active').siblings().removeClass('active');
+    }
+    var elemP = $(parent);
+    elemP.addClass('active').siblings().removeClass('active');
+}
+
+var cmsVars = {};
+var hideCMS = function (hide) {
+    if(hide){
+        cmsVars.v1 = $('.content-wrapper').css('marginRight');
+        cmsVars.v2 = $('.main-footer').css('marginRight');
+        cmsVars.v3 = $('.main-header').css('display');
+        cmsVars.v4 = $('.main-sidebar').css('display');
+        $('.content-wrapper').css('margin-right','0');
+        $('.main-footer').css('margin-right','0');
+        $('.main-header').css('display','none');
+        $('.main-sidebar').css('display','none');
+    }
+    else{
+        $('.content-wrapper').css('margin-right',cmsVars.v1);
+        $('.main-footer').css('margin-right',cmsVars.v2);
+        $('.main-header').css('display',cmsVars.v3);
+        $('.main-sidebar').css('display',cmsVars.v4);
+    }
 }
 
 
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
     function ($http, $timeout, $rootScope, $state, $stateParams, toaster, $uibModal) { // This service connects to our REST API
+
+        $rootScope.logout = function () {
+            obj.post('logout').then(function (res) {
+                if(res&&res.Status=='success'){
+                    window.location = "../";
+                }else{
+                    obj.popError('مشکل ، لطفا دوباره امتحان کنید.');
+                }
+            });
+        }
+
+        $rootScope.user = session;
 
         var serviceBase = '../api/admin/';
 
@@ -165,9 +210,33 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         obj.post = function (q, object) {
             obj.setBusy(true);
             return $http.post(serviceBase + q, object).then(function (results) {
+
+                if(obj.debugMode ){
+                    console.log(results.data);
+
+                    if(results.status != 200)
+                        obj.popModal(results);
+                }
                 obj.setBusy(false);
+
+                if(results.data.AuthState && results.data.AuthState == 'UN_AUTH'){
+                    console.log('State : UN_AUTHORIZED_USER');
+                    window.location = '../';
+                }
+
                 return results.data;
             }, function (err) {
+
+                if(obj.debugMode){
+                    console.log(results.data);
+                    obj.popModal(err.data);
+                }
+
+                if(err.data.AuthState && err.data.AuthState == 'UN_AUTH'){
+                    console.log('State : UN_AUTHORIZED_USER');
+                    window.location = '../';
+                }
+
                 obj.setBusy(false);
                 return err;
             });
@@ -175,8 +244,14 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.postAsync = function (q, object) {
             return $http.post(serviceBase + q, object).then(function (results) {
+
+                if(obj.debugMode && results.status != 200){
+                    obj.popModal(results);
+                }
                 return results.data;
             }, function (err) {
+                if(obj.debugMode)
+                    obj.popModal(err.data);
                 return err;
             });
         };
@@ -184,6 +259,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         obj.disableLoading = function () {
             $rootScope.spinner.active = false;
         }
+
 
         obj.authUser = function (user) {
             $rootScope.authenticated = true;
@@ -323,12 +399,25 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         return obj;
     }]);
 
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore) {
+app.run(function ($rootScope, $templateCache, $state, $location, $cookies,Extention) {
+
+    $rootScope.spinner ={};
 
     $rootScope.$on("$stateChangeSuccess", function () {
+        Extention.setBusy(false);
     });
+    $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error){
+            Extention.setBusy(false);
+        });
+    $rootScope.$on('$stateNotFound',
+        function(event, unfoundState, fromState, fromParams){
+            Extention.setBusy(false);
+        })
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
+        Extention.setBusy(true);
+        $rootScope.globalSearchActive = false;
     });
 
 });
