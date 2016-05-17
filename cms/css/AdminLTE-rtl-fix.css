@@ -289,3 +289,26 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     /*min-height: 45px;*/
     /*min-width: 45px;*/
 }
+
+.shopping-cart[ui-view], .order-confirmation[ui-view], .thank-you[ui-view] {
+    overflow: hidden;
+}
+
+.shopping-cart[ui-view].ng-enter, .order-confirmation[ui-view].ng-enter, .thank-you[ui-view].ng-enter {
+    height: 0px;
+@include transition(height .35s ease-in-out);
+@include transition-delay(.35s);
+}
+
+.shopping-cart[ui-view].ng-enter-active, .order-confirmation[ui-view].ng-enter-active, .thank-you[ui-view].ng-enter-active {
+    height: 200px;
+}
+
+.shopping-cart[ui-view].ng-leave, .order-confirmation[ui-view].ng-leave, .thank-you[ui-view].ng-leave {
+@include transition(all .35s ease-in-out);
+    height: 200px;
+}
+
+.shopping-cart[ui-view].ng-leave-active, .order-confirmation[ui-view].ng-leave-active, .thank-you[ui-view].ng-leave-active {
+    height: 0px;
+}

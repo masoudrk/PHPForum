@@ -78,6 +78,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
+        .state("forum", {
+            url: "/Forum/:id",
+            templateUrl: "partials/Forum/Main/Forum.html",
+            controller: 'ForumCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Forum/Main/ForumCtrl.js']);
+                }],
+                $title: function () {
+                    return 'انجمن';
+                }
+            }
+        })
         .state("new_question", {
             url: "/new_question/:id",
             templateUrl: "partials/Question/NewQuestion/NewQuestion.html",
