@@ -54,11 +54,20 @@ function echoResponse($status_code, $response) {
     echo json_encode($response);
 
 }
+
 function echoError($message) {
     $response=[];
     $response["Status"] = "error";
     $response["Message"] = $message;
     echoResponse(201, $response);
+    die();
+}
+
+function echoSuccess($obj = null) {
+    $response["Data"]=$obj;
+    $response["Status"] = "success";
+    echoResponse(200, $response);
+    die();
 }
 
 function getIPAddress(){
@@ -90,18 +99,31 @@ ValidSessionID=1");
     die();
 }
 
-function adminRequire(){
+function createSecureDbHandler(){
     $db = new DbHandler();
-    $sess = $db->getSession();
+    $sess = new Session();
+//
+//    $rq = $db->makeQuery(
+//        "SELECT admin.ID FROM user left join admin on admin.UserID=user.ID left join admin_permission on admin_permission
+//.ID=admin.PermissionID where admin_permission.PermissionLevel in('$permissionLevels') AND user.ValidSessionID=1 and 
+//user
+//.SessionID='$sess->SSN'");
+
     $rq = $db->makeQuery(
-        "SELECT admin.ID FROM user JOIN admin on admin.UserID=user.ID where user.SessionID='".$sess["SSN"]
-        ."' AND SessionValid=1");
+        "SELECT admin.ID FROM user left join admin on admin.UserID=user.ID left join admin_permission on admin_permission
+.ID=admin.PermissionID where AND user.ValidSessionID=1 and 
+user
+.SessionID='$sess->SSN'");
 
     $r = $rq->fetch_assoc();
     if($r){
-        return TRUE;
+        return $db;
     }
-    die('Encrypted media , Admininistrator auth has been failed.');
+
+    $res = [];
+    $res['AuthState'] = 'UN_AUTH';
+    echoResponse(201,$res);
+    die('');
 }
 
 function getCurrentUser(){

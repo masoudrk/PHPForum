@@ -133,7 +133,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             });
         }
 
-        $rootScope.user = session;
+        $rootScope.adminSession = session;
 
         var serviceBase = '../api/admin/';
 

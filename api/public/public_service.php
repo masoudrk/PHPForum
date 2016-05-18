@@ -123,7 +123,10 @@ $app->post('/signInUser', function() use ($app)  {
         	$resSessionIDQ = $db->updateRecord('user',"SessionID='".$sessionID."',ValidSessionID=1","ID='".$user['ID']."'");
 
             $IsAdmin=false;
-            $admin = $db->getOneRecord("select * from admin where UserID=".$user['ID']);
+            $IsAdmin=false;
+            $admin = $db->getOneRecord("select * from admin left join admin_permission on admin_permission.ID=admin.PermissionID
+             where UserID=".$user['ID']);
+
             if($admin){
                 $IsAdmin=true;
             }
@@ -137,7 +140,8 @@ $app->post('/signInUser', function() use ($app)  {
             $response['Image'] = $user['Image'];
             $response['SignupDate'] = $user['SignupDate'];
             if($IsAdmin){
-            	$response['AdminID'] = $admin['ID'];
+                $response['AdminID'] = $admin['ID'];
+                $response['AdminPermission'] = $admin['PermissionLevel'];
             }
 
             if (!isset($_SESSION)) {
@@ -155,7 +159,8 @@ $app->post('/signInUser', function() use ($app)  {
             $_SESSION['Image'] = $user['Image'];
 
             if($IsAdmin){
-            	$_SESSION['AdminID'] = $admin['ID'];
+                $_SESSION['AdminID'] = $admin['ID'];
+                $_SESSION['AdminPermission'] = $admin['PermissionLevel'];
             }
         } else {
             $response['Status'] = "error";

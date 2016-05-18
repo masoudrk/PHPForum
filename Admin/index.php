@@ -267,7 +267,7 @@
                       <a href="#" class="btn btn-default btn-flat">پروفایل</a>
                     </div>
                     <div class="pull-right">
-                      <a href="#" class="btn btn-default btn-flat">خروج</a>
+                      <a ng-click="logout()" class="btn btn-default btn-flat">خروج</a>
                     </div>
                   </li>
                 </ul>
