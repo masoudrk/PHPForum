@@ -311,6 +311,11 @@
                         <small class="label pull-right bg-green">جدید</small>
                     </a>
                 </li>
+                <li ng-if="user.IsAdmin=='1'" >
+                    <a href="../Admin/#/">
+                        <i class="fa fa-briefcase"></i><span> پنل ادمین </span>
+                    </a>
+                </li>
                 <li class="treeview">
                     <a class="link" ng-click="logout()">
                         <i class="fa fa-power-off"></i>
