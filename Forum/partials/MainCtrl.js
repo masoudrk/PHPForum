@@ -1,4 +1,6 @@
-angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log) {
+angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention) {
+
+    $scope.UserMessages = [];
 
     $scope.bgColorArray= ["bg-aqua-active","bg-purple-active","bg-red-active","bg-navy-active","bg-orange-active",
         "bg-blue-active","bg-green-active","bg-olive-active","bg-lime-active",
@@ -10,6 +12,19 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         searchValue : '',
         searchType : '0'
     };
+
+    Extention.post("getUserMessages", {UserID: $rootScope.user.UserID }).then(function (res) {
+        $scope.UserMessages = res;
+        var count =0;
+        for (var i= 0; i < $scope.UserMessages.length; i++) {
+            if (!$scope.UserMessages[i].EventView)
+                count++;
+        }
+        $scope.UserMessages["NewMessages"] = count;
+    });
+    Extention.post("getUserLastQuestion", { UserID: $rootScope.user.UserID }).then(function (res) {
+        $scope.UserQuestions = res;
+    });
 
     $scope.fullSearchData = {SearchType : '0'};
 
