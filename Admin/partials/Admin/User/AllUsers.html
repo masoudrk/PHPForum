@@ -41,11 +41,11 @@
                             <th style="width: 100px;"></th>
                         </tr>
                         <tr ng-repeat="u in user.all">
-                            <td>{{u.ID}}</td>
-                            <td>{{u.FullName}}</td>
-                            <td>{{u.Username}}</td>
-                            <td>{{u.SignupDate}}</td>
-                            <td>{{u.PhoneNumber}}</td>
+                            <td>{{u.ID| pNumber}}</td>
+                            <td>{{u.FullName| pNumber}}</td>
+                            <td>{{u.Username| pNumber}}</td>
+                            <td>{{u.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                            <td>{{u.PhoneNumber| pNumber}}</td>
                             <td ng-switch="u.UserAccepted">
                                 <span class="label label-success" ng-switch-when="1">تایید شده</span>
                                 <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>

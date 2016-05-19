@@ -237,16 +237,19 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a  class="dropdown-toggle link" data-toggle="dropdown">
-                  <img src="../images/user8-128x128.jpg" class="user-image" alt="User Image">
-                  <span class="hidden-xs">مسعود رضاخانلو</span>
+                  <img ng-src="{{session.Image}}" src="../images/Avatar.jpg"  class="user-image" alt="User Image">
+                  <span class="hidden-xs" ng-bind="session.FullName"></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="../images/masoud.jpg" class="img-circle" alt="User Image">
+                    <img ng-src="{{session.Image}}" src="../images/Avatar.jpg"  class="img-circle link"
+                         alt="User Image" ui-sref="profile">
                     <p>
-                      مسعود رضاخانلو - ادمین سایت
-                      <small class="vazir-font">عضویت در سال 1392</small>
+                      <span ng-bind="session.FullName"> </span> - ادمین
+                      <small class="vazir-font">
+                        عضویت در سال {{userSession.SignupDate |  jalaliDateSimple:'jYYYY'}}
+                      </small>
                     </p>
                   </li>
                   <!-- Menu Body -->
@@ -284,10 +287,11 @@
           <!-- Sidebar user panel -->
           <div class="user-panel">
             <div class="pull-right image">
-              <img src="../images/user2-160x160.jpg" class="img-circle" alt="User Image">
+              <img ng-src="{{session.Image}}" src="../images/Avatar.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>مسعود رضاخانلو</p>
+              <p ng-bind="session.FullName"></p>
+              <a>آنلاین <i class="fa fa-circle text-success"></i></a>
             </div>
           </div>
           <!-- search form -->
