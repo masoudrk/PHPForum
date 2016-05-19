@@ -14,7 +14,7 @@ function generateSessionAsJavascriptVariable()
 
     if(isset($_SESSION["UserID"])){
         $adminScript= '';
-        if(isset($_SESSION["IsAdmin"])){
+        if(isset($_SESSION["IsAdmin"]) && $_SESSION["IsAdmin"] == 1){
             $adminScript = "session.AdminID = '".$_SESSION["AdminID"]."';".
                             "session.AdminPermission = '".$_SESSION["AdminPermission"]."';";
         }

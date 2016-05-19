@@ -108,7 +108,7 @@
                             <li class="user-header">
                                 <img ng-src="{{user.Image}}" class="img-circle link" alt="User Image" ui-sref="profile">
                                 <p>
-                                    <span ng-bind="user.FullName"> </span> - ادمین
+                                    <span ng-bind="user.FullName"> </span> - کاربر
                                     <small class="vazir-font">عضویت در سال {{user.SignupDate |  jalaliDateSimple:'jYYYY'}}</small>
                                 </p>
                             </li>

@@ -133,7 +133,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             });
         }
 
-        $rootScope.adminSession = session;
+        $rootScope.session = session;
 
         var serviceBase = '../api/admin/';
 
@@ -426,6 +426,13 @@ app.filter('jalaliDate', function () {
     return function (inputDate, format) {
         var date = moment(inputDate);
         return date.fromNow() + " " + date.format(format);
+    }
+});
+
+app.filter('jalaliDateSimple', function () {
+    return function (inputDate, format) {
+        var date = moment(inputDate);
+        return date.format(format);
     }
 });
 
