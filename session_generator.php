@@ -13,6 +13,12 @@ function generateSessionAsJavascriptVariable()
     }
 
     if(isset($_SESSION["UserID"])){
+        $adminScript= '';
+        if(isset($_SESSION["IsAdmin"])){
+            $adminScript = "session.AdminID = '".$_SESSION["AdminID"]."';".
+                            "session.AdminPermission = '".$_SESSION["AdminPermission"]."';";
+        }
+
         echo "<script>".
             "var session = {};".
             "session.UserID = '".$_SESSION["UserID"]."';".
@@ -22,6 +28,7 @@ function generateSessionAsJavascriptVariable()
             "session.IsAdmin = '".$_SESSION["IsAdmin"]."';".
             "session.Image = '".$_SESSION["Image"]."';".
             "session.SignupDate = '".$_SESSION["SignupDate"]."';".
+             $adminScript.
             "</script>";
     }else{
         echo "<script>".

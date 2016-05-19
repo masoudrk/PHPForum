@@ -226,9 +226,29 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         obj.post = function (q, object) {
             obj.setBusy(true);
             return $http.post(serviceBase + q, object).then(function (results) {
+
+                if(obj.debugMode ){
+                    console.log(results.data);
+                }
                 obj.setBusy(false);
+
+                if(results.data.AuthState && results.data.AuthState == 'UN_AUTH'){
+                    console.log('State : UN_AUTHORIZED_USER');
+                    window.location = '../';
+                }
+
                 return results.data;
             }, function (err) {
+
+                if(obj.debugMode){
+                    console.log(err.data);
+                }
+
+                if(err.data.AuthState && err.data.AuthState == 'UN_AUTH'){
+                    console.log('State : UN_AUTHORIZED_USER');
+                    window.location = '../';
+                }
+
                 obj.setBusy(false);
                 return err;
             });
@@ -236,8 +256,14 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.postAsync = function (q, object) {
             return $http.post(serviceBase + q, object).then(function (results) {
+
+                if(obj.debugMode && results.status != 200){
+                    obj.popModal(results);
+                }
                 return results.data;
             }, function (err) {
+                if(obj.debugMode)
+                    obj.popModal(err.data);
                 return err;
             });
         };

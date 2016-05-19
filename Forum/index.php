@@ -348,7 +348,7 @@
         <div class="pull-left hidden-xs">
             <b>نسخه</b> 1.0.0
         </div>
-            <strong class="persian-rtl"></strong>  حقوق مادی و معنوی مطعلق به اداره کل علائم و ارتباطات راه آهن جمهوری اسلامی ایران است.
+            <strong class="persian-rtl"></strong>  حقوق مادی و معنوی متعلق به اداره کل علائم و ارتباطات راه آهن جمهوری اسلامی ایران است.
           Copyright &copy;
         2014-2015 <!--<a class="persian-rtl">طراحی شده توسط MagicCube.ir</a>-->.
     </footer>
