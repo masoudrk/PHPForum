@@ -65,6 +65,75 @@ $app->post('/deleteQuestion', function() use ($app)  {
     echoResponse(201, "Error:".$data->QuestionID);
 });
 
+$app->post('/getUserLastQuestion', function() use ($app)  {
+
+    $db = new DbHandler(true);
+    $data = json_decode($app->request->getBody());
+    if(!isset($data->UserID))
+    {echoResponse(201,"bad request"); return;}
+    $resQ= $db->makeQuery("select DISTINCT q.ID ,q.Title ,q.CreationDate,
+(select sum(RateValue) from question_rate where QuestionID = q.ID) as QuestionRate,
+(select count(*) from question_follow where QuestionID = q.ID) as QuestionUserFollow,
+(select count(*) from question_view where QuestionID = q.ID) as questionView,
+(select count(*) from forum_answer where QuestionID = q.ID) as questionAnswers
+from forum_question as q  where q.AuthorID = '$data->UserID' and q.AdminAccepted = 1 order by q.CreationDate limit 5");
+
+    $resp = [];
+    while($r = $resQ->fetch_assoc()){
+        $resp[] = $r;}
+
+echoResponse(200 , $resp);
+});
+
+$app->post('/getUserMessages', function() use ($app)  {
+
+    $db = new DbHandler(true);
+    $data = json_decode($app->request->getBody());
+    if(!isset($data->UserID))
+    {echoResponse(201,"bad request"); return;}
+    $resQ= $db->makeQuery("select 'Question' as EventType , qv.ViewDate as EventView , fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
+(SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
+from subject_follow as sf
+inner join forum_question fq on fq.SubjectID = sf.SubjectID
+inner join user as u on u.ID = fq.AuthorID
+LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = sf.UserID
+where fq.adminAccepted = 1 and sf.UserID = '$data->UserID'
+UNION
+select 'Answer' as EventType ,qv.ViewDate as EventView,fa.CreationDate as EventDate , q.ID as EventID , fa.AnswerText as EventTitle,
+(SELECT sum(RateValue) FROM answer_rate where AnswerID = fa.ID) as EventScore, u.FullName as EventUser
+from forum_answer as fa
+inner join forum_question as q on q.ID = fa.QuestionID
+inner join question_follow as qf on qf.QuestionID = q.ID
+inner join user as u on u.ID = fa.AuthorID
+LEFT JOIN question_view as qv on qv.QuestionID = q.ID and qv.UserID = qf.UserID
+where q.adminAccepted = 1 and fa.adminAccepted = 1 and qf.UserID = '$data->UserID'
+UNION
+select 'Question' as EventType ,qv.ViewDate as EventView,fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
+(SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
+from forum_main_subject as fms
+inner join main_subject_follow as msf on msf.MainSubjectID = fms.ID
+inner join forum_subject as fs on fs.ParentSubjectID = fms.ID
+inner join forum_question fq on fq.SubjectID = fs.ID
+inner join user as u on u.ID = fq.AuthorID
+LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = msf.UserID
+where fq.adminAccepted = 1 and msf.UserID = '$data->UserID'
+UNION
+select 'Person' as EventType ,qv.ViewDate as EventView,fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
+(SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
+from person_follow as pf
+inner join forum_question fq on fq.AuthorID = pf.TargetUserID
+inner join user as u on u.ID = fq.AuthorID
+LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = pf.UserID
+where fq.adminAccepted = 1 and pf.UserID = '$data->UserID'
+order by EventDate limit 10");
+
+    $resp = [];
+    while($r = $resQ->fetch_assoc()){
+        $resp[] = $r;}
+
+    echoResponse(200 , $resp);
+});
+
 $app->post('/getAllQuestions', function() use ($app)  {
 
     require_once '../db/question.php';

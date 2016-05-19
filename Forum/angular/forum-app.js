@@ -557,7 +557,7 @@ app.filter('jalaliDate', function () {
 });
 
 app.filter('fromNow', function () {
-    return function (inputDate, format) {
+    return function (inputDate) {
         var date = moment(inputDate);
         return date.fromNow() ;
     }
