@@ -228,7 +228,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             }, function (err) {
 
                 if(obj.debugMode){
-                    console.log(results.data);
+                    console.log(err.data);
                     obj.popModal(err.data);
                 }
 

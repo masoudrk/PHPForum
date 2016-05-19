@@ -1,4 +1,6 @@
 ﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache, $state, $rootScope, $routeParams, $uibModal, Extention ) {
+
+
     $scope.user = {};
     $scope.emailError = false;
     $scope.userNameError = false;
