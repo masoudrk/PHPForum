@@ -521,18 +521,24 @@ app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
     function ($http, $timeout,$rootScope, Extention) { // This service connects to our REST API
 
         var obj = {};
-        obj.post = function () {
+        obj.getData = function () {
             $timeout(function () {
-                Extention.postAsync('getSocketData').then(function (res) {
-                    $rootScope.socketData = res;
-                    console.log(res);
-                    obj.post();
-                });
-            },5000);
+                obj.fetch();
+            },10000);
         };
 
+        obj.fetch = function () {
+            Extention.postAsync('getSocketData').then(function (res) {
+                $rootScope.socketData = res;
+                $timeout(function () {
+                    $rootScope.$broadcast('socketDataChanged');
+                });
+                obj.getData();
+            });
+        }
 
-        obj.post();
+        obj.fetch();
+
         return obj;
     }]);
 

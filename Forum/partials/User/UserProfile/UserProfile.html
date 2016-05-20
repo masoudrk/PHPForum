@@ -2,7 +2,7 @@
 <section class="content-header">
     <h1 class="content-header vazir-font">
         <small>مدیریت</small>
-        پروفایل من
+        پروفایل کاربری
     </h1>
     <ol class="breadcrumb">
         <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
@@ -13,7 +13,7 @@
     <h1 style="font-size: 90px;">404<small><small> not found</small></small></h1>
 </section>
 
-<section class="row" ng-show="profile!=null">
+<section class="row" ng-show="profile">
     <div class="col-xs-12">
         <div class="col-sm-3 col-xs-12 pull-right">
             <!-- Profile Image -->
@@ -21,19 +21,26 @@
                 <div class="box-body box-profile">
                     <img class="profile-user-img img-responsive img-circle" src="{{profile.FullPath}}"
                          alt="User profile picture">
-                    <h3 class="profile-username text-center">{{profile.FullName}} <small ng-show="profile.Gender==0"><i class="fa fa-mars"></i></small><small ng-hide="profile.Gender==0"><i class="fa fa-venus"></i></small></h3>
-                    <p ng-show="profile.Email" class="text-muted text-center">{{profile.Email}} <i class="fa fa-envelope"></i></p>
-                    <p ng-show="profile.OrganizationName" class="text-muted text-center">{{profile.OrganizationName}}<i class="fa fa-university"></i></p>
+                    <h3 class="profile-username text-center">{{profile.FullName|pNumber}}
+                        <small ng-show="profile.Gender==0"><i class="fa fa-mars"></i></small>
+                        <small ng-hide="profile.Gender==0"><i class="fa fa-venus"></i></small>
+                    </h3>
+                    <p ng-show="profile.Email" class="text-muted text-center">{{profile.Email}} <i
+                            class="fa fa-envelope"></i></p>
+                    <p ng-show="profile.OrganizationName" class="text-muted text-center">
+                        {{profile.OrganizationName|pNumber}} <i class="fa fa-university"></i></p>
 
+                    <p ng-show="isOnline" class="text-muted text-center">آنلاین <i
+                            class="fa fa-circle text-green"></i></p>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <a class="">{{profile.score}}</a> <b class="pull-right">امتیاز</b>
+                            <a class="">{{profile.score|pNumber}}</a> <b class="pull-right">امتیاز</b>
                         </li>
                         <li class="list-group-item">
-                            <a class="">{{profile.QuestionsCount}}</a> <b class="pull-right">سوالات پرسیده</b>
+                            <a class="">{{profile.QuestionsCount|pNumber}}</a> <b class="pull-right">سوالات پرسیده</b>
                         </li>
                         <li class="list-group-item">
-                            <a class="">{{profile.AnswerCount}}</a> <b class="pull-right">جواب ها</b>
+                            <a class="">{{profile.AnswerCount|pNumber}}</a> <b class="pull-right">جواب ها</b>
                         </li>
                     </ul>
                     <a ng-show="profile.PersonFollow == 0" class="btn btn-primary btn-block"><b>دنبال کردن</b></a>
@@ -49,22 +56,22 @@
                 </div><!-- /.box-header -->
                 <div class="box-body" style="direction: rtl;">
                     <strong ng-show="profile.Tel"><i class="fa fa-phone"></i> شماره تلفن ثابت</strong>
-                    <p class="text-muted">{{profile.Tel}}
+                    <p class="text-muted">{{profile.Tel|pNumber}}
                     </p>
                     <hr ng-show="profile.Tel">
                     <strong  ng-show="profile.PhoneNumber"><i class="fa fa-mobile"></i> موبایل</strong>
                     <p class="text-muted"></p>
-                    {{profile.PhoneNumber}}
+                    {{profile.PhoneNumber|pNumber}}
                     <hr ng-show="profile.PhoneNumber">
                     <strong ng-show="profile.SignupDate"><i class="fa fa-clock-o"></i> تاریخ عضویت</strong>
-                    <p class="text-muted">{{profile.SignupDate | jalaliDate :'jYYYY/jMM/jDD'}}</p>
+                    <p class="text-muted">{{profile.SignupDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}</p>
                     <hr ng-show="profile.SignupDate">
-                    <strong ng-show="profile.Skills.length!=0"><i class="fa fa-pencil margin-r-5"></i> مهارات</strong>
+                    <strong ng-show="profile.Skills.length!=0"><i class="fa fa-pencil margin-r-5"></i> مهارت ها</strong>
                     <!--TODO tag color-->
-                    <span ng-repeat="tag in profile.Skills" class="label label-success pull-right" style="margin: 5px">  {{tag.Skill}}  <i class="fa fa-tag" aria-hidden="true"></i></span>
+                    <span ng-repeat="tag in profile.Skills" class="label label-success pull-right" style="margin: 5px">  {{tag.Skill|pNumber}}  <i class="fa fa-tag" aria-hidden="true"></i></span>
                     <hr ng-show="profile.Skills.length!=0">
                     <strong ng-show="profile.Description"><i class="fa fa-file-text-o margin-r-5"></i> درباره من</strong>
-                    <p>{{profile.Description}}</p>
+                    <p>{{profile.Description|pNumber}}</p>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div>
@@ -73,27 +80,27 @@
                 <div class="box-body" style="direction: rtl;">
                     <div class="col-xs-12 no-padding">
                         <strong><i class="fa fa-calendar"></i> آخرین سوال</strong>
-                        <span class="description persian-rtl pull-left text-muted ng-binding" style="margin-right:4%"><i class="fa fa-clock-o" aria-hidden="true"></i>    {{profile.LastQuestion.CreationDate | jalaliDate :'jYYYY/jMM/jDD'}}</span>
+                        <span class="description persian-rtl pull-left text-muted ng-binding" style="margin-right:4%"><i class="fa fa-clock-o" aria-hidden="true"></i>    {{profile.LastQuestion.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}</span>
                     </div>
                     <div class="row">
                         <div class="col-xs-2 pull-left">
                             <a href="#/question/{{profile.LastQuestion.ID}}"><i class="fa fa-angle-left fa-2x pull-left" aria-hidden="true"></i></a>
                         </div>
                         <div class="col-xs-10 persian-rtl">
-                            <p style="margin-top: 5px">{{profile.LastQuestion.Title}}</p>
+                            <p style="margin-top: 5px">{{profile.LastQuestion.Title|pNumber}}</p>
                         </div>
                     </div>
                     <hr>
                     <div class="col-xs-12 no-padding">
                         <strong><i class="fa fa-check"></i>    بهترین سوال</strong>
-                        <span class="description persian-rtl pull-left text-muted ng-binding" style="margin-right:4%"><i class="fa fa-clock-o" aria-hidden="true"></i>    {{profile.BestQuestion.CreationDate | jalaliDate :'jYYYY/jMM/jDD'}}</span>
+                        <span class="description persian-rtl pull-left text-muted ng-binding" style="margin-right:4%"><i class="fa fa-clock-o" aria-hidden="true"></i>    {{profile.BestQuestion.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}</span>
                     </div>
                     <div class="row">
                         <div class="col-xs-2 pull-left">
                             <a href="#/question/{{profile.BestQuestion.ID}}"><i class="fa fa-angle-left fa-2x pull-left" aria-hidden="true"></i></a>
                         </div>
                         <div class="col-xs-10 persian-rtl">
-                            <p style="margin-top: 5px">{{profile.BestQuestion.Title}}</p>
+                            <p style="margin-top: 5px">{{profile.BestQuestion.Title|pNumber}}</p>
                         </div>
                     </div>
                 </div><!-- /.box-body -->
