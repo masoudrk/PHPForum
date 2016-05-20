@@ -1,9 +1,10 @@
 
 angular.module(appName).controller('AllUsersCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, Extention) {
 
-	$scope.pagingParams = {};
+    $scope.pagingParams = { userType: null };
 	$scope.pagingController = {};
 	$scope.user = {};
+    $scope.dropDwonTitle = 'نمایش اعضا';
 
 	$scope.search = function () {
 		$scope.pagingController.update();
@@ -27,6 +28,28 @@ angular.module(appName).controller('AllUsersCtrl', function ($scope, $rootScope,
 				Extention.popError("مشکل در حذف کاربر ، لطفا دوباره امتحان کنید.");
 			}
 		});
+	}
+
+	$scope.changeTypeFilter = function(type) {
+	    $scope.pagingParams.userType = type;
+	    switch (type) {
+	        case null:
+	            $scope.dropDwonTitle = 'همه ی اعضا';
+	            break;
+            case 1:
+                $scope.dropDwonTitle = 'اعضای تایید شده';
+                break;
+            case 0:
+                $scope.dropDwonTitle = 'اعضا در انتظار تایید';
+                break;
+            case -1:
+                $scope.dropDwonTitle = 'اعضای تایید نشده';
+                break;
+	        default:
+	            $scope.dropDwonTitle = 'نمایش اعضا';
+                break;
+	    }
+	    $scope.search();
 	}
 	
 	fixFooter();

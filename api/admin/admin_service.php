@@ -15,6 +15,14 @@ $app->post('/deleteUser', function() use ($app)  {
 	if($sess->UserID == $data->UserID)
 		echoError('You cannot delete your account in this action.');
 
+    $resQ = $db->makeQuery("select Count(*) as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
+
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        echoError('You don\'t have permision to do this action');
+
 	$res = $db->deleteFromTable('user',"ID='$data->UserID'");
 	if($res)
 		echoSuccess();
@@ -33,6 +41,14 @@ $app->post('/changeUserAccepted', function() use ($app)  {
 
 			if($sess->UserID == $data->UserID)
 				echoError('You cannot change your own accepted state.');
+
+                $resQ = $db->makeQuery("select Count(*) as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
+
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        echoError('You don\'t have permision to do this action');
 
 			$res = $db->updateRecord('user',"UserAccepted='$data->State'","ID='$data->UserID'");
 			if($res)
@@ -56,9 +72,12 @@ $app->post('/getAllUsers', function() use ($app)  {
 
 	$where = "WHERE (user.ID!='$sess->UserID')";
 	$hasWhere = FALSE;
+    if(isset($data->userType)){
+        $where .=" AND (user.UserAccepted ='$data->userType')";
+	}
 	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
 		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
-		$where = " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
+		$where .= " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
 		$hasWhere = TRUE;
 	}
 

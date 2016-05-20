@@ -41,7 +41,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             controller: 'AllUsersCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/User/AllUsersCtrl.js','../app/directives/auto-pagination.js']);
+                    return $ocLazyLoad.load(['partials/Admin/User/AllUsersCtrl.js', '../app/directives/auto-pagination.js']);
                 }],
                 $title: function () {
                     return 'همه اعضا';
