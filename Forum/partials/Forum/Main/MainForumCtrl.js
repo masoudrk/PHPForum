@@ -8,7 +8,7 @@ angular.module(appName).controller('MainForumCtrl',
     $scope.pagingParams = { MainSubjectName : $stateParams.id };
     $scope.question = {};
 
-	Extention.post('getForumMainData',{MainSubjectName: $stateParams.id})
+	Extention.post('getMainForumData',{MainSubjectName: $stateParams.id})
 		.then(function (res) {
         $scope.forumData = res;
 	});

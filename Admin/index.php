@@ -401,8 +401,20 @@
             </li>
             <li id="STags" class="treeview">
               <a class="link">
-                <i class="fa fa-tag"></i> <span>مدیریت تگ ها</span>
+                <i class="fa fa-tag"></i> <span>مدیریت متا</span>
               </a>
+              <ul class="treeview-menu">
+                <li id="SQuestionNew">
+                  <a ui-sref="new_question">
+                    <i class="fa fa-circle-o"></i>مدیریت تگ ها
+                  </a>
+                </li>
+                <li id="SQuestions">
+                  <a ui-sref="questions">
+                    <i class="fa fa-circle-o"></i>مدیریت تحصیلات
+                  </a>
+                </li>
+              </ul>
             </li>
             <li id="SProfile">
               <a href="../Forum/#/profile">

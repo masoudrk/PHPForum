@@ -81,11 +81,11 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("forum", {
             url: "/Forum/:id",
-            templateUrl: "partials/Forum/Main/Forum.html",
+            templateUrl: "partials/Forum/Forum/Forum.html",
             controller: 'ForumCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/Main/ForumCtrl.js']);
+                    return $ocLazyLoad.load(['partials/Forum/Forum/ForumCtrl.js']);
                 }],
                 $title: function () {
                     return 'انجمن';
@@ -204,7 +204,7 @@ var hideCMS = function (hide) {
     }
 }
 
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention) {
+app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention,OnlineSocket) {
 
     $rootScope.spinner ={};
 
@@ -514,6 +514,25 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         };
 
+        return obj;
+    }]);
+
+app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
+    function ($http, $timeout,$rootScope, Extention) { // This service connects to our REST API
+
+        var obj = {};
+        obj.post = function () {
+            $timeout(function () {
+                Extention.postAsync('getSocketData').then(function (res) {
+                    $rootScope.socketData = res;
+                    console.log(res);
+                    obj.post();
+                });
+            },5000);
+        };
+
+
+        obj.post();
         return obj;
     }]);
 
