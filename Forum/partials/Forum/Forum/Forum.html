@@ -1,11 +1,11 @@
 ﻿<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
-        <small>{{forumData.MainSubject.Title}}</small>
+        <small>{{forumData.Subject.MainTitle}}</small>
            انجمن
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#/"><i class="fa fa-dashboard"></i> {{forumData.MainSubject.Title}}</a></li>
+        <li><a href="#/"><i class="fa fa-dashboard"></i> {{forumData.Subject.Title}}</a></li>
         <li class="active">انجمن</li>
     </ol>
 </section>
@@ -14,27 +14,9 @@
 
         <div class="col-md-8 col-xs-12 pull-right">
 
-            <div class="box box-success">
-                <div class="box-header">
-                    <h3 class="box-title vazir-font">موضوعات انجمن</h3>
-                    <i class="fa fa-file-text-o text-green"></i>
-                </div><!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <tbody>
-                        <tr class="link" ng-repeat="sc in forumData.SubjectChilds">
-                            <td style="vertical-align: middle;">{{sc.Title}}</td>
-                            <td style="vertical-align: middle;width: 100px" class="text-center text-muted">
-                                <span class="badge1 bg-yellow1 " style="font-size: 20px">{{sc.TotalQuestions }}</span><br>سوال
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div><!-- /.box-body -->
-            </div>
             <div class="box box-info">
                 <div class="box-header">
-                    <h3 class="box-title vazir-font">جدیدترین سوالات انجمن </h3>
+                    <h3 class="box-title vazir-font">جدیدترین سوالات {{forumData.Subject.Title}} </h3>
                     <i class="fa fa-question text-aqua"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
@@ -79,11 +61,11 @@
                         <tr class="link" ui-sref="question({id:q.ID})" ng-repeat="q in question.allAnswered">
                             <td  style="width: 50px;"><img class="img-circle" ng-src="{{q.Image}}"
                                                            style="width:40px"></td>
-                            <td style="vertical-align: middle;">{{q.FullName | subString :20}}</td>
-                            <td style="vertical-align: middle;">{{q.Title | subString :50}}</td>
-                            <td style="vertical-align: middle;">{{q.AnswersCount}} جواب </td>
+                            <td style="vertical-align: middle;">{{q.FullName | subString :20| pNumber}}</td>
+                            <td style="vertical-align: middle;">{{q.Title | subString :50| pNumber}}</td>
+                            <td style="vertical-align: middle;">{{q.AnswersCount| pNumber}} جواب </td>
                             <td style="vertical-align: middle;"><span class="persian-rtl text-muted">{{q.CreationDate |
-                                jalaliDate :'jYYYY/jMM/jDD'}}</span></td>
+                                jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span></td>
                         </tr>
                         </tbody>
                     </table>
@@ -116,7 +98,7 @@
                 <!--</div>&lt;!&ndash; /.box &ndash;&gt;-->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title vazir-font">آمار انجمن {{forumData.MainSubject.Title}}</h3>
+                    <h3 class="box-title vazir-font">آمار بخش {{forumData.Subject.Title}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <nvd3 options="options" data="data" class="with-3d-shadow with-transitions"></nvd3>

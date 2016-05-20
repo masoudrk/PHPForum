@@ -51,10 +51,10 @@
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-envelope-o"></i>
-                                <span class="label label-success">{{UserMessages.NewMessages}}</span>
+                            <span class="label label-success">{{UserMessages.NewMessages}}</span>
                         </a>
                         <ul class="dropdown-menu">
-                                <li class="header">شما {{UserMessages.NewMessages}} پیام جدید دارید!</li>
+                            <li class="header">شما {{UserMessages.NewMessages}} پیام جدید دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul  class="menu">
@@ -72,20 +72,20 @@
                                                     <i class="fa fa-question" aria-hidden="true"></i>
                                                     سوال
                                                 </span>
-                                                <small>- {{item.EventUser}}</small>
+                                            <small>- {{item.EventUser}}</small>
                                             <i ng-show="item.EventView !=null" class="fa fa-check text-success pull-left hvr-pulse" aria-hidden="true"></i>
-                                                <i ng-hide="item.EventView !=null" class="fa fa-eye text-danger pull-left hvr-pulse" aria-hidden="true"></i>
+                                            <i ng-hide="item.EventView !=null" class="fa fa-eye text-danger pull-left hvr-pulse" aria-hidden="true"></i>
                                             <small class="pull-left">{{item.EventDate | fromNow}}
                                             </small>
-                                            </h5>
-                                            <h5 class="text-right text-info" ui-sref="question({id:item.EventID})">{{item.EventTitle | subString :35}}
+                                        </h5>
+                                        <h5 class="text-right text-info" ui-sref="question({id:item.EventID})">{{item.EventTitle | subString :35}}
                                                 <span class="pull-left" dir="ltr" ng-show="item.EventScore !=null">
                                                     <i class="fa fa-thumbs-o-up"></i>
                                                     {{item.EventScore}}
                                                 </span>
-                                            </h5>
+                                        </h5>
                                         <hr />
-                                            <!--<div class="hr col-xs-12" style="margin-bottom:5px;margin-top:5px;"></div>-->
+                                        <!--<div class="hr col-xs-12" style="margin-bottom:5px;margin-top:5px;"></div>-->
                                     </li>
                                 </ul>
                             </li>
@@ -154,6 +154,38 @@
                             </li>
                         </ul>
                     </li>
+                    <!-- Messages: style can be found in dropdown.less-->
+                    <li class="dropdown messages-menu">
+                        <a class="dropdown-toggle link" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="label label-success">۴</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">شما {{UserMessages.NewMessages}} پیام جدید دارید!</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
+
+                                    <li ng-repeat="ou in socketData.OnlineUsers"><!-- start message -->
+                                        <a >
+                                            <div class="pull-right">
+                                                <img src="../images/Avatar.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4 class="vazir-font">
+                                               {{ou.FullName}}
+                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i> ۵ دقیق پیش</small>
+                                            </h4>
+                                            <p style="padding-top: 5px"> <i class="fa fa-circle text-success"></i>
+                                                آنلاین </p>
+
+                                        </a>
+                                    </li><!-- end message -->
+                                </ul>
+                            </li>
+                            <li class="footer"><a>نمایش همه پیام ها</a></li>
+                        </ul>
+                    </li>
+
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
@@ -339,12 +371,11 @@
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 
     <div class="content-wrapper" style="min-height: 600px;">
-
         <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60">
         </treasure-overlay-spinner>
         <!-- Content Wrapper. Contains page content -->
         <div ui-view ng-hide="globalSearchActive" id="mainContent" data-anim-speed="600"
-             class="anim-in-out anim-slide-below-fade" data-anim-sync="false"></div>
+             class="anim-in-out anim-slide-below-fade" data-anim-sync="true"></div>
         <div ng-show="globalSearchActive" ng-include src="'partials/GlobalSearch.html'" id="searchContent" ></div>
         <!-- /.content-wrapper -->
     </div>

@@ -52,7 +52,7 @@ function echoResponse($status_code, $response) {
     $app->contentType('application/json');
 
     echo json_encode($response);
-
+    die();
 }
 
 function echoError($message) {
@@ -82,16 +82,16 @@ function getIPAddress(){
 
 function userRequire($db){
     $sess = new Session();
-    
-    $rq = $db->makeQuery("SELECT count(*) as Count FROM user where user.ID='".$sess->UserID."' AND user.SessionID='"
-        .$sess->SSN
-        ."' AND 
-ValidSessionID=1");
-    $c = $rq->fetch_assoc()['Count'];
+
+    $rq = $db->makeQuery("SELECT u.ID FROM user as u
+where u.ID='".$sess->UserID."' AND u.SessionID='".$sess->SSN."' AND u.ValidSessionID=1 LIMIT 1");
+
+    $c=mysqli_num_rows($rq);
     if($c > 0){
+        $db->updateRecord('user',"LastActiveTime=Now()","ID='$sess->UserID' LIMIT 1");
         return TRUE;
     }
-    
+
     $sess->destroySession();
     $res = [];
     $res['AuthState'] = 'UN_AUTH';

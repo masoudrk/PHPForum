@@ -6,6 +6,22 @@ $app->post('/logout', function() use ($app)  {
     echoResponse(200, $res);
 });
 
+$app->post('/getSocketData', function() use ($app)  {
+    $db = new DbHandler(true);
+    $data = json_decode($app->request->getBody());
+
+    $resQ = $db->makeQuery('Select user.ID,user.FullName from user where user.LastActiveTime > NOW() - INTERVAL 10 MINUTE');
+
+    $arr = [];
+    $res = [];
+    while($r = $resQ->fetch_assoc()){
+        $arr[] = $r;
+    }
+
+    $res['OnlineUsers'] = $arr;
+    echoResponse(200, $res);
+});
+
 $app->post('/globalSearch', function() use ($app)  {
     $db = new DbHandler(true);
     $data = json_decode($app->request->getBody());
@@ -207,7 +223,7 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
     echoResponse(200, $res);
 });
 
-$app->post('/getForumMainData', function() use ($app)  {
+$app->post('/getMainForumData', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
@@ -234,21 +250,53 @@ FROM forum_subject WHERE forum_subject
     echoResponse(200, $res);
 });
 
+$app->post('/getSubForumData', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+
+    $resQ = $db->makeQuery("SELECT forum_subject.*,forum_main_subject.Title as MainTitle FROM forum_subject left join 
+    forum_main_subject on   forum_main_subject.SubjectID=forum_subject.ParentSubjectID WHERE  forum_subject
+    .ID='$data->SubjectID'");
+
+    $res = [];
+    $res['Subject'] = $resQ->fetch_assoc();
+
+    $resQ = $db->makeQuery("
+select @rownum := @rownum + 1 AS rank, count(*) as QTotal , DATE_FORMAT(fq.CreationDate , '%Y-%m-%d') as CreationDate
+from
+  (SELECT @rownum := 0) r ,forum_subject as fs
+  LEFT JOIN forum_question as fq on fq.SubjectID=fs.ID 
+  where fs.ID='$data->SubjectID' GROUP BY DAY(fq.CreationDate),fs.Title");
+
+    $res['ChartQData'] = $resQ->fetch_all();
+
+    $resQ = $db->makeQuery("
+select @rownum := @rownum + 1 AS rank, count(*) as QTotal , DATE_FORMAT(fq.CreationDate , '%Y-%m-%d') as CreationDate
+from
+  (SELECT @rownum := 0) r ,forum_answer as fa
+  LEFT JOIN forum_question as fq on fq.ID=fa.QuestionID
+
+where fq.SubjectID='$data->SubjectID'
+
+GROUP BY DAY(fq.CreationDate)");
+    $res['ChartAData'] = $resQ->fetch_all();
+    echoResponse(200, $res);
+});
+
 $app->post('/getForumLastQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
 
+    $pr = new Pagination($data);
     $subjectID = -1;
+
     if(isset($data->MainSubjectName)){
         $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
-                                forum_main_subject.SubjectName='$data->MainSubjectName'");
+                                forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
-    }
-
-    $pr = new Pagination($data);
-
-    $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
+        $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
 `FullPath` as Image ,
  (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' 
  FROM 
@@ -259,27 +307,38 @@ AND
 forum_subject
 .ParentSubjectID='$subjectID' order by forum_question.CreationDate desc";
 
-    $pageRes = $pr->getPage($db,$query);
+        $pageRes = $pr->getPage($db,$query);
+        echoResponse(200, $pageRes);
+    }
+    else if(isset($data->SubjectID)){
 
-    echoResponse(200, $pageRes);
+        $query = "SELECT user.FullName ,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
+`FullPath` as Image ,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' 
+ FROM forum_question  LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on 
+file_storage.ID=user.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
+.AdminAccepted='1' 
+AND forum_question.SubjectID='$data->SubjectID' order by forum_question.CreationDate desc";
+
+        $pageRes = $pr->getPage($db,$query);
+        echoResponse(200, $pageRes);
+    }
+    
+    echoError('Subject ID is not found.');
+
 });
 
 $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
 
-    $subjectID = -1;
+    $pr = new Pagination($data);
     if(isset($data->MainSubjectName)){
         $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
                                 forum_main_subject.SubjectName='$data->MainSubjectName'");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
-    }
-
-    $pr = new Pagination($data);
-
-
-    $query = "SELECT user.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
+        $query = "SELECT user.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
  forum_question.`CreationDate`,`FullPath` as Image ,AnswersCount FROM forum_question 
  LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=user.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
@@ -289,8 +348,26 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
  by s.AnswersCount 
  desc";
 
-    $pageRes = $pr->getPage($db,$query);
-    echoResponse(200, $pageRes);
+        $pageRes = $pr->getPage($db,$query);
+        echoResponse(200, $pageRes);
+    }
+    else if(isset($data->SubjectID)){
+
+        $query = "SELECT user.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
+ forum_question.`CreationDate`,`FullPath` as Image ,AnswersCount FROM forum_question 
+ LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=user.AvatarID
+ LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID from forum_answer group by forum_answer.QuestionID) s on 
+ s.QuestionID=forum_question.ID 
+ WHERE forum_question.AdminAccepted='1' AND forum_question.SubjectID='$data->SubjectID' AND s.AnswersCount > 0 order 
+ by s.AnswersCount 
+ desc";
+
+        $pageRes = $pr->getPage($db,$query);
+        echoResponse(200, $pageRes);
+    }
+
+
+
 });
 
 $app->post('/getUserProfile', function() use ($app)  {

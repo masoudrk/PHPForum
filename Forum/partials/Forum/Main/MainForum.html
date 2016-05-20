@@ -22,7 +22,7 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tbody>
-                        <tr class="link" ng-repeat="sc in forumData.SubjectChilds">
+                        <tr class="link" ng-repeat="sc in forumData.SubjectChilds" ui-sref="forum({id:sc.ID})">
                             <td style="vertical-align: middle;">{{sc.Title}}</td>
                             <td style="vertical-align: middle;width: 100px" class="text-center text-muted">
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">{{sc.TotalQuestions }}</span><br>سوال

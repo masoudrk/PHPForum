@@ -53,7 +53,7 @@ class DbHandler {
         return $r;
     }
     public function execute($query) {
-        $r = $this->conn->query($query) or die($this->conn->error.__LINE__);
+        $r = $this->conn->execute($query) or die($this->conn->error.__LINE__);
         return $r;
     }
     public function multiQuery($queries) {
