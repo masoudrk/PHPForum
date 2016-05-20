@@ -313,95 +313,87 @@
                             <span>مدیریت اعضا</span>
               </a>
             </li>
-            <li id="SQuestion" class="treeview">
-              <a class="link">
-                            <i class="fa fa-file-text-o"></i> <span>مدیریت مطالب</span>
-                <i class="fa fa-angle-right pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="SQuestionNew">
-                  <a ui-sref="new_question">
-                                    <i class="fa fa-question-circle"></i>
-                                    <span>مدیریت سوال ها</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
+                    <li id="SQuestions">
+                        <a ui-sref="new_question">
+                            <i class="fa fa-question-circle"></i>
+                            <span>مدیریت سوال ها</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="STransition">
+                                <a ui-sref="answers({id:'Transition'})" href="#/MainForum/Transition">
+                                    <i class="fa fa-circle-o"></i>
+                                    خطوط انتقال
                                 </a>
-                                <ul class="treeview-menu">
-                                    <li id="STransition">
-                                        <a ui-sref="main_forum({id:'Transition'})" href="#/MainForum/Transition">
-                                            <i class="fa fa-circle-o"></i>
-                                            خطوط انتقال
-                                        </a>
-                                    </li>
-                                    <li id="STransportManagement">
-                                        <a ui-sref="main_forum({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
-                                            <i class="fa
+                            </li>
+                            <li id="STransportManagement">
+                                <a ui-sref="answers({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
+                                    <i class="fa
                         fa-circle-o"></i>
-                                            نظارت بر سیستم های انتقال
-                                        </a>
-                                    </li>
-                                    <li id="SDataSwitch">
-                                        <a ui-sref="main_forum({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
-                                            <i class="fa fa-circle-o"></i>
-                                            مراکز خودکار و دیتا سوئیچ
-                                        </a>
-                                    </li>
-                                    <li id="SRadio">
-                                        <a ui-sref="main_forum({id:'Radio'})" href="#/MainForum/Radio">
-                                            <i class="fa fa-circle-o"></i>
-                                            رادیوئی
-                                        </a>
-                                    </li>
-                                    <li id="SCommonTopics" class="active">
-                                        <a ui-sref="main_forum({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
-                                            <i class="fa fa-circle-o"></i>
-                                            مباحث مشترک
-                                        </a>
-                                    </li>
-                                </ul>
-                </li>
-                <li id="SQuestions">
-                                <a ui-sref="questions">
-                                    <i class="fa fa-pencil"></i>
-                                    <span>مدیریت جواب ها</span>
-                                    <i class="fa fa-angle-right pull-right"></i>
-                  </a>
+                                    <span style="font-size:13px">نظارت بر سیستم های انتقال</span>
+                                </a>
+                            </li>
+                            <li id="SDataSwitch">
+                                <a ui-sref="answers({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
+                                    <i class="fa fa-circle-o"></i>
+                                    مراکز خودکار و دیتا سوئیچ
+                                </a>
+                            </li>
+                            <li id="SRadio">
+                                <a ui-sref="answers({id:'Radio'})" href="#/MainForum/Radio">
+                                    <i class="fa fa-circle-o"></i>
+                                    رادیوئی
+                                </a>
+                            </li>
+                            <li id="SCommonTopics" class="active">
+                                <a ui-sref="answers({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
+                                    <i class="fa fa-circle-o"></i>
+                                    مباحث مشترک
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="SAnswers">
+                        <a ui-sref="questions">
+                            <i class="fa fa-pencil"></i>
+                            <span>مدیریت جواب ها</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
 
-                                <ul class="treeview-menu">
-                                    <li id="STransition">
-                                        <a ui-sref="main_forum({id:'Transition'})" href="#/MainForum/Transition">
-                                            <i class="fa fa-circle-o"></i>
-                                            خطوط انتقال
-                                        </a>
-                                    </li>
-                                    <li id="STransportManagement">
-                                        <a ui-sref="main_forum({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
-                                            <i class="fa
+                        <ul class="treeview-menu">
+                            <li id="STransition">
+                                <a ui-sref="answers({id:'Transition'})" href="#/MainForum/Transition">
+                                    <i class="fa fa-circle-o"></i>
+                                    خطوط انتقال
+                                </a>
+                            </li>
+                            <li id="STransportManagement">
+                                <a ui-sref="answers({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
+                                    <i class="fa
                         fa-circle-o"></i>
-                                            نظارت بر سیستم های انتقال
-                                        </a>
-                                    </li>
-                                    <li id="SDataSwitch">
-                                        <a ui-sref="main_forum({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
-                                            <i class="fa fa-circle-o"></i>
-                                            مراکز خودکار و دیتا سوئیچ
-                                        </a>
-                                    </li>
-                                    <li id="SRadio">
-                                        <a ui-sref="main_forum({id:'Radio'})" href="#/MainForum/Radio">
-                                            <i class="fa fa-circle-o"></i>
-                                            رادیوئی
-                                        </a>
-                                    </li>
-                                    <li id="SCommonTopics" class="active">
-                                        <a ui-sref="main_forum({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
-                                            <i class="fa fa-circle-o"></i>
-                                            مباحث مشترک
-                                        </a>
-                                    </li>
-                                </ul>
-                </li>
-              </ul>
-            </li>
+                                    نظارت بر سیستم های انتقال
+                                </a>
+                            </li>
+                            <li id="SDataSwitch">
+                                <a ui-sref="answers({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
+                                    <i class="fa fa-circle-o"></i>
+                                    مراکز خودکار و دیتا سوئیچ
+                                </a>
+                            </li>
+                            <li id="SRadio">
+                                <a ui-sref="answers({id:'Radio'})" href="#/MainForum/Radio">
+                                    <i class="fa fa-circle-o"></i>
+                                    رادیوئی
+                                </a>
+                            </li>
+                            <li id="SCommonTopics" class="active">
+                                <a ui-sref="answers({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
+                                    <i class="fa fa-circle-o"></i>
+                                    مباحث مشترک
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
             <li id="SSubjects" class="treeview">
               <a class="link">
                 <i class="fa fa-bookmark"></i> <span>مدیریت موضوعات</span>

@@ -44,7 +44,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return $ocLazyLoad.load(['partials/Admin/User/AllUsersCtrl.js', '../app/directives/auto-pagination.js']);
                 }],
                 $title: function () {
-                    return 'همه اعضا';
+                    return 'مدیریت اعضا';
+                }
+            }
+        }).state("answers", {
+            url: "/answers/:id",
+            templateUrl: "partials/Admin/Answers/Answers.html",
+            controller: 'AnswersCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Answers/Answers.js', '../app/directives/auto-pagination.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت جواب ها';
                 }
             }
         }).state("elements", {

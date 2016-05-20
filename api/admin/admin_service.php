@@ -63,6 +63,33 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
 	echoError("User state is not set!");
 });
 
+$app->post('/getAllAnswers', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+	$pr = new Pagination($data);
+	$sess = new Session();
+
+	$where = "WHERE fms.SubjectName = '$data->SubjectName'";
+	$hasWhere = FALSE;
+    if(isset($data->answerType)){
+        $where .=" AND (fa.AdminAccepted ='$data->answerType')";
+	}
+	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
+		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
+		$where .= " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
+		$hasWhere = TRUE;
+	}
+
+	$pageRes = $pr->getPage($db,"SELECT fa.* ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID FROM forum_answer as fa INNER JOIN forum_question as fq on fq.ID = fa.QuestionID
+INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
+INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
+INNER join user as u on u.ID = fa.AuthorID
+LEFT JOIN file_storage as fis on fis.ID = u.AvatarID ".$where." ORDER BY fa.ID desc");
+
+	echoResponse(200, $pageRes);
+});
+
 $app->post('/getAllUsers', function() use ($app)  {
 
 	$db = new DbHandler(true);
