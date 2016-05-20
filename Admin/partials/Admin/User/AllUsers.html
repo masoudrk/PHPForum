@@ -17,7 +17,19 @@
                 <div class="box-header">
                     <h3 class="box-title vazir-font">اعضا</h3>
                     <div class="box-tools">
-                        <div class="input-group" style="width: 200px;">
+                        <div class="input-group col-xs-9 col-md-4">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius:3px;border-top-right-radius:3px;">
+                                  {{dropDwonTitle}}
+                                    <span class="fa fa-caret-down"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی اعضا</a></li>
+                                    <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">اعضای تایید شده</a></li>
+                                    <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">اعضا در انتظار تایید</a></li>
+                                    <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">اعضای تایید نشده</a></li>
+                                </ul>
+                            </div>
                             <input type="text" name="table_search" ng-model="pagingParams.searchValue"
                                    ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
                                    placeholder="جستجو ...">
@@ -53,13 +65,13 @@
                             </td>
                             <td>{{u.Email}}</td>
                             <td>
-                                <div class="table-action-icons" ng-if="adminSession.AdminPermission=='Base'">
+                                <div class="table-action-icons" ng-if="session.AdminPermission=='Base'">
                                     <i confirm="آیا مطمئن هستید که میخواهید این کاربر '{{u.FullName}}' را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeUser(u.ID)"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.UserAccepted==1" style="color: #e67e22;"
                                        ng-click="changeUserState(u.ID ,-1)"></i>
                                     <i class="fa fa-check text-blue link hvr-grow"
-                                       ng-if="u.UserAccepted==-1 || u.UserAccepted==0" ng-click="changeUserState(u.ID ,1)" ></i>
+                                       ng-if="u.UserAccepted==-1 || u.UserAccepted==0" ng-click="changeUserState(u.ID ,1)"></i>
                                 </div>
                             </td>
                         </tr>

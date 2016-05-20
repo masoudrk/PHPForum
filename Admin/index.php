@@ -308,32 +308,97 @@
           <ul class="sidebar-menu">
 
             <li class="treeview">
-              <a>
+                        <a ui-sref="all_users">
                 <i class="fa fa-user"></i>
-                <span>اعضا</span>
-                <i class="fa fa-angle-right pull-right"></i>
+                            <span>مدیریت اعضا</span>
               </a>
-              <ul class="treeview-menu">
-                <li><a ui-sref="all_users"><i class="fa fa-circle-o"></i> همه اعضا</a></li>
-                <li><a ><i class="fa fa-circle-o"></i> اعضا تایید شده</a></li>
-                <li><a ><i class="fa fa-circle-o"></i> اعضا تایید نشده</a></li>
-              </ul>
             </li>
             <li id="SQuestion" class="treeview">
               <a class="link">
-                <i class="fa fa-question-circle"></i> <span>مدیریت سوال ها</span>
+                            <i class="fa fa-file-text-o"></i> <span>مدیریت مطالب</span>
                 <i class="fa fa-angle-right pull-right"></i>
               </a>
               <ul class="treeview-menu">
                 <li id="SQuestionNew">
                   <a ui-sref="new_question">
-                    <i class="fa fa-circle-o"></i>سوال های جدید
-                  </a>
+                                    <i class="fa fa-question-circle"></i>
+                                    <span>مدیریت سوال ها</span>
+                                    <i class="fa fa-angle-right pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li id="STransition">
+                                        <a ui-sref="main_forum({id:'Transition'})" href="#/MainForum/Transition">
+                                            <i class="fa fa-circle-o"></i>
+                                            خطوط انتقال
+                                        </a>
+                                    </li>
+                                    <li id="STransportManagement">
+                                        <a ui-sref="main_forum({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
+                                            <i class="fa
+                        fa-circle-o"></i>
+                                            نظارت بر سیستم های انتقال
+                                        </a>
+                                    </li>
+                                    <li id="SDataSwitch">
+                                        <a ui-sref="main_forum({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
+                                            <i class="fa fa-circle-o"></i>
+                                            مراکز خودکار و دیتا سوئیچ
+                                        </a>
+                                    </li>
+                                    <li id="SRadio">
+                                        <a ui-sref="main_forum({id:'Radio'})" href="#/MainForum/Radio">
+                                            <i class="fa fa-circle-o"></i>
+                                            رادیوئی
+                                        </a>
+                                    </li>
+                                    <li id="SCommonTopics" class="active">
+                                        <a ui-sref="main_forum({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
+                                            <i class="fa fa-circle-o"></i>
+                                            مباحث مشترک
+                                        </a>
+                                    </li>
+                                </ul>
                 </li>
                 <li id="SQuestions">
-                  <a ui-sref="questions">
-                    <i class="fa fa-circle-o"></i>لیست سوالات
+                                <a ui-sref="questions">
+                                    <i class="fa fa-pencil"></i>
+                                    <span>مدیریت جواب ها</span>
+                                    <i class="fa fa-angle-right pull-right"></i>
                   </a>
+
+                                <ul class="treeview-menu">
+                                    <li id="STransition">
+                                        <a ui-sref="main_forum({id:'Transition'})" href="#/MainForum/Transition">
+                                            <i class="fa fa-circle-o"></i>
+                                            خطوط انتقال
+                                        </a>
+                                    </li>
+                                    <li id="STransportManagement">
+                                        <a ui-sref="main_forum({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
+                                            <i class="fa
+                        fa-circle-o"></i>
+                                            نظارت بر سیستم های انتقال
+                                        </a>
+                                    </li>
+                                    <li id="SDataSwitch">
+                                        <a ui-sref="main_forum({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
+                                            <i class="fa fa-circle-o"></i>
+                                            مراکز خودکار و دیتا سوئیچ
+                                        </a>
+                                    </li>
+                                    <li id="SRadio">
+                                        <a ui-sref="main_forum({id:'Radio'})" href="#/MainForum/Radio">
+                                            <i class="fa fa-circle-o"></i>
+                                            رادیوئی
+                                        </a>
+                                    </li>
+                                    <li id="SCommonTopics" class="active">
+                                        <a ui-sref="main_forum({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
+                                            <i class="fa fa-circle-o"></i>
+                                            مباحث مشترک
+                                        </a>
+                                    </li>
+                                </ul>
                 </li>
               </ul>
             </li>
@@ -394,7 +459,7 @@
 
       <footer class="main-footer persian-rtl" >
         <div class="pull-left hidden-xs">
-          <b>نسخه</b> 2.3.0
+          <b>نسخه</b> 1.0.0
         </div>
             <strong class="persian-rtl"></strong>
             حقوق مادی و معنوی مطعلق به اداره کل علائم و ارتباطات راه آهن جمهوری اسلامی ایران است
