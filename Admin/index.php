@@ -320,32 +320,32 @@
                             <i class="fa fa-angle-right pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="STransition">
+                            <li id="SSTransition">
                                 <a ui-sref="answers({id:'Transition'})" href="#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
                                 </a>
                             </li>
-                            <li id="STransportManagement">
+                            <li id="SSTransportManagement">
                                 <a ui-sref="answers({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
                                     <i class="fa
                         fa-circle-o"></i>
                                     <span style="font-size:13px">نظارت بر سیستم های انتقال</span>
                                 </a>
                             </li>
-                            <li id="SDataSwitch">
+                            <li id="SSDataSwitch">
                                 <a ui-sref="answers({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
                                 </a>
                             </li>
-                            <li id="SRadio">
+                            <li id="SSRadio">
                                 <a ui-sref="answers({id:'Radio'})" href="#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
                                 </a>
                             </li>
-                            <li id="SCommonTopics" class="active">
+                            <li id="SSCommonTopics" class="active">
                                 <a ui-sref="answers({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
@@ -409,7 +409,7 @@
                     <i class="fa fa-circle-o"></i>مدیریت تگ ها
                   </a>
                 </li>
-                <li id="SQuestions">
+                <li id="">
                   <a ui-sref="questions">
                     <i class="fa fa-circle-o"></i>مدیریت تحصیلات
                   </a>

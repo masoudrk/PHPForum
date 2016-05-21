@@ -63,6 +63,60 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
 	echoError("User state is not set!");
 });
 
+$app->post('/deleteAnswer', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+                    $resQ = $db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$data->AdminPermissionLevel')
+LIMIT 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $db->deleteFromTable('forum_answer',"ID='$data->AnswerID'");
+	if($res)
+		echoSuccess();
+	else
+		echoError("Cannot update record.");
+});
+
+$app->post('/changeAnswerAccepted', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	if(isset($data->State)){
+		if($data->State=='1' || $data->State=='-1'){
+			$sess = new Session();
+
+                    $resQ = $db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$data->AdminPermissionLevel')
+LIMIT 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+			$res = $db->updateRecord('forum_answer',"AdminAccepted='$data->State'","ID='$data->AnswerID'");
+			if($res)
+				echoSuccess();
+			else
+				echoError("Cannot update record.");
+		}else{
+			echoError("Sended value:$data->State is not valid!");
+		}
+	}
+
+	echoError("User state is not set!");
+});
+
 $app->post('/getAllAnswers', function() use ($app)  {
 
 	$db = new DbHandler(true);

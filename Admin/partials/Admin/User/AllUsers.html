@@ -65,7 +65,7 @@
                             </td>
                             <td>{{u.Email}}</td>
                             <td>
-                                <div class="table-action-icons" ng-if="session.AdminPermission=='Base'">
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
                                     <i confirm="آیا مطمئن هستید که میخواهید این کاربر '{{u.FullName}}' را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeUser(u.ID)"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.UserAccepted==1" style="color: #e67e22;"

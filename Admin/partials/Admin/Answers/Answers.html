@@ -51,7 +51,7 @@
                             <th>ایمیل</th>
                             <th style="width: 150px;"></th>
                         </tr>
-                        <tr ng-repeat="u in user.all">
+                        <tr ng-repeat="u in answer.all">
                             <td>
                                 <img src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
                             </td>
@@ -65,8 +65,8 @@
                             </td>
                             <td>{{u.Email}}</td>
                             <td>
-                                <div class="table-action-icons" ng-if="session.AdminPermission=='Base'">
-                                    <i confirm="آیا مطمئن هستید که میخواهید این کاربر '{{u.FullName}}' را حذف کنید؟"
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این جواب را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeAnswer(u.ID)"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1" style="color: #e67e22;"
                                        ng-click="changeAnswerState(u.ID ,-1)"></i>
@@ -81,21 +81,13 @@
                     </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix text-center">
-                    <!--<ul class="pagination pagination-sm no-margin">-->
-                    <!--<li><a href="#/">«</a></li>-->
-                    <!--<li><a href="#/">۱</a></li>-->
-                    <!--<li><a href="#/">۲</a></li>-->
-                    <!--<li><a href="#/">۳</a></li>-->
-                    <!--<li><a href="#/">»</a></li>-->
-                    <!--</ul>-->
-
                     <auto-paging page="1"
                                  page-size="20"
                                  ul-class="pagination pagination-sm no-margin"
                                  action-name="getAllAnswers"
                                  data-params="pagingParams"
                                  ng-control="pagingController"
-                                 items="user.all">
+                                 items="answer.all">
                     </auto-paging>
                 </div>
             </div><!-- /.box -->
