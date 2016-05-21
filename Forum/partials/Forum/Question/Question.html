@@ -50,9 +50,11 @@
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red-active">
                     <a href="#/" style="cursor: pointer; color: white">
-                        <h3 class="widget-user-username">{{question.FullName}}</h3>
+                        <h3 class="widget-user-username">{{question.FullName}}</h3><br>
+
                     </a>
-                    <h5 class="widget-user-desc">{{question.Description}}</h5>
+                    <h5 class="widget-user-desc" ng-show="isOnline">
+                                آنلاین <i class="fa fa-circle text-green"></i> </h5>
                 </div>
                     <div class="widget-user-image" style="cursor: pointer">
                         <img class="img-circle" ui-sref="UserProfile({id:question.UserID})" src="{{question.FullPath}}" alt="User Avatar">

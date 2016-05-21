@@ -57,36 +57,76 @@
                             <li class="header">شما {{UserMessages.NewMessages}} پیام جدید دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
-                                <ul  class="menu">
-                                    <li style="margin:10px" ng-repeat="item in UserMessages" class="persian-rtl link">
-                                        <h5 class="text-right" ui-sref="question({id:item.EventID})">
-                                                <span ng-show="item.EventType =='Person'">
-                                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                                    سوال
+                                <ul class="menu">
+                                    <li ng-repeat="item in UserMessages"><!-- start event -->
+                                        <a ui-sref="question({id:item.EventID})">
+                                            <div class="pull-right">
+                                                <img src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
+                                                     class="img-circle"
+                                                     alt="User Image">
+                                            </div>
+                                            <h4 class="vazir-font">
+                                                {{ou.FullName}}
+                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i>
+                                                    {{item.EventDate | fromNow |pNumber}}</small>
+                                            </h4>
+                                            <h5 class="text-right" style="margin-top: 0px;margin-bottom: 5px;">
+                                                {{item.EventUser|pNumber}}
+                                            </h5>
+                                            <p  ng-switch="item.EventType">
+                                                <span class="label label-warning" style="font-size: 10px"
+                                                      ng-switch-when="Person">
+                                                   سوال جدید
                                                 </span>
-                                                <span ng-show="item.EventType =='Answer'">
-                                                    <i class="fa fa-reply" aria-hidden="true"></i>
+                                                <span class="label label-warning" style="font-size: 10px"
+                                                      ng-switch-when="Answer">
                                                     پاسخ
                                                 </span>
-                                                <span ng-show="item.EventType =='Question'">
-                                                    <i class="fa fa-question" aria-hidden="true"></i>
-                                                    سوال
+                                                <span class="label label-warning" style="font-size: 10px"
+                                                      ng-switch-when="Question">
+                                                     سوال جدید
                                                 </span>
-                                            <small>- {{item.EventUser}}</small>
-                                            <i ng-show="item.EventView !=null" class="fa fa-check text-success pull-left hvr-pulse" aria-hidden="true"></i>
-                                            <i ng-hide="item.EventView !=null" class="fa fa-eye text-danger pull-left hvr-pulse" aria-hidden="true"></i>
-                                            <small class="pull-left">{{item.EventDate | fromNow}}
-                                            </small>
-                                        </h5>
-                                        <h5 class="text-right text-info" ui-sref="question({id:item.EventID})">{{item.EventTitle | subString :35}}
-                                                <span class="pull-left" dir="ltr" ng-show="item.EventScore !=null">
+                                            </p>
+                                            <p class="text-right text-info" ui-sref="question({id:item.EventID})"
+                                               style="margin-top: 5px;">
+                                                <span style="margin-right: 5px;">
+                                                    سوال : {{item.EventTitle | subString :100|pNumber}}
+                                                </span>
+                                                <span class="pull-left" dir="ltr" ng-show="item.EventScore">
                                                     <i class="fa fa-thumbs-o-up"></i>
-                                                    {{item.EventScore}}
+                                                    {{item.EventScore|pNumber}}
                                                 </span>
-                                        </h5>
-                                        <hr />
-                                        <!--<div class="hr col-xs-12" style="margin-bottom:5px;margin-top:5px;"></div>-->
-                                    </li>
+                                            </p>
+                                        </a>
+                                    </li><!-- end event -->
+<!--                                    <li style="margin:10px" ng-repeat="item in UserMessages" class="persian-rtl link">-->
+<!--                                        <h5 class="text-right" ui-sref="question({id:item.EventID})">-->
+<!--                                                <span ng-show="item.EventType =='Person'">-->
+<!--                                                    <i class="fa fa-user" aria-hidden="true"></i>-->
+<!--                                                    سوال-->
+<!--                                                </span>-->
+<!--                                                <span ng-show="item.EventType =='Answer'">-->
+<!--                                                    <i class="fa fa-reply" aria-hidden="true"></i>-->
+<!--                                                    پاسخ-->
+<!--                                                </span>-->
+<!--                                                <span ng-show="item.EventType =='Question'">-->
+<!--                                                    <i class="fa fa-question" aria-hidden="true"></i>-->
+<!--                                                    سوال-->
+<!--                                                </span>-->
+<!--                                            <small>- {{item.EventUser}}</small>-->
+<!--                                            <i ng-show="item.EventView !=null" class="fa fa-check text-success pull-left hvr-pulse" aria-hidden="true"></i>-->
+<!--                                            <i ng-hide="item.EventView !=null" class="fa fa-eye text-danger pull-left hvr-pulse" aria-hidden="true"></i>-->
+<!--                                            <small class="pull-left">{{item.EventDate | fromNow}}-->
+<!--                                            </small>-->
+<!--                                        </h5>-->
+<!--                                        <h5 class="text-right text-info" ui-sref="question({id:item.EventID})">{{item.EventTitle | subString :35}}-->
+<!--                                                <span class="pull-left" dir="ltr" ng-show="item.EventScore !=null">-->
+<!--                                                    <i class="fa fa-thumbs-o-up"></i>-->
+<!--                                                    {{item.EventScore}}-->
+<!--                                                </span>-->
+<!--                                        </h5>-->
+<!--                                        <hr />-->
+<!--                                    </li>-->
                                 </ul>
                             </li>
                             <li class="footer"><a>نمایش همه پیام ها</a></li>
