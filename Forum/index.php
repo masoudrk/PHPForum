@@ -51,7 +51,7 @@
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="label label-success">{{UserMessages.NewMessages}}</span>
+                            <span class="label label-success" ng-bind="UserMessages.NewMessages | pNumber"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">شما {{UserMessages.NewMessages}} پیام جدید دارید!</li>
@@ -157,32 +157,37 @@
                     <!-- Messages: style can be found in dropdown.less-->
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown" aria-expanded="true">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="label label-success">۴</span>
+                            <i class="fa fa-headphones"></i>
+                            <span class="label label-danger" ng-show="socketData.OnlineUsers.length"
+                                  ng-bind="socketData.OnlineUsers.length | pNumber">
+                            </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما {{UserMessages.NewMessages}} پیام جدید دارید!</li>
+                            <li class="header">{{socketData.OnlineUsers.length|pNumber}} نفر آنلاین </li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
 
                                     <li ng-repeat="ou in socketData.OnlineUsers"><!-- start message -->
-                                        <a >
+                                        <a ui-sref="UserProfile({id:ou.ID})">
                                             <div class="pull-right">
-                                                <img src="../images/Avatar.jpg" class="img-circle" alt="User Image">
+                                                <img src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
+                                                     class="img-circle"
+                                                     alt="User
+                                                Image">
                                             </div>
                                             <h4 class="vazir-font">
                                                {{ou.FullName}}
-                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i> ۵ دقیق پیش</small>
+                                                <small class="persian-rtl"><i class="fa fa-clock-o"></i>
+                                                    {{ou.LastActiveTime | fromNow |pNumber}}</small>
                                             </h4>
-                                            <p style="padding-top: 5px"> <i class="fa fa-circle text-success"></i>
+                                            <p style="padding-top: 5px"> <i class="fa fa-circle text-green"></i>
                                                 آنلاین </p>
 
                                         </a>
                                     </li><!-- end message -->
                                 </ul>
                             </li>
-                            <li class="footer"><a>نمایش همه پیام ها</a></li>
                         </ul>
                     </li>
 
@@ -246,7 +251,7 @@
                 </a>
                 <div class="pull-left info">
                     <p><a ui-sref="profile" ng-bind="user.FullName"></a></p>
-                    <a>آنلاین <i class="fa fa-circle text-success"></i></a>
+                    <a>آنلاین <i class="fa fa-circle text-green"></i></a>
                 </div>
             </div>
             <!-- search form -->

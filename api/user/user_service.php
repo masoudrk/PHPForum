@@ -8,9 +8,11 @@ $app->post('/logout', function() use ($app)  {
 
 $app->post('/getSocketData', function() use ($app)  {
     $db = new DbHandler(true);
-    $data = json_decode($app->request->getBody());
+    $s = new Session();
 
-    $resQ = $db->makeQuery('Select user.ID,user.FullName from user where user.LastActiveTime > NOW() - INTERVAL 10 MINUTE');
+    $resQ = $db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image from user LEFT JOIN file_storage on 
+    file_storage.ID=user.AvatarID 
+ where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 80 MINUTE");
 
     $arr = [];
     $res = [];
