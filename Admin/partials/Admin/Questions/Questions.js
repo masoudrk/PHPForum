@@ -9,8 +9,8 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 		$scope.pagingController.update();
 	}
 
-	$scope.changeQuestionState = function (uid, s) {
-	    Extention.post('changeQuestionAccepted', { State: s, QuestionID: uid, AdminPermissionLevel: session.AdminPermissionLevel }).then(function (res) {
+	$scope.changeQuestionState = function (uid, s, AuthorID ) {
+	    Extention.post('changeQuestionAccepted', { State: s, QuestionID: uid, AdminPermissionLevel: session.AdminPermissionLevel, UserID: AuthorID }).then(function (res) {
 			if(res && res.Status == 'success'){
 			    Extention.popSuccess("وضعیت سوال با موفقیت تغییر کرد!");
 				$scope.pagingController.update();
@@ -19,8 +19,8 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 			}
 		});
 	}
-	$scope.removeQuestion = function (uid) {
-	    Extention.post('deleteQuestion', { QuestionID: uid, AdminPermissionLevel: session.AdminPermissionLevel }).then(function (res) {
+	$scope.removeQuestion = function (uid ,AuthorID) {
+	    Extention.post('deleteQuestion', { QuestionID: uid, AdminPermissionLevel: session.AdminPermissionLevel, UserID: AuthorID }).then(function (res) {
 			if(res && res.Status=='success'){
 			    Extention.popSuccess("سوال با موفقیت حذف شد!");
 				$scope.pagingController.update();
@@ -53,12 +53,13 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	}
 
 
-	$scope.openRoleModal = function (text) {
+	$scope.openRoleModal = function (title , text ) {
 	    $uibModal.open({
 	        animation: true,
 	        templateUrl: 'myModalContent.html',
 	        controller: function ($scope, $uibModalInstance) {
 	            $scope.Text = text;
+	            $scope.Title = title;
 	            $scope.cancel = function () {
 	                $uibModalInstance.dismiss('cancel');
 	            };
