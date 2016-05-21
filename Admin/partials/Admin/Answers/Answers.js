@@ -1,6 +1,6 @@
 
 angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, Extention, $stateParams, $uibModal) {
-
+    $scope.adminType = $stateParams.id;
     $scope.pagingParams = { SubjectName: $stateParams.id, answerType: null};
 	$scope.pagingController = {};
     $scope.dropDwonTitle = 'نمایش جواب ها';
@@ -9,22 +9,22 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 		$scope.pagingController.update();
 	}
 	$scope.changeAnswerState = function (uid, s) {
-		Extention.post('changeUserAccepted',{State : s,AnswerID:uid}).then(function (res) {
+	    Extention.post('changeAnswerAccepted', { State: s, AnswerID: uid, AdminPermissionLevel: session.AdminPermissionLevel }).then(function (res) {
 			if(res && res.Status == 'success'){
-				Extention.popSuccess("وضعیت کاربر با موفقیت تغییر کرد!");
+			    Extention.popSuccess("وضعیت جواب با موفقیت تغییر کرد!");
 				$scope.pagingController.update();
 			}else{
-				Extention.popError("مشکل در تغییر وضعیت کاربر ، لطفا دوباره تلاش کنید.");
+			    Extention.popError("مشکل در تغییر وضعیت جواب ، لطفا دوباره تلاش کنید.");
 			}
 		});
 	}
 	$scope.removeAnswer = function (uid) {
-	    Extention.post('deleteUser', { AnswerID: uid }).then(function (res) {
+	    Extention.post('deleteAnswer', { AnswerID: uid, AdminPermissionLevel: session.AdminPermissionLevel }).then(function (res) {
 			if(res && res.Status=='success'){
-				Extention.popSuccess("کاربر با موفقیت حذف شد!");
+				Extention.popSuccess("جواب با موفقیت حذف شد!");
 				$scope.pagingController.update();
 			}else{
-				Extention.popError("مشکل در حذف کاربر ، لطفا دوباره امتحان کنید.");
+			    Extention.popError("مشکل در حذف جواب ، لطفا دوباره امتحان کنید.");
 			}
 		});
 	}

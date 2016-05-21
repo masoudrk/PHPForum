@@ -12,6 +12,7 @@ class Session {
 	public $IsAdmin;
 	public $AdminID;
 	public $AdminPermission;
+	public $AdminPermissionLevel;
 	public $SignupDate;
 	public $Image;
 
@@ -30,6 +31,7 @@ class Session {
 			$this->Image = $_SESSION['Image'];
 
 			if($this->IsAdmin){
+				$this->AdminPermissionLevel = $_SESSION['AdminPermissionLevel'];
 				$this->AdminPermission = $_SESSION['AdminPermission'];
 				$this->AdminID = $_SESSION['AdminID'];
 			}
@@ -68,6 +70,7 @@ class Session {
 			unset($_SESSION['IsAdmin']);
 			unset($_SESSION['AdminID']);
 			unset($_SESSION['AdminPermission']);
+			unset($_SESSION['AdminPermissionLevel']);
 			unset($_SESSION['SignupDate']);
 			unset($_SESSION['Image']);
 			unset($_SESSION['FirstName']);

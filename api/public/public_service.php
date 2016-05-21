@@ -175,7 +175,8 @@ $app->post('/signInUser', function() use ($app)  {
             $response['SignupDate'] = $user['SignupDate'];
             if($IsAdmin){
                 $response['AdminID'] = $admin['ID'];
-                $response['AdminPermission'] = $admin['PermissionLevel'];
+                $response['AdminPermissionLevel'] = $admin['PermissionLevel'];
+                $response['AdminPermission'] = $admin['Permission'];
             }
 
             if (!isset($_SESSION)) {
@@ -194,7 +195,8 @@ $app->post('/signInUser', function() use ($app)  {
 
             if($IsAdmin){
                 $_SESSION['AdminID'] = $admin['ID'];
-                $_SESSION['AdminPermission'] = $admin['PermissionLevel'];
+                $_SESSION['AdminPermissionLevel'] = $admin['PermissionLevel'];
+                $_SESSION['AdminPermission'] = $admin['Permission'];
             }
         } else {
             $response['Status'] = "error";
