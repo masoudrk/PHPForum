@@ -15,6 +15,7 @@ angular.module(appName).controller('UserProfileCtrl', function ($scope, $rootSco
 
     $scope.checkNowOnline = function () {
         var ous =  $scope.socketData.OnlineUsers;
+        
         for (var i = 0 ; i < ous.length ; i++){
             if($scope.userID == ous[i].ID ){
                 $scope.isOnline = true;

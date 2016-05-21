@@ -12,7 +12,7 @@ $app->post('/getSocketData', function() use ($app)  {
 
     $resQ = $db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image from user LEFT JOIN file_storage on 
     file_storage.ID=user.AvatarID 
- where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 80 MINUTE");
+ where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 3 MINUTE");
 
     $arr = [];
     $res = [];
@@ -479,7 +479,7 @@ inner join user as u on u.ID = q.AuthorID
 inner join file_storage as f on f.ID = u.AvatarID
 inner join forum_subject as s on q.SubjectID = s.ID
 inner join forum_main_subject as ms on ms.ID = s.ParentSubjectID
-left join organ_position as o on u.OrganizationID = o.ID
+inner join organ_position as o on u.OrganizationID = o.ID
 where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
@@ -720,7 +720,9 @@ $app->post('/saveUserAddintionalInfo', function() use ($app)  {
     $db = new DbHandler(true);
     $sess = new Session();
 
-    $db->updateRecord('user',"Description='$data->Description'",'ID='.$sess->UserID);
+    $q = "Description='$data->Description'".((isset($data->GenderSelected))?",Gender='$data->GenderSelected'":"");
+
+    $db->updateRecord('user' ,$q ,"ID='$sess->UserID'");
 
     $d = $db->deleteFromTable('user_skill','UserID='.$sess->UserID);
     if(isset($data->Skills)){

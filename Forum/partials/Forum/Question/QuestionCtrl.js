@@ -1,13 +1,33 @@
 ﻿angular.module(appName).controller('QuestionCtrl', function ($scope, $element, $rootScope, $routeParams, $state, $location, $timeout, $stateParams, Extention) {
 
+    $scope.isOnline = false;
     $scope.question = {};
+
     Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
         $scope.question = res;
         console.log($scope.question);
-        $timeout(() => {
+        $scope.checkNowOnline();
+        $timeout(function () {
             fixFooter();
-        });
+        } );
     });
+
+    $rootScope.$on("socketDataChanged", function(){
+        $scope.checkNowOnline();
+    });
+
+    $scope.checkNowOnline = function () {
+        if(!$scope.question.UserID)
+            return;
+        var ous =  $scope.socketData.OnlineUsers;
+        for (var i = 0 ; i < ous.length ; i++){
+            if($scope.question.UserID == ous[i].ID ){
+                $scope.isOnline = true;
+                return;
+            }
+        }
+        $scope.isOnline = false;
+    }
 
     $scope.saveAnswer = function() {
         if (!$scope.answerText || $scope.answerText.length == 0) {
