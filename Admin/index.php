@@ -321,32 +321,32 @@
                         </a>
                         <ul class="treeview-menu">
                             <li id="SSTransition">
-                                <a ui-sref="answers({id:'Transition'})" href="#/MainForum/Transition">
+                                <a ui-sref="questions({id:'Transition'})" href="#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
                                 </a>
                             </li>
                             <li id="SSTransportManagement">
-                                <a ui-sref="answers({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
+                                <a ui-sref="questions({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
                                     <i class="fa
                         fa-circle-o"></i>
                                     <span style="font-size:13px">نظارت بر سیستم های انتقال</span>
                                 </a>
                             </li>
                             <li id="SSDataSwitch">
-                                <a ui-sref="answers({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
+                                <a ui-sref="questions({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
                                 </a>
                             </li>
                             <li id="SSRadio">
-                                <a ui-sref="answers({id:'Radio'})" href="#/MainForum/Radio">
+                                <a ui-sref="questions({id:'Radio'})" href="#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
                                 </a>
                             </li>
                             <li id="SSCommonTopics" class="active">
-                                <a ui-sref="answers({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
+                                <a ui-sref="questions({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
                                 </a>

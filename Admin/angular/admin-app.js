@@ -59,6 +59,18 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'مدیریت جواب ها';
                 }
             }
+        }).state("questions", {
+            url: "/questions/:id",
+            templateUrl: "partials/Admin/Questions/Questions.html",
+            controller: 'QuestionsCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Questions/Questions.js', '../app/directives/auto-pagination.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت سوال ها';
+                }
+            }
         }).state("elements", {
             url: "/elements",
             templateUrl: "partials/Admin/Elements/_Elements.html",

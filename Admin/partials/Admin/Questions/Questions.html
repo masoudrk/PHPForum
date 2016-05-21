@@ -6,7 +6,7 @@
     </h1>
     <ol class="breadcrumb">
         <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
-        <li class="active"> جواب ها</li>
+        <li class="active"> سوال ها</li>
     </ol>
 </section>
 
@@ -24,10 +24,10 @@
                                     <span class="fa fa-caret-down"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی جواب ها</a></li>
-                                    <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">جواب های تایید شده</a></li>
-                                    <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">جواب های در انتظار تایید</a></li>
-                                    <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">جواب ها تایید نشده</a></li>
+                                    <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی سوال ها</a></li>
+                                    <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">سوال های تایید شده</a></li>
+                                    <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">سوال های در انتظار تایید</a></li>
+                                    <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">سوال ها تایید نشده</a></li>
                                 </ul>
                             </div>
                             <input type="text" name="table_search" ng-model="pagingParams.searchValue"
@@ -51,13 +51,13 @@
                             <th>ایمیل</th>
                             <th style="width: 150px;"></th>
                         </tr>
-                        <tr ng-repeat="u in answer.all">
+                        <tr ng-repeat="u in question.all">
                             <td>
                                 <img src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
                             </td>
                             <td>{{u.FullName| pNumber}}</td>
                             <td>{{u.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
-                            <td>{{u.AnswerText| pNumber | subString:20}}</td>
+                            <td>{{u.QuestionText | pNumber | subString:20}}</td>
                             <td ng-switch="u.AdminAccepted">
                                 <span class="label label-success" ng-switch-when="1">تایید شده</span>
                                 <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
@@ -66,13 +66,13 @@
                             <td>{{u.Email}}</td>
                             <td>
                                 <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
-                                    <i confirm="آیا مطمئن هستید که میخواهید این جواب را حذف کنید؟"
-                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeAnswer(u.ID)"></i>
+                                    <i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeQuestion(u.ID)"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1" style="color: #e67e22;"
-                                       ng-click="changeAnswerState(u.ID ,-1)"></i>
+                                       ng-click="changeQuestionState(u.ID ,-1)"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
-                                       ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeAnswerState(u.ID ,1)"></i>
-                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.AnswerText)"></i>
+                                       ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeQuestionState(u.ID ,1)"></i>
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.QuestionText)"></i>
                                     <a class="link" href="../Forum/#/question/{{u.QuestionID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse"></i></a>
                                 </div>
                             </td>
@@ -84,10 +84,10 @@
                     <auto-paging page="1"
                                  page-size="20"
                                  ul-class="pagination pagination-sm no-margin"
-                                 action-name="getAllAnswers"
+                                 action-name="getAllQuestions"
                                  data-params="pagingParams"
                                  ng-control="pagingController"
-                                 items="answer.all">
+                                 items="question.all">
                     </auto-paging>
                 </div>
             </div><!-- /.box -->
@@ -97,7 +97,7 @@
 
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header vazir-font text-right">
-        <h3 class="modal-title text-info">متن جواب</h3>
+        <h3 class="modal-title text-info">متن سوال</h3>
     </div>
     <div class="modal-body vazir-font text-right">
         {{Text}}

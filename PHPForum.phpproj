@@ -335,6 +335,8 @@
     <Content Include="Admin\partials\Admin\Profile\Profile.html" />
     <Content Include="Admin\partials\Admin\Profile\ProfileCtrl.js" />
     <Content Include="Admin\partials\Admin\Answers\Answers.html" />
+    <Content Include="Admin\partials\Admin\Questions\Questions.html" />
+    <Content Include="Admin\partials\Admin\Questions\Questions.js" />
     <Content Include="Admin\partials\Admin\User\AllUsers.html" />
     <Content Include="Admin\partials\Admin\Answers\Answers.js" />
     <Content Include="Admin\partials\Admin\User\AllUsersCtrl.js" />
