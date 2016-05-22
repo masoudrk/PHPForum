@@ -38,7 +38,7 @@
                     <!--TODO kar dare in ghesmat-->
                     <i class="fa fa-thumbs-up" ng-show="question.PersonQuestionRate == 1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
                     <i ng-click="setLikeQuestion(1)" class="fa fa-thumbs-o-up link hvr-pulse" ng-show="question.PersonQuestionRate != 1" style="font-size: 20px;" aria-hidden="true"></i>
-                    <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(question.QuestionScore)?question.QuestionScore:0}}</span>
+                    <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(question.QuestionScore)?question.QuestionScore:0 | pNumber}}</span>
                     <i ng-click="setLikeQuestion(-1)" class="fa fa-thumbs-o-down link hvr-pulse" ng-show="question.PersonQuestionRate != -1" style="font-size: 20px;" aria-hidden="true"></i>
                     <i class="fa fa-thumbs-down" ng-show="question.PersonQuestionRate == -1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
                 </div>
@@ -145,7 +145,7 @@
                     <div class="box-footer">
                         <i class="fa fa-thumbs-up" ng-show="answer.PersonAnswerRate == 1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
                         <i ng-click="setLikeAnswers(answer,1)" class="fa fa-thumbs-o-up link hvr-pulse" ng-show="answer.PersonAnswerRate != 1" style="font-size: 20px;" aria-hidden="true"></i>
-                        <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(answer.AnswerScore)?answer.AnswerScore:0}}</span>
+                        <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(answer.AnswerScore)?answer.AnswerScore:0 | pNumber}}</span>
                         <i ng-click="setLikeAnswers(answer,-1)" class="fa fa-thumbs-o-down link hvr-pulse" ng-show="answer.PersonAnswerRate != -1" style="font-size: 20px;" aria-hidden="true"></i>
                         <i class="fa fa-thumbs-down" ng-show="answer.PersonAnswerRate == -1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
                     </div>
