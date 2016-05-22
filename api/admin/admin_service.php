@@ -6,6 +6,131 @@ $app->post('/logout', function() use ($app)  {
 	echoResponse(200, $res);
 });
 
+$app->post('/getAllTags', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+	$pr = new Pagination($data);
+
+	$pageRes = $pr->getPage($db,"SELECT t.* , (SELECT COUNT(*) FROM tag_question as tq WHERE tq.TagID= t.ID) as UseCount
+FROM tag as t  ORDER BY t.ID desc");
+
+	echoResponse(200, $pageRes);
+});
+
+$app->post('/deleteTag', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $db->deleteFromTable('tag' , "ID = $data->ID");
+    $res2 = $db->deleteFromTable('tag_question' , "TagID = $data->ID");
+	if($res && $res2)
+		echoSuccess();
+	else
+		echoError("Cannot delete record.");
+});
+
+$app->post('/insertTag', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $object = (object) [
+            'Text' => $data->Text
+          ];
+
+    $column_names = array( 'Text');
+
+	$res = $db->insertIntoTable($object ,$column_names,'tag');
+	if($res)
+		echoSuccess();
+	else
+		echoError("Cannot update record.");
+});
+
+
+$app->post('/getAllEducations', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+	$pr = new Pagination($data);
+
+	$pageRes = $pr->getPage($db,"SELECT e.* , (SELECT COUNT(*) FROM user_education as ue WHERE ue.EducationID = e.ID) as UseCount
+FROM education as e  ORDER BY e.ID desc");
+
+	echoResponse(200, $pageRes);
+});
+
+$app->post('/deleteEducation', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $db->deleteFromTable('education' , "ID = $data->ID");
+    $res2 = $db->deleteFromTable('user_education' , "EducationID = $data->ID");
+	if($res && $res2)
+		echoSuccess();
+	else
+		echoError("Cannot delete record.");
+});
+
+$app->post('/insertEducation', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $object = (object) [
+            'Name' => $data->Name
+          ];
+
+    $column_names = array( 'Name');
+
+	$res = $db->insertIntoTable($object ,$column_names,'education');
+	if($res)
+		echoSuccess();
+	else
+		echoError("Cannot update record.");
+});
+
 $app->post('/deleteUser', function() use ($app)  {
 
 	$db = new DbHandler(true);
