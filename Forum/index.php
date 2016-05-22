@@ -21,6 +21,8 @@
             ?>
 
     <title ng-bind="($title || 'Loading ...')">Loading ...</title>
+
+    <link rel="icon" href="../images/title.png" />
     <link rel="icon" href="{{titleIcon}}">
 
 </head>
@@ -346,18 +348,31 @@
                         <i class="fa fa-users"></i> <span>انجمن</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li id="SForumHome"><a ui-sref="forum_home"><i class="fa fa-circle-o"></i>
-                                خانه </a></li>
+                        <ul class="treeview-menu">
+                            <li id="SForumHome">
+                                <a ui-sref="forum_home">
+                                    <i class="fa fa-circle-o"></i>
+                                    خانه
+                                </a>
+                            </li>
+                            <li id="STransition">
+                                <a ui-sref="main_forum({id:'Transition'})">
+                                    <i class="fa fa-circle-o"></i>
+                                    خطوط انتقال
+                                </a>
+                            </li>
+                            <li id="STransportManagement">
+                                <a ui-sref="main_forum({id:'TransportManagement'})">
+                                    <i class="fa
+                        fa-circle-o"></i>
+                                    <span style="font-size:13px">نظارت بر سیستم های انتقال</span>
+                                </a>
+                            </li>
                         <li id="SDataSwitch"><a ui-sref="main_forum({id:'DataSwitch'})"><i class="fa fa-circle-o"></i>
 مراکز خودکار و دیتا سوئیچ</a></li>
                         <li id="SRadio"><a ui-sref="main_forum({id:'Radio'})"><i class="fa fa-circle-o"></i>
                                 رادیوئی</a></li>
-                        <li id="STransportManagement"><a ui-sref="main_forum({id:'TransportManagement'})"><i class="fa
-                        fa-circle-o"></i> نظارت بر سیستم ها انتقال
-                            </a></li>
-                        <li id="STransition"><a ui-sref="main_forum({id:'Transition'})"><i class="fa fa-circle-o"></i>
-                                خطوط انتقال</a></li>
+                        
 
                         <li id="SCommonTopics"><a ui-sref="main_forum({id:'CommonTopics'})"><i class="fa fa-circle-o"></i>
                                 مباحث مشترک</a></li>
@@ -429,7 +444,8 @@
         <div class="pull-left hidden-xs">
             <b>نسخه</b> 1.0.0
         </div>
-            <strong class="persian-rtl"></strong>  حقوق مادی و معنوی متعلق به اداره کل علائم و ارتباطات راه آهن جمهوری اسلامی ایران است.
+            <strong class="persian-rtl"></strong>
+            کلیه حقوق مادی و معنوی این سایت متعلق به اداره کل ارتباطات و علائم الکتریکی راه آهن جمهوری اسلامی ایران می باشد.
           Copyright &copy;
         2014-2015 <!--<a class="persian-rtl">طراحی شده توسط MagicCube.ir</a>-->.
     </footer>

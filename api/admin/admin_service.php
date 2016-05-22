@@ -80,7 +80,10 @@ LIMIT 1");
 
 	$res = $db->deleteFromTable('forum_answer',"ID='$data->AnswerID'");
 	if($res)
-		echoSuccess();
+    {
+        $db->updateRecord('user',"score=(score-2)" , "ID = '$data->UserID'");
+        echoSuccess();
+    }
 	else
 		echoError("Cannot update record.");
 });
@@ -105,8 +108,13 @@ LIMIT 1");
         echoError('You don\'t have permision to do this action');
 
 			$res = $db->updateRecord('forum_answer',"AdminAccepted='$data->State'","ID='$data->AnswerID'");
-			if($res)
-				echoSuccess();
+			if($res){
+                if($data->State == 1)
+                    $db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
+                else if($data->State == -1)
+                    $db->updateRecord('user',"score=(score-2)" , "ID = '$data->UserID'");
+        echoSuccess();
+            }
 			else
 				echoError("Cannot update record.");
 		}else{
@@ -131,7 +139,7 @@ $app->post('/getAllAnswers', function() use ($app)  {
 	}
 	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
 		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
-		$where .= " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
+		$where .= " AND ( fa.AnswerText LIKE '%".$s."%' OR u.FullName LIKE '%".$s."%' OR u.Email LIKE '%".$s."%')";
 		$hasWhere = TRUE;
 	}
 
@@ -158,7 +166,7 @@ $app->post('/getAllQuestions', function() use ($app)  {
 	}
 	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
 		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
-		$where .= " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
+		$where .= " AND (fq.Title LIKE '%".$s."%' OR fq.QuestionText LIKE '%".$s."%' OR u.FullName LIKE '%".$s."%' OR u.Email LIKE '%".$s."%')";
 		$hasWhere = TRUE;
 	}
 
@@ -189,8 +197,10 @@ LIMIT 1");
         echoError('You don\'t have permision to do this action');
 
 	$res = $db->deleteFromTable('forum_question',"ID='$data->QuestionID'");
-	if($res)
+	if($res){
+        $db->updateRecord('user',"score=(score-5)" , "ID = '$data->UserID'");
 		echoSuccess();
+    }
 	else
 		echoError("Cannot update record.");
 });
@@ -216,7 +226,13 @@ LIMIT 1");
 
 			$res = $db->updateRecord('forum_question',"AdminAccepted='$data->State'","ID='$data->QuestionID'");
 			if($res)
-				echoSuccess();
+            {
+                if($data->State == 1)
+                    $db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
+                else if($data->State == -1)
+                    $db->updateRecord('user',"score=(score-5)" , "ID = '$data->UserID'");
+                echoSuccess();
+            }
 			else
 				echoError("Cannot update record.");
 		}else{

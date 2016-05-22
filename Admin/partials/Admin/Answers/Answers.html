@@ -69,9 +69,9 @@
                                     <i confirm="آیا مطمئن هستید که میخواهید این جواب را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeAnswer(u.ID)"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1" style="color: #e67e22;"
-                                       ng-click="changeAnswerState(u.ID ,-1)"></i>
+                                       ng-click="changeAnswerState(u.ID ,-1, u.AuthorID)"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
-                                       ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeAnswerState(u.ID ,1)"></i>
+                                       ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeAnswerState(u.ID ,1, u.AuthorID)"></i>
                                     <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.AnswerText)"></i>
                                     <a class="link" href="../Forum/#/question/{{u.QuestionID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse"></i></a>
                                 </div>

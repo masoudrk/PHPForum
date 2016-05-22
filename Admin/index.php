@@ -21,6 +21,7 @@
           ?>
 
     <title>داشبورد</title>
+    <link rel="icon" href="../images/title.png" />
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   </head>
@@ -461,13 +462,16 @@
         <!-- /.content-wrapper -->
       </div>
 
-      <footer class="main-footer persian-rtl" >
-        <div class="pull-left hidden-xs">
-          <b>نسخه</b> 1.0.0
-        </div>
+        <footer class="main-footer persian-rtl">
+            <div class="pull-left hidden-xs">
+                <b>نسخه</b>
+                1.0.0
+            </div>
             <strong class="persian-rtl"></strong>
-            حقوق مادی و معنوی مطعلق به اداره کل علائم و ارتباطات راه آهن جمهوری اسلامی ایران است
-      </footer>
+            کلیه حقوق مادی و معنوی این سایت متعلق به اداره کل ارتباطات و علائم الکتریکی راه آهن جمهوری اسلامی ایران می باشد.
+          Copyright &copy;
+        2014-2015 <!--<a class="persian-rtl">طراحی شده توسط MagicCube.ir</a>-->.
+        </footer>
 
       <!-- Control Sidebar -->
       <aside class="control-sidebar control-sidebar-dark">

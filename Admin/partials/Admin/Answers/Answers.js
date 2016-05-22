@@ -8,8 +8,8 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	$scope.search = function () {
 		$scope.pagingController.update();
 	}
-	$scope.changeAnswerState = function (uid, s) {
-	    Extention.post('changeAnswerAccepted', { State: s, AnswerID: uid, AdminPermissionLevel: session.AdminPermissionLevel }).then(function (res) {
+	$scope.changeAnswerState = function (uid, s, AuthorID) {
+	    Extention.post('changeAnswerAccepted', { State: s, AnswerID: uid, AdminPermissionLevel: session.AdminPermissionLevel, UserID: AuthorID }).then(function (res) {
 			if(res && res.Status == 'success'){
 			    Extention.popSuccess("وضعیت جواب با موفقیت تغییر کرد!");
 				$scope.pagingController.update();
@@ -18,8 +18,8 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 			}
 		});
 	}
-	$scope.removeAnswer = function (uid) {
-	    Extention.post('deleteAnswer', { AnswerID: uid, AdminPermissionLevel: session.AdminPermissionLevel }).then(function (res) {
+	$scope.removeAnswer = function (uid, AuthorID) {
+	    Extention.post('deleteAnswer', { AnswerID: uid, AdminPermissionLevel: session.AdminPermissionLevel, UserID: AuthorID }).then(function (res) {
 			if(res && res.Status=='success'){
 				Extention.popSuccess("جواب با موفقیت حذف شد!");
 				$scope.pagingController.update();
