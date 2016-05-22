@@ -31,7 +31,7 @@
             Extention.popError('متن خود را وارد کنید');
             return;
         }
-        Extention.post("saveAnswer", { QuestionID: $stateParams.id, AuthorID: $rootScope.user.UserID, AnswerText: $scope.answerText }).then(function (res) {
+        Extention.post("saveAnswer", { QuestionID: $stateParams.id, AnswerText: $scope.answerText }).then(function (res) {
             if (res == true) {
                 $scope.answerText = '';
                 Extention.popInfo('پاسخ شما ثبت شد . در صورت تایید نمایش داده خواهد شد');
@@ -43,7 +43,7 @@
     $scope.setLikeQuestion = function(rate) {
         Extention.post("rateQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID, RateValue: rate, TargetUserID: $scope.question.UserID }).then(function (res) {
             $scope.question.PersonQuestionRate = res;
-            $scope.question.QuestionScore = res +Number($scope.question.QuestionScore);
+            $scope.question.QuestionScore = Number(res) + Number($scope.question.QuestionScore);
         });
     }
 
@@ -63,6 +63,7 @@
     $scope.followQuestion = function () {
         Extention.postAsync("followQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
             if (res == true) {
+                $scope.question.FollowCount = number($scope.question.FollowCount) + 1;
                 $scope.question.PersonFollow = 1;
             }
         });
@@ -71,6 +72,7 @@
     $scope.unFollowQuestion = function () {
         Extention.postAsync("unFollowQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
             if (res == true) {
+                $scope.question.FollowCount = number($scope.question.FollowCount) - 1;
                 $scope.question.PersonFollow = 0;
             }
         });

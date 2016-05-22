@@ -58,12 +58,14 @@
     <Compile Include="api\sessionHandler.php" />
     <Compile Include="api\user\user_service.php" />
     <Compile Include="api\user\index.php" />
+    <Compile Include="cms\functions.php" />
     <Compile Include="config.php" />
     <Compile Include="Forum\index.php" />
     <Compile Include="index.php" />
     <Compile Include="js\editor\ckeditor\samples\old\assets\posteddata.php" />
     <Compile Include="js\editor\ckeditor\samples\old\sample_posteddata.php" />
     <Compile Include="session_generator.php" />
+    <Compile Include="verify.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Admin\" />
@@ -128,12 +130,16 @@
     <Folder Include="Forum\partials\Dashboard\" />
     <Folder Include="Forum\partials\Elements\" />
     <Folder Include="Forum\partials\Forum\" />
+    <Folder Include="Forum\partials\Forum\Forum\" />
     <Folder Include="Forum\partials\Forum\Main\" />
     <Folder Include="Forum\partials\Forum\Question\" />
     <Folder Include="Forum\partials\Forum\Radio\" />
     <Folder Include="Forum\partials\Forum\Transition\" />
-    <Folder Include="Forum\partials\Forum\TransportManagement\" />
     <Folder Include="Forum\partials\Forum\_Home\" />
+    <Folder Include="Forum\partials\MyActions\" />
+    <Folder Include="Forum\partials\MyActions\Answers\" />
+    <Folder Include="Forum\partials\MyActions\NewQuestion\" />
+    <Folder Include="Forum\partials\MyActions\Questions\" />
     <Folder Include="Forum\partials\Profile\" />
     <Folder Include="Forum\partials\Question\" />
     <Folder Include="Forum\partials\Question\NewQuestion\" />
@@ -450,6 +456,7 @@
     <Content Include="css\ADM-dateTimePicker.min.css" />
     <Content Include="css\angular-tooltips.css" />
     <Content Include="css\angular-tooltips.min.css" />
+    <Content Include="css\anim-in-out.css" />
     <Content Include="css\bootstrap-plus.css" />
     <Content Include="css\bootstrap-plus.min.css" />
     <Content Include="css\bootstrap.min.css" />
@@ -503,6 +510,8 @@
     <Content Include="Forum\partials\Elements\Widgets.html" />
     <Content Include="Forum\partials\Elements\_Elements.html" />
     <Content Include="Forum\partials\Elements\_ElementsCtrl.js" />
+    <Content Include="Forum\partials\Forum\Forum\Forum.html" />
+    <Content Include="Forum\partials\Forum\Forum\ForumCtrl.js" />
     <Content Include="Forum\partials\Forum\Main\MainForum.html" />
     <Content Include="Forum\partials\Forum\Main\MainForumCtrl.js" />
     <Content Include="Forum\partials\Forum\Question\Question.html" />
@@ -511,12 +520,16 @@
     <Content Include="Forum\partials\Forum\Radio\RadioCtrl.js" />
     <Content Include="Forum\partials\Forum\Transition\Transition.html" />
     <Content Include="Forum\partials\Forum\Transition\TransitionCtrl.js" />
-    <Content Include="Forum\partials\Forum\TransportManagement\TransportManagement.html" />
-    <Content Include="Forum\partials\Forum\TransportManagement\TransportManagementCtrl.js" />
     <Content Include="Forum\partials\Forum\_Home\Home.html" />
     <Content Include="Forum\partials\Forum\_Home\HomeCtrl.js" />
     <Content Include="Forum\partials\GlobalSearch.html" />
     <Content Include="Forum\partials\MainCtrl.js" />
+    <Content Include="Forum\partials\MyActions\Answers\Answers.html" />
+    <Content Include="Forum\partials\MyActions\Answers\AnswersCtrl.js" />
+    <Content Include="Forum\partials\MyActions\NewQuestion\NewQuestion.html" />
+    <Content Include="Forum\partials\MyActions\NewQuestion\NewQuestionCtrl.js" />
+    <Content Include="Forum\partials\MyActions\Questions\Questions.html" />
+    <Content Include="Forum\partials\MyActions\Questions\QuestionsCtrl.js" />
     <Content Include="Forum\partials\Profile\Profile.html" />
     <Content Include="Forum\partials\Profile\ProfileCtrl.js" />
     <Content Include="Forum\partials\Question\NewQuestion\NewQuestion.html" />
@@ -612,6 +625,7 @@
     <Content Include="js\angularjs-dropdown-multiselect.min.js" />
     <Content Include="js\angularpersian.js" />
     <Content Include="js\angularpersian.min.js" />
+    <Content Include="js\anim-in-out.js" />
     <Content Include="js\bootstrap-plus.js" />
     <Content Include="js\bootstrap-plus.min.js" />
     <Content Include="js\bootstrap-toolkit-1.5.0.js" />
