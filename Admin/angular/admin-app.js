@@ -35,6 +35,30 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return $ocLazyLoad.load(['partials/Admin/Profile/ProfileCtrl.js']);
                 }]
             }
+        }).state("tag", {
+            url: "/tag",
+            templateUrl: "partials/Admin/Tag/Tag.html",
+            controller: 'TagCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Tag/TagCtrl.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت تگ';
+                }
+            }
+        }).state("education", {
+            url: "/education",
+            templateUrl: "partials/Admin/Education/Education.html",
+            controller: 'EducationCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Education/EducationCtrl.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت تحصیلات';
+                }
+            }
         }).state("all_users", {
             url: "/all_users",
             templateUrl: "partials/Admin/User/AllUsers.html",
