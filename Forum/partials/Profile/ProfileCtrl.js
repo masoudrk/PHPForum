@@ -115,5 +115,4 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
 
 
     activeElement('#SProfile');
-	fixFooter();
 });

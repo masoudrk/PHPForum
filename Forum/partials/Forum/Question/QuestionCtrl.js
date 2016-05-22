@@ -138,6 +138,4 @@
                 return 'label-success';
         }
     }
-
-    fixFooter();
 });

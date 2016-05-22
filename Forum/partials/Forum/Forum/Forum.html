@@ -1,11 +1,11 @@
 ﻿<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
-        <small>{{forumData.Subject.MainTitle}}</small>
+        <small>{{forumData.Subject.MainTitle| pNumber}}</small>
            انجمن
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#/"><i class="fa fa-dashboard"></i> {{forumData.Subject.Title}}</a></li>
+        <li><a href="#/"><i class="fa fa-dashboard"></i> {{forumData.Subject.Title | pNumber}}</a></li>
         <li class="active">انجمن</li>
     </ol>
 </section>
@@ -16,7 +16,7 @@
 
             <div class="box box-info">
                 <div class="box-header">
-                    <h3 class="box-title vazir-font">جدیدترین سوالات {{forumData.Subject.Title}} </h3>
+                    <h3 class="box-title vazir-font">جدیدترین سوالات {{forumData.Subject.Title| pNumber}} </h3>
                     <i class="fa fa-question text-aqua"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
@@ -33,7 +33,7 @@
                                                             tooltip-append-to-body="true"></td>
                             <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
                             <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.Title | subString :50|pNumber}}</td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.AnswersCount|pNumber}} جواب </td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.AnswersCount || '0'|pNumber}} جواب </td>
                             <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">
                                 <span class="persian-rtl text-muted" style="font-size: 12px;">
                                     {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
@@ -79,7 +79,7 @@
                             </td>
                             <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
                             <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.Title | subString :50|pNumber}}</td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.AnswersCount|pNumber}} جواب </td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.AnswersCount || '0' |pNumber}} جواب </td>
                             <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">
                                 <span class="persian-rtl text-muted" style="font-size: 12px;">
                                     {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}

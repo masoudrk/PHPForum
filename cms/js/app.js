@@ -18,7 +18,7 @@ if (typeof jQuery === "undefined") {
 
 
 $(document).ready(function () {
-    traverse(document.body);
+    //traverse(document.body);
 });
 
 /* AdminLTE

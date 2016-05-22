@@ -14,5 +14,4 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $element, 
         });
     };
 	activeElement('#SQuestion','#SQuestions');
-	fixFooter();
 }); 
