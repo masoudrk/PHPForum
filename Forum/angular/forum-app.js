@@ -601,6 +601,12 @@ app.filter('moment', function () {
     }
 });
 
+app.filter('concat', function () {
+    return function (input, con) {
+        return input + con;
+    }
+});
+
 app.filter('subString', function () {
     return function (text, length) {
         if (text && text.length > length) {

@@ -312,3 +312,14 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .shopping-cart[ui-view].ng-leave-active, .order-confirmation[ui-view].ng-leave-active, .thank-you[ui-view].ng-leave-active {
     height: 0px;
 }
+
+.tooltip-inner {
+    font-family: 'Vazir', Tahoma;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+.table-responsive {
+    direction: rtl;
+}

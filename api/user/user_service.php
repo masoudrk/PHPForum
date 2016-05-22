@@ -291,19 +291,24 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
     $db = new DbHandler(true);
 
     $pr = new Pagination($data);
-    $subjectID = -1;
+
+    $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+ INTERVAL 7 DAY))+
+ (SELECT count(*) from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ INTERVAL 7 DAY)) / 2";
 
     if(isset($data->MainSubjectName)){
         $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
                                 forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
-        $query = "SELECT user.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
+        $query = "SELECT u.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
 `FullPath` as Image ,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' 
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' ,
+ ($rateSelection) as Rate
  FROM 
-forum_question  LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on 
-file_storage.ID=user.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
+forum_question  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
+file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
 .AdminAccepted='1' 
 AND 
 forum_subject
@@ -314,11 +319,10 @@ forum_subject
     }
     else if(isset($data->SubjectID)){
 
-        $query = "SELECT user.FullName ,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
-`FullPath` as Image ,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' 
- FROM forum_question  LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on 
-file_storage.ID=user.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
+        $query = "SELECT u.FullName ,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
+`FullPath` as Image ,($rateSelection) as Rate
+ FROM forum_question  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
+file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
 .AdminAccepted='1' 
 AND forum_question.SubjectID='$data->SubjectID' order by forum_question.CreationDate desc";
 
@@ -340,9 +344,14 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
                                 forum_main_subject.SubjectName='$data->MainSubjectName'");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
-        $query = "SELECT user.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
- forum_question.`CreationDate`,`FullPath` as Image ,AnswersCount FROM forum_question 
- LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=user.AvatarID 
+        $query = "SELECT u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
+ forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount,
+ ((SELECT count(*) from forum_question where forum_question.AuthorID=u.ID 
+ and forum_question.CreationDate > NOW() - INTERVAL 7 DAY)+
+ (SELECT  count(*) from question_view where (question_view.UserID=u.ID) and (question_view.ViewDate > NOW() - INTERVAL 7
+  DAY))/2) as Rate
+  FROM forum_question 
+ LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
  LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID from forum_answer group by forum_answer.QuestionID) s on 
  s.QuestionID=forum_question.ID 
@@ -355,9 +364,14 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
     }
     else if(isset($data->SubjectID)){
 
-        $query = "SELECT user.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
- forum_question.`CreationDate`,`FullPath` as Image ,AnswersCount FROM forum_question 
- LEFT JOIN user on user.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=user.AvatarID
+        $query = "SELECT u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
+ forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount ,
+ ((SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and forum_question.CreationDate > NOW() - INTERVAL 7 DAY)+
+ (SELECT count(*) from question_view where question_view.UserID=u.ID and question_view.ViewDate > NOW() - INTERVAL
+  7 DAY)/2) as Rate
+ 
+ FROM forum_question 
+ LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=u.AvatarID
  LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID from forum_answer group by forum_answer.QuestionID) s on 
  s.QuestionID=forum_question.ID 
  WHERE forum_question.AdminAccepted='1' AND forum_question.SubjectID='$data->SubjectID' AND s.AnswersCount > 0 order 
