@@ -7,9 +7,6 @@
         $scope.question = res;
         console.log($scope.question);
         $scope.checkNowOnline();
-        $timeout(function () {
-            fixFooter();
-        } );
     });
 
     $rootScope.$on("socketDataChanged", function(){
@@ -56,7 +53,7 @@
                 if ($scope.question.Answers[i].ID == answer.ID)
                 {
                     $scope.question.Answers[i].PersonAnswerRate = res;
-                    $scope.question.Answers[i].AnswerScore = res + Number($scope.question.Answers[i].AnswerScore);
+                    $scope.question.Answers[i].AnswerScore = Number(res) + Number($scope.question.Answers[i].AnswerScore);
                     return;
                 }
             }

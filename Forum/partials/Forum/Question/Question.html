@@ -20,21 +20,21 @@
             <div class="box box-solid">
                 <div class="box-header with-border vazir-font">
                     <h3 class="box-title">عنوان سوال</h3>
-                    <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o" aria-hidden="true"></i>   {{question.CreationDate | jalaliDate :'jYYYY/jMM/jDD'}}</span>
-                    <span class="description pull-left" style="margin-right: 4%">{{question.ViewCount}}   <i class="fa fa-eye" aria-hidden="true"></i></span>
-                    <span class="description pull-left" style="margin-right: 4%">{{question.FollowCount}}   <i class="fa fa-users" aria-hidden="true"></i></span>
+                    <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o" aria-hidden="true"></i>   {{question.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
+                    <span class="description pull-left" style="margin-right: 4%">{{question.ViewCount | pNumber}}   <i class="fa fa-eye" aria-hidden="true"></i></span>
+                    <span class="description pull-left" style="margin-right: 4%">{{question.FollowCount | pNumber}}   <i class="fa fa-users" aria-hidden="true"></i></span>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="col-xs-12">
                         <p class="persian-rtl text-right" style="font-size: 25px;">
-                            {{question.Title}}
+                            {{question.Title | pNumber}}
                         </p>
                         <a ng-show="question.PersonFollow == 0" ng-click="followQuestion()" class="btn btn-primary pull-left" style="margin: 5px"><b>دنبال کردن</b></a>
                         <a ng-hide="question.PersonFollow == 0" ng-click="unFollowQuestion()" class="btn btn-danger pull-left" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
                     </div>
                 </div><!-- /.box-body -->
                 <div class="box-footer">
-                    <span ng-repeat="tag in question.Tags" class="label pull-right" ng-class="getTagColor(tag.ID)" style="margin: 5px">  {{tag.Text}}  <i class="fa fa-tag" aria-hidden="true"></i></span>
+                    <span ng-repeat="tag in question.Tags" class="label pull-right" ng-class="getTagColor(tag.ID)" style="margin: 5px">  {{tag.Text | pNumber}}  <i class="fa fa-tag" aria-hidden="true"></i></span>
                     <!--TODO kar dare in ghesmat-->
                     <i class="fa fa-thumbs-up" ng-show="question.PersonQuestionRate == 1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
                     <i ng-click="setLikeQuestion(1)" class="fa fa-thumbs-o-up link hvr-pulse" ng-show="question.PersonQuestionRate != 1" style="font-size: 20px;" aria-hidden="true"></i>
@@ -50,7 +50,7 @@
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header bg-red-active">
                     <a href="#/" style="cursor: pointer; color: white">
-                        <h3 class="widget-user-username">{{question.FullName}}</h3><br>
+                        <h3 class="widget-user-username">{{question.FullName | pNumber}}</h3><br>
 
                     </a>
                     <h5 class="widget-user-desc" ng-show="isOnline">
@@ -63,19 +63,19 @@
                         <div class="row">
                             <div class="col-xs-4 border-left">
                                 <div class="description-block">
-                                    <h5 class="description-header">{{question.score}}</h5>
+                                    <h5 class="description-header">{{question.score | pNumber}}</h5>
                                     <span class="description-text">امتیاز</span>
                                 </div><!-- /.description-block -->
                             </div><!-- /.col -->
                             <div class="col-xs-4 border-left">
                                 <div class="description-block">
-                                    <h5 class="description-header">{{question.QuestionsCount}}</h5>
+                                    <h5 class="description-header">{{question.QuestionsCount | pNumber}}</h5>
                                     <span class="description-text">سوالات پرسیده</span>
                                 </div><!-- /.description-block -->
                             </div><!-- /.col -->
                             <div class="col-xs-4">
                                 <div class="description-block">
-                                    <h5 class="description-header">{{question.AnswerCount}}</h5>
+                                    <h5 class="description-header">{{question.AnswerCount | pNumber}}</h5>
                                     <span class="description-text">جواب ها</span>
                                 </div><!-- /.description-block -->
                             </div><!-- /.col -->
@@ -93,16 +93,16 @@
                     </div><!-- /.box-header -->
                     <!-- form start -->
                     <div class="persian-rtl box-body text-right">
-                        {{question.QuestionText}}
+                        {{question.QuestionText | pNumber}}
                     </div><!-- /.box-body -->
 
                     <div class="box-footer">
-                        <span ng-repeat="tag in question.Tags" class="label pull-right" ng-class="getTagColor(tag.ID)" style="margin: 5px">  {{tag.Text}}  <i class="fa fa-tag" aria-hidden="true"></i></span>
+                        <span ng-repeat="tag in question.Tags" class="label pull-right" ng-class="getTagColor(tag.ID)" style="margin: 5px">  {{tag.Text | pNumber}}  <i class="fa fa-tag" aria-hidden="true"></i></span>
 
 
                         <i class="fa fa-thumbs-up" ng-show="question.PersonQuestionRate == 1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
                         <i ng-click="setLikeQuestion(1)" class="fa fa-thumbs-o-up link hvr-pulse" ng-show="question.PersonQuestionRate != 1" style="font-size: 20px;" aria-hidden="true"></i>
-                        <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(question.QuestionScore)?question.QuestionScore:0}}</span>
+                        <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(question.QuestionScore)?question.QuestionScore:0 | pNumber}}</span>
                         <i ng-click="setLikeQuestion(-1)" class="fa fa-thumbs-o-down link hvr-pulse" ng-show="question.PersonQuestionRate != -1" style="font-size: 20px;" aria-hidden="true"></i>
                         <i class="fa fa-thumbs-down" ng-show="question.PersonQuestionRate == -1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
                     </div>
@@ -116,17 +116,17 @@
                             <img class="profile-user-img img-responsive img-circle" alt="User profile picture" ui-sref="UserProfile({id:answer.UserID})" src="{{answer.FullPath}}">
                             <!--<a href="#/" style="cursor: pointer; color: black">
                                 <h3 class="text-center profile-username">نادیا معصومی</h3></a>-->
-                            <p class="text-muted text-center">{{answer.Description}}</p>
-                            <p class="text-muted text-center">{{answer.Email}}</p>
+                            <p class="text-muted text-center">{{answer.Description | pNumber}}</p>
+                            <p class="text-muted text-center">{{answer.Email | pNumber}}</p>
                             <ul class="list-group list-group-unbordered hidden-xs" style="margin-bottom: 0px;">
                                 <li class="list-group-item">
-                                    <a class="">{{answer.score}}</a> <b class="pull-right">امتیاز</b>
+                                    <a class="">{{answer.score | pNumber}}</a> <b class="pull-right">امتیاز</b>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="">{{answer.QuestionsCount}}</a> <b class="pull-right">سوالات پرسیده</b>
+                                    <a class="">{{answer.QuestionsCount | pNumber}}</a> <b class="pull-right">سوالات پرسیده</b>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="">{{answer.AnswerCount}}</a> <b class="pull-right">جواب ها</b>
+                                    <a class="">{{answer.AnswerCount | pNumber}}</a> <b class="pull-right">جواب ها</b>
                                 </li>
                             </ul>
                             <a ng-show="answer.PersonFollow == 0 && user.UserID != answer.UserID" ng-click="followPerson(answer.UserID)" class="btn btn-primary btn-block"><b>دنبال کردن</b></a>
@@ -137,7 +137,7 @@
                                 <h3 class="profile-username box-title">
                                     {{answer.FullName}} <small>{{answer.OrganizationName}}</small>
                                 </h3>
-                                <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o" aria-hidden="true"></i>   {{answer.CreationDate | jalaliDate :'jYYYY/jMM/jDD'}}</span>
+                                <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o" aria-hidden="true"></i>   {{answer.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
                             </div>
                             <p>{{answer.AnswerText}}</p>
                         </div>
@@ -161,9 +161,9 @@
                         <div class="col-sm-3 col-xs-12 pull-right">
                             <img class="profile-user-img img-responsive img-circle" alt="User profile picture" src="{{user.Image}}">
                             <a style="cursor: pointer; color: black">
-                                <h3 class="text-center profile-username">{{user.FullName}}</h3>
+                                <h3 class="text-center profile-username">{{user.FullName | pNumber}}</h3>
                             </a>
-                            <p class="text-muted text-center">{{user.Email}}</p>
+                            <p class="text-muted text-center">{{user.Email | pNumber}}</p>
                         </div>
                         <div class="col-sm-9 col-xs-12">
                             <div class="col-sm-9 col-sm-offset-3 col-xs-12">
