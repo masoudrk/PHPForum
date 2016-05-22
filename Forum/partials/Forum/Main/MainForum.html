@@ -56,7 +56,7 @@
                                                    tooltip-append-to-body="true"></td>
                             <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}}</td>
                             <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
-                                {{q.Title | subString :50|pNumber}}
+                                {{q.Title | subString :30|pNumber}}
                             </td>
                             <td ui-sref="question({id:q.ID})">
                                 <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">دیده
@@ -109,7 +109,7 @@
                             </td>
                             <td ui-sref="question({id:q.ID})">{{q.FullName | subString :20|pNumber}}</td>
                             <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
-                                {{q.Title | subString :50|pNumber}}
+                                {{q.Title | subString :30|pNumber}}
                             </td>
                             <td ui-sref="question({id:q.ID})">
                                 <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">دیده

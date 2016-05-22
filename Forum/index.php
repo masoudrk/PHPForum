@@ -151,51 +151,49 @@
                         </ul>
                     </li>
                     <!-- Tasks: style can be found in dropdown.less -->
-                    <li class="dropdown tasks-menu">
-                        <a class="dropdown-toggle link" data-toggle="dropdown">
-                            <i class="fa fa-flag-o"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                                <li class="header">آخرین سوالات شما</li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                    <ul class="menu">
-                                        <li style="margin:10px" ng-repeat="item in UserQuestions" class="persian-rtl link">
-                                            <h5 class="text-right" ui-sref="question({id:item.ID})">
-                                                {{item.Title | subString :20}}
-                                                <span class="pull-left persian-rtl" dir="rtl" ng-show="item.CreationDate !=null">
-                                                    {{item.CreationDate | fromNow}}
-                                                    <i class="fa fa-clock-o"></i>
-                                                </span>
-                                            </h5>
-                                            <h5>
-                                                <span ng-show="item.QuestionUserFollow != null" class="description pull-right">
-                                                    {{item.QuestionUserFollow}}
-                                                    <i class="fa fa-users" aria-hidden="true"></i>
-                                                </span>
-                                                <span ng-show="item.questionView != null" class="description text-ceter">
-                                                    {{item.questionView}}
-                                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                                </span>
-                                                <span ng-show="item.questionAnswers != null" class="description pull-left">
-                                                    {{item.questionAnswers}}
-                                                    <i class="fa fa-home" aria-hidden="true"></i>
-                                                </span>
-                                                <span ng-show="item.QuestionRate != null" class="description pull-left">
-                                                    {{item.QuestionRate}}
-                                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-                                                </span>
-                                            </h5>
-                                            <hr />
-                                            <!--<div class="hr col-xs-12" style="margin-bottom:5px;margin-top:5px;"></div>-->
-                                        </li>
-                                </ul>
-                            </li>
-                            <li class="footer">
-                                    <a href="#/">نمایش همه سوالات شما</a>
-                            </li>
-                        </ul>
-                    </li>
+<!--                    <li class="dropdown tasks-menu">-->
+<!--                        <a class="dropdown-toggle link" data-toggle="dropdown">-->
+<!--                            <i class="fa fa-flag-o"></i>-->
+<!--                        </a>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                                <li class="header">آخرین سوالات شما</li>-->
+<!--                            <li>-->
+<!--                                    <ul class="menu">-->
+<!--                                        <li style="margin:10px" ng-repeat="item in UserQuestions" class="persian-rtl link">-->
+<!--                                            <h5 class="text-right" ui-sref="question({id:item.ID})">-->
+<!--                                                {{item.Title | subString :20}}-->
+<!--                                                <span class="pull-left persian-rtl" dir="rtl" ng-show="item.CreationDate !=null">-->
+<!--                                                    {{item.CreationDate | fromNow}}-->
+<!--                                                    <i class="fa fa-clock-o"></i>-->
+<!--                                                </span>-->
+<!--                                            </h5>-->
+<!--                                            <h5>-->
+<!--                                                <span ng-show="item.QuestionUserFollow != null" class="description pull-right">-->
+<!--                                                    {{item.QuestionUserFollow}}-->
+<!--                                                    <i class="fa fa-users" aria-hidden="true"></i>-->
+<!--                                                </span>-->
+<!--                                                <span ng-show="item.questionView != null" class="description text-ceter">-->
+<!--                                                    {{item.questionView}}-->
+<!--                                                    <i class="fa fa-eye" aria-hidden="true"></i>-->
+<!--                                                </span>-->
+<!--                                                <span ng-show="item.questionAnswers != null" class="description pull-left">-->
+<!--                                                    {{item.questionAnswers}}-->
+<!--                                                    <i class="fa fa-home" aria-hidden="true"></i>-->
+<!--                                                </span>-->
+<!--                                                <span ng-show="item.QuestionRate != null" class="description pull-left">-->
+<!--                                                    {{item.QuestionRate}}-->
+<!--                                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>-->
+<!--                                                </span>-->
+<!--                                            </h5>-->
+<!--                                            <hr />-->
+<!--                                        </li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li class="footer">-->
+<!--                                    <a href="#/">نمایش همه سوالات شما</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
                     <!-- Messages: style can be found in dropdown.less-->
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown" aria-expanded="true">
