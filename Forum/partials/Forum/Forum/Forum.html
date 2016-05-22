@@ -23,18 +23,26 @@
                     <table class="table table-hover" ng-show="question.all.length > 0">
                         <tbody>
                         <tr class="link" ng-repeat="q in question.all">
-                            <td  style="width: 50px;"><img  class="img-circle" ng-src="{{q.Image}}"
-                                                            style="width:40px"
-                                                            ng-style="{'border': (q.Rate > 5) ? activity.high :
+                            <td><img  class="img-circle" ng-src="{{q.Image}}"
+                                      style="width:40px"
+                                      ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                                 (q.Rate > 2.5)?activity.medium : activity.low}"
-                                                            title="{{q.Rate | number:1 | pNumber | concat : ' امتیاز '}}"
-                                                            data-toggle="tooltip" data-placement="top"
-                                                            tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
-                                                            tooltip-append-to-body="true"></td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.Title | subString :50|pNumber}}</td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.AnswersCount || '0'|pNumber}} جواب </td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">
+                                      title="{{q.Rate | number:1 | pNumber | concat : ' امتیاز '}}"
+                                      data-toggle="tooltip" data-placement="top"
+                                      tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
+                                      tooltip-append-to-body="true"></td>
+                            <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}}</td>
+                            <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
+                                {{q.Title | subString :50|pNumber}}
+                            </td>
+                            <td ui-sref="question({id:q.ID})">
+                                <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">دیده
+                                    نشده</span>
+                            </td>
+                            <td class="text-center" ui-sref="question({id:q.ID})" style="white-space: nowrap;" >
+                                <span>{{q.AnswersCount || '0' |pNumber}}</span>  جواب
+                            </td>
+                            <td ui-sref="question({id:q.ID})"  style="white-space: nowrap;">
                                 <span class="persian-rtl text-muted" style="font-size: 12px;">
                                     {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
                                 </span>
@@ -77,10 +85,16 @@
                                      tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
                                      tooltip-append-to-body="true">
                             </td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.Title | subString :50|pNumber}}</td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.AnswersCount || '0' |pNumber}} جواب </td>
-                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">
+                            <td ui-sref="question({id:q.ID})">{{q.FullName | subString :20|pNumber}}</td>
+                            <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
+                                {{q.Title | subString :50|pNumber}}
+                            </td>
+                            <td ui-sref="question({id:q.ID})">
+                                <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">دیده
+                                    نشده</span>
+                            </td>
+                            <td ui-sref="question({id:q.ID})" style="white-space: nowrap;">{{q.AnswersCount || '0'|pNumber}} جواب </td>
+                            <td ui-sref="question({id:q.ID})" style="white-space: nowrap;">
                                 <span class="persian-rtl text-muted" style="font-size: 12px;">
                                     {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}
                                 </span>
