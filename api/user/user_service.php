@@ -109,7 +109,7 @@ $app->post('/getUserMessages', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     if(!isset($data->UserID))
     {echoResponse(201,"bad request"); return;}
-    $resQ= $db->makeQuery("select 'Question' as EventType , qv.ViewDate as EventView , fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
+    $resQ= $db->makeQuery("select * from (select 'Question' as EventType , qv.ViewDate as EventView , fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
 (SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
 from subject_follow as sf
 inner join forum_question fq on fq.SubjectID = sf.SubjectID
@@ -142,8 +142,8 @@ from person_follow as pf
 inner join forum_question fq on fq.AuthorID = pf.TargetUserID
 inner join user as u on u.ID = fq.AuthorID
 LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = pf.UserID
-where fq.adminAccepted = 1 and pf.UserID = '$data->UserID'
-order by EventDate limit 10");
+where fq.adminAccepted = 1 and pf.UserID = '$data->UserID') as resp
+order by resp.EventDate DESC limit 10");
 
     $resp = [];
     while($r = $resQ->fetch_assoc()){
@@ -693,12 +693,21 @@ $app->post('/rateAnswer', function() use ($app)  {
 $app->post('/saveAnswer', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
-    if(!isset($data->AuthorID) || !isset($data->QuestionID) || !isset($data->AnswerText))
+    $sess = new Session();
+    if(!isset($data->QuestionID) || !isset($data->AnswerText))
         {echoResponse(201, 'bad Request');return;}
 
-    $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate","'$data->AuthorID','$data->QuestionID','$data->AnswerText',now()");
-    echoResponse(200, true);
-    return;
+    if($sess->IsAdmin)
+    {
+        $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate,AdminAccepted","'$sess->UserID','$data->QuestionID','$data->AnswerText',now(),1");
+        echoResponse(200, true);
+        return;
+    }else{
+
+        $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate","'$sess->UserID','$data->QuestionID','$data->AnswerText',now()");
+        echoResponse(200, true);
+        return;
+    }
 });
 
 $app->post('/saveMainSubject', function() use ($app)  {
