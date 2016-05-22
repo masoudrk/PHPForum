@@ -31,7 +31,7 @@
                             <th>تاریخ</th>
                             <th>وضعیت تایید ادمین</th>
                         </tr>
-                        <tr ng-repeat="q in answer.all">
+                        <tr ng-repeat="q in answer.all" class="link" ui-sref="question({id:q.QuestionID})">
                             <td  style="width: 50px;">
                                 <img class="img-circle" ng-src="{{q.QuestionerImage}}"
                                      style="width:40px;">

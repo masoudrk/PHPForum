@@ -29,7 +29,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         })
         .state("dashboard", {
-            url: "/dashboard",
+            url: "/Dashboard",
             templateUrl: "partials/Dashboard/Dashboard.html",
             controller: 'DashboardCtrl',
             resolve: {
@@ -41,7 +41,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         }).state("profile", {
-            url: "/profile",
+            url: "/Profile",
             templateUrl: "partials/Profile/Profile.html",
             controller: 'ProfileCtrl',
             resolve: {
@@ -54,7 +54,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         })
         .state("forum_home", {
-            url: "/home",
+            url: "/Home",
             templateUrl: "partials/Forum/_Home/Home.html",
             controller: 'HomeCtrl',
             resolve: {
@@ -93,12 +93,12 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         })
         .state("new_question", {
-            url: "/new_question/:id",
-            templateUrl: "partials/Question/NewQuestion/NewQuestion.html",
+            url: "/NewQuestion/:id",
+            templateUrl: "partials/MyActions/NewQuestion/NewQuestion.html",
             controller: 'NewQuestionCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Question/NewQuestion/NewQuestionCtrl.js']);
+                    return $ocLazyLoad.load(['partials/MyActions/NewQuestion/NewQuestionCtrl.js']);
                 }],
                 $title: function () {
                     return 'سوال جدید';
@@ -106,19 +106,33 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         })
         .state("questions", {
-            url: "/questions",
-            templateUrl: "partials/Question/Questions/Questions.html",
+            url: "/MyQuestions",
+            templateUrl: "partials/MyActions/Questions/Questions.html",
             controller: 'QuestionsCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Question/Questions/QuestionsCtrl.js']);
+                    return $ocLazyLoad.load(['partials/MyActions/Questions/QuestionsCtrl.js']);
                 }],
                 $title: function () {
                     return 'سوالات شما';
                 }
             }
-        }).state("question", {
-        url: "/question/:id",
+        })
+        .state("my_answers", {
+            url: "/MyAnswers",
+            templateUrl: "partials/MyActions/Answers/Answers.html",
+            controller: 'AnswersCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/MyActions/Answers/AnswersCtrl.js']);
+                }],
+                $title: function () {
+                    return 'جواب های شما';
+                }
+            }
+        })
+        .state("question", {
+            url: "/Question/:id",
             templateUrl: "partials/Forum/Question/Question.html",
             controller: 'QuestionCtrl',
             resolve: {
@@ -153,27 +167,6 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
 }
 ]);
 
-var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
-var traverse = function (el) {
-    if (el.nodeType == 3) {
-        var list = el.data.match(/[0-9]/g);
-        if (list != null && list.length != 0) {
-            for (var i = 0; i < list.length; i++)
-                el.data = el.data.replace(list[i], persian[list[i]]);
-        }
-    }
-    for (var i = 0; i < el.childNodes.length; i++) {
-        traverse(el.childNodes[i]);
-    }
-}
-
-var fixPersianNumbers = function () {
-    traverse(document.body);
-}
-
-var fixFooter = function () {
-    traverse(document.body);
-}
 
 var activeElement = function (parent , name) {
     if(name){

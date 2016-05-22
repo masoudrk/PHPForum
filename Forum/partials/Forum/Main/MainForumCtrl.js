@@ -18,11 +18,6 @@ angular.module(appName).controller('MainForumCtrl',
 		.then(function (res) {
         $scope.forumData = res;
 	});
-    
-    $scope.loadFinishPageData = function () {
-        $timeout(function(){fixPersianNumbers()});
-    }
-    
 
     $scope.options = {
         "chart": {
@@ -87,5 +82,4 @@ angular.module(appName).controller('MainForumCtrl',
     };
 
 	activeElement('#SForum','#S' + $stateParams.id);
-	fixFooter();
 });

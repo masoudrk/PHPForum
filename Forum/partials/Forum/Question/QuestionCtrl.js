@@ -136,6 +136,4 @@
                 return 'label-success';
         }
     }
-
-    fixFooter();
 });

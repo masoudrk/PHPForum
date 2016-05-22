@@ -56,7 +56,7 @@
                             <span class="label label-success" ng-bind="UserMessages.NewMessages | pNumber"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما {{UserMessages.NewMessages}} پیام جدید دارید!</li>
+                            <li class="header">شما <span>{{UserMessages.NewMessages| pNumber}}</span> پیام جدید دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
@@ -138,10 +138,10 @@
                     <li class="dropdown notifications-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">0</span>
+                            <span class="label label-warning" ng-bind="'0'| pNumber"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما 0 اعلان جدید دارید!</li>
+                            <li class="header"> شما <span>{{'0'| pNumber}}</span> اعلان جدید دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
@@ -232,7 +232,6 @@
                             </li>
                         </ul>
                     </li>
-
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
@@ -244,8 +243,10 @@
                             <li class="user-header">
                                 <img ng-src="{{user.Image}}" class="img-circle link" alt="User Image" ui-sref="profile">
                                 <p>
-                                    <span ng-bind="user.FullName"> </span> - کاربر
-                                    <small class="vazir-font">عضویت در سال {{user.SignupDate |  jalaliDateSimple:'jYYYY'}}</small>
+                                    <span ng-bind="user.FullName |pNumber"> </span> - کاربر
+                                    <small class="vazir-font"> عضویت در سال
+                                        <span ng-bind="user.SignupDate |
+                                        jalaliDateSimple:'jYYYY'|pNumber"></span></small>
                                 </p>
                             </li>
                             <!-- Menu Body -->
@@ -381,7 +382,7 @@
 
                 <li id="SQuestion" class="treeview">
                     <a class="link">
-                        <i class="fa fa-question-circle"></i> <span>مدیریت سوال ها</span>
+                        <i class="fa fa-bullhorn"></i> <span>فعالیت ها</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -393,6 +394,11 @@
                         <li id="SQuestions">
                             <a ui-sref="questions">
                                 <i class="fa fa-circle-o"></i>سوالات شما
+                            </a>
+                        </li>
+                        <li id="SAnswers">
+                            <a ui-sref="my_answers">
+                                <i class="fa fa-circle-o"></i>جواب های شما
                             </a>
                         </li>
                     </ul>
@@ -442,7 +448,7 @@
 
     <footer class="main-footer persian-rtl">
         <div class="pull-left hidden-xs">
-            <b>نسخه</b> 1.0.0
+            <b>نسخه</b> {{'1.0.0'| pNumber}}
         </div>
             <strong class="persian-rtl"></strong>
             کلیه حقوق مادی و معنوی این سایت متعلق به اداره کل ارتباطات و علائم الکتریکی راه آهن جمهوری اسلامی ایران می باشد.

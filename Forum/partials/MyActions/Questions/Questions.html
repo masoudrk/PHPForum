@@ -32,10 +32,10 @@
                             <th style="width: 100px"></th>
                         </tr>
                         <tr ng-repeat="q in question.all">
-                            <td >{{q.Title| subString :50}}</td>
-                            <td >{{q.SubjectTitle| subString :50}}</td>
+                            <td >{{q.Title| subString :50|pNumber}}</td>
+                            <td >{{q.SubjectTitle| subString :50|pNumber}}</td>
                             <td>
-                                <span class="persian-rtl text-muted">{{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'}}</span>
+                                <span class="persian-rtl text-muted">{{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}</span>
                             </td>
                             <td ng-switch="q.AdminAccepted">
                                 <span class="label label-danger" ng-switch-when="-1" >رد شده</span>

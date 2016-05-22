@@ -108,14 +108,14 @@
     function fieldTemplate(el, attrs) {
         return '<ul class="english-text" data-ng-hide="Hide" data-ng-class="ulClass"> ' +
             '<li ' +
-                'title="{{Item.title}}" ' +
+                'title="{{Item.title | pNumber}}" ' +
                 'data-ng-class="Item.liClass" ' +
                 'data-ng-repeat="Item in List"> ' +
                     '<a ' +
                         (attrs.pgHref ? 'data-ng-href="{{Item.pgHref}}" ' : 'href ') +
                         'data-ng-class="Item.aClass" ' +
                         'data-ng-click="Item.action()" ' +
-                        'data-ng-bind="Item.value">' +
+                        'data-ng-bind="Item.value | pNumber">' +
                     '</a> ' +
             '</li>' +
         '</ul>'

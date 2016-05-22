@@ -90,5 +90,4 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 	}
 
 	activeElement('#SQuestion','#SQuestionNew');
-	fixFooter();
 });
