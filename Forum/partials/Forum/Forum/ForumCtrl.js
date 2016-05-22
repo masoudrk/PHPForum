@@ -4,6 +4,12 @@ angular.module(appName).controller('ForumCtrl',
     if(!$stateParams.id || $stateParams.id ==''){
         $state.go('forum_home');
     }
+        
+    $scope.activity = {
+        low : 'solid 2px #e74c3c',
+        medium : 'solid 2px #f1c40f',
+        high : 'solid 2px #2ecc71'
+    };
 
     $scope.pagingParams = { SubjectID : $stateParams.id };
     $scope.question = {};

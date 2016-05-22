@@ -1,0 +1,69 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>جواب های شما</small>
+        همه جواب ها
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">جواب های شما</li>
+    </ol>
+</section>
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="col-xs-12">
+            <div class="box box-warning">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">جواب های شما</h3>
+                    <i class="fa fa-question text-muted"></i>
+                    <div class="box-tools">
+                        <button class="btn btn-sm btn-success" ui-sref="new_question">پرسیدن سوال</button>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th colspan="2">جواب به</th>
+                            <th>خلاصه جواب شما</th>
+                            <th></th>
+                            <th>تاریخ</th>
+                            <th>وضعیت تایید ادمین</th>
+                        </tr>
+                        <tr ng-repeat="q in answer.all">
+                            <td  style="width: 50px;">
+                                <img class="img-circle" ng-src="{{q.QuestionerImage}}"
+                                     style="width:40px;">
+                            </td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
+
+                            <td class="max-col-width-100">{{q.AnswerText| subString :50|pNumber}}</td>
+                            <td >{{q.SubjectTitle| subString :50 |pNumber}}</td>
+                            <td>
+                                <span class="persian-rtl text-muted">{{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}</span>
+                            </td>
+                            <td ng-switch="q.AdminAccepted">
+                                <span class="label label-danger" ng-switch-when="-1" >رد شده</span>
+                                <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
+                                <span class="label label-success" ng-switch-when="1" >تایید شده</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllMyAnswers"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 on-load-finish="loadFinishPageData()"
+                                 items="answer.all">
+                    </auto-paging>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

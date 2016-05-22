@@ -40,14 +40,23 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover" ng-show="question.all.length > 0">
                         <tbody>
-                        <tr class="link" ui-sref="question({id:q.ID})" ng-repeat="q in question.all">
-                            <td  style="width: 50px;"><img class="img-circle" ng-src="{{q.Image}}"
-                                                           style="width:40px"></td>
-                            <td style="vertical-align: middle;">{{q.FullName | subString :20}}</td>
-                            <td style="vertical-align: middle;">{{q.Title | subString :50}}</td>
-                            <td style="vertical-align: middle;">{{q.AnswersCount}} جواب </td>
-                            <td style="vertical-align: middle;"><span class="persian-rtl text-muted">{{q.CreationDate |
-                                jalaliDate :'jYYYY/jMM/jDD'}}</span></td>
+                        <tr class="link" ng-repeat="q in question.all">
+                            <td  style="width: 50px;"><img  class="img-circle" ng-src="{{q.Image}}"
+                                                   style="width:40px"
+                                                    ng-style="{'border': (q.Rate > 5) ? activity.high :
+                                                                (q.Rate > 2.5)?activity.medium : activity.low}"
+                                                   title="{{q.Rate | number:1 | pNumber | concat : ' امتیاز '}}"
+                                                   data-toggle="tooltip" data-placement="top"
+                                                   tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
+                                                   tooltip-append-to-body="true"></td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.Title | subString :50|pNumber}}</td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.AnswersCount|pNumber}} جواب </td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">
+                                <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                    {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
+                                </span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -76,14 +85,24 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover" ng-show="question.allAnswered.length > 0">
                         <tbody>
-                        <tr class="link" ui-sref="question({id:q.ID})" ng-repeat="q in question.allAnswered">
-                            <td  style="width: 50px;"><img class="img-circle" ng-src="{{q.Image}}"
-                                                           style="width:40px"></td>
-                            <td style="vertical-align: middle;">{{q.FullName | subString :20}}</td>
-                            <td style="vertical-align: middle;">{{q.Title | subString :50}}</td>
-                            <td style="vertical-align: middle;">{{q.AnswersCount}} جواب </td>
-                            <td style="vertical-align: middle;"><span class="persian-rtl text-muted">{{q.CreationDate |
-                                jalaliDate :'jYYYY/jMM/jDD'}}</span></td>
+                        <tr class="link" ng-repeat="q in question.allAnswered">
+                            <td  style="width: 50px;">
+                                <img class="img-circle" ng-src="{{q.Image}}"
+                                     style="width:40px;"
+                                     ng-style="{'border': (q.Rate > 5) ? activity.high :
+                                                   (q.Rate > 2.5)?activity.medium:activity.low}"
+                                     title="{{(q.score || '0' )| number:1 | pNumber | concat : ' امتیاز '}}" data-toggle="tooltip" data-placement="top"
+                                     tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
+                                     tooltip-append-to-body="true">
+                            </td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.Title | subString :50|pNumber}}</td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.AnswersCount|pNumber}} جواب </td>
+                            <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">
+                                <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                    {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}
+                                </span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
