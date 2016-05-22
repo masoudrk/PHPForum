@@ -17,16 +17,12 @@
   word-wrap: break-word;
     text-align: right;
 
-    font-family: 'Yekan', Tahoma;
-    font-weight: 600;
+  font-family: 'Vazir', Tahoma;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
     direction: rtl;
-}
-.toast-message-en {
-  -ms-word-wrap: break-word;
-  word-wrap: break-word;
-
-    font-family: 'Segoe', Tahoma;
-    direction: ltr;
 }
 .toast-message a,
 .toast-message label {

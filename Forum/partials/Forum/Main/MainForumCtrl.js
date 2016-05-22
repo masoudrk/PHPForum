@@ -13,72 +13,78 @@ angular.module(appName).controller('MainForumCtrl',
 
     $scope.pagingParams = { MainSubjectName : $stateParams.id };
     $scope.question = {};
+    $scope.data = [
+        {
+            "key" : "سوال ها" ,
+            "values" : []
+        },
+
+        {
+            "key" : "جواب ها" ,
+            "values" : []
+        }
+    ]
 
 	Extention.post('getMainForumData',{MainSubjectName: $stateParams.id})
 		.then(function (res) {
         $scope.forumData = res;
+        //$scope.data[0].values=[[ 1025409600000 , 23.041422681023] , [ 1028088000000 , 19.854291255832] , [
+            // 1030766400000 , 21.02286281168] ];
+            //res.ChartAData;
+        //$scope.data[1].values =[ [ 1025409600000 , 7.9356392949025] , [ 1028088000000 , 7.4514668527298] , [
+            // 1030766400000 , 7.9085410566608]];
+            // res.ChartQData;
+
+        $scope.data = [
+            {
+                "key" : "Africa" ,
+                "values" : [ [ 1463347751 , 1] , [ 1463347128 , 8] , [ 1463433820 , 20] ]
+            }
+        ];
 	});
 
     $scope.options = {
-        "chart": {
-            "type": "lineChart",
-            "height": 200,
-            "margin": {
-                "top": 20,
-                "right": 20,
-                "bottom": 40,
-                "left": 55
+        chart: {
+            type: 'stackedAreaChart',
+            height: 300,
+            margin : {
+                top: 20,
+                right: 20,
+                bottom: 30,
+                left: 40
             },
-            "showLegend": false,
-            "useInteractiveGuideline": true,
-            "dispatch": {},
-            "xAxis": {
-                "axisLabel": "روز"
+            x: function(d){
+                return d[0];
             },
-            "yAxis": {
-                "axisLabel": "سوالات",
-                "axisLabelDistance": -10,
-                tickFormat: function(d){
-                    return d3.format('.02f')(d);
+            y: function(d){
+                return d[1];
+            },
+            useVoronoi: false,
+            clipEdge: false,
+            showLegend:false,
+            duration: 100,
+            useInteractiveGuideline: true,
+            xAxis: {
+                showMaxMin: false,
+                tickFormat: function(d) {
+                    return d3.time.format('%x')(new Date(d))
                 }
             },
-            "caption": {
-                enable: false
+            yAxis: {
+                tickFormat: function(d){
+                    return d3.format(',.2f')(d);
+                }
             },
-            "legend": {
-                enable: false
+            zoom: {
+                enabled: true,
+                scaleExtent: [1, 10],
+                useFixedDomain: false,
+                useNiceScale: false,
+                horizontalOff: false,
+                verticalOff: true,
+                unzoomEventType: 'dblclick.zoom'
             }
         }
-    };
-
-    $scope.data = sinAndCos();
-
-    /*Random Data Generator */
-    function sinAndCos() {
-        var sin = [],sin2 = [],
-            cos = [];
-
-        //Data is represented as an array of {x,y} pairs.
-        for (var i = 0; i < 100; i++) {
-            var  t = 0;
-            if(i>70)
-                t=i/2;
-            else if(i  > 50)
-                t= 5;
-            else
-                t= i;
-            sin2.push({x: i, y: (t < 0)?-t:t});
-        }
-
-        //Line chart data should be sent as an array of series objects.
-        return [
-            {
-                values: sin2,
-                key: 'Another sine wave',
-                color: '#7777ff',
-                area: true      //area - set to true if you want this line to turn into a filled area chart.
-            }
-        ];
     };
 
 	activeElement('#SForum','#S' + $stateParams.id);

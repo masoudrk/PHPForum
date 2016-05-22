@@ -147,7 +147,7 @@
                                 <ul class="menu">
                                 </ul>
                             </li>
-                            <li class="footer"><a href="#">نمایش همه</a></li>
+                            <li class="footer"><a >نمایش همه</a></li>
                         </ul>
                     </li>
                     <!-- Tasks: style can be found in dropdown.less -->
@@ -192,7 +192,7 @@
                                 </ul>
                             </li>
                             <li class="footer">
-                                    <a href="#/">نمایش همه سوالات شما</a>
+                                    <a >نمایش همه سوالات شما</a>
                             </li>
                         </ul>
                     </li>

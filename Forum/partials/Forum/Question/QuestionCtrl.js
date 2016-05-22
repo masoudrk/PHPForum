@@ -7,9 +7,6 @@
         $scope.question = res;
         console.log($scope.question);
         $scope.checkNowOnline();
-        $timeout(function () {
-            fixFooter();
-        } );
     });
 
     $rootScope.$on("socketDataChanged", function(){

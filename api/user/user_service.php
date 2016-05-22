@@ -249,11 +249,13 @@ $app->post('/getMainForumData', function() use ($app)  {
     $resQ = $db->makeQuery("SELECT * FROM forum_main_subject WHERE SubjectName='$data->MainSubjectName'");
     $mainSubject = $resQ->fetch_assoc();
     $res['MainSubject'] = $mainSubject;
+    $mainSubjectID = $mainSubject['SubjectID'];
 
-    $resQ = $db->makeQuery("SELECT forum_subject.*,
-(SELECT Count(*) FROM forum_question WHERE SubjectID=forum_subject.ID AND AdminAccepted=1) as TotalQuestions
-FROM forum_subject WHERE forum_subject
-    .ParentSubjectID='".$mainSubject['SubjectID']."'");
+    $resQ = $db->makeQuery("SELECT fs.*,
+(SELECT Count(*) FROM forum_question WHERE SubjectID=fs.ID AND AdminAccepted=1) as TotalQuestions,
+(SELECT Count(*) FROM forum_answer inner join forum_question on forum_question.ID=forum_answer.QuestionID WHERE 
+forum_question.SubjectID=fs.ID AND forum_question.AdminAccepted=1) as TotalAnswers
+FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
 
     $subjectChilds = [];
     while($r = $resQ->fetch_assoc()){
@@ -262,6 +264,26 @@ FROM forum_subject WHERE forum_subject
 
     $res['SubjectChilds'] = $subjectChilds;
 
+    $resQ = $db->makeQuery("
+select UNIX_TIMESTAMP(fq.CreationDate), count(*) as QTotal 
+from
+  (SELECT @rownum := 0) r ,forum_subject as fs
+  LEFT JOIN forum_question as fq on fq.SubjectID=fs.ID 
+  where fs.ParentSubjectID='$mainSubjectID' GROUP BY DAY(fq.CreationDate),fs.Title");
+
+    $res['ChartQData'] = $resQ->fetch_all();
+
+    $resQ = $db->makeQuery("
+select  UNIX_TIMESTAMP(fq.CreationDate), count(*) as QTotal 
+from
+  (SELECT @rownum := 0) r ,forum_answer as fa
+  LEFT JOIN forum_question as fq on fq.ID=fa.QuestionID
+  LEFT JOIN forum_subject as fs on fs.ID=fq.SubjectID
+
+where fs.ParentSubjectID='$mainSubjectID'
+
+GROUP BY DAY(fq.CreationDate)");
+    $res['ChartAData'] = $resQ->fetch_all();
 
     echoResponse(200, $res);
 });
@@ -304,6 +326,7 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
 
+    $sess = new Session();
     $pr = new Pagination($data);
 
     $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
@@ -320,14 +343,15 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
         $query = "SELECT u.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
 `FullPath` as Image ,
  (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' ,
+ (SELECT question_view.ID from question_view 
+        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate
- FROM 
-forum_question  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
-file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
-.AdminAccepted='1' 
-AND 
-forum_subject
-.ParentSubjectID='$subjectID' order by forum_question.CreationDate desc";
+ FROM forum_question 
+ LEFT JOIN user as u on u.ID=forum_question.AuthorID 
+ LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
+ LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
+ WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' 
+ order by forum_question.CreationDate desc";
 
         $pageRes = $pr->getPage($db,$query);
         echoResponse(200, $pageRes);
@@ -335,7 +359,9 @@ forum_subject
     else if(isset($data->SubjectID)){
 
         $query = "SELECT u.FullName ,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
-`FullPath` as Image ,($rateSelection) as Rate
+`FullPath` as Image ,($rateSelection) as Rate,
+ (SELECT question_view.ID from question_view 
+        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' 
  FROM forum_question  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
 file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
 .AdminAccepted='1' 
@@ -353,6 +379,7 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
 
+    $sess= new Session();
     $pr = new Pagination($data);
 
     $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
@@ -368,7 +395,9 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
         $query = "SELECT u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
  forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount,
- ($rateSelection) as Rate
+ ($rateSelection) as Rate,
+ (SELECT question_view.ID from question_view 
+        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
   FROM forum_question 
  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
@@ -385,8 +414,9 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
 
         $query = "SELECT u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
  forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount ,
-($rateSelection) as Rate
- 
+($rateSelection) as Rate,
+ (SELECT question_view.ID from question_view 
+        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
  FROM forum_question 
  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=u.AvatarID
  LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID from forum_answer group by forum_answer.QuestionID) s on 

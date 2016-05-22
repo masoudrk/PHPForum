@@ -393,37 +393,6 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         obj.getAuth = function () {
             return { authenticated: $rootScope.authenticated, isAdmin: $rootScope.isAdmin };
         }
-
-        obj.openSignupPanel = function (lang) {
-            var template;
-            if (lang == 'en')
-                template = 'partials/HomeEN/SignupTemplate.html';
-            else
-                template = 'partials/Home/SignupTemplate.html';
-
-            $uibModal.open({
-                animation: true,
-                templateUrl: template,
-                controller: 'authCtrl',
-                size: 'md'
-            });
-        }
-
-        obj.openSigninPanel = function (lang) {
-            var template;
-            if (lang == 'en')
-                template = 'partials/HomeEN/LoginTemplate.html';
-            else
-                template = 'partials/Home/LoginTemplate.html';
-
-            $uibModal.open({
-                animation: true,
-                templateUrl: template,
-                controller: 'authCtrl',
-                size: 'md'
-            });
-        }
-
         obj.scrollTo = function (y) {
 
             var startY = currentYPosition();
