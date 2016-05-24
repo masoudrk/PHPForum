@@ -57,94 +57,94 @@
                         <li class="dropdown messages-menu">
                             <a class="dropdown-toggle link" data-toggle="dropdown">
                                 <i class="fa fa-envelope-o"></i>
-                                <span class="label label-success">4</span>
+                                <span class="label label-success" ng-bind="UserMessages.NewMessages | pNumber"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">شما 4 پیام جدید دارید!</li>
+                                <li class="header">
+                                    شما
+                                    <span>{{UserMessages.NewMessages| pNumber}}</span>
+                                    پیام جدید دارید!
+                                </li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
-                                        <li>
-                                            <!-- start message -->
-                                            <a href="#">
+                                        <li ng-repeat="item in UserMessages">
+                                            <!-- start event -->
+                                            <a ui-sref="question({id:item.EventID})">
                                                 <div class="pull-right">
-                                                    <img src="../images/masoud.jpg" class="img-circle" alt="User Image" />
+                                                    <img src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
+                                                        class="img-circle"
+                                                        alt="User Image" />
                                                 </div>
                                                 <h4 class="vazir-font">
-                                                    تیم پشتیبانی
+                                                    {{ou.FullName}}
                                                     <small class="persian-rtl">
                                                         <i class="fa fa-clock-o"></i>
-                                                        5 دقیق پیش
+                                                        {{item.EventDate | fromNow |pNumber}}
                                                     </small>
                                                 </h4>
-                                                <p>چرا شما یک تم جدید خریداری نمی کنید؟</p>
+                                                <h5 class="text-right" style="margin-top: 0px;margin-bottom: 5px;">
+                                                    {{item.EventUser|pNumber}}
+                                                </h5>
+                                                <p ng-switch="item.EventType">
+                                                    <span class="label label-warning" style="font-size: 10px"
+                                                        ng-switch-when="Person">
+                                                        سوال جدید
+                                                    </span>
+                                                    <span class="label label-warning" style="font-size: 10px"
+                                                        ng-switch-when="Answer">
+                                                        پاسخ
+                                                    </span>
+                                                    <span class="label label-warning" style="font-size: 10px"
+                                                        ng-switch-when="Question">
+                                                        سوال جدید
+                                                    </span>
+                                                </p>
+                                                <p class="text-right text-info" ui-sref="question({id:item.EventID})"
+                                                    style="margin-top: 5px;">
+                                                    <span style="margin-right: 5px;">
+                                                        سوال : {{item.EventTitle | subString :100|pNumber}}
+                                                    </span>
+                                                    <span class="pull-left" dir="ltr" ng-show="item.EventScore">
+                                                        <i class="fa fa-thumbs-o-up"></i>
+                                                        {{item.EventScore|pNumber}}
+                                                    </span>
+                                                </p>
                                             </a>
                                         </li>
-                                        <!-- end message -->
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-right">
-                                                    <img src="../images/user3-128x128.jpg" class="img-circle" alt="User Image" />
-                                                </div>
-                                                <h4 class="vazir-font">
-                                                    تیم طراحی
-                                                    <small class="persian-rtl">
-                                                        <i class="fa fa-clock-o"></i>
-                                                        2 ساعت
-                                                    </small>
-                                                </h4>
-                                                <p>لطفا به پیشنهاد من توجه کنید!</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-right">
-                                                    <img src="../images/user4-128x128.jpg" class="img-circle" alt="User Image" />
-                                                </div>
-                                                <h4 class="vazir-font">
-                                                    برنامه نویس
-                                                    <small class="persian-rtl">
-                                                        <i class="fa fa-clock-o"></i>
-                                                        امروز
-                                                    </small>
-                                                </h4>
-                                                <p>بهترین نسخه این cms در حال بروزرسانیست! به من یک پیام بدهید.</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-right">
-                                                    <img src="../images/user3-128x128.jpg" class="img-circle" alt="User Image" />
-                                                </div>
-                                                <h4 class="vazir-font">
-                                                    فروشندگان
-                                                    <small class="persian-rtl">
-                                                        <i class="fa fa-clock-o"></i>
-                                                        دیروز
-                                                    </small>
-                                                </h4>
-                                                <p>لطفا یک پیام به من بدهید</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-right">
-                                                    <img src="../images/user4-128x128.jpg" class="img-circle" alt="User Image" />
-                                                </div>
-                                                <h4 class="vazir-font">
-                                                    بینندگان
-                                                    <small class="persian-rtl">
-                                                        <i class="fa fa-clock-o"></i>
-                                                        2 روز پیش
-                                                    </small>
-                                                </h4>
-                                                <p>ممنون از انتقاد شما دوست عزیز</p>
-                                            </a>
-                                        </li>
+                                        <!-- end event -->
+                                        <!--                                    <li style="margin:10px" ng-repeat="item in UserMessages" class="persian-rtl link">-->
+                                        <!--                                        <h5 class="text-right" ui-sref="question({id:item.EventID})">-->
+                                        <!--                                                <span ng-show="item.EventType =='Person'">-->
+                                        <!--                                                    <i class="fa fa-user" aria-hidden="true"></i>-->
+                                        <!--                                                    سوال-->
+                                        <!--                                                </span>-->
+                                        <!--                                                <span ng-show="item.EventType =='Answer'">-->
+                                        <!--                                                    <i class="fa fa-reply" aria-hidden="true"></i>-->
+                                        <!--                                                    پاسخ-->
+                                        <!--                                                </span>-->
+                                        <!--                                                <span ng-show="item.EventType =='Question'">-->
+                                        <!--                                                    <i class="fa fa-question" aria-hidden="true"></i>-->
+                                        <!--                                                    سوال-->
+                                        <!--                                                </span>-->
+                                        <!--                                            <small>- {{item.EventUser}}</small>-->
+                                        <!--                                            <i ng-show="item.EventView !=null" class="fa fa-check text-success pull-left hvr-pulse" aria-hidden="true"></i>-->
+                                        <!--                                            <i ng-hide="item.EventView !=null" class="fa fa-eye text-danger pull-left hvr-pulse" aria-hidden="true"></i>-->
+                                        <!--                                            <small class="pull-left">{{item.EventDate | fromNow}}-->
+                                        <!--                                            </small>-->
+                                        <!--                                        </h5>-->
+                                        <!--                                        <h5 class="text-right text-info" ui-sref="question({id:item.EventID})">{{item.EventTitle | subString :35}}-->
+                                        <!--                                                <span class="pull-left" dir="ltr" ng-show="item.EventScore !=null">-->
+                                        <!--                                                    <i class="fa fa-thumbs-o-up"></i>-->
+                                        <!--                                                    {{item.EventScore}}-->
+                                        <!--                                                </span>-->
+                                        <!--                                        </h5>-->
+                                        <!--                                        <hr />-->
+                                        <!--                                    </li>-->
                                     </ul>
                                 </li>
                                 <li class="footer">
-                                    <a href="#">نمایش همه پیام ها</a>
+                                    <a>نمایش همه پیام ها</a>
                                 </li>
                             </ul>
                         </li>
@@ -152,125 +152,105 @@
                         <li class="dropdown notifications-menu">
                             <a class="dropdown-toggle link" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
-                                <span class="label label-warning">10</span>
+                                <span class="label label-warning" ng-bind="'0'| pNumber"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">شما 10 اعلان جدید دارید!</li>
+                                <li class="header">
+                                    شما
+                                    <span>{{'0'| pNumber}}</span>
+                                    اعلان جدید دارید!
+                                </li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
-                                    <ul class="menu">
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-users text-aqua"></i>
-                                                5 عضو جدید به ما پیوستند!
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-warning text-yellow"></i>
-                                                در حال حاضر سایت به صورت فعال عمل میکند اما اخیرا به مشکلی در سرور برخورده ایم
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-users text-red"></i>
-                                                12 عضو جدید به ما پیوستند
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-shopping-cart text-green"></i>
-                                                سوالات شما در حال منقضی شدن هستند
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-user text-red"></i>
-                                                شما رمز خود را عوض کردید
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <ul class="menu"></ul>
                                 </li>
                                 <li class="footer">
-                                    <a href="#">نمایش همه</a>
+                                    <a>نمایش همه</a>
                                 </li>
                             </ul>
                         </li>
                         <!-- Tasks: style can be found in dropdown.less -->
-                        <li class="dropdown tasks-menu">
-                            <a class="dropdown-toggle link" data-toggle="dropdown">
-                                <i class="fa fa-flag-o"></i>
-                                <span class="label label-danger">9</span>
+                        <!--                    <li class="dropdown tasks-menu">-->
+                        <!--                        <a class="dropdown-toggle link" data-toggle="dropdown">-->
+                        <!--                            <i class="fa fa-flag-o"></i>-->
+                        <!--                        </a>-->
+                        <!--                        <ul class="dropdown-menu">-->
+                        <!--                                <li class="header">آخرین سوالات شما</li>-->
+                        <!--                            <li>-->
+                        <!--                                    <ul class="menu">-->
+                        <!--                                        <li style="margin:10px" ng-repeat="item in UserQuestions" class="persian-rtl link">-->
+                        <!--                                            <h5 class="text-right" ui-sref="question({id:item.ID})">-->
+                        <!--                                                {{item.Title | subString :20}}-->
+                        <!--                                                <span class="pull-left persian-rtl" dir="rtl" ng-show="item.CreationDate !=null">-->
+                        <!--                                                    {{item.CreationDate | fromNow}}-->
+                        <!--                                                    <i class="fa fa-clock-o"></i>-->
+                        <!--                                                </span>-->
+                        <!--                                            </h5>-->
+                        <!--                                            <h5>-->
+                        <!--                                                <span ng-show="item.QuestionUserFollow != null" class="description pull-right">-->
+                        <!--                                                    {{item.QuestionUserFollow}}-->
+                        <!--                                                    <i class="fa fa-users" aria-hidden="true"></i>-->
+                        <!--                                                </span>-->
+                        <!--                                                <span ng-show="item.questionView != null" class="description text-ceter">-->
+                        <!--                                                    {{item.questionView}}-->
+                        <!--                                                    <i class="fa fa-eye" aria-hidden="true"></i>-->
+                        <!--                                                </span>-->
+                        <!--                                                <span ng-show="item.questionAnswers != null" class="description pull-left">-->
+                        <!--                                                    {{item.questionAnswers}}-->
+                        <!--                                                    <i class="fa fa-home" aria-hidden="true"></i>-->
+                        <!--                                                </span>-->
+                        <!--                                                <span ng-show="item.QuestionRate != null" class="description pull-left">-->
+                        <!--                                                    {{item.QuestionRate}}-->
+                        <!--                                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>-->
+                        <!--                                                </span>-->
+                        <!--                                            </h5>-->
+                        <!--                                            <hr />-->
+                        <!--                                        </li>-->
+                        <!--                                </ul>-->
+                        <!--                            </li>-->
+                        <!--                            <li class="footer">-->
+                        <!--                                    <a href="#/">نمایش همه سوالات شما</a>-->
+                        <!--                            </li>-->
+                        <!--                        </ul>-->
+                        <!--                    </li>-->
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <li class="dropdown messages-menu">
+                            <a class="dropdown-toggle link" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-headphones"></i>
+                                <span class="label label-danger" ng-show="socketData.OnlineUsers.length"
+                                    ng-bind="socketData.OnlineUsers.length | pNumber"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">شما 9 کار انجام نشده دارید!</li>
+                                <li class="header">{{socketData.OnlineUsers.length|pNumber}} نفر آنلاین </li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
-                                    <ul class="menu">
-                                        <li>
-                                            <!-- Task item -->
-                                            <a href="#">
-                                                <h3 class="vazir-font">
-                                                    طراحی دکمه ها
-                                                    <small class="pull-left">20%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">20% انجام شده</span>
-                                                    </div>
+                                    <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
+
+                                        <li ng-repeat="ou in socketData.OnlineUsers">
+                                            <!-- start message -->
+                                            <a ui-sref="UserProfile({id:ou.ID})">
+                                                <div class="pull-right">
+                                                    <img src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
+                                                        class="img-circle"
+                                                        alt="User
+                                                Image" />
                                                 </div>
+                                                <h4 class="vazir-font">
+                                                    {{ou.FullName}}
+                                                    <small class="persian-rtl">
+                                                        <i class="fa fa-clock-o"></i>
+                                                        {{ou.LastActiveTime | fromNow |pNumber}}
+                                                    </small>
+                                                </h4>
+                                                <p style="padding-top: 5px">
+                                                    <i class="fa fa-circle text-green"></i>
+                                                    آنلاین
+                                                </p>
+
                                             </a>
                                         </li>
-                                        <!-- end task item -->
-                                        <li>
-                                            <!-- Task item -->
-                                            <a href="#">
-                                                <h3 class="vazir-font">
-                                                    ایجاد تم زیبا
-                                                    <small class="pull-left">40%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">40% انجام شده</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <!-- end task item -->
-                                        <li>
-                                            <!-- Task item -->
-                                            <a href="#">
-                                                <h3 class="vazir-font">
-                                                    برخی از کارها که باید انجام شوند
-                                                    <small class="pull-left">60%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">60% انجام شده</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <!-- end task item -->
-                                        <li>
-                                            <!-- Task item -->
-                                            <a href="#">
-                                                <h3 class="vazir-font">
-                                                    ایجاد انیمیشن های زیبا
-                                                    <small class="pull-left">80%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">80% انجام شده</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <!-- end task item -->
+                                        <!-- end message -->
                                     </ul>
-                                </li>
-                                <li class="footer">
-                                    <a href="#">نمایش همه وظایف</a>
                                 </li>
                             </ul>
                         </li>
@@ -359,10 +339,16 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
 
-                    <li class="treeview">
+                    <li ng-show="session.AdminPermissionLevel =='Base'" class="treeview">
                         <a ui-sref="all_users">
                             <i class="fa fa-user"></i>
                             <span>مدیریت اعضا</span>
+                        </a>
+                    </li>
+                    <li ng-show="session.AdminPermissionLevel =='Base'" class="treeview">
+                        <a ui-sref="all_admins">
+                            <i class="fa fa-gavel"></i>
+                            <span>مدیران</span>
                         </a>
                     </li>
                     <li id="SQuestions">
@@ -372,32 +358,32 @@
                             <i class="fa fa-angle-right pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="SSTransition">
+                            <li id="SSTransition" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
                                 <a ui-sref="questions({id:'Transition'})" href="#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
                                 </a>
                             </li>
-                            <li id="SSTransportManagement">
+                            <li id="SSTransportManagement" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement'">
                                 <a ui-sref="questions({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
                                     <i class="fa
                         fa-circle-o"></i>
                                     <span style="font-size:13px">نظارت بر سیستم های انتقال</span>
                                 </a>
                             </li>
-                            <li id="SSDataSwitch">
+                            <li id="SSDataSwitch" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch'">
                                 <a ui-sref="questions({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
                                 </a>
                             </li>
-                            <li id="SSRadio">
+                            <li id="SSRadio" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio'">
                                 <a ui-sref="questions({id:'Radio'})" href="#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
                                 </a>
                             </li>
-                            <li id="SSCommonTopics" class="active">
+                            <li id="SSCommonTopics" class="active" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics'">
                                 <a ui-sref="questions({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
@@ -413,32 +399,32 @@
                         </a>
 
                         <ul class="treeview-menu">
-                            <li id="STransition">
+                            <li id="STransition" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
                                 <a ui-sref="answers({id:'Transition'})" href="#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
                                 </a>
                             </li>
-                            <li id="STransportManagement">
+                            <li id="STransportManagement" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement'">
                                 <a ui-sref="answers({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
                                     <i class="fa
                         fa-circle-o"></i>
                                     نظارت بر سیستم های انتقال
                                 </a>
                             </li>
-                            <li id="SDataSwitch">
+                            <li id="SDataSwitch" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch'">
                                 <a ui-sref="answers({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
                                 </a>
                             </li>
-                            <li id="SRadio">
+                            <li id="SRadio" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio'">
                                 <a ui-sref="answers({id:'Radio'})" href="#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
                                 </a>
                             </li>
-                            <li id="SCommonTopics" class="active">
+                            <li id="SCommonTopics" class="active" ng-show="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics'">
                                 <a ui-sref="answers({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
@@ -452,7 +438,7 @@
                             <span>مدیریت موضوعات</span>
                         </a>
                     </li>-->
-                    <li id="SMeta" class="treeview">
+                    <li id="SMeta" ng-show="session.AdminPermissionLevel =='Base'" class="treeview">
                         <a class="link">
                             <i class="fa fa-tag"></i>
                             <span>مدیریت متا</span>

@@ -71,6 +71,18 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'مدیریت اعضا';
                 }
             }
+        }).state("all_admins", {
+            url: "/all_admins",
+            templateUrl: "partials/Admin/Admin/AllAdmins.html",
+            controller: 'AllAdminsCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Admin/AllAdminsCtrl.js', '../app/directives/auto-pagination.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت مدیران';
+                }
+            }
         }).state("answers", {
             url: "/answers/:id",
             templateUrl: "partials/Admin/Answers/Answers.html",

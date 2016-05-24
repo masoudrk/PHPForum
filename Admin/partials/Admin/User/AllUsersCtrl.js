@@ -51,6 +51,4 @@ angular.module(appName).controller('AllUsersCtrl', function ($scope, $rootScope,
 	    }
 	    $scope.search();
 	}
-	
-	fixFooter();
 });
