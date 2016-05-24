@@ -27,6 +27,8 @@ $app->post('/getSocketData', function() use ($app)  {
 $app->post('/globalSearch', function() use ($app)  {
     $db = new DbHandler(true);
     $data = json_decode($app->request->getBody());
+    $sess = new Session();
+
     $searchValue = $data->searchValue;
     $searchType = $data->searchType;
 
@@ -37,17 +39,32 @@ $app->post('/globalSearch', function() use ($app)  {
     $p = new Pagination();
     if($searchType == 0){
 
-        $res = $p->getPage($db,'SELECT * FROM `forum_question` WHERE forum_question.AdminAccepted=\'1\' AND ((Title LIKE N\'%"'.$searchValue.'%\') OR 
-    (QuestionText LIKE N\'%'.$searchValue.'%\'))');
+        $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+ INTERVAL 7 DAY))+
+ (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ INTERVAL 7 DAY))";
+        $res = $p->getPage($db,"SELECT forum_question.* , u.score, u.FullName , file_storage.FullPath as Image,
+ (SELECT question_view.ID from question_view 
+        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
+ ($rateSelection) as Rate
+FROM `forum_question` 
+    LEFT JOIN user as u on u.ID=forum_question.AuthorID
+    LEFT JOIN file_storage on u.AvatarID=file_storage.ID
+WHERE forum_question.AdminAccepted=1 AND ((Title LIKE N'%$searchValue%') OR 
+    (QuestionText LIKE N'%$searchValue%'))");
 
-        $sRes['Total'] =$res['Total'];
-
-        foreach ($res['Items'] as &$s){
-            $sr = [];
-            $sr['ID'] = $s['ID'];
-            $sr['Text'] = $s['Title'];
-            $sRes['Items'][] = $sr;
-        }
+        $res['SearchType'] = $searchType;
+        echoResponse(200, $res);
+        return;
+//        $sRes['Total'] =$res['Total'];
+//
+//        foreach ($res['Items'] as &$s){
+//            $sr = [];
+//            $sr['ID'] = $s['ID'];
+//            $sr['Text'] = $s['Title'];
+//            $sRes['Items'][] = $sr;
+//        }
     }else if($searchType == 1){
 
         $res = $p->getPage($db,'SELECT u.* , fs.FullPath as Image, 
@@ -938,7 +955,8 @@ $app->post('/updateAvatar', function() use ($app)  {
 
     $sess = new Session();
     $db = new DbHandler(true);
-    $fileID = $db->insertToTable('file_storage','FullPath,UploadDate,UserID',"'$destination',NOW(),'$sess->UserID'");
+    $fileID = $db->insertToTable('file_storage','FullPath,UploadDate,UserID,IsAvatar',"'$destination',NOW(),
+    '$sess->UserID','1'");
     $resUpdate = $db->updateRecord('user',"AvatarID='$fileID'","ID='$sess->UserID'");
 
     if($resUpdate){
