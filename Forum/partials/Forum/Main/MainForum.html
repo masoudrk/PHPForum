@@ -37,58 +37,121 @@
                     </table>
                 </div><!-- /.box-body -->
             </div>
-            <div class="box box-info">
-                <div class="box-header">
-                    <h3 class="box-title vazir-font">جدیدترین سوالات انجمن </h3>
-                    <i class="fa fa-question text-aqua"></i>
-                </div><!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover" ng-show="question.all.length > 0">
-                        <tbody>
-                        <tr class="link" ng-repeat="q in question.all">
-                            <td><img  class="img-circle" ng-src="{{q.Image}}"
-                                                   style="width:40px"
-                                                    ng-style="{'border': (q.Rate > 5) ? activity.high :
+
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="link active">
+                        <a ng-click="activeTab = 0" data-toggle="tab" aria-expanded="true"> جدیدترین سوالات انجمن
+                        </a>
+                    </li>
+                    <li class="link">
+                        <a ng-click="activeTab = 1" data-toggle="tab" aria-expanded="false"> دنبال شده ها </a>
+                    </li>
+                </ul>
+                <div class="tab-content" style="padding: 0;">
+                    <div class="tab-pane" ng-class="(activeTab == 0)?'active':''" >
+                        <div class="table-responsive no-padding">
+                            <table class="table border-bottom-table table-hover" ng-show="question.all.length > 0">
+                                <tbody>
+                                <tr class="link" ng-repeat="q in question.all">
+                                    <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
+                                              style="width:40px"
+                                              ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                                 (q.Rate > 2.5)?activity.medium : activity.low}"
-                                                   title="{{q.Rate | number:1 | pNumber | concat : ' امتیاز '}}"
-                                                   data-toggle="tooltip" data-placement="top"
-                                                   tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
-                                                   tooltip-append-to-body="true"></td>
-                            <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}}</td>
-                            <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
-                                {{q.Title | subString :30|pNumber}}
-                            </td>
-                            <td ui-sref="question({id:q.ID})">
+                                              title="{{q.score | number:1 | pNumber | concat : ' امتیاز '}}"
+                                              data-toggle="tooltip" data-placement="top"
+                                              tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
+                                              tooltip-append-to-body="true"></td>
+                                    <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}}</td>
+                                    <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
+                                        {{q.Title | subString :30|pNumber}}
+                                    </td>
+                                    <td ui-sref="question({id:q.ID})">
                                 <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">دیده
                                     نشده</span>
-                            </td>
-                            <td class="text-center" ui-sref="question({id:q.ID})" >{{q.AnswersCount || '0'|pNumber}} جواب
-                            </td>
-                            <td ui-sref="question({id:q.ID})" >
+                                    </td>
+                                    <td class="text-center" ui-sref="question({id:q.ID})" >{{q.AnswersCount || '0'|pNumber}} جواب
+                                    </td>
+                                    <td ui-sref="question({id:q.ID})" >
                                 <span class="persian-rtl text-muted" style="font-size: 12px;">
                                     {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
                                 </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div><!-- /.box-body -->
-                <div class="box-footer clearfix text-center">
-                    <auto-paging page="1"
-                                 page-size="20"
-                                 ul-class="pagination pagination-sm no-margin"
-                                 action-name="getForumLastQuestions"
-                                 data-params="pagingParams"
-                                 ng-control="pagingController"
-                                 on-load-finish="loadFinishPageData()"
-                                 items="question.all"
-                                 ng-show="question.all.length > 0">
-                    </auto-paging>
-                    <h4 class="text-center text-muted" ng-show="question.all.length == 0">
-                        بدون سوال
-                    </h4>
-                </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix text-center" style="padding-bottom: 5px;">
+                            <auto-paging page="1"
+                                         page-size="20"
+                                         ul-class="pagination pagination-sm no-margin"
+                                         action-name="getForumLastQuestions"
+                                         data-params="pagingParams"
+                                         ng-control="pagingController"
+                                         on-load-finish="loadFinishPageData()"
+                                         items="question.all"
+                                         ng-show="question.all.length > 0">
+                            </auto-paging>
+                            <h4 class="text-center text-muted" ng-show="question.all.length == 0">
+                                بدون سوال
+                            </h4>
+                        </div>
+                    </div><!-- /.tab-pane -->
+                    <!-- Following questions -->
+                    <div class="tab-pane" ng-class="(activeTab == 1)?'active':''" >
+                        <div class="table-responsive no-padding">
+                            <table class="table border-bottom-table table-hover"
+                                   ng-show="question.allFollowing.length > 0">
+                                <tbody>
+                                <tr class="link" ng-repeat="q in question.allFollowing">
+                                    <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
+                                              style="width:40px"
+                                              ng-style="{'border': (q.Rate > 5) ? activity.high :
+                                                                (q.Rate > 2.5)?activity.medium : activity.low}"
+                                              title="{{q.score | number:1 | pNumber | concat : ' امتیاز '}}"
+                                              data-toggle="tooltip" data-placement="top"
+                                              tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
+                                              tooltip-append-to-body="true"></td>
+                                    <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}}</td>
+                                    <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
+                                        {{q.Title | subString :30|pNumber}}
+                                    </td>
+                                    <td ui-sref="question({id:q.ID})">
+                                <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">
+                                    دیده
+          نشده
+                                </span>
+                                    </td>
+                                    <td class="text-center" ui-sref="question({id:q.ID})" >{{q.AnswersCount || '0'|pNumber}} جواب
+                                    </td>
+                                    <td ui-sref="question({id:q.ID})" >
+                                <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                    {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
+                                </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix text-center" style="padding-bottom: 5px;">
+                            <auto-paging page="1"
+                                         page-size="20"
+                                         ul-class="pagination pagination-sm no-margin"
+                                         action-name="getLastFollowingQuestions"
+                                         data-params="pagingParams"
+                                         ng-control="pagingController"
+                                         on-load-finish="loadFinishPageData()"
+                                         items="question.allFollowing"
+                                         ng-show="question.all.length > 0">
+                            </auto-paging>
+                            <h4 class="text-center text-muted" ng-show="question.allFollowing.length == 0">
+                                بدون سوال
+                            </h4>
+                        </div>
+                    </div><!-- /.tab-pane -->
+                </div><!-- /.tab-content -->
             </div>
+
             <div class="box box-warning">
                 <div class="box-header">
                     <h3 class="box-title vazir-font">سوالات جواب داده شده</h3>
@@ -99,7 +162,7 @@
                         <tbody>
                         <tr class="link" ng-repeat="q in question.allAnswered">
                             <td  style="width: 50px;">
-                                <img class="img-circle" ng-src="{{q.Image}}"
+                                <img class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
                                      style="width:40px;"
                                      ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                    (q.Rate > 2.5)?activity.medium:activity.low}"

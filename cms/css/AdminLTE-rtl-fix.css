@@ -340,3 +340,12 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     -webkit-font-smoothing: antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
 }
+.border-bottom-table > thead > tr > th,
+.border-bottom-table > tbody > tr > th,
+.border-bottom-table > tfoot > tr > th,
+.border-bottom-table > thead > tr > td,
+.border-bottom-table > tbody > tr > td,
+.border-bottom-table > tfoot > tr > td {
+    border-top: none !important;
+    border-bottom: 1px solid #f4f4f4 !important;
+}

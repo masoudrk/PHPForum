@@ -103,6 +103,7 @@ from forum_question as q  where q.AuthorID = '$data->UserID' and q.AdminAccepted
 echoResponse(200 , $resp);
 });
 
+
 $app->post('/getUserMessages', function() use ($app)  {
 
     $db = new DbHandler(true);
@@ -322,6 +323,83 @@ GROUP BY DAY(fq.CreationDate)");
     echoResponse(200, $res);
 });
 
+$app->post('/getLastFollowingQuestions', function() use ($app)  {
+
+    $db = new DbHandler(true);
+    $data = json_decode($app->request->getBody());
+
+    $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+                                forum_main_subject.SubjectName='$data->MainSubjectName' ");
+
+    $subjectID= $resQ->fetch_assoc()['SubjectID'];
+
+    $sess = new Session();
+
+    $rateSelection =
+        "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+ INTERVAL 7 DAY)) + (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ INTERVAL 7 DAY))";
+
+    $pageRes = [];
+    $pageRes['Action'] = 'Get Following Questions';
+    $pageRes['Items'] = [];
+    $pageRes['Total'] = $db->makeQuery("
+SELECT count(*) as Total 
+FROM (
+  (SELECT forum_question.*
+   FROM person_follow
+     LEFT JOIN user ON user.ID = person_follow.TargetUserID
+     LEFT JOIN forum_question ON forum_question.AuthorID = user.ID
+     LEFT JOIN forum_subject ON forum_subject.ID = forum_question.SubjectID
+   WHERE person_follow.UserID = '$sess->UserID'
+         AND forum_subject.ParentSubjectID = '$subjectID'
+  )
+  UNION
+  (SELECT forum_question.*
+   FROM subject_follow
+     LEFT JOIN forum_question ON forum_question.SubjectID = subject_follow.SubjectID
+     LEFT JOIN forum_subject ON forum_subject.ID = forum_question.SubjectID
+   WHERE subject_follow.UserID = '$sess->UserID'
+         AND forum_subject.ParentSubjectID = '$subjectID'
+  )
+) res ORDER BY res.CreationDate DESC")->fetch_assoc()['Total'];
+
+    $offset = ($data->pageIndex - 1) * $data->pageSize;
+
+    $resQ = $db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, ($rateSelection) as Rate,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
+ (SELECT question_view.ID from question_view 
+        where question_view.QuestionID=res.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
+FROM (
+  (SELECT forum_question.*
+   FROM person_follow
+     LEFT JOIN user ON user.ID = person_follow.TargetUserID
+     LEFT JOIN forum_question ON forum_question.AuthorID = user.ID
+     LEFT JOIN forum_subject ON forum_subject.ID = forum_question.SubjectID
+   WHERE person_follow.UserID = '$sess->UserID'
+         AND forum_subject.ParentSubjectID = '$subjectID'
+  )
+  UNION
+  (SELECT forum_question.*
+   FROM subject_follow
+     LEFT JOIN forum_question ON forum_question.SubjectID = subject_follow.SubjectID
+     LEFT JOIN forum_subject ON forum_subject.ID = forum_question.SubjectID
+   WHERE subject_follow.UserID = '$sess->UserID'
+         AND forum_subject.ParentSubjectID = '$subjectID'
+  )
+) as res 
+LEFT JOIN user as u on u.ID=res.AuthorID
+LEFT JOIN file_storage on file_storage.ID=u.AvatarID
+ORDER BY res.CreationDate DESC
+"." LIMIT $offset, $data->pageSize");
+
+    while($r = $resQ->fetch_assoc())
+        $pageRes['Items'][] = $r;
+
+    echoResponse(200, $pageRes);
+});
+
 $app->post('/getForumLastQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
@@ -340,7 +418,7 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
                                 forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
-        $query = "SELECT u.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
+        $query = "SELECT u.score,u.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
 `FullPath` as Image ,
  (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' ,
  (SELECT question_view.ID from question_view 
@@ -358,11 +436,13 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
     }
     else if(isset($data->SubjectID)){
 
-        $query = "SELECT u.FullName ,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
+        $query = "SELECT u.FullName ,u.score,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, 
+        `CreationDate`,
 `FullPath` as Image ,($rateSelection) as Rate,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' ,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' 
- FROM forum_question  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
+ FROM forum_question LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
 file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
 .AdminAccepted='1' 
 AND forum_question.SubjectID='$data->SubjectID' order by forum_question.CreationDate desc";
@@ -393,7 +473,7 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
                                 forum_main_subject.SubjectName='$data->MainSubjectName'");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
-        $query = "SELECT u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
+        $query = "SELECT u.score,u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
  forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount,
  ($rateSelection) as Rate,
  (SELECT question_view.ID from question_view 
@@ -412,7 +492,7 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
     }
     else if(isset($data->SubjectID)){
 
-        $query = "SELECT u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
+        $query = "SELECT u.score,u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
  forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount ,
 ($rateSelection) as Rate,
  (SELECT question_view.ID from question_view 

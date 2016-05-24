@@ -23,9 +23,9 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         $scope.UserMessages["NewMessages"] = count;
     });
     
-    Extention.post("getUserLastQuestion", { UserID: $rootScope.user.UserID }).then(function (res) {
-        $scope.UserQuestions = res;
-    });
+    // Extention.post("getUserLastQuestion", { UserID: $rootScope.user.UserID }).then(function (res) {
+    //     $scope.UserQuestions = res;
+    // });
 
     $scope.fullSearchData = {SearchType : '0'};
 

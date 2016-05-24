@@ -27,5 +27,4 @@ angular.module(appName).controller('UserProfileCtrl', function ($scope, $rootSco
     $scope.checkNowOnline();
 
     activeElement('#SProfile');
-	fixFooter();
 });

@@ -113,7 +113,9 @@
                 <div class="box" ng-class="getBoxColor(answer.ID)">
                     <div class="box-body box-profile">
                         <div class="col-sm-3 col-xs-12">
-                            <img class="profile-user-img img-responsive img-circle" alt="User profile picture" ui-sref="UserProfile({id:answer.UserID})" src="{{answer.FullPath}}">
+                            <img class="profile-user-img img-responsive img-circle" alt="User profile picture"
+                                 ui-sref="UserProfile({id:answer.UserID})" src="../images/Avatar.jpg"
+                                 ng-src="{{answer.FullPath}}">
                             <!--<a href="#/" style="cursor: pointer; color: black">
                                 <h3 class="text-center profile-username">نادیا معصومی</h3></a>-->
                             <p class="text-muted text-center">{{answer.Description | pNumber}}</p>

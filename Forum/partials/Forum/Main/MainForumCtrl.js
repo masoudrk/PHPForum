@@ -1,6 +1,7 @@
 angular.module(appName).controller('MainForumCtrl', 
     function ($scope, $element, $rootScope, $stateParams, $state, $timeout, $timeout, Extention) {
 
+    $scope.activeTab = 0;
     $scope.activity = {
         low : 'solid 2px #e74c3c',
         medium : 'solid 2px #f1c40f',
