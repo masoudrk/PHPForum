@@ -679,9 +679,9 @@ $app->post('/followQuestion', function() use ($app)  {
     $resQ =$db->makeQuery("select count(*) as val from question_follow where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
-    {echoResponse(200, false);return;}
+    {echoError('you followed this question erlier');return;}
     $resQ =$db->makeQuery("insert into question_follow (UserID, QuestionID , QuestionFollowDate) values ('$data->UserID','$data->QuestionID',now())");
-    echoResponse(200, true);
+    echoSuccess();
     return;
 });
 
@@ -695,9 +695,9 @@ $app->post('/followPerson', function() use ($app)  {
     $resQ =$db->makeQuery("select count(*) as val from person_follow where UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
-        {echoResponse(200, false);return;}
+        {echoError('you followed this question erlier');return;}
     $resQ =$db->makeQuery("insert into person_follow (UserID, TargetUserID , PersonFollowDate) values ('$data->UserID','$data->TargetUserID',now())");
-    echoResponse(200, true);
+    echoSuccess();
 });
 
 $app->post('/followSubject', function() use ($app)  {
@@ -745,7 +745,7 @@ $app->post('/unFollowPerson', function() use ($app)  {
         {echoResponse(201, 'bad request');return;}
 
     $db->deleteFromTable('person_follow',"UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
-    echoResponse(200, true);
+    echoSuccess();
 });
 
 $app->post('/unFollowQuestion', function() use ($app)  {
@@ -756,7 +756,7 @@ $app->post('/unFollowQuestion', function() use ($app)  {
         {echoResponse(201, 'bad request');return;}
 
     $db->deleteFromTable('Question_follow',"UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
-    echoResponse(200, true);
+    echoSuccess();
 });
 
 $app->post('/rateQuestion', function() use ($app)  {

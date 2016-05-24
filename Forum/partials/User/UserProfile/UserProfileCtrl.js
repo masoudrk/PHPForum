@@ -13,6 +13,22 @@ angular.module(appName).controller('UserProfileCtrl', function ($scope, $rootSco
         $scope.checkNowOnline();
     });
 
+    $scope.followPerson = function () {
+        Extention.postAsync("followPerson", { TargetUserID: $scope.userID, UserID: $rootScope.user.UserID }).then(function (res) {
+            if (res.Status == 'success') {
+                $scope.profile.PersonFollow = 1;
+            }
+        });
+    }
+
+    $scope.unFollowPerson = function () {
+        Extention.postAsync("unFollowPerson", { TargetUserID: $scope.userID, UserID: $rootScope.user.UserID }).then(function (res) {
+            if (res.Status == 'success') {
+                $scope.profile.PersonFollow = 0;
+            }
+        });
+    }
+
     $scope.checkNowOnline = function () {
         var ous =  $scope.socketData.OnlineUsers;
         

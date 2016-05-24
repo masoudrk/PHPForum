@@ -62,8 +62,9 @@
 
     $scope.followQuestion = function () {
         Extention.postAsync("followQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
-            if (res == true) {
-                $scope.question.FollowCount = number($scope.question.FollowCount) + 1;
+            console.log(res);
+            if (res.Status == 'success') {
+                $scope.question.FollowCount = Number($scope.question.FollowCount) + 1;
                 $scope.question.PersonFollow = 1;
             }
         });
@@ -71,8 +72,8 @@
 
     $scope.unFollowQuestion = function () {
         Extention.postAsync("unFollowQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
-            if (res == true) {
-                $scope.question.FollowCount = number($scope.question.FollowCount) - 1;
+            if (res.Status == 'success') {
+                $scope.question.FollowCount = Number($scope.question.FollowCount) - 1;
                 $scope.question.PersonFollow = 0;
             }
         });
@@ -80,7 +81,7 @@
 
     $scope.followPerson = function (personID) {
         Extention.postAsync("followPerson", { TargetUserID: personID, UserID: $rootScope.user.UserID }).then(function (res) {
-            if (res == true) {
+            if (res.Status == 'success') {
                 for (var i = 0; i < $scope.question.Answers.length ; i++) {
                     if ($scope.question.Answers[i].UserID == personID)
                         {$scope.question.Answers[i].PersonFollow = 1;return;}
@@ -91,7 +92,7 @@
 
     $scope.unFollowPerson = function (personID) {
         Extention.postAsync("unFollowPerson", { TargetUserID: personID, UserID: $rootScope.user.UserID }).then(function (res) {
-            if (res == true) {
+            if (res.Status == 'success') {
                 for (var i = 0; i < $scope.question.Answers.length ; i++) {
                     if ($scope.question.Answers[i].UserID == personID)
                     { $scope.question.Answers[i].PersonFollow = 0; return; }

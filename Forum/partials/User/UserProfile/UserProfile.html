@@ -43,8 +43,8 @@
                             <a class="">{{profile.AnswerCount|pNumber}}</a> <b class="pull-right">جواب ها</b>
                         </li>
                     </ul>
-                    <a ng-show="profile.PersonFollow == 0" class="btn btn-primary btn-block"><b>دنبال کردن</b></a>
-                    <a ng-hide="profile.PersonFollow == 0" class="btn btn-danger btn-block"><b>حذف از دنبال کننده ها</b></a>
+                    <a ng-show="profile.PersonFollow == 0" class="btn btn-primary btn-block" ng-click="followPerson()"><b>دنبال کردن</b></a>
+                    <a ng-hide="profile.PersonFollow == 0" class="btn btn-danger btn-block" ng-click="unFollowPerson()"><b>حذف از دنبال کننده ها</b></a>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <!-- About Me Box -->
