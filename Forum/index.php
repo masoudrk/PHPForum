@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="forumApp" ng-controller="MainCtrl">
+<html ng-app="forumApp" ng-controller="MainCtrl" style="background-color: #ECF0F5;" >
 <head>
     <?php
     require  '../cms/functions.php';
@@ -444,15 +444,15 @@
         <!-- /.content-wrapper -->
     </div>
 
-    <footer class="main-footer persian-rtl">
-        <div class="pull-left hidden-xs">
-            <b>نسخه</b> {{'1.0.0'| pNumber}}
-        </div>
-            <strong class="persian-rtl"></strong>
-            کلیه حقوق مادی و معنوی این سایت متعلق به اداره کل ارتباطات و علائم الکتریکی راه آهن جمهوری اسلامی ایران می باشد.
-          Copyright &copy;
-        2014-2015 <!--<a class="persian-rtl">طراحی شده توسط MagicCube.ir</a>-->.
-    </footer>
+<!--    <footer class="main-footer persian-rtl">-->
+<!--        <div class="pull-left hidden-xs">-->
+<!--            <b>نسخه</b> {{'1.0.0'| pNumber}}-->
+<!--        </div>-->
+<!--            <strong class="persian-rtl"></strong>-->
+<!--            کلیه حقوق مادی و معنوی این سایت متعلق به اداره کل ارتباطات و علائم الکتریکی راه آهن جمهوری اسلامی ایران می باشد.-->
+<!--          Copyright &copy;-->
+<!--        2014-2015 <!--<a class="persian-rtl">طراحی شده توسط MagicCube.ir</a>-->.-->
+<!--    </footer>-->
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark" id="side-bar-fixer">
