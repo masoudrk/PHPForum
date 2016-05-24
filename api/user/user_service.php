@@ -332,7 +332,6 @@ $app->post('/getLastFollowingQuestions', function() use ($app)  {
                                 forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
     $subjectID= $resQ->fetch_assoc()['SubjectID'];
-
     $sess = new Session();
 
     $rateSelection =
@@ -356,13 +355,14 @@ FROM (
          AND forum_subject.ParentSubjectID = '$subjectID'
   )
   UNION
-  (SELECT forum_question.*
-   FROM subject_follow
-     LEFT JOIN forum_question ON forum_question.SubjectID = subject_follow.SubjectID
-     LEFT JOIN forum_subject ON forum_subject.ID = forum_question.SubjectID
-   WHERE subject_follow.UserID = '$sess->UserID'
-         AND forum_subject.ParentSubjectID = '$subjectID'
-  )
+  (
+  SELECT forum_question.*
+FROM main_subject_follow
+  LEFT JOIN forum_subject ON forum_subject.ParentSubjectID=main_subject_follow.MainSubjectID
+  LEFT JOIN forum_question ON forum_question.SubjectID=forum_subject.ID
+ WHERE main_subject_follow.UserID = '$sess->UserID'
+      AND main_subject_follow.MainSubjectID = '$subjectID'
+        )
 ) res ORDER BY res.CreationDate DESC")->fetch_assoc()['Total'];
 
     $offset = ($data->pageIndex - 1) * $data->pageSize;
@@ -382,11 +382,11 @@ FROM (
   )
   UNION
   (SELECT forum_question.*
-   FROM subject_follow
-     LEFT JOIN forum_question ON forum_question.SubjectID = subject_follow.SubjectID
-     LEFT JOIN forum_subject ON forum_subject.ID = forum_question.SubjectID
-   WHERE subject_follow.UserID = '$sess->UserID'
-         AND forum_subject.ParentSubjectID = '$subjectID'
+FROM main_subject_follow
+  LEFT JOIN forum_subject ON forum_subject.ParentSubjectID=main_subject_follow.MainSubjectID
+  LEFT JOIN forum_question ON forum_question.SubjectID=forum_subject.ID
+ WHERE main_subject_follow.UserID = '$sess->UserID'
+      AND main_subject_follow.MainSubjectID = '$subjectID'
   )
 ) as res 
 LEFT JOIN user as u on u.ID=res.AuthorID
