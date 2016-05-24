@@ -1,0 +1,109 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small> همه مدیران</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">همه مدیران</li>
+    </ol>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-9 pull-right">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">مدیران</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>شماره</th>
+                            <th>نام کامل</th>
+                            <th>تاریخ عضویت</th>
+                            <th>ایمیل</th>
+                            <th>نوع مدیر</th>
+                            <th>دسترسی مدیر</th>
+                            <th style="width: 100px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in admins">
+                            <td>{{u.ID| pNumber}}</td>
+                            <td>{{u.FullName| pNumber}}</td>
+                            <td>{{u.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                            <td>{{u.Email}}</td>
+                            <td ng-switch="u.PermissionLevel">
+                                <span class="label label-success" ng-switch-when="Base">اصلی</span>
+                                <span class="label label-warning" ng-switch-when="ForumManager">مدیر انجمن</span>
+                            </td>
+                            <td>
+                                {{u.Permission}}
+                            </td>
+                            <td>
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این کاربر '{{u.FullName}}' را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow"></i>
+                                    <i class="fa fa-pencil text-blue link hvr-grow" ></i>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllAdmins"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 items="admins">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">افزودن مدیر</h3>
+                    <i class="fa fa-plus fa-2x text-muted"></i>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="form">
+                        <div class="form-group row" ng-class="errForum.mainSubject? 'has-error':''">
+                            <label class="col-xs-12 control-labe">شماره کاربری</label>
+                            <div class="col-xs-12">
+                                <input type="number" ng-model="adminUserID" class="form-control col-xs-12 persian-rtl" placeholder="شماره کاربری" min="1">
+                            </div>
+                        </div>
+                        <div class="form-group row" ng-class="errForum.subject? 'has-error':''">
+                            <label class="col-xs-12 control-labe">نوع مدیر</label>
+                            <div class="col-xs-12">
+                                <ui-select ng-model="adminType.selected" theme="bootstrap" sortable="true" close-on-select="true" required>
+                                    <ui-select-match placeholder="نوع مدیر">{{adminType.selected.Permission}}</ui-select-match>
+                                    <ui-select-choices repeat="type in adminTypes">
+                                        <div compile="type.Permission | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-gro p row" style="margin-top: 5px">
+                            <div class="col-xs-12">
+                                <button class="btn btn-success pull-left" type="submit" ng-click="updateAdmin()">
+                                    افزودن
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+
+
+

@@ -386,12 +386,72 @@ $app->post('/getAllUsers', function() use ($app)  {
 		$hasWhere = TRUE;
 	}
 
-	$pageRes = $pr->getPage($db,"SELECT user.`ID`, `FullName`, `Email`, `Password`, `Username`, 
-`PhoneNumber`, `Tel`, `SignupDate`, `Gender`, `Description`, `SessionID`, 
-`ValidSessionID`, `UserAccepted`,  admin.ID as 
+	$pageRes = $pr->getPage($db,"SELECT user.`ID`, `FullName`, `Email`, `Password`, `Username`,
+`PhoneNumber`, `Tel`, `SignupDate`, `Gender`, `Description`, `SessionID`,
+`MailAccepted`, `ValidSessionID`, `UserAccepted`,  admin.ID as 
 AdminID FROM user LEFT JOIN admin on admin.UserID = user.ID  ".$where." ORDER BY user.ID desc");
 
 	echoResponse(200, $pageRes);
+});
+
+$app->post('/getAllAdminTypes', function() use ($app)  {
+
+    $db = new DbHandler(true);
+
+    $pageRes = $db->makeQuery("SELECT * FROM `admin_permission`");
+    $res=[];
+    while($r = $pageRes->fetch_assoc())
+        $res[] = $r;
+    echoSuccess($res);
+});
+
+
+$app->post('/updateAdmin', function() use ($app)  {
+
+    $db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+	$sess = new Session();
+
+$resQ = $db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base')
+LIMIT 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+    $resQ = $db->makeQuery("SELECT COUNT(*) as val FROM `user` WHERE `ID` = '$data->UserID'");
+
+    $sql =$resQ->fetch_assoc();
+    if($sql["val"] == 0)
+        echoError('there is no user with this UserID');
+
+    $resQ = $db->makeQuery("SELECT COUNT(*) as val FROM `admin` WHERE `UserID` = '$data->UserID'");
+
+    $sql =$resQ->fetch_assoc();
+    if($sql["val"] == 0){
+        $resQ = $db->insertToTable('admin',"`UserID`, `PermissionID`","'$data->UserID','$data->PermissionID'");
+    }else
+    {
+        $resQ = $db->updateRecord('admin',"`PermissionID`= '$data->PermissionID'","UserID = '$data->UserID'");
+    }
+    if($sql)
+        echoSuccess();
+    else
+        echoError('error in updateing admin');
+});
+
+$app->post('/getAllAdmins', function() use ($app)  {
+
+    $db = new DbHandler(true);
+    $data = json_decode($app->request->getBody());
+    $pr = new Pagination($data);
+
+    $pageRes = $pr->getPage($db,"SELECT u.FullName, u.SignupDate , u.Email , ap.Permission , ap.PermissionLevel ,a.ID FROM `admin` as a INNER JOIN user as u on u.ID = a.`UserID` INNER JOIN admin_permission as ap on ap.ID = a.`PermissionID`");
+
+    echoResponse(200, $pageRes);
 });
 
 ?>

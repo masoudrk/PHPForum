@@ -45,17 +45,16 @@
                         <tr>
                             <th>شماره</th>
                             <th>نام کامل</th>
-                            <th>نام کاربری</th>
                             <th>تاریخ عضویت</th>
                             <th>تلفن همراه</th>
                             <th>وضعیت</th>
                             <th>ایمیل</th>
+                            <th>وضعیت ایمیل</th>
                             <th style="width: 100px;"></th>
                         </tr>
                         <tr ng-repeat="u in user.all">
                             <td>{{u.ID| pNumber}}</td>
                             <td>{{u.FullName| pNumber}}</td>
-                            <td>{{u.Username| pNumber}}</td>
                             <td>{{u.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
                             <td>{{u.PhoneNumber| pNumber}}</td>
                             <td ng-switch="u.UserAccepted">
@@ -64,6 +63,10 @@
                                 <span class="label label-danger" ng-switch-when="-1">رد شده</span>
                             </td>
                             <td>{{u.Email}}</td>
+                            <td ng-switch="u.MailAccepted">
+                                <span class="label label-success" ng-switch-when="1">تایید شده</span>
+                                <span class="label label-danger" ng-switch-when="0"> تایید نشده</span>
+                            </td>
                             <td>
                                 <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
                                     <i confirm="آیا مطمئن هستید که میخواهید این کاربر '{{u.FullName}}' را حذف کنید؟"
@@ -80,11 +83,11 @@
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix text-center">
                     <!--<ul class="pagination pagination-sm no-margin">-->
-                    <!--<li><a href="#/">«</a></li>-->
-                    <!--<li><a href="#/">۱</a></li>-->
-                    <!--<li><a href="#/">۲</a></li>-->
-                    <!--<li><a href="#/">۳</a></li>-->
-                    <!--<li><a href="#/">»</a></li>-->
+                        <!--<li><a href="#/">«</a></li>-->
+                        <!--<li><a href="#/">۱</a></li>-->
+                        <!--<li><a href="#/">۲</a></li>-->
+                        <!--<li><a href="#/">۳</a></li>-->
+                        <!--<li><a href="#/">»</a></li>-->
                     <!--</ul>-->
 
                     <auto-paging page="1"

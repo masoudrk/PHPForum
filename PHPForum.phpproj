@@ -87,6 +87,7 @@
     <Folder Include="Admin\partials\Admin\Elements\" />
     <Folder Include="Admin\partials\Admin\Answers\" />
     <Folder Include="Admin\partials\Admin\Education\" />
+    <Folder Include="Admin\partials\Admin\Admin\" />
     <Folder Include="Admin\partials\Admin\Tag\" />
     <Folder Include="Admin\partials\Admin\Questions\" />
     <Folder Include="Admin\partials\Admin\Profile\" />
@@ -133,8 +134,6 @@
     <Folder Include="Forum\partials\Forum\Forum\" />
     <Folder Include="Forum\partials\Forum\Main\" />
     <Folder Include="Forum\partials\Forum\Question\" />
-    <Folder Include="Forum\partials\Forum\Radio\" />
-    <Folder Include="Forum\partials\Forum\Transition\" />
     <Folder Include="Forum\partials\Forum\_Home\" />
     <Folder Include="Forum\partials\MyActions\" />
     <Folder Include="Forum\partials\MyActions\Answers\" />
@@ -330,6 +329,8 @@
     <Content Include="Admin\dist\js\pages\dashboard.js" />
     <Content Include="Admin\dist\js\pages\dashboard2.js" />
     <Content Include="Admin\partials\Admin\AdminCtrl.js" />
+    <Content Include="Admin\partials\Admin\Admin\AllAdmins.html" />
+    <Content Include="Admin\partials\Admin\Admin\AllAdminsCtrl.js" />
     <Content Include="Admin\partials\Admin\Dashboard\Dashboard.html" />
     <Content Include="Admin\partials\Admin\Dashboard\DashboardCtrl.js" />
     <Content Include="Admin\partials\Admin\Education\Education.html" />
@@ -516,10 +517,6 @@
     <Content Include="Forum\partials\Forum\Main\MainForumCtrl.js" />
     <Content Include="Forum\partials\Forum\Question\Question.html" />
     <Content Include="Forum\partials\Forum\Question\QuestionCtrl.js" />
-    <Content Include="Forum\partials\Forum\Radio\Radio.html" />
-    <Content Include="Forum\partials\Forum\Radio\RadioCtrl.js" />
-    <Content Include="Forum\partials\Forum\Transition\Transition.html" />
-    <Content Include="Forum\partials\Forum\Transition\TransitionCtrl.js" />
     <Content Include="Forum\partials\Forum\_Home\Home.html" />
     <Content Include="Forum\partials\Forum\_Home\HomeCtrl.js" />
     <Content Include="Forum\partials\GlobalSearch.html" />
@@ -557,11 +554,12 @@
     <Content Include="Images\credit\visa.png" />
     <Content Include="Images\data-transference-by-internet.png" />
     <Content Include="Images\default-50x50.gif" />
-    <Content Include="Images\final-carier.png" />
-    <Content Include="Images\final-fiber.png" />
-    <Content Include="Images\final-markaz.png" />
-    <Content Include="Images\final-radio.png" />
-    <Content Include="Images\final-supervizer.png" />
+    <Content Include="Images\final-carier.jpg" />
+    <Content Include="Images\final-fiber.jpg" />
+    <Content Include="Images\final-markaz.jpg" />
+    <Content Include="Images\final-radio.jpg" />
+    <Content Include="Images\final-right.jpg" />
+    <Content Include="Images\final-supervizer.jpg" />
     <Content Include="Images\global-management.png" />
     <Content Include="Images\icons.png" />
     <Content Include="Images\Logo.png" />
