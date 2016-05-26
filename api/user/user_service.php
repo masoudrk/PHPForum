@@ -247,13 +247,17 @@ $app->post('/getMainForumData', function() use ($app)  {
     $sess = new Session();
 
     $res = [];
-    $resQ = $db->makeQuery("SELECT * FROM forum_main_subject WHERE SubjectName='$data->MainSubjectName'");
+    $resQ = $db->makeQuery("SELECT * ,
+(SELECT count(*) FROM main_subject_follow where MainSubjectID = fms.ID and UserID = '$sess->UserID') as PersonFollow 
+FROM forum_main_subject as fms WHERE SubjectName='$data->MainSubjectName'");
     $mainSubject = $resQ->fetch_assoc();
     $res['MainSubject'] = $mainSubject;
     $mainSubjectID = $mainSubject['SubjectID'];
 
     $resQ = $db->makeQuery("SELECT fs.*,
 (SELECT Count(*) FROM forum_question WHERE SubjectID=fs.ID AND AdminAccepted=1) as TotalQuestions,
+(SELECT count(*) FROM subject_follow where SubjectID = fs.ID) as FollowCount ,
+(SELECT count(*) FROM subject_follow where SubjectID = fs.ID and UserID = '$sess->UserID') as PersonFollow ,
 (SELECT Count(*) FROM forum_answer inner join forum_question on forum_question.ID=forum_answer.QuestionID WHERE 
 forum_question.SubjectID=fs.ID AND forum_question.AdminAccepted=1) as TotalAnswers
 FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
@@ -658,15 +662,16 @@ $app->post('/followMainSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
-    if(!isset($data->UserID) || !isset($data->MainSubjectID))
+    $sess = new Session();
+    if(!isset($data->MainSubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$db->makeQuery("select count(*) as val from main_subject_follow where UserID = '$data->UserID' and MainSubjectID = '$data->MainSubjectID'");
+    $resQ =$db->makeQuery("select count(*) as val from main_subject_follow where UserID = '$sess->UserID' and MainSubjectID = '$data->MainSubjectID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
-        {echoResponse(200, false);return;}
-    $resQ =$db->makeQuery("insert into main_subject_follow (UserID, MainSubjectID , MainSubjectFollowDate) values ('$data->UserID','$data->MainSubjectID',now())");
-    echoResponse(200, true);
+        {echoError('you followed this main subject erlier');return;}
+    $resQ =$db->makeQuery("insert into main_subject_follow (UserID, MainSubjectID , MainSubjectFollowDate) values ('$sess->UserID','$data->MainSubjectID',now())");
+    echoSuccess();
 });
 
 $app->post('/followQuestion', function() use ($app)  {
@@ -704,37 +709,40 @@ $app->post('/followSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
-    if(!isset($data->UserID) || !isset($data->SubjectID))
+    $sess = new Session();
+    if( !isset($data->SubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$db->makeQuery("select count(*) as val from subject_follow where UserID = '$data->UserID' and SubjectID = '$data->SubjectID'");
+    $resQ =$db->makeQuery("select count(*) as val from subject_follow where UserID = '$sess->UserID' and SubjectID = '$data->SubjectID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
-        {echoResponse(200, false);return;}
-    $resQ =$db->makeQuery("insert into subject_follow (UserID, SubjectID , SubjectFollowDate) values ('$data->UserID','$data->SubjectID',now())");
-    echoResponse(200, true);
+        {echoError('you followed this subject erlier');return;}
+    $resQ =$db->makeQuery("insert into subject_follow (UserID, SubjectID , SubjectFollowDate) values ('$sess->UserID','$data->SubjectID',now())");
+    echoSuccess();
 });
 
 $app->post('/unFollowSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
-    if(!isset($data->UserID) || !isset($data->SubjectID))
+    $sess = new Session();
+    if( !isset($data->SubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $db->deleteFromTable('subject_follow',"UserID = '$data->UserID' and SubjectID = '$data->SubjectID'");
-    echoResponse(200, true);
+    $db->deleteFromTable('subject_follow',"UserID = '$sess->UserID' and SubjectID = '$data->SubjectID'");
+    echoSuccess();
 });
 
 $app->post('/unFollowMainSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
-    if(!isset($data->UserID) || !isset($data->MainSubjectID))
+    $sess = new Session();
+    if(!isset($data->MainSubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $db->deleteFromTable('main_subject_follow',"UserID = '$data->UserID' and MainSubjectID = '$data->MainSubjectID'");
-    echoResponse(200, true);
+    $db->deleteFromTable('main_subject_follow',"UserID = '$sess->UserID' and MainSubjectID = '$data->MainSubjectID'");
+    echoSuccess();
 });
 
 $app->post('/unFollowPerson', function() use ($app)  {

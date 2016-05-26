@@ -14,21 +14,21 @@ angular.module(appName).controller('MainForumCtrl',
 
     $scope.pagingParams = { MainSubjectName : $stateParams.id };
     $scope.question = {};
-    $scope.data = [
-        {
-            "key" : "سوال ها" ,
-            "values" : []
-        },
-
-        {
-            "key" : "جواب ها" ,
-            "values" : []
-        }
-    ]
+        $scope.data = [
+            {
+                "key": "سوال ها",
+                "values": []
+            },
+            {
+                "key": "جواب ها",
+                "values": []
+            }
+        ];
 
 	Extention.post('getMainForumData',{MainSubjectName: $stateParams.id})
 		.then(function (res) {
-        $scope.forumData = res;
+		    $scope.forumData = res;
+            console.log(res);
         //$scope.data[0].values=[[ 1025409600000 , 23.041422681023] , [ 1028088000000 , 19.854291255832] , [
             // 1030766400000 , 21.02286281168] ];
             //res.ChartAData;
@@ -36,7 +36,54 @@ angular.module(appName).controller('MainForumCtrl',
             // 1030766400000 , 7.9085410566608]];
             // res.ChartQData;
 
-	});
+		});
+
+	$scope.followSubject = function (id) {
+	    Extention.postAsync("followSubject", { SubjectID: id }).then(function (res) {
+	        console.log(res);
+	        if (res.Status == 'success') {
+	            for (var i = 0; i < $scope.forumData.SubjectChilds.length ; i++) {
+	                if ($scope.forumData.SubjectChilds[i].ID == id)
+	                {
+	                    $scope.forumData.SubjectChilds[i].PersonFollow = 1;
+	                    $scope.forumData.SubjectChilds[i].FollowCount = Number($scope.forumData.SubjectChilds[i].FollowCount) + 1;
+	                    return;
+	                }
+	            }
+	        }
+	    });
+	}
+
+	$scope.unFollowSubject = function (id) {
+	    Extention.postAsync("unFollowSubject", { SubjectID: id }).then(function (res) {
+	        if (res.Status == 'success') {
+	            for (var i = 0; i < $scope.forumData.SubjectChilds.length ; i++) {
+	                if ($scope.forumData.SubjectChilds[i].ID == id) {
+	                    $scope.forumData.SubjectChilds[i].PersonFollow = 0;
+	                    $scope.forumData.SubjectChilds[i].FollowCount = Number($scope.forumData.SubjectChilds[i].FollowCount) - 1;
+	                    return;
+	                }
+	            }
+	        }
+	    });
+	}
+
+	$scope.followMainSubject = function (id) {
+	    Extention.postAsync("followMainSubject", { MainSubjectID: id }).then(function (res) {
+	        console.log(res);
+	        if (res.Status == 'success') {
+	            $scope.forumData.MainSubject.PersonFollow = 1;
+	        }
+	    });
+	}
+
+	$scope.unFollowMainSubject = function (id) {
+	    Extention.postAsync("unFollowMainSubject", { MainSubjectID: id }).then(function (res) {
+	        if (res.Status == 'success') {
+	            $scope.forumData.MainSubject.PersonFollow = 0;
+	        }
+	    });
+	}
 
         $scope.options = {
             "chart": {

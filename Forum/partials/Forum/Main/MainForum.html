@@ -1,8 +1,10 @@
 ﻿<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
+        <a ng-show="forumData.MainSubject.PersonFollow == 0" ng-click="followMainSubject(forumData.MainSubject.ID)" class="btn btn-primary btn-xs" style="margin: 5px"><b>دنبال کردن</b></a>
+        <a ng-hide="forumData.MainSubject.PersonFollow == 0" ng-click="unFollowMainSubject(forumData.MainSubject.ID)" class="btn btn-danger btn-xs" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
         <small>{{forumData.MainSubject.Title}}</small>
-           انجمن
+        انجمن
     </h1>
     <ol class="breadcrumb">
         <li><a href="#/"><i class="fa fa-dashboard"></i> {{forumData.MainSubject.Title}}</a></li>
@@ -22,15 +24,24 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tbody>
-                        <tr class="link" ng-repeat="sc in forumData.SubjectChilds" ui-sref="forum({id:sc.ID})">
-                            <td style="vertical-align: middle;">{{sc.Title}}</td>
+                        <tr class="link" ng-repeat="sc in forumData.SubjectChilds">
+                            <td style="vertical-align: middle;"  ui-sref="forum({id:sc.ID})">{{sc.Title}}</td>
                             <td style="vertical-align: middle;width: 75px" class="text-center text-muted">
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">
                                     {{sc.TotalQuestions| pNumber }}</span><br>سوال
                             </td>
-                            <td style="vertical-align: middle;width: 75px" class="text-center text-muted">
+                            <td style="vertical-align: middle; width: 75px" class="text-center text-muted">
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">
                                     {{sc.TotalAnswers| pNumber }}</span><br>جواب
+                            </td>
+                            <td style="vertical-align: middle; width: 100px" class="text-center text-muted">
+                                <span class="badge1 bg-yellow1 " style="font-size: 20px">
+                                    {{sc.FollowCount| pNumber }}
+                                </span><br>دنبال کنندگان
+                            </td>
+                            <td style="vertical-align: middle;width: 100px" class="text-center text-muted">
+                                <a ng-show="sc.PersonFollow == 0" ng-click="followSubject(sc.ID)" class="btn btn-primary btn-xs pull-left" style="margin: 5px"><b>دنبال کردن</b></a>
+                                <a ng-hide="sc.PersonFollow == 0" ng-click="unFollowSubject(sc.ID)" class="btn btn-danger btn-xs pull-left" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
                             </td>
                         </tr>
                         </tbody>
