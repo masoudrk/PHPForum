@@ -479,6 +479,7 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
         $query = "SELECT u.score,u.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
 `FullPath` as Image ,
  (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' ,
+(SELECT count(*) FROM question_view where QuestionID = forum_question.ID) as 'ViewCount' ,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate
@@ -498,6 +499,7 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
         `CreationDate`,
 `FullPath` as Image ,($rateSelection) as Rate,
  (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID) as 'AnswersCount' ,
+(SELECT count(*) FROM question_view where QuestionID = forum_question.ID) as 'ViewCount' ,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' 
  FROM forum_question LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
@@ -533,6 +535,7 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
         $query = "SELECT u.score,u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
  forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount,
+(SELECT count(*) FROM question_view where QuestionID = forum_question.ID) as 'ViewCount' ,
  ($rateSelection) as Rate,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
@@ -552,6 +555,7 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
 
         $query = "SELECT u.score,u.FullName, forum_question.`ID`, `QuestionText`, forum_question.`Title`,
  forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount ,
+(SELECT count(*) FROM question_view where QuestionID = forum_question.ID) as 'ViewCount' ,
 ($rateSelection) as Rate,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
