@@ -9,6 +9,17 @@
         $scope.checkNowOnline();
     });
 
+    $scope.setBestAnswer = function(AnswerID) {
+        Extention.post("setBestAnswer", { QuestionID: $stateParams.id, AnswerID: AnswerID }).then(function (res) {
+            if (res.Status == 'success') {
+                Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
+                    $scope.question = res;
+                    $scope.checkNowOnline();
+                });
+            }
+        });
+    }
+
     $rootScope.$on("socketDataChanged", function(){
         $scope.checkNowOnline();
     });
@@ -32,10 +43,9 @@
             return;
         }
         Extention.post("saveAnswer", { QuestionID: $stateParams.id, AnswerText: $scope.answerText }).then(function (res) {
-            if (res == true) {
+            if (res.Status == 'success') {
                 $scope.answerText = '';
                 Extention.popInfo('پاسخ شما ثبت شد . در صورت تایید نمایش داده خواهد شد');
-                console.log(res);
             }
         });
     }

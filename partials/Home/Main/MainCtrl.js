@@ -46,7 +46,9 @@
             Extention.post('savePerson', $scope.user).then(function (msg) {
                 console.log(msg);
                 if (msg.Status == 'success') {
-                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد . بعد از تایید شما می توانید وارد انجمن شوید');
+                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد .لطفا ایمیل خود را بررسی کنید تا از صحت ایمیل شما مطمئن شویم. بعد از تایید مدیر، شما می توانید وارد انجمن شوید',12000);
+                } else if (msg.Status == 'notAccepted') {
+                    Extention.popInfo('ایمیل فعال سازی جدیدی برای شما ارسال شده است');
                 } else {
                     Extention.popError('اطلاعات شما نا معتبر است.');
                 }
@@ -87,6 +89,32 @@
         anchors: ['firstPage'/*, 'secondPage', '3rdPage', '4thpage', 'lastPage'*/],
         menu: '#menu'
     };
+
+    $scope.openForgetPassModal = function () {
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'passModal.html',
+            controller: function ($scope, $uibModalInstance) {
+                $scope.sentPassToEmail = function() {
+                    if ($scope.Email) {
+                        Extention.post('forgetPassword', {Email :$scope.Email}).then(function (msg) {
+                            if (msg.Status == 'success') {
+                                Extention.popSuccess('پسورد جدید برای ایمیل شما ارسال شده است');
+                            } else {
+                                console.log(msg);
+                                Extention.popError('اطلاعات شما نا معتبر است.');
+                            }
+                        });
+                    }
+                }
+
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+            },
+            size: 'md'
+        });
+    }
 
     //$scope.moog = function (merg) { console.log(merg); };
     

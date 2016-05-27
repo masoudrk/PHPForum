@@ -13,6 +13,25 @@
     </div>
 </script>
 
+<script type="text/ng-template" id="passModal.html">
+    <div class="modal-header vazir-font text-right">
+        <h3 class="modal-title text-danger">تغییر رمز عبور</h3>
+    </div>
+    <div class="modal-body vazir-font text-right no-padding-bottom">
+        <div class="row">
+            <div class="form-group col-xs-9">
+                <input tabindex="1" type="email" dir="rtl" class="form-control" name="username" ng-model="Email" placeholder="ایمیل" required>
+            </div>
+            <div class="form-group col-xs-3">
+                <button tabindex="2" type="button" ng-click="sentPassToEmail()" dir="rtl" class="form-control btn btn-success">ارسال به ایمیل</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
+
 <div class="row">
     <div class="col-xs-12 vazir-font text-center" style="margin-top:20px"><img src="images/Logo.png" width="80"/>
     </div>
@@ -121,15 +140,17 @@
                 <button tabindex="0" type="button" dir="rtl" ng-click="signOutUser()" class="form-control btn btn-danger pull-right">خروج <i class="fa fa-sign-out" aria-hidden="true"></i></button>
             </div>
             <form name="signInForm" ng-submit="signInFunc()" ng-hide="userSession.UserID">
-
                 <div class="form-group col-xs-12" ng-class="{false: '', true: 'has-error'}[!signInForm.username.$valid && signInForm.username.$touched]">
                     <input tabindex="1" type="text" dir="rtl" class="form-control" name="username" ng-model="signIn.Username" placeholder="ایمیل" required>
                 </div>
                 <div class="form-group col-xs-12" ng-class="{false: '', true: 'has-error'}[!signInForm.password.$valid && signInForm.password.$touched]">
                     <input tabindex="2" type="password" dir="rtl" class="form-control" name="password" ng-model="signIn.Password" placeholder="پسورد" required>
                 </div>
-                <div class="form-group col-xs-12 col-sm-6 col-sm-offset-3">
+                <div class="form-group col-xs-12 col-sm-6 pull-right">
                     <button tabindex="3" type="submit" dir="rtl" class="form-control btn btn-success">ورود</button>
+                </div>
+                <div class="form-group col-xs-12 col-sm-6 text-center" style="margin-top:8px">
+                    <a ng-click="openForgetPassModal()" style="font-size:15px">فراموشی رمز</a> 
                 </div>
             </form>
         </div>

@@ -103,6 +103,56 @@ $app->post('/savePerson', function() use ($app) {
     echoResponse(200, $result);
 });
 
+$app->post('/forgetPassword', function() use ($app)  {
+    $db = new DbHandler();
+    $data = json_decode($app->request->getBody());
+    if(!isset($data->Email))
+        echoError('bad request');
+    $reqsql = $db->makeQuery("select u.FullName ,u.UserAccepted, u.ID from user as u where u.Email = '$data->Email'");
+    $res = $reqsql->fetch_assoc();
+    if(!$res)
+        echoError('this email is not valid');
+    if($res["UserAccepted"] != 1)
+        echoError('this user is not accepted yet . you dont have permission to change password');
+
+    $newPassword = generateRandomString(10);
+    require_once '../passwordHash.php';
+    $password = passwordHash::hash($newPassword);
+    $reqsql = $db->updateRecord('user' , "Password ='".$password."'" , "ID = ".$res["ID"]);
+    if(!$reqsql)
+        echoError('failed to update password');
+
+    $subject = 'Sepantarai.com';
+// message
+    $message = '
+                <html>
+                <head>
+                  <title></title>
+                </head>
+                <body>
+<p style="direction: rtl">سلام '.$res["FullName"].'</p><br>
+                <p style="direction: rtl">پسورد جدید شما :
+<br>'.$newPassword.'
+<br> ایمیل شما:
+'.$data->Email.'
+                </p>
+                </body>
+                </html>
+';
+    $headers  = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .=  'From: sepantarai@sepantarai.com' . "\r\n" .
+        'Reply-To: '.$data->Email."\r\n" .
+        'X-Mailer: Sepantarai.com';
+
+    //if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', "::1")))
+    {
+        mail($data->Email, $subject, $message, $headers);
+    }
+
+    echoSuccess();
+});
+
 $app->post('/getAllPositions', function() use ($app)  {
     $db = new DbHandler();
     $resq = $db->makeQuery("SELECT * FROM `organ_position` WHERE 1");
