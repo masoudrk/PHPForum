@@ -1,12 +1,11 @@
 ﻿angular.module(appName).controller('QuestionCtrl', function ($scope, $element, $rootScope,$uibModal,
-                                                             $routeParams, $state, $location, $timeout, $stateParams, Extention) {
+                                                             $routeParams, $state, $location, $timeout, $stateParams, Extention ,Upload) {
 
     $scope.isOnline = false;
     $scope.question = {};
 
     Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
         $scope.question = res;
-        console.log($scope.question);
         $scope.checkNowOnline();
     });
 

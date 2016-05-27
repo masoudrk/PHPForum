@@ -2,6 +2,30 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
 
     $scope.UserMessages = [];
 
+    // $rootScope.$on("socketDataChanged", function(){
+    //     if($rootScope.globalSearchActive && $scope.pagingParams.searchType==1)
+    //         $scope.checkNowOnline();
+    // });
+
+    $scope.checkNowOnline = function () {
+        return
+        var ous =  $scope.socketData.OnlineUsers;
+        for (var i = 0 ; i < ous.length ; i++){
+            for (var j = 0 ;j < $rootScope.searchResult.length; j++){
+                if($scope.searchResult[j].UserID == ous[i].ID ){
+                    $scope.searchResult[j].isOnline = true;
+                }else{
+                    $scope.searchResult[j].isOnline = false;
+                }
+            }
+        }
+    }
+    $scope.activity = {
+        low : '#e74c3c',
+        medium : '#f1c40f',
+        high : '#2ecc71'
+    };
+    
     $scope.bgColorArray= ["bg-aqua-active","bg-purple-active","bg-red-active","bg-navy-active","bg-orange-active",
         "bg-blue-active","bg-green-active","bg-olive-active","bg-lime-active",
         "bg-fuchsia-active","bg-teal-active","bg-yellow-active","bg-maroon-active","bg-light-blue-active","bg-black-active",

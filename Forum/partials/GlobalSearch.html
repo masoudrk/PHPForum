@@ -67,10 +67,16 @@
                 <div class="widget-user-header" ng-class="getRandomColorClass(u.ID)" >
                     <h3 class="widget-user-username link" ui-sref="UserProfile({id:u.ID})">{{u.FullName}}</h3>
                     <!--<h5 class="widget-user-desc">توسعه دهنده وب</h5>-->
+
+                    <h5 class="widget-user-desc" ng-show="u.isOnline">
+                        آنلاین <i class="fa fa-circle text-green"></i>
+                    </h5>
                 </div>
                 <div class="widget-user-image">
                     <img class="img-circle link" ng-src="{{u.Image}}" ui-sref="UserProfile({id:u.ID})"
-                         alt="User Avatar">
+                         alt="User Avatar"
+                         ng-style="{'border-color': (u.Rate > 5) ? activity.high :
+                                                                (u.Rate > 2.5)?activity.medium : activity.low}">
                 </div>
                 <div class="box-footer">
                     <div class="row">
