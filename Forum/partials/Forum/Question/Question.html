@@ -14,6 +14,42 @@
     <h1 style="font-size: 90px;">404<small><small> not found</small></small></h1>
 </section>
 
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header vazir-font text-right">
+        <h3 class="modal-title text-danger">نمایش فایل ضمیمه</h3>
+    </div>
+    <div class="modal-body vazir-font text-center" ng-switch="attachment.GeneralType">
+        <div ng-switch-when="Image">
+            <img ng-src="{{'../' + attachment.AbsolutePath}}" class="img-responsive">
+        </div>
+        <div class="row" ng-switch-default>
+            <div class="col-xs-12 text-center">
+                <span class="fa fa-file fa-5x"></span>
+            </div>
+            <p class="col-xs-12 text-center">
+                <br>
+                <h4 class=" persian-rtl">
+                    <span> نام فایل :</span>
+                    <span class="text-danger"> {{attachment.Filename}} </span><br><br>
+                    <span> حجم :</span>
+                    <span class="text-danger"> {{attachment.FileSize| pNumber}} کیلوبایت</span><br><br>
+                    <span> تاریخ آپلود :</span>
+                    <span class="text-danger">
+                        {{attachment.UploadDate  | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}
+                    </span>
+                    <br>
+                </h4>
+            </p>
+        </div>
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+        <button class="btn btn-success pull-right" ng-click="downloadAttachment()">
+            دانلود فایل
+        </button>
+    </div>
+</script>
+
 <div class="row" ng-show="question!=null">
     <div class="col-xs-12">
         <div class="col-md-8">
@@ -31,6 +67,7 @@
                         </p>
                         <a ng-show="question.PersonFollow == 0" ng-click="followQuestion()" class="btn btn-primary pull-left" style="margin: 5px"><b>دنبال کردن</b></a>
                         <a ng-hide="question.PersonFollow == 0" ng-click="unFollowQuestion()" class="btn btn-danger pull-left" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
+
                     </div>
                 </div><!-- /.box-body -->
                 <div class="box-footer">
@@ -96,6 +133,26 @@
                         {{question.QuestionText | pNumber}}
                     </div><!-- /.box-body -->
 
+                    <div style="padding: 5px;" class="persian-rtl">
+                        <ul class="nav nav-pills" style="padding-right: 0px;">
+                            <li ng-repeat="at in question.Attachments" class="active">
+                                <a class="english-font link" ng-click="openAttachments(at)" ng-if="at.GeneralType=='Image'">
+                                    {{at.Filename}}
+                                    <img
+                                            ng-src="{{'../' + at.AbsolutePath}}"
+                                            style="width:30px;height: 30px;"
+                                            class="img-circle" >
+                                </a>
+                                <a class="english-font link" ng-click="openAttachments(at)" ng-if="at.GeneralType!='Image'">
+                                    <div>
+                                        <span style="">{{at.Filename}}</span>
+                                        <i style="height: 30px" class="fa fa-file fa-2x"></i>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="box-footer">
                         <span ng-repeat="tag in question.Tags" class="label pull-right" ng-class="getTagColor(tag.ID)" style="margin: 5px">  {{tag.Text | pNumber}}  <i class="fa fa-tag" aria-hidden="true"></i></span>
 
@@ -134,14 +191,33 @@
                             <a ng-show="answer.PersonFollow == 0 && user.UserID != answer.UserID" ng-click="followPerson(answer.UserID)" class="btn btn-primary btn-block"><b>دنبال کردن</b></a>
                             <a ng-hide="answer.PersonFollow == 0 || user.UserID == answer.UserID" ng-click="unFollowPerson(answer.UserID)" class="btn btn-danger btn-block"><b>حذف از دنبال کننده ها</b></a>
                         </div>
-                        <div class="col-sm-9 col-xs-12 persian-rtl">
+                        <div class="col-sm-9 col-xs-12 persian-rtl" style="padding: 0;">
                             <div class="box-header with-border">
                                 <h3 class="profile-username box-title">
                                     {{answer.FullName}} <small>{{answer.OrganizationName}}</small>
                                 </h3>
                                 <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o" aria-hidden="true"></i>   {{answer.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
                             </div>
-                            <p>{{answer.AnswerText}}</p>
+                            <p style="min-height: 184px;padding: 10px;">{{answer.AnswerText}}</p>
+                            <div>
+                                <ul class="nav nav-pills" style="padding-right: 0px;">
+                                    <li ng-repeat="at in answer.Attachments" class="active">
+                                        <a class="english-font link" ng-click="openAttachments(at)" ng-if="at.GeneralType=='Image'">
+                                            {{at.Filename}}
+                                            <img
+                                                 ng-src="{{'../' + at.AbsolutePath}}"
+                                                 style="width:30px;height: 30px;"
+                                                 class="img-circle" >
+                                        </a>
+                                        <a class="english-font link" ng-click="openAttachments(at)" ng-if="at.GeneralType!='Image'">
+                                            <div>
+                                                <span style="">{{at.Filename}}</span>
+                                                <i style="height: 30px" class="fa fa-file fa-2x"></i>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div><!-- /.box-body -->
                     <div class="box-footer">
@@ -154,7 +230,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12" id="test">
+            <div class="col-md-8 col-xs-12 pull-right" id="test">
                 <div class="box box-danger">
                     <div class="box-header with-border">
                         <h3 class="box-title">پاسخ خود را وارد کنید</h3>
@@ -168,15 +244,49 @@
                             <p class="text-muted text-center">{{user.Email | pNumber}}</p>
                         </div>
                         <div class="col-sm-9 col-xs-12">
-                            <div class="col-sm-9 col-sm-offset-3 col-xs-12">
+                            <div class="col-xs-12">
                                 <div class="form-group">
-                                    <label for="comment"></label>
-                                    <textarea dir="rtl" ng-model="answerText" class="form-control" rows="5" id="comment"></textarea>
+                                    <textarea dir="rtl" ng-model="answerText" class="form-control" rows="9"
+                                              id="comment">
+                                    </textarea>
                                 </div>
                                 <button ng-click="saveAnswer()" class="btn btn-primary pull-right col-sm-4 col-xs-12"><b>ثبت</b></button>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xs-12 pull-left">
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        <h3 class="box-title vazir-font"> فایل های ضمیمه پاسخ </h3>
+                        <i class="fa fa-paperclip fa-2x text-muted"></i>
+                    </div><!-- /.box-header -->
+                    <div class="box-body persian-rtl" >
+                        <div ng-repeat="f in myFiles">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <img ngf-thumbnail="f||'../images/Avatar.jpg'" style="width:50px;height: 50px;"
+                                         class="img-circle pull-left" >
+                                <span style="padding-left: 5px;word-wrap: break-word;line-height: 50px;" class="text-left pull-left" >
+                                    {{f.name}}
+                                </span>
+                                    <button type="button" class="close" ng-click="removeFile(f)" aria-hidden="true">×</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-gro p row" style="margin-top: 5px">
+                            <div class="col-xs-12">
+                            <span class="btn btn-primary btn-file pull-left ">
+            انتخاب فایل (ها)  <input type="file" id="inputFile" ngf-select="" name="file" accept="image/*"
+                                     ngf-max-size="50MB" ngf-model-invalid="errorFile" ngf-multiple="true"
+                                     ngf-keep="'distinct'" ng-model="myFiles"
+                                     ngf-change="filesChanged($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                                     class="ng-pristine ng-untouched ng-valid ng-empty" multiple="multiple">
+                            </span>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
                 </div>
             </div>
         </div>

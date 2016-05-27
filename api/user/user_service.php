@@ -12,7 +12,7 @@ $app->post('/getSocketData', function() use ($app)  {
 
     $resQ = $db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image from user LEFT JOIN file_storage on 
     file_storage.ID=user.AvatarID 
- where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 3 MINUTE");
+ where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 1 MINUTE");
 
     $arr = [];
     $res = [];
@@ -236,9 +236,9 @@ $app->post('/saveQuestion', function() use ($app)  {
                     if(mysqli_num_rows($fileTypeQ) > 0)
                         $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
 
-                    $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,IsAvatar,UserID,FileTypeID',
-                        "'$destination','.
-                    ./$destination','0','$sess->UserID','$fileTypeID'",true);
+                    $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,
+                    FileTypeID',
+                        "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID'",true);
 
                     $db->insertToTable('question_attachment','QuestionID,FileID',
                         "'$qID','$fid'");
@@ -690,7 +690,18 @@ where tg.QuestionID = '$r->QuestionID'");
             $tags[] = $item;
     $resp['Tags'] = $tags;
 
-        $resQ = $db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
+
+    $resQ = $db->makeQuery("select fs.*,ft.GeneralType from question_attachment as qt
+inner join file_storage as fs on fs.ID = qt.FileID
+left join file_type as ft on ft.ID = fs.FileTypeID
+where qt.QuestionID = '$r->QuestionID'");
+
+    $qAttachments = [];
+    while($item = $resQ->fetch_assoc())
+        $qAttachments[] = $item;
+    $resp['Attachments'] = $qAttachments;
+
+    $resQ = $db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID' and q.AnswerID = a.ID limit 1) as PersonAnswerRate ,
@@ -703,8 +714,21 @@ left join organ_position as o on u.OrganizationID = o.ID
 where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 order by a.CreationDate");
 
     $Answers = [];
-    while($item = $resQ->fetch_assoc())
-            $Answers[] = $item;
+    while($item = $resQ->fetch_assoc()){
+
+        $resaQ = $db->makeQuery("select fs.*,ft.GeneralType from answer_attachment as att
+inner join file_storage as fs on fs.ID = att.FileID
+left join file_type as ft on ft.ID = fs.FileTypeID
+where att.AnswerID = '".$item['ID']."'");
+
+
+        $aAttachments = [];
+        while($itemA = $resaQ->fetch_assoc())
+            $aAttachments[] = $itemA;
+
+        $item['Attachments'] = $aAttachments;
+        $Answers[] = $item;
+    }
     $resp['Answers'] = $Answers;
 
     echoResponse(200, $resp);
@@ -878,23 +902,60 @@ $app->post('/rateAnswer', function() use ($app)  {
 });
 
 $app->post('/saveAnswer', function() use ($app)  {
-    $data = json_decode($app->request->getBody());
+
+    $data = json_decode($_POST['data']);
     $db = new DbHandler(true);
     $sess = new Session();
+
+
     if(!isset($data->QuestionID) || !isset($data->AnswerText))
         {echoResponse(201, 'bad Request');return;}
 
+    $aID = -1;
     if($sess->IsAdmin)
     {
-        $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate,AdminAccepted","'$sess->UserID','$data->QuestionID','$data->AnswerText',now(),1");
-        echoResponse(200, true);
-        return;
-    }else{
-
-        $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate","'$sess->UserID','$data->QuestionID','$data->AnswerText',now()");
-        echoResponse(200, true);
-        return;
+        $aID = $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate,AdminAccepted",
+            "'$sess->UserID','$data->QuestionID','$data->AnswerText',now(),1",true);
     }
+    else{
+        $aID = $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate","'$sess->UserID',
+        '$data->QuestionID','$data->AnswerText',now()",true);
+    }
+
+    if (isset($_FILES['file'])) {
+        $file_ary = reArrayFiles($_FILES['file']);
+
+        if (!file_exists('../content/user_upload/')) {
+            mkdir('../content/user_upload/', 0777, true);
+        }
+
+        foreach ($file_ary as $file) {
+            $filename = $file['name'];
+            $rand = generateRandomString(18);
+            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+            $destination ='content/user_upload/'.$rand.'.'.$ext;
+            $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
+            if($uploadSuccess){
+                $fileTypeQ = $db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+
+                $fileTypeID = -1;
+                if(mysqli_num_rows($fileTypeQ) > 0)
+                    $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
+
+                $fileSize = $file['size'] / 1024;
+                $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
+                FileSize,UploadDate',
+                    "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID','$fileSize',NOW()",
+                    true);
+
+                $db->insertToTable('answer_attachment','AnswerID,FileID',
+                    "'$aID','$fid'");
+            }
+        }
+    }
+    echoResponse(200, true);
+    return;
 });
 
 $app->post('/saveMainSubject', function() use ($app)  {

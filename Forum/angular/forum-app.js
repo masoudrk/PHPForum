@@ -486,7 +486,7 @@ app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
         obj.getData = function () {
             $timeout(function () {
                 obj.fetch();
-            },10000);
+            },50000);
         };
 
         obj.fetch = function () {

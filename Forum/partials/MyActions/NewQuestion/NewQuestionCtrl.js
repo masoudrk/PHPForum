@@ -105,6 +105,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 	$scope.childSubjectChanged = function () {
 		$scope.errForum.subject = false;
 	}
+    
 
 	// $scope.filesChanged = function(files, file, newFiles, duplicateFiles, invalidFiles ,event) {
      //
