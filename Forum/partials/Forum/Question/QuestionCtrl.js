@@ -1,4 +1,5 @@
-﻿angular.module(appName).controller('QuestionCtrl', function ($scope, $element, $rootScope, $routeParams, $state, $location, $timeout, $stateParams, Extention) {
+﻿angular.module(appName).controller('QuestionCtrl', function ($scope, $element, $rootScope,$uibModal,
+                                                             $routeParams, $state, $location, $timeout, $stateParams, Extention) {
 
     $scope.isOnline = false;
     $scope.question = {};

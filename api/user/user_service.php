@@ -236,9 +236,11 @@ $app->post('/saveQuestion', function() use ($app)  {
                     if(mysqli_num_rows($fileTypeQ) > 0)
                         $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
 
-                    $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,
-                    FileTypeID',
-                        "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID'",true);
+                    $fileSize = $file['size'] / 1024;
+                    $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
+                FileSize,UploadDate',
+                        "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID','$fileSize',NOW()",
+                        true);
 
                     $db->insertToTable('question_attachment','QuestionID,FileID',
                         "'$qID','$fid'");
