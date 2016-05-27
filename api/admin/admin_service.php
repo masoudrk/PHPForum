@@ -176,8 +176,40 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
         echoError('You don\'t have permision to do this action');
 
 			$res = $db->updateRecord('user',"UserAccepted='$data->State'","ID='$data->UserID'");
-			if($res)
-				echoSuccess();
+
+			if($res){
+                if($data->State == 1){
+                    $resQ = $db->makeQuery("SELECT u.Email,u.FullName FROM user as u WHERE u.ID = '$data->UserID'");
+                    $res = $resQ->fetch_assoc();
+                    $subject = 'Sepantarai.com';
+    $message = '
+                <html>
+                <head>
+                  <title></title>
+                </head>
+                <body>
+<p style="direction: rtl">”·«„ '.$res["FullName"].'</p><br>
+                <p style="direction: rtl">
+Õ”«» ò«—»—? ‘„« »« «?„?· “?—  «??œ ‘œÂ «”  . ‘„« „?  Ê«‰?œ œ— «‰Ã„‰ „‘€Ê· »Â ›⁄«·?  ‘Ê?œ.
+<br>
+'.$res["Email"].'
+                </p>
+                </body>
+                </html>
+';
+    $headers  = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .=  'From: sepantarai@sepantarai.com' . "\r\n" .
+        'Reply-To: '.$res["Email"]."\r\n" .
+        'X-Mailer: Sepantarai.com';
+
+    //if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', "::1")))
+    {
+        mail($res["Email"], $subject, $message, $headers);
+    }
+                }
+                	echoSuccess();
+            }
 			else
 				echoError("Cannot update record.");
 		}else{

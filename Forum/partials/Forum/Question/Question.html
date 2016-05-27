@@ -221,11 +221,15 @@
                         </div>
                     </div><!-- /.box-body -->
                     <div class="box-footer">
-                        <i class="fa fa-thumbs-up" ng-show="answer.PersonAnswerRate == 1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
+                        <div ng-if="user.AdminPermissionLevel == 'Base' || user.AdminPermission == question.SubjectName">
+                            <a ng-show="answer.BestAnswer == 0" ng-click="setBestAnswer(answer.ID)" class="btn btn-primary btn-xs pull-right" style="margin: 5px"><b>ثبت به عنوان بهترین جواب</b> <i class="fa fa-check"></i> </a>
+                        </div>
+                        <span ng-hide="answer.BestAnswer == 0" class="label bg-green pull-right" style="margin: 5px"><b>بهتربن جواب</b></span>
+                        <i class="fa fa-thumbs-up" ng-show="answer.PersonAnswerRate == 1" style="font-size: 20px; color: firebrick" aria-hidden="true"></i>
                         <i ng-click="setLikeAnswers(answer,1)" class="fa fa-thumbs-o-up link hvr-pulse" ng-show="answer.PersonAnswerRate != 1" style="font-size: 20px;" aria-hidden="true"></i>
                         <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(answer.AnswerScore)?answer.AnswerScore:0 | pNumber}}</span>
                         <i ng-click="setLikeAnswers(answer,-1)" class="fa fa-thumbs-o-down link hvr-pulse" ng-show="answer.PersonAnswerRate != -1" style="font-size: 20px;" aria-hidden="true"></i>
-                        <i class="fa fa-thumbs-down" ng-show="answer.PersonAnswerRate == -1" style="font-size: 20px;color:firebrick" aria-hidden="true"></i>
+                        <i class="fa fa-thumbs-down" ng-show="answer.PersonAnswerRate == -1" style="font-size: 20px; color: firebrick" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>

@@ -25,7 +25,11 @@
                     <table class="table table-hover">
                         <tbody>
                         <tr class="link" ng-repeat="sc in forumData.SubjectChilds">
-                            <td style="vertical-align: middle;"  ui-sref="forum({id:sc.ID})">{{sc.Title}}</td>
+                            <td style="vertical-align: middle;" ui-sref="forum({id:sc.ID})">{{sc.Title}}</td>
+                            <td style="vertical-align: middle;width: 100px" class="text-center text-muted">
+                                <a ng-show="sc.PersonFollow == 0" ng-click="followSubject(sc.ID)" class="btn btn-primary btn-xs pull-left" style="margin: 5px"><b>دنبال کردن</b></a>
+                                <a ng-hide="sc.PersonFollow == 0" ng-click="unFollowSubject(sc.ID)" class="btn btn-danger btn-xs pull-left" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
+                            </td>
                             <td style="vertical-align: middle;width: 75px" class="text-center text-muted">
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">
                                     {{sc.TotalQuestions| pNumber }}</span><br>سوال
@@ -38,10 +42,6 @@
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">
                                     {{sc.FollowCount| pNumber }}
                                 </span><br>دنبال کنندگان
-                            </td>
-                            <td style="vertical-align: middle;width: 100px" class="text-center text-muted">
-                                <a ng-show="sc.PersonFollow == 0" ng-click="followSubject(sc.ID)" class="btn btn-primary btn-xs pull-left" style="margin: 5px"><b>دنبال کردن</b></a>
-                                <a ng-hide="sc.PersonFollow == 0" ng-click="unFollowSubject(sc.ID)" class="btn btn-danger btn-xs pull-left" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
                             </td>
                         </tr>
                         </tbody>
@@ -69,17 +69,17 @@
                                               style="width:40px"
                                               ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                                 (q.Rate > 2.5)?activity.medium : activity.low}"
-                                              title="{{q.score | number:1 | pNumber | concat : ' امتیاز '}}"
+                                              title="{{q.score | pNumber | concat : ' امتیاز '}}"
                                               data-toggle="tooltip" data-placement="top"
                                               tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
                                               tooltip-append-to-body="true"></td>
-                                    <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}}</td>
+                                    <td ui-sref="question({id:q.ID})">{{q.FullName | subString :20|pNumber}} <span class="badge bg-yellow">{{q.score | pNumber}}</span></td>
                                     <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
                                         {{q.Title | subString :30|pNumber}}
                                     </td>
                                     <td ui-sref="question({id:q.ID})">
-                                <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">دیده
-                                    نشده</span>
+                                        {{q.ViewCount | pNumber}}
+                                        <i class="fa fa-eye text-blue"></i>
                                     </td>
                                     <td class="text-center" ui-sref="question({id:q.ID})" >{{q.AnswersCount || '0'|pNumber}} جواب
                                     </td>
@@ -123,15 +123,9 @@
                                               data-toggle="tooltip" data-placement="top"
                                               tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
                                               tooltip-append-to-body="true"></td>
-                                    <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}}</td>
+                                    <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}} <span class="badge bg-yellow">{{q.score | pNumber}}</span></td>
                                     <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
                                         {{q.Title | subString :30|pNumber}}
-                                    </td>
-                                    <td ui-sref="question({id:q.ID})">
-                                <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">
-                                    دیده
-          نشده
-                                </span>
                                     </td>
                                     <td class="text-center" ui-sref="question({id:q.ID})" >{{q.AnswersCount || '0'|pNumber}} جواب
                                     </td>
@@ -181,13 +175,15 @@
                                      tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
                                      tooltip-append-to-body="true">
                             </td>
-                            <td ui-sref="question({id:q.ID})">{{q.FullName | subString :20|pNumber}}</td>
+                            <td ui-sref="question({id:q.ID})">{{q.FullName | subString :20|pNumber}} <span class="badge bg-yellow">{{q.score | pNumber}}</span></td>
                             <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
                                 {{q.Title | subString :30|pNumber}}
                             </td>
                             <td ui-sref="question({id:q.ID})">
-                                <span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">دیده
-                                    نشده</span>
+                                        {{q.ViewCount | pNumber}}
+                                        <i class="fa fa-eye text-blue"></i>
+                                <!--<span class="label label-success" style="font-size: 10px" ng-if="!q.QViewID">دیده
+                                    نشده</span>-->
                             </td>
                             <td ui-sref="question({id:q.ID})">{{q.AnswersCount || '0'|pNumber}} جواب </td>
                             <td ui-sref="question({id:q.ID})">

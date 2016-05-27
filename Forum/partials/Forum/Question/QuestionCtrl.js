@@ -1,6 +1,4 @@
-﻿angular.module(appName).controller('QuestionCtrl', function ($scope, $element, $rootScope, $routeParams,
-                                                             $state, $location, $timeout, $stateParams,$uibModal,
-Extention ,Upload) {
+﻿angular.module(appName).controller('QuestionCtrl', function ($scope, $element, $rootScope, $routeParams, $state, $location, $timeout, $stateParams, Extention) {
 
     $scope.isOnline = false;
     $scope.question = {};
@@ -10,6 +8,17 @@ Extention ,Upload) {
         console.log($scope.question);
         $scope.checkNowOnline();
     });
+
+    $scope.setBestAnswer = function(AnswerID) {
+        Extention.post("setBestAnswer", { QuestionID: $stateParams.id, AnswerID: AnswerID }).then(function (res) {
+            if (res.Status == 'success') {
+                Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
+                    $scope.question = res;
+                    $scope.checkNowOnline();
+                });
+            }
+        });
+    }
 
     $scope.openAttachments = function (att) {
         $uibModal.open({

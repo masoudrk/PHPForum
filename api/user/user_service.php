@@ -12,7 +12,7 @@ $app->post('/getSocketData', function() use ($app)  {
 
     $resQ = $db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image from user LEFT JOIN file_storage on 
     file_storage.ID=user.AvatarID 
- where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 1 MINUTE");
+ where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 3 MINUTE");
 
     $arr = [];
     $res = [];
@@ -902,12 +902,9 @@ $app->post('/rateAnswer', function() use ($app)  {
 });
 
 $app->post('/saveAnswer', function() use ($app)  {
-
-    $data = json_decode($_POST['data']);
+    $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
     $sess = new Session();
-
-
     if(!isset($data->QuestionID) || !isset($data->AnswerText))
         {echoResponse(201, 'bad Request');return;}
 
