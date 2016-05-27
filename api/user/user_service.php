@@ -669,7 +669,7 @@ $app->post('/getQuestionByID', function() use ($app)  {
     if($sql['val'] == 0)
         {$resQ =$db->makeQuery("insert into question_view (UserID, QuestionID , ViewDate) values ('$r->UserID','$r->QuestionID',now())");}
 
-    $resQ = $db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainTitle , o.OrganizationName ,
+    $resQ = $db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainSubject , ms.SubjectName , o.OrganizationName ,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT count(*) FROM question_view where QuestionID = q.ID) as ViewCount ,
@@ -686,7 +686,6 @@ inner join organ_position as o on u.OrganizationID = o.ID
 where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
-
     $resQ = $db->makeQuery("select t.* from tag as t
 inner join tag_question as tg on tg.tagID = t.ID
 where tg.QuestionID = '$r->QuestionID'");
@@ -696,23 +695,13 @@ where tg.QuestionID = '$r->QuestionID'");
             $tags[] = $item;
     $resp['Tags'] = $tags;
 
-
-    $resQ = $db->makeQuery("select fs.*,ft.GeneralType from question_attachment as qt
-inner join file_storage as fs on fs.ID = qt.FileID
-left join file_type as ft on ft.ID = fs.FileTypeID
-where qt.QuestionID = '$r->QuestionID'");
-
-    $qAttachments = [];
-    while($item = $resQ->fetch_assoc())
-        $qAttachments[] = $item;
-    $resp['Attachments'] = $qAttachments;
-
-    $resQ = $db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
+        $resQ = $db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID' and q.AnswerID = a.ID limit 1) as PersonAnswerRate ,
 (SELECT sum(RateValue) FROM answer_rate where AnswerID = a.ID) as AnswerScore ,
-(SELECT count(*) FROM person_follow where TargetUserID = a.AuthorID and UserID = '$r->UserID') as PersonFollow
+(SELECT count(*) FROM person_follow where TargetUserID = a.AuthorID and UserID = '$r->UserID') as PersonFollow,
+(SELECT count(*) FROM forum_question as qst where qst.ID = '$r->QuestionID' and qst.BestAnswerID = a.ID) as BestAnswer
 from forum_answer as a
 inner join user as u on u.ID = a.AuthorID
 inner join file_storage as f on f.ID = u.AvatarID
@@ -720,21 +709,8 @@ left join organ_position as o on u.OrganizationID = o.ID
 where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 order by a.CreationDate");
 
     $Answers = [];
-    while($item = $resQ->fetch_assoc()){
-
-        $resaQ = $db->makeQuery("select fs.*,ft.GeneralType from answer_attachment as att
-inner join file_storage as fs on fs.ID = att.FileID
-left join file_type as ft on ft.ID = fs.FileTypeID
-where att.AnswerID = '".$item['ID']."'");
-
-
-        $aAttachments = [];
-        while($itemA = $resaQ->fetch_assoc())
-            $aAttachments[] = $itemA;
-
-        $item['Attachments'] = $aAttachments;
-        $Answers[] = $item;
-    }
+    while($item = $resQ->fetch_assoc())
+            $Answers[] = $item;
     $resp['Answers'] = $Answers;
 
     echoResponse(200, $resp);
@@ -1077,5 +1053,25 @@ $app->post('/updateAvatar', function() use ($app)  {
     }
 
     echoError("Error");
+});
+
+$app->post('/setBestAnswer', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    $sess = new Session();
+
+    if(!isset($data->QuestionID) || !isset($data->AnswerID))
+        {echoResponse(201, 'bad Request');return;}
+
+    if($sess->IsAdmin)
+    {
+        $db->updateRecord('forum_question',"BestAnswerID = '$data->AnswerID'" , "ID = '$data->QuestionID'");
+        echoSuccess();
+        return;
+    }else{
+
+        echoError('you dont have permission to do this action');
+    }
 });
 ?>
