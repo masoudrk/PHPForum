@@ -1,4 +1,5 @@
-angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootScope, $stateParams, $state, $timeout, Extention) {
+angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootScope, $stateParams
+    , $state, $timeout, Extention,Upload) {
 
 	$scope.question = {};
 	$scope.allTags = [];
@@ -62,16 +63,32 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			return;
 		}
 
-		Extention.post('saveQuestion',$scope.question).then(function (res) {
-			if(res && res.Status=='success'){
-				Extention.popSuccess('سوال شما با موفقیت در انجمن ثبت شد!');
-				$state.go('new_question',{},{reload:true});
-			}else{
-				Extention.popError('مشکل در ثبت سوال سوال ، لطفا دوباره تلاش کنید!');
-			}
-		});
+        Extention.setBusy(true);
+
+        var u = Upload.upload({
+            url: serviceBaseURL + 'saveQuestion',
+            method: 'POST',
+            file: $scope.myFiles,
+            data: {data : angular.toJson($scope.question) }
+        });
+
+        u.then(function(resp) {
+            // file is uploaded successfully
+            Extention.setBusy(false);
+            Extention.popSuccess('سوال شما با موفقیت ارسال شد!');
+            $scope.emptyForm();
+        }, function(resp) {
+            // handle error
+            Extention.setBusy(false);
+            Extention.popError('مشکل در ثبت سوال سوال ، لطفا دوباره تلاش کنید!');
+        });
 	}
-	
+
+    $scope.emptyForm = function () {
+        $scope.question = {};
+        $scope.myFiles= [] ;
+    }
+
 	$scope.fieldChanged = function (name , value) {
 		$scope.errForum[name] = value == undefined || value == '';
 	}
@@ -88,6 +105,15 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 	$scope.childSubjectChanged = function () {
 		$scope.errForum.subject = false;
 	}
+
+	// $scope.filesChanged = function(files, file, newFiles, duplicateFiles, invalidFiles ,event) {
+     //
+	// }
+
+    $scope.removeFile = function (file) {
+        var index = $scope.myFiles.indexOf(file);
+        $scope.myFiles.splice(index,1);
+    }
 
 	activeElement('#SQuestion','#SQuestionNew');
 });

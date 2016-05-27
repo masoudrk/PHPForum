@@ -12,10 +12,11 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="col-xs-12 col-md-4">
+
             <div class="box box-danger">
                 <div class="box-header with-border">
-                    <h3 class="box-title vazir-font">پیوست سوال</h3>
-                    <i class="fa fa-plus fa-2x text-muted"></i>
+                    <h3 class="box-title vazir-font">اطلاعات تکمیلی سوال</h3>
+                    <i class="fa fa-info fa-2x text-muted"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <div class="form">
@@ -64,16 +65,47 @@
                                 </ui-select>
                             </div>
                         </div>
-                        <div class="form-gro p row" style="margin-top: 5px">
-                            <div class="col-xs-12">
-                                <button class="btn btn-success pull-left" type="submit" ng-click="saveQuestion()" >
-                                  {{form.submitButton}}
-                                </button>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font"> فایل های ضمیمه </h3>
+                    <i class="fa fa-paperclip fa-2x text-muted"></i>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div ng-repeat="f in myFiles">
+                        <!--<div class="alert alert-success alert-dismissable" style="direction: ltr">-->
+                            <!--<img ngf-thumbnail="f||'../images/Avatar.jpg'" style="width:50px;height: 50px;"-->
+                                 <!--class="img-circle" >-->
+                            <!--<button type="button" class="close" ng-click="removeFile(f)" aria-hidden="true">×</button>-->
+                            <!--<span style="padding-left: 5px;word-wrap: break-word;" class="text-left" >{{f.name}}</span>-->
+                        <!--</div>-->
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <img ngf-thumbnail="f||'../images/Avatar.jpg'" style="width:50px;height: 50px;"
+                                     class="img-circle pull-left" >
+                                <span style="padding-left: 5px;word-wrap: break-word;line-height: 50px;" class="text-left pull-left" >
+                                    {{f.name}}
+                                </span>
+                                <button type="button" class="close" ng-click="removeFile(f)" aria-hidden="true">×</button>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-gro p row" style="margin-top: 5px">
+                        <div class="col-xs-12">
+                            <span class="btn btn-primary btn-file pull-left ">
+            انتخاب فایل (ها)  <input type="file" id="inputFile" ngf-select name="file"
+                                accept="image/*" ngf-max-size="50MB"
+                                ngf-model-invalid="errorFile" ngf-multiple="true" ngf-keep="'distinct'"
+                                ng-model="myFiles"
+                                ngf-change="filesChanged($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)">
+                            </span>
                         </div>
                     </div>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
+
         </div>
 
         <div class="col-xs-12 col-md-8">
@@ -99,6 +131,13 @@
                                           ng-model-options="{debounce:100}"></textarea>
                             </div>
                             <label for="body" class="col-xs-2 control-label">سوال کامل</label>
+                        </div>
+                        <div class="form-gro p " style="margin-top: 5px">
+                            <div class="col-xs-12">
+                                <button class="btn btn-success pull-left" type="submit" ng-click="saveQuestion()" >
+                                    {{form.submitButton}}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div><!-- /.box-body -->
