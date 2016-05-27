@@ -53,7 +53,7 @@
                         </tr>
                         <tr ng-repeat="u in question.all">
                             <td>
-                                <img src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
+                                <img ng-src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
                             </td>
                             <td>{{u.FullName| pNumber}}</td>
                             <td>{{u.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
@@ -67,13 +67,13 @@
                             <td>
                                 <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
                                     <i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"
-                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeQuestion(u.ID , u.AuthorID)"></i>
+                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeQuestion(u.ID , u.AuthorID)" title="خذف سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1" style="color: #e67e22;"
-                                       ng-click="changeQuestionState(u.ID ,-1, u.AuthorID)"></i>
+                                       ng-click="changeQuestionState(u.ID ,-1, u.AuthorID)" title="رد کردن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
-                                       ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeQuestionState(u.ID ,1, u.AuthorID)"></i>
-                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.Title , u.QuestionText)"></i>
-                                    <a class="link" href="../Forum/#/question/{{u.QuestionID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse"></i></a>
+                                       ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeQuestionState(u.ID ,1, u.AuthorID)" title="تایید سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.Title , u.QuestionText)" title="متن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <a class="link" href="../Forum/#/question/{{u.QuestionID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
                         </tr>
