@@ -28,7 +28,7 @@ function getPageAuthorQuestions($db ,$uID,$pin){
     $pr = new Pagination(null);
     $pr->setParams($pin);
 
-    $res= $pr->getPage($db, "SELECT forum_question.* FROM forum_question WHERE forum_question.AuthorID = '$uID' ORDER BY CreationDate ASC");
+    $res= $pr->getPage($db, "SELECT forum_question.* FROM forum_question WHERE forum_question.AuthorID = '$uID' ORDER BY CreationDate desc");
     foreach($res['Items'] as &$qs){
 
         $cq = $db->makeQuery('Select forum_subject.Title from forum_subject where forum_subject.ID='.$qs['SubjectID']);

@@ -120,7 +120,6 @@ from forum_question as q  where q.AuthorID = '$data->UserID' and q.AdminAccepted
 echoResponse(200 , $resp);
 });
 
-
 $app->post('/getUserMessages', function() use ($app)  {
 
     $db = new DbHandler(true);
@@ -200,7 +199,7 @@ $app->post('/getAllMyAnswers', function() use ($app)  {
 
 $app->post('/saveQuestion', function() use ($app)  {
     
-    $data = json_decode($app->request->getBody());
+    $data = json_decode($_POST['data']);
     $db = new DbHandler(true);
     $sess = new Session();
 
@@ -214,8 +213,38 @@ $app->post('/saveQuestion', function() use ($app)  {
         $d = $db->deleteFromTable('tag_question','QuestionID='.$qID);
     }else{
         $qID = $db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID,CreationDate',
-            "'$data->QuestionText',
-        '$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW()",true);
+            "'$data->QuestionText','$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW()",true);
+
+        if (isset($_FILES['file'])) {
+            $file_ary = reArrayFiles($_FILES['file']);
+
+            if (!file_exists('../content/user_upload/')) {
+                mkdir('../content/user_upload/', 0777, true);
+            }
+
+            foreach ($file_ary as $file) {
+                $filename = $file['name'];
+                $rand = generateRandomString(18);
+                $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+                $destination ='content/user_upload/'.$rand.'.'.$ext;
+                $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
+                if($uploadSuccess){
+                    $fileTypeQ = $db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+
+                    $fileTypeID = -1;
+                    if(mysqli_num_rows($fileTypeQ) > 0)
+                        $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
+
+                    $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,IsAvatar,UserID,FileTypeID',
+                        "'$destination','.
+                    ./$destination','0','$sess->UserID','$fileTypeID'",true);
+
+                    $db->insertToTable('question_attachment','QuestionID,FileID',
+                        "'$qID','$fid'");
+                }
+            }
+        }
     }
 
     if(isset($data->Tags)){
@@ -281,12 +310,18 @@ FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
     }
 
     $res['SubjectChilds'] = $subjectChilds;
+//
+//    $currentDate = time();
+//    for ($i = 0 ; $i < 20 ; $i++){
+//        $formatDate = date("Y-m-d H:i:s", $currentDate);
+//        $currentDate = strtotime('-1 days', $currentDate);
+//    }
 
     $resQ = $db->makeQuery("
-select UNIX_TIMESTAMP(fq.CreationDate), count(*) as QTotal 
+select UNIX_TIMESTAMP(fq.CreationDate), count(*) as QTotal
 from
   (SELECT @rownum := 0) r ,forum_subject as fs
-  LEFT JOIN forum_question as fq on fq.SubjectID=fs.ID 
+  LEFT JOIN forum_question as fq on fq.SubjectID=fs.ID
   where fs.ParentSubjectID='$mainSubjectID' GROUP BY DAY(fq.CreationDate),fs.Title");
 
     $res['ChartQData'] = $resQ->fetch_all();
