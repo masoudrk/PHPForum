@@ -55,6 +55,7 @@ function generateRequiredCMSJavaFiles(){
     <script src="dist/js/pages/dashboard.js"></script> -->
     <!-- AdminLTE for demo purposes -->
     <script src="../cms/js/demo.js"></script>
+    <script src="../js/canvas-snow.js"></script>
 
 
 <?php

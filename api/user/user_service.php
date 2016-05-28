@@ -67,11 +67,18 @@ WHERE forum_question.AdminAccepted=1 AND ((Title LIKE N'%$searchValue%') OR
 //        }
     }else if($searchType == 1){
 
-        $res = $p->getPage($db,'SELECT u.* , fs.FullPath as Image, 
-( SELECT count(*) FROM forum_answer where AuthorID = u.ID ) as AnswersCount, 
-( SELECT count(*) FROM forum_question where AuthorID = u.ID ) as QuestionsCount 
+        $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+ INTERVAL 7 DAY))+
+ (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ INTERVAL 7 DAY))";
+
+        $res = $p->getPage($db,"SELECT u.* , fs.FullPath as Image, 
+( SELECT count(*) FROM forum_answer where AuthorID = u.ID and forum_answer.AdminAccepted=1 ) as AnswersCount, 
+( SELECT count(*) FROM forum_question where AuthorID = u.ID and  forum_question.AdminAccepted=1 ) as QuestionsCount ,
+($rateSelection) as Rate
 FROM `user` as u LEFT JOIN file_storage as fs on fs.ID=u.AvatarID 
-WHERE u.UserAccepted=\'1\' AND u.FullName LIKE N\'%'.$searchValue.'%\'');
+WHERE u.UserAccepted=1 AND u.FullName LIKE N'%$searchValue%'");
 
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);

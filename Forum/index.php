@@ -435,7 +435,7 @@
 
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 
-    <div class="content-wrapper" style="min-height: 600px;">
+    <div class="content-wrapper" id="cont" style="min-height: 600px;">
         <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60">
         </treasure-overlay-spinner>
         <!-- Content Wrapper. Contains page content -->
