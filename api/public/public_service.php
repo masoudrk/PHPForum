@@ -61,7 +61,7 @@ $app->post('/savePerson', function() use ($app) {
         ,"'$r->FullName','$r->Email','$r->Password','$r->Tel',now(),'$r->OrganizationID'",true);
 
 
-    $linkID = generateRandomString(250);
+    $linkID = generateRandomString(30);
     $dateplus_1 = strtotime("+1 day", time());
     $subject = 'Sepantarai.com';
 // message
@@ -80,8 +80,8 @@ $app->post('/savePerson', function() use ($app) {
                 </html>
 ';
     $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .=  'From: offical@sepantarai.com' . "\r\n" .
+    $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+    $headers .= 'From: offical@sepantarai.com' . "\r\n" .
         'Reply-To: '.$r->Email."\r\n" .
         'X-Mailer: Sepantarai.com';
 
@@ -140,7 +140,7 @@ $app->post('/forgetPassword', function() use ($app)  {
                 </html>
 ';
     $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
     $headers .=  'From: sepantarai@sepantarai.com' . "\r\n" .
         'Reply-To: '.$data->Email."\r\n" .
         'X-Mailer: Sepantarai.com';
