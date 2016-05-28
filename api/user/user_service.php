@@ -693,6 +693,16 @@ inner join organ_position as o on u.OrganizationID = o.ID
 where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
+    $resQ = $db->makeQuery("select fs.*,ft.GeneralType from question_attachment as qt
+inner join file_storage as fs on fs.ID = qt.FileID
+left join file_type as ft on ft.ID=fs.FileTypeID
+where qt.QuestionID='$r->QuestionID'");
+
+    $aAtt = [];
+    while($item = $resQ->fetch_assoc())
+        $aAtt[] = $item;
+    $resp['Attachments'] = $aAtt;
+
     $resQ = $db->makeQuery("select t.* from tag as t
 inner join tag_question as tg on tg.tagID = t.ID
 where tg.QuestionID = '$r->QuestionID'");
@@ -716,8 +726,21 @@ left join organ_position as o on u.OrganizationID = o.ID
 where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 order by a.CreationDate");
 
     $Answers = [];
-    while($item = $resQ->fetch_assoc())
-            $Answers[] = $item;
+    while($item = $resQ->fetch_assoc()){
+        $aID = $item['ID'];
+
+        $resaQ = $db->makeQuery("select fs.*,ft.GeneralType from answer_attachment as att
+inner join file_storage as fs on fs.ID = att.FileID
+left join file_type as ft on ft.ID=fs.FileTypeID
+where att.AnswerID='$aID'");
+
+        $aAtt = [];
+        while($itema = $resaQ->fetch_assoc())
+            $aAtt[] = $itema;
+        $item['Attachments'] = $aAtt;
+
+        $Answers[] = $item;
+    }
     $resp['Answers'] = $Answers;
 
     echoResponse(200, $resp);
@@ -891,7 +914,7 @@ $app->post('/rateAnswer', function() use ($app)  {
 });
 
 $app->post('/saveAnswer', function() use ($app)  {
-    $data = json_decode($app->request->getBody());
+    $data = json_decode($_POST['data']);
     $db = new DbHandler(true);
     $sess = new Session();
     if(!isset($data->QuestionID) || !isset($data->AnswerText))
