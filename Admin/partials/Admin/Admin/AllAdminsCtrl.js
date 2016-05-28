@@ -32,8 +32,8 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
 	    }
 	}
 
-	$scope.removeAdmin = function (uid) {
-		Extention.post('deleteUser',{UserID:uid}).then(function (res) {
+	$scope.deleteAdmin = function (uid) {
+	    Extention.post('deleteAdmin', { AdminID: uid }).then(function (res) {
 			if(res && res.Status=='success'){
 				Extention.popSuccess("کاربر با موفقیت حذف شد!");
 				$scope.pagingController.update();
@@ -41,5 +41,15 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
 				Extention.popError("مشکل در حذف کاربر ، لطفا دوباره امتحان کنید.");
 			}
 		});
+	}
+
+	$scope.editAdmin = function(admin) {
+	    for (var i = 0; i < $scope.adminTypes.length; i++) {
+	        if ($scope.adminTypes[i].ID == admin.PID) {
+	            $scope.adminType.selected = $scope.adminTypes[i];
+                break;
+	        }
+	    }
+	    $scope.adminUserID = Number(admin.UserID);
 	}
 });

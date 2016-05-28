@@ -481,9 +481,33 @@ $app->post('/getAllAdmins', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $pr = new Pagination($data);
 
-    $pageRes = $pr->getPage($db,"SELECT u.FullName, u.SignupDate , u.Email , ap.Permission , ap.PermissionLevel ,a.ID FROM `admin` as a INNER JOIN user as u on u.ID = a.`UserID` INNER JOIN admin_permission as ap on ap.ID = a.`PermissionID`");
+    $pageRes = $pr->getPage($db,"SELECT u.ID as UserID , u.FullName, u.SignupDate , u.Email , ap.ID as PID , ap.Permission , ap.PermissionLevel ,a.ID FROM `admin` as a INNER JOIN user as u on u.ID = a.`UserID` INNER JOIN admin_permission as ap on ap.ID = a.`PermissionID`");
 
     echoResponse(200, $pageRes);
+});
+
+$app->post('/deleteAdmin', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+	if($sess->UserID == $data->AdminID)
+		echoError('You cannot delete your account in this action.');
+
+    $resQ = $db->makeQuery("select Count(*) as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
+
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $db->deleteFromTable('admin',"ID='$data->AdminID'");
+	if($res)
+		echoSuccess();
+	else
+		echoError("Cannot update record.");
 });
 
 ?>
