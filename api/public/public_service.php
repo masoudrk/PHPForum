@@ -1,11 +1,5 @@
 <?php
 
-$app->post('/logout', function() use ($app)  {
-    $sess = new Session();
-    $res = $sess->destroySession();
-    echoResponse(200, $res);
-});
-
 $app->post('/savePerson', function() use ($app) {
 
     $r = json_decode($app->request->getBody());
@@ -74,7 +68,8 @@ $app->post('/savePerson', function() use ($app) {
                 <p style="direction: rtl">سلام '.$r->FullName.'! لطفا برای فعال سازی حساب کاربری خود روی لینک زیر کلیک
                  کنید:
 <br>
-                 ----> <a href="sepantarai.com/verify.php?link='.$linkID.'"> Verify account link </a> <----
+                 ----> <a href="http://www.sepantarai.com/verify.php?link='.$linkID.'"> Verify account link </a> 
+                 <----
                 </p>
                 </body>
                 </html>
@@ -195,16 +190,18 @@ $app->post('/signInUser', function() use ($app)  {
     $email = $r->Username;
 
     $user = $db->getOneRecord("select user.ID,FullName,Email,Password,Username,SignupDate,file_storage.FullPath as Image from 
-    user 
-    LEFT JOIN 
-    file_storage ON 
-            file_storage.ID=user.AvatarID where Email='$email' and UserAccepted = 1");
+    user LEFT JOIN 
+    file_storage ON file_storage.ID=user.AvatarID where Email='$email' and UserAccepted = 1");
 
     if ($user != NULL) {
         if(passwordHash::check_password($user['Password'],$password)){
 
             $sessionID = generateSessionID(100);
-            $resSessionIDQ = $db->updateRecord('user',"SessionID='".$sessionID."',ValidSessionID=1","ID='".$user['ID']."'");
+            $resSessionIDQ = $db->insertToTable('user_session',"UserID,SessionID,LoginDate,DeviceName,IP","'"
+                .$user['ID']."','$sessionID',NOW(),'".getOperatingSystem()."','".getIPAddress()."'");
+
+            //$resSessionIDQ = $db->updateRecord('user',"SessionID='".$sessionID."',ValidSessionID=1","ID='"
+                //.$user['ID']."'");
 
             $IsAdmin=false;
             $IsAdmin=false;

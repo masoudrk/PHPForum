@@ -8,6 +8,33 @@
 function generateRequiredCMSJavaFiles(){
 ?>
 
+    <!-- jQuery 2.1.4 -->
+    <script src="../cms/js/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../cms/js/jQueryUI/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="../cms/js/bootstrap.min.js"></script>
+    <!-- Bootstrap WYSIHTML5
+    <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
+    <!-- Slimscroll -->
+    <script src="../cms/js/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="../cms/js/fastclick/fastclick.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../cms/js/app.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes)
+    <script src="dist/js/pages/dashboard.js"></script> -->
+    <!-- AdminLTE for demo purposes -->
+    <script src="../cms/js/demo.js"></script>
+    <script src="../js/canvas-snow.js"></script>
+
+    <script src="../js/am-charts/amcharts.js" type="text/javascript"></script>
+    <script src="../js/am-charts/serial.js" type="text/javascript"></script>
+
     <script src="../cms/js/d3.js"></script>
     <script src="../cms/js/nv.d3.js"></script>
     <script src="../js/persian.min.js"></script>
@@ -33,29 +60,7 @@ function generateRequiredCMSJavaFiles(){
     <script type="text/javascript" src="../js/moment-jalaali.js"></script>
     <script type="text/javascript" src="../js/angular-confirm.min.js"></script>
 
-    <!-- jQuery 2.1.4 -->
-    <script src="../cms/js/jQuery/jQuery-2.1.4.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="../cms/js/jQueryUI/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button);
-    </script>
-    <!-- Bootstrap 3.3.5 -->
-    <script src="../cms/js/bootstrap.min.js"></script>
-    <!-- Bootstrap WYSIHTML5
-    <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
-    <!-- Slimscroll -->
-    <script src="../cms/js/slimScroll/jquery.slimscroll.min.js"></script>
-    <!-- FastClick -->
-    <script src="../cms/js/fastclick/fastclick.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../cms/js/app.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes)
-    <script src="dist/js/pages/dashboard.js"></script> -->
-    <!-- AdminLTE for demo purposes -->
-    <script src="../cms/js/demo.js"></script>
-    <script src="../js/canvas-snow.js"></script>
+    <script type="text/javascript" src="../app/directives/serial-chart-directive.js"></script>
 
 
 <?php
@@ -80,6 +85,7 @@ function generateRequiredCMSCssFiles(){
     <!-- Theme style -->
     <link rel="stylesheet" href="../css/site-styles.css">
 
+    <link rel="stylesheet" href="../cms/css/pallete.css">
     <link rel="stylesheet" href="../cms/css/AdminLTE-rtl.css">
     <link rel="stylesheet" href="../cms/css/AdminLTE-rtl-fix.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins

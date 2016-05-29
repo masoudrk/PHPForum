@@ -1,11 +1,4 @@
 <?php
-
-$app->post('/logout', function() use ($app)  {
-    $sess = new Session();
-    $res = $sess->destroySession();
-    echoResponse(200, $res);
-});
-
 $app->post('/getSocketData', function() use ($app)  {
     $db = new DbHandler(true);
     $s = new Session();
@@ -105,6 +98,26 @@ $app->post('/deleteQuestion', function() use ($app)  {
         return ;
     }
     echoResponse(201, "Error:".$data->QuestionID);
+});
+
+$app->post('/deleteSession', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    $sess= new Session();
+
+    $resQ = $db->makeQuery("select * from user_session where user_session.ID='".$data->ID."'");
+    $s = $resQ->fetch_assoc();
+
+    if($s['SessionID'] == $sess->SSN)
+        echoError("CurrentSession");
+
+    $res = $db->deleteFromTable('user_session',"ID='".$data->ID."'");
+
+    if($res)
+        echoSuccess();
+
+    echoError("Cannot delete from table.");
 });
 
 $app->post('/getUserLastQuestion', function() use ($app)  {
@@ -340,7 +353,7 @@ from
     $res['ChartQData'] = $resQ->fetch_all();
 
     $resQ = $db->makeQuery("
-select  UNIX_TIMESTAMP(fq.CreationDate), count(*) as QTotal 
+select fq.CreationDate as date, count(*) as value 
 from
   (SELECT @rownum := 0) r ,forum_answer as fa
   LEFT JOIN forum_question as fq on fq.ID=fa.QuestionID
@@ -349,7 +362,12 @@ from
 where fs.ParentSubjectID='$mainSubjectID'
 
 GROUP BY DAY(fq.CreationDate)");
-    $res['ChartAData'] = $resQ->fetch_all();
+
+    $cData = [];
+    while($r = $resQ->fetch_assoc())
+        $cData[] = $r;
+    $res['ChartAData'] = $cData;
+    //$res['ChartAData'] = $resQ->fetch_all();
 
     echoResponse(200, $res);
 });
@@ -586,6 +604,7 @@ $app->post('/getUserProfile', function() use ($app)  {
     //adminRequire();
     require_once '../db/education.php';
     require_once '../db/skill.php';
+    require_once '../db/user_session.php';
 
     $db = new DbHandler(true);
     $sess = new Session();
@@ -606,6 +625,8 @@ $app->post('/getUserProfile', function() use ($app)  {
 
     $user['Skills'] = getUserSkills($db,$sess->UserID);
     $user['AllSkills'] = getAllSkills($db);
+    
+    $user['ActiveSessions'] = getAllUserActiveSessions($db,$sess->UserID);
 
     echoResponse(200, $user);
 });

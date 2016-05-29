@@ -3,7 +3,7 @@ var serviceBaseURL = '../api/user/';
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'nvd3', 'ngPersian',
-    'ngFileUpload','anim-in-out']);
+    'ngFileUpload','anim-in-out','am-charts']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',

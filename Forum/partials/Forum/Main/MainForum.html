@@ -11,6 +11,7 @@
         <li class="active">انجمن</li>
     </ol>
 </section>
+
 <div class="row">
     <div class="col-xs-12">
 
@@ -64,7 +65,7 @@
                         <div class="table-responsive no-padding">
                             <table class="table border-bottom-table table-hover" ng-show="question.all.length > 0">
                                 <tbody>
-                                <tr class="link" ng-repeat="q in question.all">
+                                <tr class="link" ng-repeat="q in question.all"  repeat-end="onLastRepeatEnd()">
                                     <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
                                               style="width:40px"
                                               ng-style="{'border': (q.Rate > 5) ? activity.high :
@@ -226,7 +227,7 @@
                     <h3 class="box-title vazir-font">آمار انجمن {{forumData.MainSubject.Title}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
-                    <nvd3 options="options" data="data" class="with-3d-shadow with-transitions"></nvd3>
+                    <serial-chart chart-data="forumData.ChartAData" chart-height="300"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 

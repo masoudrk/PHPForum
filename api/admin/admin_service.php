@@ -1,11 +1,5 @@
 <?php
 
-$app->post('/logout', function() use ($app)  {
-	$sess = new Session();
-	$res = $sess->destroySession();
-	echoResponse(200, $res);
-});
-
 $app->post('/getAllTags', function() use ($app)  {
 
 	$db = new DbHandler(true);
@@ -188,9 +182,9 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
                   <title></title>
                 </head>
                 <body>
-<p style="direction: rtl">ÓáÇã '.$res["FullName"].'</p><br>
+<p style="direction: rtl">ï¿½ï¿½ï¿½ï¿½ '.$res["FullName"].'</p><br>
                 <p style="direction: rtl">
-ÍÓÇÈ ˜ÇÑÈÑ? ÔãÇ ÈÇ Ç?ã?á Ò?Ñ ÊÇ??Ï ÔÏå ÇÓÊ . ÔãÇ ã? ÊæÇä?Ï ÏÑ ÇäÌãä ãÔÛæá Èå ÝÚÇá?Ê Ôæ?Ï.
+ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½?ï¿½?ï¿½ ï¿½?ï¿½ ï¿½ï¿½??ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ . ï¿½ï¿½ï¿½ ï¿½? ï¿½ï¿½ï¿½ï¿½?ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½?ï¿½ ï¿½ï¿½?ï¿½.
 <br>
 '.$res["Email"].'
                 </p>
