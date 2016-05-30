@@ -342,32 +342,40 @@ FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
 //        $formatDate = date("Y-m-d H:i:s", $currentDate);
 //        $currentDate = strtotime('-1 days', $currentDate);
 //    }
+    $curDate = date('Y-m-d');
+    $resCQ = $db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resC  = $resCQ->fetch_assoc();
+    //echoSuccess($resC);
 
     $resQ = $db->makeQuery("
-select UNIX_TIMESTAMP(fq.CreationDate), count(*) as QTotal
-from
-  (SELECT @rownum := 0) r ,forum_subject as fs
-  LEFT JOIN forum_question as fq on fq.SubjectID=fs.ID
-  where fs.ParentSubjectID='$mainSubjectID' GROUP BY DAY(fq.CreationDate),fs.Title");
 
-    $res['ChartQData'] = $resQ->fetch_all();
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+    left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID=3 and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
+  ,
+  (select count(*) from forum_answer
+    left join forum_question on forum_answer.QuestionID=forum_question.ID
+    left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID='$mainSubjectID' and Date(forum_answer.CreationDate) < cd.IntervalDay) as 
+  IAnswerCount,
+  (select count(*) from forum_question
+    left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID=3 and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+    left join forum_question on forum_answer.QuestionID=forum_question.ID
+    left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID='$mainSubjectID' and Date(forum_answer.CreationDate) = cd.IntervalDay) as 
+  AnswerCount
+  
+from calendar_day as cd
+where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']));
 
-    $resQ = $db->makeQuery("
-select fq.CreationDate as date, count(*) as value 
-from
-  (SELECT @rownum := 0) r ,forum_answer as fa
-  LEFT JOIN forum_question as fq on fq.ID=fa.QuestionID
-  LEFT JOIN forum_subject as fs on fs.ID=fq.SubjectID
-
-where fs.ParentSubjectID='$mainSubjectID'
-
-GROUP BY DAY(fq.CreationDate)");
-
-    $cData = [];
+    $cqData = [];
     while($r = $resQ->fetch_assoc())
-        $cData[] = $r;
-    $res['ChartAData'] = $cData;
-    //$res['ChartAData'] = $resQ->fetch_all();
+        $cqData[] = $r;
+    $res['ChartData'] = $cqData;
 
     echoResponse(200, $res);
 });
