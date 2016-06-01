@@ -36,7 +36,12 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
                 session.FullName = res.FullName;
                 $rootScope.user.FullName = res.FullName;
             }else{
-                Extention.popError('مشکل در تغییر اطلاعات ، لطفا دوباره تلاش کنید.');
+                if(res.Message == 'EmailExists'){
+
+                    Extention.popWarning('خطا : این ایمیل قبلا ثبت شده ، لطفا ایمیل دیگری انتخاب کنید.',12000);
+                }else{
+                    Extention.popError('مشکل در تغییر اطلاعات ، لطفا دوباره تلاش کنید.');
+                }
             }
         });
     }

@@ -281,6 +281,11 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 delay = 7000;
             toaster.pop('info', "", msg, delay, 'trustedHtml');
         }
+        obj.popWarning = function (msg, delay) {
+            if (!delay)
+                delay = 7000;
+            toaster.pop('warning', "", msg, delay, 'trustedHtml');
+        }
 
         obj.popModal = function (data) {
             $uibModal.open({

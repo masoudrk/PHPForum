@@ -1063,7 +1063,11 @@ $app->post('/saveUserInfo', function() use ($app)  {
     $db = new DbHandler(true);
     $sess = new Session();
 
-    $resQ = null;
+    $resQ = $db->makeQuery("select 1 from user where Email='$data->Email' and ID!='$sess->UserID' LIMIT 1");
+    $count = mysqli_num_rows($resQ);
+    if($count > 0){
+        echoError("EmailExists");
+    }
 
     if(isset($data->Password)){
         $pass = passwordHash::hash($data->Password);

@@ -19,7 +19,8 @@ angular.module(appName).controller('ForumCtrl',
         $scope.forumData = res;
 	});
 
-    $scope.incrementChartOptions = [{
+    $scope.incrementChartOptions = [
+    {
         id:"g1",
         type : "smoothedLine",
         lineColor: "#00BBCC",
