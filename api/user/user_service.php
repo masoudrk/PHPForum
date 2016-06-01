@@ -336,23 +336,17 @@ FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
     }
 
     $res['SubjectChilds'] = $subjectChilds;
-//
-//    $currentDate = time();
-//    for ($i = 0 ; $i < 20 ; $i++){
-//        $formatDate = date("Y-m-d H:i:s", $currentDate);
-//        $currentDate = strtotime('-1 days', $currentDate);
-//    }
+
     $curDate = date('Y-m-d');
     $resCQ = $db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
     $resC  = $resCQ->fetch_assoc();
-    //echoSuccess($resC);
 
     $resQ = $db->makeQuery("
 
 SELECT cd.IntervalDay as date,
   (select count(*) from forum_question
     left join forum_subject on forum_subject.ID=forum_question.SubjectID
-  where forum_subject.ParentSubjectID=3 and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
+  where forum_subject.ParentSubjectID='$mainSubjectID' and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
   ,
   (select count(*) from forum_answer
     left join forum_question on forum_answer.QuestionID=forum_question.ID
@@ -361,7 +355,7 @@ SELECT cd.IntervalDay as date,
   IAnswerCount,
   (select count(*) from forum_question
     left join forum_subject on forum_subject.ID=forum_question.SubjectID
-  where forum_subject.ParentSubjectID=3 and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  where forum_subject.ParentSubjectID='$mainSubjectID' and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
   ,
   (select count(*) from forum_answer
     left join forum_question on forum_answer.QuestionID=forum_question.ID
@@ -370,7 +364,7 @@ SELECT cd.IntervalDay as date,
   AnswerCount
   
 from calendar_day as cd
-where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']));
+where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
     $cqData = [];
     while($r = $resQ->fetch_assoc())
@@ -392,25 +386,36 @@ $app->post('/getSubForumData', function() use ($app)  {
     $res = [];
     $res['Subject'] = $resQ->fetch_assoc();
 
-    $resQ = $db->makeQuery("
-select @rownum := @rownum + 1 AS rank, count(*) as QTotal , DATE_FORMAT(fq.CreationDate , '%Y-%m-%d') as CreationDate
-from
-  (SELECT @rownum := 0) r ,forum_subject as fs
-  LEFT JOIN forum_question as fq on fq.SubjectID=fs.ID 
-  where fs.ID='$data->SubjectID' GROUP BY DAY(fq.CreationDate),fs.Title");
 
-    $res['ChartQData'] = $resQ->fetch_all();
+    $curDate = date('Y-m-d');
+    $resCQ = $db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resC  = $resCQ->fetch_assoc();
 
     $resQ = $db->makeQuery("
-select @rownum := @rownum + 1 AS rank, count(*) as QTotal , DATE_FORMAT(fq.CreationDate , '%Y-%m-%d') as CreationDate
-from
-  (SELECT @rownum := 0) r ,forum_answer as fa
-  LEFT JOIN forum_question as fq on fq.ID=fa.QuestionID
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+  where forum_question.SubjectID='$data->SubjectID' and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
+  ,
+  (select count(*) from forum_answer
+    left join forum_question on forum_answer.QuestionID=forum_question.ID
+  where forum_question.SubjectID='$data->SubjectID' and Date(forum_answer.CreationDate) < cd.IntervalDay) as
+  IAnswerCount,
+  (select count(*) from forum_question
+  where forum_question.SubjectID='$data->SubjectID' and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+    left join forum_question on forum_answer.QuestionID=forum_question.ID
+  where forum_question.SubjectID='$data->SubjectID' and Date(forum_answer.CreationDate) = cd.IntervalDay) as
+  AnswerCount
 
-where fq.SubjectID='$data->SubjectID'
+from calendar_day as cd
+where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
-GROUP BY DAY(fq.CreationDate)");
-    $res['ChartAData'] = $resQ->fetch_all();
+    $cqData = [];
+    while($r = $resQ->fetch_assoc())
+        $cqData[] = $r;
+    $res['ChartData'] = $cqData;
+
     echoResponse(200, $res);
 });
 

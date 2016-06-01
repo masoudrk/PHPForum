@@ -31,15 +31,15 @@
                                 <a ng-show="sc.PersonFollow == 0" ng-click="followSubject(sc.ID)" class="btn btn-primary btn-xs pull-left" style="margin: 5px"><b>دنبال کردن</b></a>
                                 <a ng-hide="sc.PersonFollow == 0" ng-click="unFollowSubject(sc.ID)" class="btn btn-danger btn-xs pull-left" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
                             </td>
-                            <td style="vertical-align: middle;width: 75px" class="text-center text-muted">
+                            <td style="vertical-align: middle;width: 75px" class="text-center text-muted" ui-sref="forum({id:sc.ID})">
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">
                                     {{sc.TotalQuestions| pNumber }}</span><br>سوال
                             </td>
-                            <td style="vertical-align: middle; width: 75px" class="text-center text-muted">
+                            <td style="vertical-align: middle; width: 75px" class="text-center text-muted" ui-sref="forum({id:sc.ID})">
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">
                                     {{sc.TotalAnswers| pNumber }}</span><br>جواب
                             </td>
-                            <td style="vertical-align: middle; width: 100px" class="text-center text-muted">
+                            <td style="vertical-align: middle; width: 100px" class="text-center text-muted" ui-sref="forum({id:sc.ID})">
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">
                                     {{sc.FollowCount| pNumber }}
                                 </span><br>دنبال کنندگان
@@ -224,7 +224,7 @@
                 <!--</div>&lt;!&ndash; /.box &ndash;&gt;-->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title vazir-font">آمار انجمن {{forumData.MainSubject.Title}}</h3>
+                    <h3 class="box-title vazir-font">نمودار افزایشی {{forumData.MainSubject.Title}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <div class="col-xs-12 text-center">
@@ -239,15 +239,16 @@
                             </li>
                         </ul>
                     </div>
-                    <serial-chart chart-id="chart1"
-                                  chart-data="forumData.ChartData"
-                                  chart-graphs="incrementChartOptions"
-                                  chart-height="300"></serial-chart>
+                    <serial-chart
+                      chart-id="chart1"
+                      chart-data="forumData.ChartData"
+                      chart-graphs="incrementChartOptions"
+                      chart-height="260"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title vazir-font">آمار انجمن {{forumData.MainSubject.Title}}</h3>
+                    <h3 class="box-title vazir-font">نمودار تعدد {{forumData.MainSubject.Title}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <div class="col-xs-12 text-center">
@@ -265,7 +266,7 @@
                     <serial-chart chart-id="chart2"
                                   chart-data="forumData.ChartData"
                                   chart-graphs="dailyChartOptions"
-                                  chart-height="300"></serial-chart>
+                                  chart-height="260"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 

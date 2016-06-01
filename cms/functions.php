@@ -49,7 +49,6 @@ function generateRequiredCMSJavaFiles(){
     <script src="../js/anim-in-out.js"></script>
     <script src="../js/ng-file-upload.min.js"></script>
     <script src="../js/angularpersian.min.js"></script>
-    <script src="../cms/js/angular-nvd3.min.js"></script>
     <script src="../cms/js/treasure-overlay-spinner.js" type="text/javascript"></script>
     <script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript"></script>
     <script src="../js/toaster.js" type="text/javascript"></script>

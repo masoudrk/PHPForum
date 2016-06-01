@@ -2,28 +2,30 @@
 <html ng-app="forumApp" ng-controller="MainCtrl" style="background-color: #ECF0F5;" >
 <head>
     <?php
-    require  '../cms/functions.php';
+        require  '../cms/functions.php';
 
-    if (!isset($_SESSION)) {
-        session_start();
-        if(!isset($_SESSION['UserID'])){?>
-            <script>
-                window.location ="../";
-            </script>
-            <?php
-        }else{
-            require_once  '../session_generator.php';
-            generateSessionAsJavascriptVariable();
+        if (!isset($_SESSION)) {
+            session_start();
+            if(!isset($_SESSION['UserID']))
+            {?>
+                <script>
+                    //debugger
+                    window.location ="../";
+                </script>
+                <?php
+            }else{
+                require_once  '../session_generator.php';
+                generateSessionAsJavascriptVariable();
+            }
         }
-    }
-    generateMetas();
-    generateRequiredCMSCssFiles();
-            ?>
+        generateMetas();
+        generateRequiredCMSCssFiles();
+    ?>
 
     <title ng-bind="($title || 'Loading ...')">Loading ...</title>
 
     <link rel="icon" href="../images/title.png" />
-    <link rel="icon" href="{{titleIcon}}">
+    <link rel="icon" href="{{titleIcon}}" />
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini vazir-font">

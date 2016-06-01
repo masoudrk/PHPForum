@@ -57,8 +57,10 @@ class Session {
 	}
 
 	public function destroySession(){
+
 		$res = [];
 	    if (!isset($_SESSION)) {
+            ini_set('session.gc_maxlifetime', 30*6000);
 	    session_start();
 	    }
 	    if(isSet($_SESSION['UserID']))
@@ -74,11 +76,7 @@ class Session {
 			unset($_SESSION['SignupDate']);
 			unset($_SESSION['Image']);
 			unset($_SESSION['FirstName']);
-//	        $info='info';
-//	        if(isSet($_COOKIE[$info]))
-//	        {
-//	            setcookie ($info, '', time() - $cookie_time);
-//	        }
+
 			$res['Status'] = 'success';
 	    }
 	    else
