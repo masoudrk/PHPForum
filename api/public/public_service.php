@@ -234,7 +234,7 @@ $app->post('/signInUser', function() use ($app)  {
             }
 
             $cookiePath = '/';
-            $cookieTime = time()+30*24*60*60;
+            $cookieTime = time() + 914748364;
 
             setcookie("SSN", $sessionID, $cookieTime ,$cookiePath);
             setcookie("FullName", $user['FullName'],$cookieTime,$cookiePath);

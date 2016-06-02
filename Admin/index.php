@@ -2,22 +2,22 @@
 <html ng-app="adminApp">
 <head>
     <?php
-    require  '../cms/functions.php';
+        require_once  '../cms/functions.php';
+        require_once  '../session_generator.php';
 
-    if (!isset($_SESSION)) {
-        session_start();
-        if(!isset($_SESSION['UserID'])){?>
-    <script>
-            window.location ="../";
-    </script>
-    <?php
-        }else{
-            require_once  '../session_generator.php';
-            generateSessionAsJavascriptVariable();
+        if (!isset($_SESSION)) {
+            session_start();
+            if(!hasInfo()){?>
+        <script>
+                window.location ="../";
+        </script>
+        <?php
+            }else{
+                generateSessionAsJavascriptVariable();
+            }
         }
-    }
-    generateMetas();
-    generateRequiredCMSCssFiles();
+        generateMetas();
+        generateRequiredCMSCssFiles();
     ?>
 
     <title>داشبورد</title>

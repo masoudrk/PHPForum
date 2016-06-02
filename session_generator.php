@@ -7,7 +7,6 @@
  */
 
 function hasInfo(){
-
     return isset($_SESSION['UserID']) || isset($_COOKIE['UserID']) ;
 }
 

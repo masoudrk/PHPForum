@@ -32,6 +32,12 @@ $app->post('/globalSearch', function() use ($app)  {
     $p = new Pagination();
     if($searchType == 0){
 
+        $searchQuery = '';
+        $searchArr = explode(" ",$searchValue);
+        foreach ($searchArr as $s){
+            $searchQuery .= " AND ( (Title LIKE N'%$s%') OR (QuestionText LIKE N'%$s%') )";
+        }
+        
         $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
  (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
@@ -44,21 +50,18 @@ $app->post('/globalSearch', function() use ($app)  {
 FROM `forum_question` 
     LEFT JOIN user as u on u.ID=forum_question.AuthorID
     LEFT JOIN file_storage on u.AvatarID=file_storage.ID
-WHERE forum_question.AdminAccepted=1 AND ((Title LIKE N'%$searchValue%') OR 
-    (QuestionText LIKE N'%$searchValue%'))");
+WHERE forum_question.AdminAccepted=1 $searchQuery");
 
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);
         return;
-//        $sRes['Total'] =$res['Total'];
-//
-//        foreach ($res['Items'] as &$s){
-//            $sr = [];
-//            $sr['ID'] = $s['ID'];
-//            $sr['Text'] = $s['Title'];
-//            $sRes['Items'][] = $sr;
-//        }
     }else if($searchType == 1){
+
+        $searchQuery = '';
+        $searchArr = explode(" ",$searchValue);
+        foreach ($searchArr as $s){
+            $searchQuery .= " AND u.FullName LIKE N'%$s%' ";
+        }
 
         $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
@@ -71,7 +74,7 @@ WHERE forum_question.AdminAccepted=1 AND ((Title LIKE N'%$searchValue%') OR
 ( SELECT count(*) FROM forum_question where AuthorID = u.ID and  forum_question.AdminAccepted=1 ) as QuestionsCount ,
 ($rateSelection) as Rate
 FROM `user` as u LEFT JOIN file_storage as fs on fs.ID=u.AvatarID 
-WHERE u.UserAccepted=1 AND u.FullName LIKE N'%$searchValue%'");
+WHERE u.UserAccepted=1 ".$searchQuery);
 
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);
