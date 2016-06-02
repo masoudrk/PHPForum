@@ -199,11 +199,14 @@ $app->post('/signInUser', function() use ($app)  {
             $sessionID = generateSessionID(100);
             $resSessionIDQ = $db->insertToTable('user_session',"UserID,SessionID,LoginDate,DeviceName,IP","'"
                 .$user['ID']."','$sessionID',NOW(),'".getOperatingSystem()."','".getIPAddress()."'");
+//
+//            $db->deleteFromTable('LoginTime','ID IN (
+//     SELECT ID
+//     WHERE user_id = 1
+//     ORDER BY datetime DESC
+//     LIMIT 0, 5
+//)');
 
-            //$resSessionIDQ = $db->updateRecord('user',"SessionID='".$sessionID."',ValidSessionID=1","ID='"
-                //.$user['ID']."'");
-
-            $IsAdmin=false;
             $IsAdmin=false;
             $admin = $db->getOneRecord("select * from admin left join admin_permission on admin_permission.ID=admin.PermissionID
              where UserID=".$user['ID']);
@@ -230,13 +233,23 @@ $app->post('/signInUser', function() use ($app)  {
                 session_start();
             }
 
+            $cookiePath = '/';
+            $cookieTime = time()+30*24*60*60;
+
+            setcookie("SSN", $sessionID, $cookieTime ,$cookiePath);
+            setcookie("FullName", $user['FullName'],$cookieTime,$cookiePath);
+            setcookie("IsAdmin", ($IsAdmin)?1:0, $cookieTime,$cookiePath);
+            setcookie("Email", $email, $cookieTime,$cookiePath);
+            setcookie("UserID", $user['ID'], $cookieTime,$cookiePath);
+            setcookie("SignupDate", $user['SignupDate'], $cookieTime,$cookiePath);
+            setcookie("Image", $user['Image'],$cookieTime,$cookiePath);
+
             $_SESSION['Status'] = "success";
             $_SESSION['SSN'] = $sessionID;
             $_SESSION['FullName'] = $user['FullName'];
             $_SESSION['IsAdmin'] = $IsAdmin;
             $_SESSION['Email'] = $email;
             $_SESSION['UserID'] = $user['ID'];
-            $_SESSION['AdminID'] = $admin['ID'];
             $_SESSION['SignupDate'] = $user['SignupDate'];
             $_SESSION['Image'] = $user['Image'];
 
@@ -244,6 +257,10 @@ $app->post('/signInUser', function() use ($app)  {
                 $_SESSION['AdminID'] = $admin['ID'];
                 $_SESSION['AdminPermissionLevel'] = $admin['PermissionLevel'];
                 $_SESSION['AdminPermission'] = $admin['Permission'];
+
+                setcookie("AdminID", $admin['ID'], $cookieTime,$cookiePath);
+                setcookie("AdminPermissionLevel", $admin['PermissionLevel'], $cookieTime,$cookiePath);
+                setcookie("AdminPermission", $admin['Permission'],$cookieTime,$cookiePath);
             }
         } else {
             $response['Status'] = "error";

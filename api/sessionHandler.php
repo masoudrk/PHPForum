@@ -63,6 +63,21 @@ class Session {
             ini_set('session.gc_maxlifetime', 30*6000);
 	    session_start();
 	    }
+
+		if(isSet($_SESSION['UserID']))
+		{
+			$cookiePath = '/';
+			$cookieTime = time()-1000;
+
+			setcookie("SSN", '', $cookieTime ,$cookiePath);
+			setcookie("FullName",'',$cookieTime,$cookiePath);
+			setcookie("IsAdmin", '', $cookieTime,$cookiePath);
+			setcookie("Email", '', $cookieTime,$cookiePath);
+			setcookie("UserID", '', $cookieTime,$cookiePath);
+			setcookie("SignupDate", '', $cookieTime,$cookiePath);
+			setcookie("Image", '',$cookieTime,$cookiePath);
+		}
+
 	    if(isSet($_SESSION['UserID']))
 	    {
 			unset($_SESSION['UserID']);

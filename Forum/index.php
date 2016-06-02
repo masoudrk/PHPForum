@@ -2,11 +2,12 @@
 <html ng-app="forumApp" ng-controller="MainCtrl" style="background-color: #ECF0F5;" >
 <head>
     <?php
-        require  '../cms/functions.php';
+        require_once  '../cms/functions.php';
+        require_once  '../session_generator.php';
 
         if (!isset($_SESSION)) {
             session_start();
-            if(!isset($_SESSION['UserID']))
+            if(!hasInfo())
             {?>
                 <script>
                     //debugger
@@ -14,7 +15,6 @@
                 </script>
                 <?php
             }else{
-                require_once  '../session_generator.php';
                 generateSessionAsJavascriptVariable();
             }
         }
