@@ -317,7 +317,7 @@ $app->post('/getAllQuestions', function() use ($app)  {
 		$hasWhere = TRUE;
 	}
 
-	$pageRes = $pr->getPage($db,"SELECT fq.* ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID
+	$pageRes = $pr->getPage($db,"SELECT fq.* ,fs.Title as SubjectName ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID
 FROM forum_question as fq
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
@@ -586,6 +586,34 @@ LEFT JOIN file_storage as fs on u.AvatarID = fs.ID ".$where." ORDER BY m.ID desc
 	echoResponse(200, $pageRes);
 });
 
+$app->post('/getCommonMessages', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+	$where = "WHERE 1";
+	if(isset($data->filter) && strlen($data->filter) > 0){
+		$s = mb_convert_encoding($data->filter, "UTF-8", "auto");
+		$where .= " AND MessageTitle = '$s'";
+	}
+	$pageRes = $db->makeQuery("SELECT * FROM `common_message` $where");
+
+    $res=[];
+    while($r = $pageRes->fetch_assoc())
+        $res[] = $r;
+	echoSuccess($res);
+});
+
+$app->post('/getSubjects', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$pageRes = $db->makeQuery("SELECT fs.* , fm.Title as MainTitle FROM forum_subject fs INNER JOIN
+forum_main_subject as fm on fm.ID = fs.ParentSubjectID");
+    $res=[];
+    while($r = $pageRes->fetch_assoc())
+        $res[] = $r;
+	echoSuccess($res);
+});
+
 $app->post('/deleteMessage', function() use ($app)  {
 
 	$db = new DbHandler(true);
@@ -607,6 +635,36 @@ LIMIT 1");
     }
 	else
 		echoError("Cannot update record.");
+});
+
+$app->post('/exchangeQuestion', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	if( isset($data->QuestionID) && isset($data->SubjectID)){
+			$sess = new Session();
+
+                    $resQ = $db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
+LIMIT 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+			$res = $db->updateRecord('forum_question',"SubjectID='$data->SubjectID'","ID='$data->QuestionID'");
+			if($res)
+            {
+                echoSuccess();
+            }
+			else
+				echoError("Cannot update record.");
+	}
+
+	echoError("Bad request!");
 });
 
 ?>
