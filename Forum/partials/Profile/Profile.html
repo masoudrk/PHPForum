@@ -20,14 +20,17 @@
                     </li>
                     <li class="link">
                         <a ng-click="activeTab = 3" data-toggle="tab" aria-expanded="false">
-            اطلاعات تکمیلی <small class="label bg-red"
-                                  ng-show="curUser.Educations.length==0 || curUser.Skills.length==0||!curUser.Description">ناقص</small>
+             <small class="badge bg-red" style="margin-top: -3px;margin-right: 8px"
+                                  ng-show="curUser.Educations.length==0||curUser.Skills.length==0||!curUser.Description">ناقص</small>
+                            اطلاعات تکمیلی
                         </a>
                     </li>
                     <li class="link">
                         <a ng-click="activeTab = 1" data-toggle="tab" aria-expanded="false">
 
-                            <small class="label label-warning" ng-bind="curUser.ActiveSessions.length | pNumber"></small>
+                            <small class="badge bg-green" style="margin-top: -3px;margin-right: 8px"
+                                   ng-bind="curUser.ActiveSessions.length | pNumber"
+                            ></small>
                             <span>اتصال ها</span>
                         </a>
 
@@ -36,7 +39,8 @@
                     aria-expanded="false">تایم لاین</a></li>-->
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane" ng-class="(activeTab == 0)?'active':''" >
+                    <div class="tab-pane"
+                         ng-class="(activeTab == 0)?'active':''" >
                         <!-- The timeline -->
                         <ul class="timeline timeline-inverse">
                             <!-- timeline time label -->
@@ -183,6 +187,15 @@
                                            placeholder="شماره تلفن همراه ... ">
                                 </div>
                                 <label for="inputPhone1" class="col-sm-3 control-label">موبایل</label>
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <input type="password" ng-model="curUser.OldPassword" class="form-control"
+                                           id="pass_old"
+                                           placeholder="رمز فعلی ...">
+                                </div>
+                                <label for="pass_old" class="col-sm-3 control-label">رمز فعلی</label>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">

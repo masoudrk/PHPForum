@@ -31,7 +31,8 @@
                             <th>وضعیت تایید ادمین</th>
                             <th style="width: 100px"></th>
                         </tr>
-                        <tr ng-repeat="q in question.all">
+                        <tr ng-repeat="q in question.all"
+                            class="fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-20">
                             <td >{{q.Title| subString :50|pNumber}}</td>
                             <td >{{q.SubjectTitle| subString :50|pNumber}}</td>
                             <td>

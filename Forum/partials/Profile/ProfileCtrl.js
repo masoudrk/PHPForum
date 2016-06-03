@@ -30,16 +30,37 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
     }
     
     $scope.saveUserInfo = function () {
+
+        if($scope.curUser.Password && ($scope.curUser.VerifyPassword != $scope.curUser.Password) ||
+            $scope.curUser.VerifyPassword && ($scope.curUser.VerifyPassword != $scope.curUser.Password) )
+        {
+            Extention.popError('رمز وارد شده با تکرار آن یکسان نیست!');
+            return;
+        }
+
+        if($scope.curUser.Password.length < 5 )
+        {
+            Extention.popError(persianJs('رمز جدید بایستی حداقل 5 کاراکتر باشد!').englishNumber().toString() );
+            return;
+        }
+
         Extention.post('saveUserInfo', $scope.curUser).then(function (res) {
+
             if(res && res.Status=='success'){
                 Extention.popSuccess('با موفقیت تغییر کرد!');
                 session.FullName = res.FullName;
                 $rootScope.user.FullName = res.FullName;
+                $scope.curUser.Password=undefined;
+                $scope.curUser.VerifyPassword=undefined;
+                $scope.curUser.OldPassword=undefined;
             }else{
                 if(res.Message == 'EmailExists'){
-
                     Extention.popWarning('خطا : این ایمیل قبلا ثبت شده ، لطفا ایمیل دیگری انتخاب کنید.',12000);
-                }else{
+                }else if(res.Message == 'OldPasswordIsNotValid'){
+                    Extention.popError('خطا : رمز عبور فعلی اشتباه است.');
+                }else if(res.Message == 'PasswordIsNotValid'){
+                    Extention.popError(persianJs('خطا : رمز عبور جدید بایستی حداقل 5 کاراکتر باشد.').englishNumber().toString());
+                }else {
                     Extention.popError('مشکل در تغییر اطلاعات ، لطفا دوباره تلاش کنید.');
                 }
             }
@@ -106,7 +127,6 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
 
         });
     }
-
 
     $scope.passwordChanged = function () {
         if(!$scope.curUser.Password && !$scope.curUser.VerifyPassword)
