@@ -131,6 +131,18 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'ارسال پیام';
                 }
             }
+        }).state("skill", {
+            url: "/skill",
+            templateUrl: "partials/Admin/Skill/Skill.html",
+            controller: 'SkillCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Skill/Skill.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت مهارت ها';
+                }
+            }
         });
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');

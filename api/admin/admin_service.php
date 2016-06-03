@@ -12,6 +12,18 @@ FROM tag as t  ORDER BY t.ID desc");
 	echoResponse(200, $pageRes);
 });
 
+$app->post('/getAllSkills', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+	$pr = new Pagination($data);
+
+	$pageRes = $pr->getPage($db,"SELECT t.* , (SELECT COUNT(*) FROM user_skill as tq WHERE tq.SkillID= t.ID) as UseCount
+FROM skill as t  ORDER BY t.ID desc");
+
+	echoResponse(200, $pageRes);
+});
+
 $app->post('/deleteTag', function() use ($app)  {
 
 	$db = new DbHandler(true);
@@ -33,6 +45,33 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
 		echoSuccess();
 	else
 		echoError("Cannot delete record.");
+});
+
+$app->post('/insertSkill', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $object = (object) [
+            'Skill' => $data->Skill
+          ];
+
+    $column_names = array( 'Skill');
+
+	$res = $db->insertIntoTable($object ,$column_names,'skill');
+	if($res)
+		echoSuccess();
+	else
+		echoError("Cannot update record.");
 });
 
 $app->post('/insertTag', function() use ($app)  {
@@ -92,6 +131,28 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
 
 	$res = $db->deleteFromTable('education' , "ID = $data->ID");
     $res2 = $db->deleteFromTable('user_education' , "EducationID = $data->ID");
+	if($res && $res2)
+		echoSuccess();
+	else
+		echoError("Cannot delete record.");
+});
+$app->post('/deleteSkill', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $db->deleteFromTable('skill' , "ID = $data->ID");
+    $res2 = $db->deleteFromTable('user_skill' , "SkillID = $data->ID");
 	if($res && $res2)
 		echoSuccess();
 	else
@@ -258,7 +319,7 @@ LIMIT 1");
 			if($res){
                 if($data->State == 1){
                     $db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
-                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                     "'$sess->UserID','$data->UserID',NOW(),'".'ÊÇ??Ï ?Çã'."','".'?Çã ÔãÇ ÊÇ??Ï ÔÏ'."','0'");
                 }
 
@@ -381,12 +442,12 @@ LIMIT 1");
                 if($data->State == 1)
                 {
                     $db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
-                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                 "'$sess->UserID','$data->UserID',NOW(),'".'ÊÇ??Ï ÓæÇá'."','".'ÓæÇá ÔãÇ ÊÇ??Ï ÔÏ'."','0'");
                 }
                 else if($data->State == -1 && isset($data->Message))
                 {
-                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
             "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','0'");
                 }
                 echoSuccess();
@@ -539,7 +600,7 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
 
     foreach ($data->Users as $value)
     {
-    	$db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+    	$db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
             "'$sess->UserID','$value->ID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','".$data->Message->MessageType."'");
 
         if($data->Message->MessageType == 1){
@@ -591,7 +652,7 @@ $app->post('/getAllMessages', function() use ($app)  {
 
 	$pageRes = $pr->getPage($db,"SELECT u.FullName ,fs.FullPath, u.Email , m.* FROM message as m
 INNER JOIN user as u on u.ID = m.UserID
-INNER join user as au on au.ID = m.AdminID
+INNER join user as au on au.ID = m.SenderUserID
 LEFT JOIN file_storage as fs on u.AvatarID = fs.ID ".$where." ORDER BY m.ID desc");
 
 	echoResponse(200, $pageRes);
