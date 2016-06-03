@@ -19,6 +19,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 			}
 		});
 	}
+
 	$scope.removeQuestion = function (uid ,AuthorID) {
 	    Extention.post('deleteQuestion', { QuestionID: uid, AdminPermissionLevel: session.AdminPermissionLevel, UserID: AuthorID }).then(function (res) {
 			if(res && res.Status=='success'){
@@ -79,7 +80,6 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	                    $scope.cancel = function () {
 	                        $uibModalInstance.dismiss('cancel');
 	                    };
-
 	                    $scope.send = function (subject) {
 	                        Extention.post('exchangeQuestion', { SubjectID: subject.ID, QuestionID: $scope.question.ID}).then(function (res) {
 	                            if (res && res.Status == 'success') {
@@ -105,30 +105,43 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	    });
 	}
 
-	//$scope.openExchangeModal = function (question) {
-	//    Extention.post('getCommonMessages', { filter: 'رد سوال' }).then(function (res) {
-	//        if (res && res.Status == 'success') {
-	//            $uibModal.open({
-	//                animation: true,
-	//                templateUrl: 'ExchangeModal.html',
-	//                controller: function ($scope, $uibModalInstance) {
-	//                    $scope.common = res.Data;
-	//                    $scope.question = question;
-	//                    $scope.cancel = function () {
-	//                        $uibModalInstance.dismiss('cancel');
-	//                    };
+	$scope.openDiscardModal = function (questionID , authorID) {
+	    Extention.post('getCommonMessages', { filter: 'رد سوال' }).then(function (res) {
+	        if (res && res.Status == 'success') {
+	            var modalInstance = $uibModal.open({
+	                animation: true,
+	                templateUrl: 'DiscardQuestionModal.html',
+	                controller: function ($scope, $uibModalInstance) {
+	                    $scope.common = res.Data;
+	                    $scope.questionID = questionID;
+	                    $scope.authorID = authorID;
+	                    $scope.cancel = function () {
+	                        $uibModalInstance.dismiss('cancel');
+	                    };
 
-	//                    $scope.send = function (message) {
+	                    $scope.send = function (message) {
+	                        Extention.post('changeQuestionAccepted', { State: -1, QuestionID: $scope.questionID, AdminPermissionLevel: session.AdminPermissionLevel, UserID: $scope.authorID, Message: message }).then(function (res) {
+	                            if (res && res.Status == 'success') {
+	                                Extention.popSuccess("وضعیت سوال با موفقیت تغییر کرد!");
+	                                $uibModalInstance.dismiss('cancel');
+	                            } else {
+	                                Extention.popError("مشکل در تغییر وضعیت سوال ، لطفا دوباره تلاش کنید.");
+	                            }
+	                        });
+	                    };
+	                },
+	                size: 'md'
+	            });
+	            modalInstance.result.then(function () {
+	            }, function () {
+	                $scope.pagingController.update();
+	            });
+	        } else {
+	            return;
+	        }
 
-	//                    };
-	//                },
-	//                size: 'md'
-	//            });
-	//        } else {
-	//            return;
-	//        }
-	//    });
-	//}
+	    });
+	}
 
     console.log('#S' + $stateParams.id);
     activeElement('#SQuestions', '#SS' + $stateParams.id);

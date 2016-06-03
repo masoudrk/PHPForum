@@ -392,7 +392,7 @@
                         </ul>
                     </li>
                     <li id="SAnswers">
-                        <a ui-sref="questions">
+                        <a>
                             <i class="fa fa-pencil"></i>
                             <span>مدیریت جواب ها</span>
                             <i class="fa fa-angle-right pull-right"></i>

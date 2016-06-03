@@ -40,7 +40,6 @@
     }
 
     $scope.savePerson = function () {
-        console.log($scope.Position);
         if ($scope.user.roleAccepted && $scope.signUpForm.$valid && !$scope.user.emailError) {
             $scope.user.OrganizationID = $scope.Position.selected.ID;
             Extention.post('savePerson', $scope.user).then(function (msg) {

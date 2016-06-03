@@ -70,7 +70,7 @@
                                     <i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeQuestion(u.ID , u.AuthorID)" title="خذف سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1 || u.AdminAccepted==0" style="color: #e67e22;"
-                                       ng-click="changeQuestionState(u.ID ,-1, u.AuthorID)" title="رد کردن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                       ng-click="openDiscardModal(u.ID , u.AuthorID)" title="رد کردن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
                                        ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeQuestionState(u.ID ,1, u.AuthorID)" title="تایید سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.Title , u.QuestionText)" title="متن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
@@ -126,7 +126,7 @@
                     </tr>
                     <tr class="link" ng-repeat="u in subjects" ng-click="send(u)">
                         <td class="persian-rtl">
-                            {{$index}}
+                            {{$index | pNumber}}
                         </td>
                         <td class="persian-rtl">
                             {{u.MainTitle | pNumber}}
@@ -152,28 +152,41 @@
 </script>
 
 <script type="text/ng-template" id="DiscardQuestionModal.html">
-    <div class="table-responsive mailbox-messages">
-        <table class="table table-hover">
-            <tbody>
-                <tr>
-                    <th>نام انجمن</th>
-                    <th>زیر مجموعه</th>
-                </tr>
-                <tr class="link" ng-repeat="u in subjects" ng-click="send(u)">
-                    <td class="persian-rtl">
-                        {{u.MainTitle | pNumber}}
-                    </td>
-                    <td class="persian-rtl">
-                        {{u.Title | pNumber}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="modal-header vazir-font text-right">
+        <label class="modal-title text-danger" style="font-size:15px">دلیل رد سوال را انتخاب کنید</label>
     </div>
+    <div class="modal-body vazir-font text-right persian-rtl">
+        <div class="table-responsive mailbox-messages">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th>شماره</th>
+                        <th>دلیل رد سوال</th>
+                        <th style="width : 25px"></th>
+                    </tr>
+                    <tr class="link" ng-repeat="u in common" ng-click="send(u)">
+                        <td class="persian-rtl">
+                            {{$index | pNumber}}
+                        </td>
+                        <td class="persian-rtl">
+                            {{u.Message | pNumber}}
+                        </td>
+                        <td>
+                            <div class="table-action-icons">
+                                <i class="fa fa-times text-yellow link hvr-grow" ng-click="send(u)" title="رد سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+   
     <div class="modal-footer vazir-font">
         <button class="btn btn-warning pull-right" type="button" ng-click="send(null)">رد سوال بدون فیدبک</button>
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
     </div>
+
 </script>
 
 

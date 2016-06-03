@@ -182,9 +182,9 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
                   <title></title>
                 </head>
                 <body>
-<p style="direction: rtl">ï¿½ï¿½ï¿½ï¿½ '.$res["FullName"].'</p><br>
+<p style="direction: rtl">ÓáÇã '.$res["FullName"].'</p><br>
                 <p style="direction: rtl">
-ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½?ï¿½?ï¿½ ï¿½?ï¿½ ï¿½ï¿½??ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ . ï¿½ï¿½ï¿½ ï¿½? ï¿½ï¿½ï¿½ï¿½?ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½?ï¿½ ï¿½ï¿½?ï¿½.
+Ç˜ÇäÊ ÔãÇ ÊÇ??Ï ÔÏå . ÔãÇ ã? ÊæÇä?Ï ÏÑ ÇäÌãä ÔÑæÚ Èå ÝÚÇá?Ê ˜ä?Ï
 <br>
 '.$res["Email"].'
                 </p>
@@ -256,10 +256,14 @@ LIMIT 1");
 
 			$res = $db->updateRecord('forum_answer',"AdminAccepted='$data->State'","ID='$data->AnswerID'");
 			if($res){
-                if($data->State == 1)
+                if($data->State == 1){
                     $db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
-                else if($data->State == -1)
-                    $db->updateRecord('user',"score=(score-2)" , "ID = '$data->UserID'");
+                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    "'$sess->UserID','$data->UserID',NOW(),'".'ÊÇ??Ï ?Çã'."','".'?Çã ÔãÇ ÊÇ??Ï ÔÏ'."','0'");
+                }
+
+                //else if($data->State == -1)
+                //    $db->updateRecord('user',"score=(score-2)" , "ID = '$data->UserID'");
         echoSuccess();
             }
 			else
@@ -375,9 +379,16 @@ LIMIT 1");
 			if($res)
             {
                 if($data->State == 1)
+                {
                     $db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
-                else if($data->State == -1)
-                    $db->updateRecord('user',"score=(score-5)" , "ID = '$data->UserID'");
+                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                "'$sess->UserID','$data->UserID',NOW(),'".'ÊÇ??Ï ÓæÇá'."','".'ÓæÇá ÔãÇ ÊÇ??Ï ÔÏ'."','0'");
+                }
+                else if($data->State == -1 && isset($data->Message))
+                {
+                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+            "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','0'");
+                }
                 echoSuccess();
             }
 			else
