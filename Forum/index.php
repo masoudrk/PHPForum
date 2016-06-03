@@ -2,28 +2,30 @@
 <html ng-app="forumApp" ng-controller="MainCtrl" style="background-color: #ECF0F5;" >
 <head>
     <?php
-    require  '../cms/functions.php';
+        require_once  '../cms/functions.php';
+        require_once  '../session_generator.php';
 
-    if (!isset($_SESSION)) {
-        session_start();
-        if(!isset($_SESSION['UserID'])){?>
-            <script>
-                window.location ="../";
-            </script>
-            <?php
-        }else{
-            require_once  '../session_generator.php';
-            generateSessionAsJavascriptVariable();
+        if (!isset($_SESSION)) {
+            session_start();
+            if(!hasInfo())
+            {?>
+                <script>
+                    //debugger
+                    window.location ="../";
+                </script>
+                <?php
+            }else{
+                generateSessionAsJavascriptVariable();
+            }
         }
-    }
-    generateMetas();
-    generateRequiredCMSCssFiles();
-            ?>
+        generateMetas();
+        generateRequiredCMSCssFiles();
+    ?>
 
     <title ng-bind="($title || 'Loading ...')">Loading ...</title>
 
     <link rel="icon" href="../images/title.png" />
-    <link rel="icon" href="{{titleIcon}}">
+    <link rel="icon" href="{{titleIcon}}" />
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini vazir-font">
@@ -439,6 +441,7 @@
         <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60">
         </treasure-overlay-spinner>
         <!-- Content Wrapper. Contains page content -->
+
         <div ui-view ng-hide="globalSearchActive" id="mainContent" data-anim-speed="600"
              class="anim-in-out anim-slide-below-fade" data-anim-sync="true"></div>
         <div ng-show="globalSearchActive" ng-include src="'partials/GlobalSearch.html'" id="searchContent" ></div>

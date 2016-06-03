@@ -6,6 +6,10 @@
  * Time: 07:33 PM
  */
 
+function hasInfo(){
+    return isset($_SESSION['UserID']) || isset($_COOKIE['UserID']) ;
+}
+
 function generateSessionAsJavascriptVariable()
 {
     if (!isset($_SESSION)) {
@@ -32,9 +36,31 @@ function generateSessionAsJavascriptVariable()
              $adminScript.
             "</script>";
     }else{
-        echo "<script>".
-            "var session = {};".
-            "</script>";
+
+        if(isset($_COOKIE['UserID'])){
+
+            $_SESSION['SSN'] = $_COOKIE['SSN'];
+            $_SESSION['FullName'] = $_COOKIE['FullName'];
+            $_SESSION['IsAdmin'] = $_COOKIE['IsAdmin'];
+            $_SESSION['Email'] = $_COOKIE['Email'];
+            $_SESSION['UserID'] = $_COOKIE['UserID'];
+            $_SESSION['SignupDate'] = $_COOKIE['SignupDate'];
+            $_SESSION['Image'] = $_COOKIE['Image'];
+
+            if($_SESSION['IsAdmin']){
+                $_SESSION['AdminID'] = $_COOKIE['AdminID'];
+                $_SESSION['AdminPermissionLevel'] = $_COOKIE['AdminPermissionLevel'];
+                $_SESSION['AdminPermission'] = $_COOKIE['AdminPermission'];
+            }
+
+            generateSessionAsJavascriptVariable();
+        }else{
+
+            echo "<script>".
+                "var session = {};".
+                "</script>";
+        }
+
     }
 }
 ?>

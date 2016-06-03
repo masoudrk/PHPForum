@@ -14,67 +14,121 @@ angular.module(appName).controller('ForumCtrl',
     $scope.pagingParams = { SubjectID : $stateParams.id };
     $scope.question = {};
 
-
-    $scope.data = [
-        {
-            key: "جواب ها",
-            values: [ ] ,
-            mean: 250
-        },
-        {
-            key: "سوال ها",
-            values: [ ],
-            mean: -60
-        }
-    ];
-
 	Extention.post('getSubForumData',{SubjectID: $stateParams.id})
 		.then(function (res) {
         $scope.forumData = res;
-        $scope.data[0].values = res.ChartAData;
-        $scope.data[1].values = res.ChartQData;
 	});
-    
 
+    $scope.incrementChartOptions = [
+    {
+        id:"g1",
+        type : "smoothedLine",
+        lineColor: "#00BBCC",
+        valueField: "IQuestionCount",
+        fillColors: "#00BBCC",
+        fillAlphas:0.2,
+        bullet: "round",
+        bulletColor: "#FFFFFF",
+        bulletBorderAlpha : 1,
+        bulletBorderThickness : 2,
+        bulletSize : 7,
+        useLineColorForBulletBorder : true,
+        lineThickness : 2,
+        balloon:{
+            drop:false
+        },
+        balloonFunction : function (graphDataItem, graph){
+            var value = graphDataItem.values.value;
+            var date = moment(graphDataItem.category);
+            var d =  date.format('jYYYY/jMM/jDD');
 
-        $scope.options = {
-            "chart": {
-                "type": "lineChart",
-                "height": 350,
-                "margin": {
-                    "top": 40,
-                    "right": 20,
-                    "bottom": 60,
-                    "left": 75
-                },
-                x: function (d) {
-                    return d[0];
-                },
-                y: function (d) {
-                    return d[1];
-                },
-                "useInteractiveGuideline": true,
-                "dispatch": {},
-                "clipEdge": true,
-                "showLegend":false,
-                "xAxis": {
-                    "axisLabel": "روز",
-                    tickFormat: function (d) {
-                        if ($scope.data[0].values[d]) {
-                            var label = $scope.data[1].values[d][2];
-                            return label;
-                        }
-                        return '';
-                    }
-                },
-                "yAxis": {
-                    "axisLabel": "تعداد",
-                    tickFormat: function (d) {
-                        return d3.format('.02f')(d);
-                    },
-                }
+            return "<b style=\"font-size: 13px\">" +
+                persianJs( value + " سوال <br>" +'<span class="text-muted">'+
+                    d + '</span>').englishNumber().toString() + "</b>";
+        }
+        },
+        {
+            id:"g2",
+            type : "smoothedLine",
+            lineColor: "#e74c3c",
+            valueField: "IAnswerCount",
+            fillColors: "#e74c3c",
+            fillAlphas:0.2,
+            bullet: "round",
+            bulletColor: "#FFFFFF",
+            bulletBorderAlpha : 1,
+            bulletBorderThickness : 2,
+            bulletSize : 7,
+            useLineColorForBulletBorder : true,
+            lineThickness : 2,
+            balloon:{
+                drop:false
+            },
+            balloonFunction : function (graphDataItem, graph){
+                var value = graphDataItem.values.value;
+                var date = moment(graphDataItem.category);
+                var d =  date.format('jYYYY/jMM/jDD');
+
+                return "<b style=\"font-size: 13px\">" +
+                    persianJs( value + " جواب <br>" +'<span class="text-muted">'+
+                        d + '</span>').englishNumber().toString() + "</b>";
             }
         }
+    ];
+
+    $scope.dailyChartOptions =[{
+        id:"g1",
+        type : "smoothedLine",
+        lineColor: "#00BBCC",
+        valueField: "QuestionCount",
+        fillColors: "#00BBCC",
+        bullet: "round",
+        bulletColor: "#FFFFFF",
+        bulletBorderAlpha : 1,
+        bulletBorderThickness : 2,
+        bulletSize : 7,
+        useLineColorForBulletBorder : true,
+        lineThickness : 2,
+        balloon:{
+            drop:false
+        },
+        balloonFunction : function (graphDataItem, graph){
+            var value = graphDataItem.values.value;
+            var date = moment(graphDataItem.category);
+            var d =  date.format('jYYYY/jMM/jDD');
+
+            return "<b style=\"font-size: 13px\">" +
+                persianJs( value + " سوال <br>" +'<span class="text-muted">'+
+                    d + '</span>').englishNumber().toString() + "</b>";
+        }
+    },
+        {
+            id:"g2",
+            type : "smoothedLine",
+            lineColor: "#e74c3c",
+            valueField: "AnswerCount",
+            fillColors: "#e74c3c",
+            bullet: "round",
+            bulletColor: "#FFFFFF",
+            bulletBorderAlpha : 1,
+            bulletBorderThickness : 2,
+            bulletSize : 7,
+            useLineColorForBulletBorder : true,
+            lineThickness : 2,
+            balloon:{
+                drop:false
+            },
+            balloonFunction : function (graphDataItem, graph){
+                var value = graphDataItem.values.value;
+                var date = moment(graphDataItem.category);
+                var d =  date.format('jYYYY/jMM/jDD');
+
+                return "<b style=\"font-size: 13px\">" +
+                    persianJs( value + " جواب <br>" +'<span class="text-muted">'+
+                        d + '</span>').englishNumber().toString() + "</b>";
+            }
+        }
+    ];
 
 	activeElement('#SForum','#S' + $stateParams.id);
 });

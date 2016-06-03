@@ -15,6 +15,7 @@ $app = new \Slim\Slim();
 $user_id = NULL;
 
 require_once 'user_service.php';
+require_once '../generic_service.php';
 
 
 function reArrayFiles(&$file_post) {

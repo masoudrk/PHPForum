@@ -349,6 +349,9 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     border-top: none !important;
     border-bottom: 1px solid #f4f4f4 !important;
 }
+.border-bottom-table>tbody>tr:last-child > td {
+    border-bottom-width: 0 !important;
+}
 
 .nav-pills>li+li {
     margin-top: 2px;
@@ -373,4 +376,8 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .nav-pills>li.active>a:focus,  .nav-pills>li.active>a:hover{
     color: #222;
     background-color: #D2DaDE;
+}
+
+.amcharts-balloon-div {
+
 }

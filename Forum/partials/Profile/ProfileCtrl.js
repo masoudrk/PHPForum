@@ -4,9 +4,13 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
     $scope.activeTab = 2;
     $scope.isEqualWithVerify = true;
 
-    Extention.post('getUserProfile').then(function (res) {
-        $scope.curUser = res;
-    });
+    $scope.getUser = function () {
+
+        Extention.post('getUserProfile').then(function (res) {
+            $scope.curUser = res;
+        });
+    }
+    $scope.getUser();
 
     $scope.getRandomSpan = function(){
         var i = Math.floor((Math.random()*6)+1);
@@ -32,7 +36,12 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
                 session.FullName = res.FullName;
                 $rootScope.user.FullName = res.FullName;
             }else{
-                Extention.popError('مشکل در تغییر اطلاعات ، لطفا دوباره تلاش کنید.');
+                if(res.Message == 'EmailExists'){
+
+                    Extention.popWarning('خطا : این ایمیل قبلا ثبت شده ، لطفا ایمیل دیگری انتخاب کنید.',12000);
+                }else{
+                    Extention.popError('مشکل در تغییر اطلاعات ، لطفا دوباره تلاش کنید.');
+                }
             }
         });
     }
@@ -113,6 +122,25 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
         return $scope.randomClass[id % $scope.randomClass.length];
     }
 
+    $scope.removeSession= function (id) {
+        Extention.post('deleteSession',{ID : id}).then(function (res) {
+
+            if(res){
+                if (res.Status=='success') {
+                    Extention.popSuccess('اتصال با موفقیت قطع شد.');
+                    $scope.getUser();
+                }
+                else if(res.Message == 'CurrentSession'){
+                    Extention.popInfo('مشکل در قطع اتصال ، شما با این شناسه متصل هستید!');
+                }
+                else {
+                    Extention.popError('مشکل در قطع اتصال ، لطفا دوباره تلاش کنید.');
+                }
+            }else {
+                Extention.popError('مشکل در قطع اتصال ، لطفا دوباره تلاش کنید.');
+            }
+        });
+    }
 
     activeElement('#SProfile');
 });

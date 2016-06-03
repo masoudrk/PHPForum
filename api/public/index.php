@@ -12,6 +12,7 @@ require '../libs/Slim/Slim.php';
 $app = new \Slim\Slim();
 
 require_once 'public_service.php';
+require_once '../generic_service.php';
 
 $app->run();
 ?>

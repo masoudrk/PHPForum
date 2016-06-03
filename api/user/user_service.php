@@ -1,11 +1,4 @@
 <?php
-
-$app->post('/logout', function() use ($app)  {
-    $sess = new Session();
-    $res = $sess->destroySession();
-    echoResponse(200, $res);
-});
-
 $app->post('/getSocketData', function() use ($app)  {
     $db = new DbHandler(true);
     $s = new Session();
@@ -39,6 +32,12 @@ $app->post('/globalSearch', function() use ($app)  {
     $p = new Pagination();
     if($searchType == 0){
 
+        $searchQuery = '';
+        $searchArr = explode(" ",$searchValue);
+        foreach ($searchArr as $s){
+            $searchQuery .= " AND ( (Title LIKE N'%$s%') OR (QuestionText LIKE N'%$s%') )";
+        }
+        
         $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
  (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
@@ -51,21 +50,18 @@ $app->post('/globalSearch', function() use ($app)  {
 FROM `forum_question` 
     LEFT JOIN user as u on u.ID=forum_question.AuthorID
     LEFT JOIN file_storage on u.AvatarID=file_storage.ID
-WHERE forum_question.AdminAccepted=1 AND ((Title LIKE N'%$searchValue%') OR 
-    (QuestionText LIKE N'%$searchValue%'))");
+WHERE forum_question.AdminAccepted=1 $searchQuery");
 
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);
         return;
-//        $sRes['Total'] =$res['Total'];
-//
-//        foreach ($res['Items'] as &$s){
-//            $sr = [];
-//            $sr['ID'] = $s['ID'];
-//            $sr['Text'] = $s['Title'];
-//            $sRes['Items'][] = $sr;
-//        }
     }else if($searchType == 1){
+
+        $searchQuery = '';
+        $searchArr = explode(" ",$searchValue);
+        foreach ($searchArr as $s){
+            $searchQuery .= " AND u.FullName LIKE N'%$s%' ";
+        }
 
         $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
@@ -78,7 +74,7 @@ WHERE forum_question.AdminAccepted=1 AND ((Title LIKE N'%$searchValue%') OR
 ( SELECT count(*) FROM forum_question where AuthorID = u.ID and  forum_question.AdminAccepted=1 ) as QuestionsCount ,
 ($rateSelection) as Rate
 FROM `user` as u LEFT JOIN file_storage as fs on fs.ID=u.AvatarID 
-WHERE u.UserAccepted=1 AND u.FullName LIKE N'%$searchValue%'");
+WHERE u.UserAccepted=1 ".$searchQuery);
 
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);
@@ -105,6 +101,26 @@ $app->post('/deleteQuestion', function() use ($app)  {
         return ;
     }
     echoResponse(201, "Error:".$data->QuestionID);
+});
+
+$app->post('/deleteSession', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    $sess= new Session();
+
+    $resQ = $db->makeQuery("select * from user_session where user_session.ID='".$data->ID."'");
+    $s = $resQ->fetch_assoc();
+
+    if($s['SessionID'] == $sess->SSN)
+        echoError("CurrentSession");
+
+    $res = $db->deleteFromTable('user_session',"ID='".$data->ID."'");
+
+    if($res)
+        echoSuccess();
+
+    echoError("Cannot delete from table.");
 });
 
 $app->post('/getUserLastQuestion', function() use ($app)  {
@@ -323,33 +339,40 @@ FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
     }
 
     $res['SubjectChilds'] = $subjectChilds;
-//
-//    $currentDate = time();
-//    for ($i = 0 ; $i < 20 ; $i++){
-//        $formatDate = date("Y-m-d H:i:s", $currentDate);
-//        $currentDate = strtotime('-1 days', $currentDate);
-//    }
+
+    $curDate = date('Y-m-d');
+    $resCQ = $db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resC  = $resCQ->fetch_assoc();
 
     $resQ = $db->makeQuery("
-select UNIX_TIMESTAMP(fq.CreationDate), count(*) as QTotal
-from
-  (SELECT @rownum := 0) r ,forum_subject as fs
-  LEFT JOIN forum_question as fq on fq.SubjectID=fs.ID
-  where fs.ParentSubjectID='$mainSubjectID' GROUP BY DAY(fq.CreationDate),fs.Title");
 
-    $res['ChartQData'] = $resQ->fetch_all();
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+    left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID='$mainSubjectID' and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
+  ,
+  (select count(*) from forum_answer
+    left join forum_question on forum_answer.QuestionID=forum_question.ID
+    left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID='$mainSubjectID' and Date(forum_answer.CreationDate) < cd.IntervalDay) as 
+  IAnswerCount,
+  (select count(*) from forum_question
+    left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID='$mainSubjectID' and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+    left join forum_question on forum_answer.QuestionID=forum_question.ID
+    left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID='$mainSubjectID' and Date(forum_answer.CreationDate) = cd.IntervalDay) as 
+  AnswerCount
+  
+from calendar_day as cd
+where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
-    $resQ = $db->makeQuery("
-select  UNIX_TIMESTAMP(fq.CreationDate), count(*) as QTotal 
-from
-  (SELECT @rownum := 0) r ,forum_answer as fa
-  LEFT JOIN forum_question as fq on fq.ID=fa.QuestionID
-  LEFT JOIN forum_subject as fs on fs.ID=fq.SubjectID
-
-where fs.ParentSubjectID='$mainSubjectID'
-
-GROUP BY DAY(fq.CreationDate)");
-    $res['ChartAData'] = $resQ->fetch_all();
+    $cqData = [];
+    while($r = $resQ->fetch_assoc())
+        $cqData[] = $r;
+    $res['ChartData'] = $cqData;
 
     echoResponse(200, $res);
 });
@@ -366,25 +389,36 @@ $app->post('/getSubForumData', function() use ($app)  {
     $res = [];
     $res['Subject'] = $resQ->fetch_assoc();
 
-    $resQ = $db->makeQuery("
-select @rownum := @rownum + 1 AS rank, count(*) as QTotal , DATE_FORMAT(fq.CreationDate , '%Y-%m-%d') as CreationDate
-from
-  (SELECT @rownum := 0) r ,forum_subject as fs
-  LEFT JOIN forum_question as fq on fq.SubjectID=fs.ID 
-  where fs.ID='$data->SubjectID' GROUP BY DAY(fq.CreationDate),fs.Title");
 
-    $res['ChartQData'] = $resQ->fetch_all();
+    $curDate = date('Y-m-d');
+    $resCQ = $db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resC  = $resCQ->fetch_assoc();
 
     $resQ = $db->makeQuery("
-select @rownum := @rownum + 1 AS rank, count(*) as QTotal , DATE_FORMAT(fq.CreationDate , '%Y-%m-%d') as CreationDate
-from
-  (SELECT @rownum := 0) r ,forum_answer as fa
-  LEFT JOIN forum_question as fq on fq.ID=fa.QuestionID
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+  where forum_question.SubjectID='$data->SubjectID' and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
+  ,
+  (select count(*) from forum_answer
+    left join forum_question on forum_answer.QuestionID=forum_question.ID
+  where forum_question.SubjectID='$data->SubjectID' and Date(forum_answer.CreationDate) < cd.IntervalDay) as
+  IAnswerCount,
+  (select count(*) from forum_question
+  where forum_question.SubjectID='$data->SubjectID' and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+    left join forum_question on forum_answer.QuestionID=forum_question.ID
+  where forum_question.SubjectID='$data->SubjectID' and Date(forum_answer.CreationDate) = cd.IntervalDay) as
+  AnswerCount
 
-where fq.SubjectID='$data->SubjectID'
+from calendar_day as cd
+where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
-GROUP BY DAY(fq.CreationDate)");
-    $res['ChartAData'] = $resQ->fetch_all();
+    $cqData = [];
+    while($r = $resQ->fetch_assoc())
+        $cqData[] = $r;
+    $res['ChartData'] = $cqData;
+
     echoResponse(200, $res);
 });
 
@@ -586,6 +620,7 @@ $app->post('/getUserProfile', function() use ($app)  {
     //adminRequire();
     require_once '../db/education.php';
     require_once '../db/skill.php';
+    require_once '../db/user_session.php';
 
     $db = new DbHandler(true);
     $sess = new Session();
@@ -606,6 +641,8 @@ $app->post('/getUserProfile', function() use ($app)  {
 
     $user['Skills'] = getUserSkills($db,$sess->UserID);
     $user['AllSkills'] = getAllSkills($db);
+    
+    $user['ActiveSessions'] = getAllUserActiveSessions($db,$sess->UserID);
 
     echoResponse(200, $user);
 });
@@ -1029,7 +1066,11 @@ $app->post('/saveUserInfo', function() use ($app)  {
     $db = new DbHandler(true);
     $sess = new Session();
 
-    $resQ = null;
+    $resQ = $db->makeQuery("select 1 from user where Email='$data->Email' and ID!='$sess->UserID' LIMIT 1");
+    $count = mysqli_num_rows($resQ);
+    if($count > 0){
+        echoError("EmailExists");
+    }
 
     if(isset($data->Password)){
         $pass = passwordHash::hash($data->Password);

@@ -8,31 +8,6 @@
 function generateRequiredCMSJavaFiles(){
 ?>
 
-    <script src="../cms/js/d3.js"></script>
-    <script src="../cms/js/nv.d3.js"></script>
-    <script src="../js/persian.min.js"></script>
-
-    <script src="../js/angular.js"></script>
-    <script src="../js/angular-route.min.js"></script>
-    <script src="../js/angular-cookies.min.js"></script>
-    <script src="../js/angular-animate.min.js" ></script>
-    <script src="../js/angular-ui-router.js"></script>
-
-    <script src="../js/ng-file-upload-shim.min.js"></script>
-    <script src="../js/anim-in-out.js"></script>
-    <script src="../js/ng-file-upload.min.js"></script>
-    <script src="../js/angularpersian.min.js"></script>
-    <script src="../cms/js/angular-nvd3.min.js"></script>
-    <script src="../cms/js/treasure-overlay-spinner.js" type="text/javascript"></script>
-    <script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript"></script>
-    <script src="../js/toaster.js" type="text/javascript"></script>
-    <script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript"></script>
-    <script src="../cms/js/select/select.min.js" type="text/javascript"></script>
-
-    <script type="text/javascript" src="../js/moment.js"></script>
-    <script type="text/javascript" src="../js/moment-jalaali.js"></script>
-    <script type="text/javascript" src="../js/angular-confirm.min.js"></script>
-
     <!-- jQuery 2.1.4 -->
     <script src="../cms/js/jQuery/jQuery-2.1.4.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -57,6 +32,35 @@ function generateRequiredCMSJavaFiles(){
     <script src="../cms/js/demo.js"></script>
     <script src="../js/canvas-snow.js"></script>
 
+    <script src="../js/am-charts/amcharts.js" type="text/javascript"></script>
+    <script src="../js/am-charts/serial.js" type="text/javascript"></script>
+
+    <script src="../cms/js/d3.js"></script>
+    <script src="../cms/js/nv.d3.js"></script>
+    <script src="../js/persian.min.js"></script>
+
+    <script src="../js/angular.js"></script>
+    <script src="../js/angular-route.min.js"></script>
+    <script src="../js/angular-cookies.min.js"></script>
+    <script src="../js/angular-animate.min.js" ></script>
+    <script src="../js/angular-ui-router.js"></script>
+
+    <script src="../js/ng-file-upload-shim.min.js"></script>
+    <script src="../js/anim-in-out.js"></script>
+    <script src="../js/ng-file-upload.min.js"></script>
+    <script src="../js/angularpersian.min.js"></script>
+    <script src="../cms/js/treasure-overlay-spinner.js" type="text/javascript"></script>
+    <script src="../js/lazyLoad/ocLazyLoad.min.js" type="text/javascript"></script>
+    <script src="../js/toaster.js" type="text/javascript"></script>
+    <script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript"></script>
+    <script src="../cms/js/select/select.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="../js/moment.js"></script>
+    <script type="text/javascript" src="../js/moment-jalaali.js"></script>
+    <script type="text/javascript" src="../js/angular-confirm.min.js"></script>
+
+    <script type="text/javascript" src="../app/directives/serial-chart-directive.js"></script>
+
 
 <?php
 }
@@ -80,6 +84,7 @@ function generateRequiredCMSCssFiles(){
     <!-- Theme style -->
     <link rel="stylesheet" href="../css/site-styles.css">
 
+    <link rel="stylesheet" href="../cms/css/pallete.css">
     <link rel="stylesheet" href="../cms/css/AdminLTE-rtl.css">
     <link rel="stylesheet" href="../cms/css/AdminLTE-rtl-fix.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins

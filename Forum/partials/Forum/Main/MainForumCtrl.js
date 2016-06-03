@@ -12,30 +12,122 @@ angular.module(appName).controller('MainForumCtrl',
         $state.go('forum_home');
     }
 
+    $scope.incrementChartOptions =[{
+        id:"g1",
+        type : "smoothedLine",
+        lineColor: "#00BBCC",
+        valueField: "IQuestionCount",
+        fillColors: "#00BBCC",
+        fillAlphas:0.2,
+        bullet: "round",
+        bulletColor: "#FFFFFF",
+        bulletBorderAlpha : 1,
+        bulletBorderThickness : 2,
+        bulletSize : 7,
+        useLineColorForBulletBorder : true,
+        lineThickness : 2,
+        balloon:{
+            drop:false
+        },
+        balloonFunction : function (graphDataItem, graph){
+            var value = graphDataItem.values.value;
+            var date = moment(graphDataItem.category);
+            var d =  date.format('jYYYY/jMM/jDD');
+
+            return "<b style=\"font-size: 13px\">" +
+                persianJs( value + " سوال <br>" +'<span class="text-muted">'+
+                    d + '</span>').englishNumber().toString() + "</b>";
+        }
+    },
+        {
+            id:"g2",
+            type : "smoothedLine",
+            lineColor: "#e74c3c",
+            valueField: "IAnswerCount",
+            fillColors: "#e74c3c",
+            fillAlphas:0.2,
+            bullet: "round",
+            bulletColor: "#FFFFFF",
+            bulletBorderAlpha : 1,
+            bulletBorderThickness : 2,
+            bulletSize : 7,
+            useLineColorForBulletBorder : true,
+            lineThickness : 2,
+            balloon:{
+                drop:false
+            },
+            balloonFunction : function (graphDataItem, graph){
+                var value = graphDataItem.values.value;
+                var date = moment(graphDataItem.category);
+                var d =  date.format('jYYYY/jMM/jDD');
+
+                return "<b style=\"font-size: 13px\">" +
+                    persianJs( value + " جواب <br>" +'<span class="text-muted">'+
+                        d + '</span>').englishNumber().toString() + "</b>";
+            }
+        }
+    ];
+
+    $scope.dailyChartOptions =[{
+        id:"g1",
+        type : "smoothedLine",
+        lineColor: "#00BBCC",
+        valueField: "QuestionCount",
+        fillColors: "#00BBCC",
+        bullet: "round",
+        bulletColor: "#FFFFFF",
+        bulletBorderAlpha : 1,
+        bulletBorderThickness : 2,
+        bulletSize : 7,
+        useLineColorForBulletBorder : true,
+        lineThickness : 2,
+        balloon:{
+            drop:false
+        },
+        balloonFunction : function (graphDataItem, graph){
+            var value = graphDataItem.values.value;
+            var date = moment(graphDataItem.category);
+            var d =  date.format('jYYYY/jMM/jDD');
+
+            return "<b style=\"font-size: 13px\">" +
+                persianJs( value + " سوال <br>" +'<span class="text-muted">'+
+                    d + '</span>').englishNumber().toString() + "</b>";
+        }
+    },
+        {
+            id:"g2",
+            type : "smoothedLine",
+            lineColor: "#e74c3c",
+            valueField: "AnswerCount",
+            fillColors: "#e74c3c",
+            bullet: "round",
+            bulletColor: "#FFFFFF",
+            bulletBorderAlpha : 1,
+            bulletBorderThickness : 2,
+            bulletSize : 7,
+            useLineColorForBulletBorder : true,
+            lineThickness : 2,
+            balloon:{
+                drop:false
+            },
+            balloonFunction : function (graphDataItem, graph){
+                var value = graphDataItem.values.value;
+                var date = moment(graphDataItem.category);
+                var d =  date.format('jYYYY/jMM/jDD');
+
+                return "<b style=\"font-size: 13px\">" +
+                    persianJs( value + " جواب <br>" +'<span class="text-muted">'+
+                        d + '</span>').englishNumber().toString() + "</b>";
+            }
+        }
+    ];
+
     $scope.pagingParams = { MainSubjectName : $stateParams.id };
     $scope.question = {};
-        $scope.data = [
-            {
-                "key": "سوال ها",
-                "values": []
-            },
-            {
-                "key": "جواب ها",
-                "values": []
-            }
-        ];
 
 	Extention.post('getMainForumData',{MainSubjectName: $stateParams.id})
 		.then(function (res) {
 		    $scope.forumData = res;
-            console.log(res);
-        //$scope.data[0].values=[[ 1025409600000 , 23.041422681023] , [ 1028088000000 , 19.854291255832] , [
-            // 1030766400000 , 21.02286281168] ];
-            //res.ChartAData;
-        //$scope.data[1].values =[ [ 1025409600000 , 7.9356392949025] , [ 1028088000000 , 7.4514668527298] , [
-            // 1030766400000 , 7.9085410566608]];
-            // res.ChartQData;
-
 		});
 
 	$scope.followSubject = function (id) {
@@ -85,77 +177,7 @@ angular.module(appName).controller('MainForumCtrl',
 	    });
 	}
 
-        $scope.options = {
-            "chart": {
-                "type": "lineChart",
-                "height": 200,
-                "margin": {
-                    "top": 20,
-                    "right": 20,
-                    "bottom": 40,
-                    "left": 55
-                },
-                "showLegend": false,
-                "useInteractiveGuideline": true,
-                "dispatch": {},
-                "xAxis": {
-                    "axisLabel": "روز"
-                },
-                "yAxis": {
-                    "axisLabel": "سوالات",
-                    "axisLabelDistance": -10,
-                    tickFormat: function(d){
-                        return d3.format('.02f')(d);
-                    }
-                },
-                "caption": {
-                    enable: false
-                },
-                "legend": {
-                    enable: false
-                }
-            }
-        };
 
-        $scope.data = sinAndCos();
-
-        /*Random Data Generator */
-        function sinAndCos() {
-            var sin = [],sin2 = [],
-                cos = [];
-
-            //Data is represented as an array of {x,y} pairs.
-            for (var i = 0; i < 100; i++) {
-                var  t = 0;
-                if(i > 90 && i <= 100)
-                    t = 190-i;
-                else if(i > 80 && i <= 90)
-                    t = i;
-                else if(i > 70 && i <= 80)
-                    t= 15;
-                else if(i > 60 && i <= 70)
-                    t= 80-i;
-                else if(i > 50 && i <= 60)
-                    t= i;
-                else if(i > 30 && i <= 50)
-                    t= 12;
-                else if(i > 10 && i <= 30)
-                    t= 8;
-                else
-                    t= 2;
-                sin2.push({x: i, y: t});
-            }
-
-            //Line chart data should be sent as an array of series objects.
-            return [
-                {
-                    values: sin2,
-                    key: 'Another sine wave',
-                    color: '#7777ff',
-                    area: true      //area - set to true if you want this line to turn into a filled area chart.
-                }
-            ];
-        };
 
 	activeElement('#SForum','#S' + $stateParams.id);
 });

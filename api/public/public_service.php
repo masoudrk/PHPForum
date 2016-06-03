@@ -1,11 +1,5 @@
 <?php
 
-$app->post('/logout', function() use ($app)  {
-    $sess = new Session();
-    $res = $sess->destroySession();
-    echoResponse(200, $res);
-});
-
 $app->post('/savePerson', function() use ($app) {
 
     $r = json_decode($app->request->getBody());
@@ -74,7 +68,8 @@ $app->post('/savePerson', function() use ($app) {
                 <p style="direction: rtl">سلام '.$r->FullName.'! لطفا برای فعال سازی حساب کاربری خود روی لینک زیر کلیک
                  کنید:
 <br>
-                 ----> <a href="sepantarai.com/verify.php?link='.$linkID.'"> Verify account link </a> <----
+                 ----> <a href="http://www.sepantarai.com/verify.php?link='.$linkID.'"> Verify account link </a> 
+                 <----
                 </p>
                 </body>
                 </html>
@@ -195,18 +190,23 @@ $app->post('/signInUser', function() use ($app)  {
     $email = $r->Username;
 
     $user = $db->getOneRecord("select user.ID,FullName,Email,Password,Username,SignupDate,file_storage.FullPath as Image from 
-    user 
-    LEFT JOIN 
-    file_storage ON 
-            file_storage.ID=user.AvatarID where Email='$email' and UserAccepted = 1");
+    user LEFT JOIN 
+    file_storage ON file_storage.ID=user.AvatarID where Email='$email' and UserAccepted = 1");
 
     if ($user != NULL) {
         if(passwordHash::check_password($user['Password'],$password)){
 
             $sessionID = generateSessionID(100);
-            $resSessionIDQ = $db->updateRecord('user',"SessionID='".$sessionID."',ValidSessionID=1","ID='".$user['ID']."'");
+            $resSessionIDQ = $db->insertToTable('user_session',"UserID,SessionID,LoginDate,DeviceName,IP","'"
+                .$user['ID']."','$sessionID',NOW(),'".getOperatingSystem()."','".getIPAddress()."'");
+//
+//            $db->deleteFromTable('LoginTime','ID IN (
+//     SELECT ID
+//     WHERE user_id = 1
+//     ORDER BY datetime DESC
+//     LIMIT 0, 5
+//)');
 
-            $IsAdmin=false;
             $IsAdmin=false;
             $admin = $db->getOneRecord("select * from admin left join admin_permission on admin_permission.ID=admin.PermissionID
              where UserID=".$user['ID']);
@@ -233,13 +233,23 @@ $app->post('/signInUser', function() use ($app)  {
                 session_start();
             }
 
+            $cookiePath = '/';
+            $cookieTime = time() + 914748364;
+
+            setcookie("SSN", $sessionID, $cookieTime ,$cookiePath);
+            setcookie("FullName", $user['FullName'],$cookieTime,$cookiePath);
+            setcookie("IsAdmin", ($IsAdmin)?1:0, $cookieTime,$cookiePath);
+            setcookie("Email", $email, $cookieTime,$cookiePath);
+            setcookie("UserID", $user['ID'], $cookieTime,$cookiePath);
+            setcookie("SignupDate", $user['SignupDate'], $cookieTime,$cookiePath);
+            setcookie("Image", $user['Image'],$cookieTime,$cookiePath);
+
             $_SESSION['Status'] = "success";
             $_SESSION['SSN'] = $sessionID;
             $_SESSION['FullName'] = $user['FullName'];
             $_SESSION['IsAdmin'] = $IsAdmin;
             $_SESSION['Email'] = $email;
             $_SESSION['UserID'] = $user['ID'];
-            $_SESSION['AdminID'] = $admin['ID'];
             $_SESSION['SignupDate'] = $user['SignupDate'];
             $_SESSION['Image'] = $user['Image'];
 
@@ -247,6 +257,10 @@ $app->post('/signInUser', function() use ($app)  {
                 $_SESSION['AdminID'] = $admin['ID'];
                 $_SESSION['AdminPermissionLevel'] = $admin['PermissionLevel'];
                 $_SESSION['AdminPermission'] = $admin['Permission'];
+
+                setcookie("AdminID", $admin['ID'], $cookieTime,$cookiePath);
+                setcookie("AdminPermissionLevel", $admin['PermissionLevel'], $cookieTime,$cookiePath);
+                setcookie("AdminPermission", $admin['Permission'],$cookieTime,$cookiePath);
             }
         } else {
             $response['Status'] = "error";

@@ -2,8 +2,8 @@
 var serviceBaseURL = '../api/user/';
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
-    'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'nvd3', 'ngPersian',
-    'ngFileUpload','anim-in-out']);
+    'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
+    'ngFileUpload','anim-in-out','am-charts']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -280,6 +280,11 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             if (!delay)
                 delay = 7000;
             toaster.pop('info', "", msg, delay, 'trustedHtml');
+        }
+        obj.popWarning = function (msg, delay) {
+            if (!delay)
+                delay = 7000;
+            toaster.pop('warning', "", msg, delay, 'trustedHtml');
         }
 
         obj.popModal = function (data) {

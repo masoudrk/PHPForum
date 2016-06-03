@@ -19,13 +19,24 @@
                     </a>
                     </li>
                     <li class="link">
-                        <a ng-click="activeTab = 3" data-toggle="tab" aria-expanded="false"> اطلاعات تکمیلی <small class="label bg-red">ناقص</small></a>
+                        <a ng-click="activeTab = 3" data-toggle="tab" aria-expanded="false">
+            اطلاعات تکمیلی <small class="label bg-red"
+                                  ng-show="curUser.Educations.length==0 || curUser.Skills.length==0||!curUser.Description">ناقص</small>
+                        </a>
+                    </li>
+                    <li class="link">
+                        <a ng-click="activeTab = 1" data-toggle="tab" aria-expanded="false">
+
+                            <small class="label label-warning" ng-bind="curUser.ActiveSessions.length | pNumber"></small>
+                            <span>اتصال ها</span>
+                        </a>
 
                     </li>
-                    <!--<li class="link"><a ng-click="activeTab = 1" data-toggle="tab" aria-expanded="false">تایم لاین</a></li>-->
+                    <!--<li class="link"><a ng-click="activeTab = 0" data-toggle="tab"
+                    aria-expanded="false">تایم لاین</a></li>-->
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane" ng-class="(activeTab == 1)?'active':''" >
+                    <div class="tab-pane" ng-class="(activeTab == 0)?'active':''" >
                         <!-- The timeline -->
                         <ul class="timeline timeline-inverse">
                             <!-- timeline time label -->
@@ -106,6 +117,33 @@
                                 <i class="fa fa-clock-o bg-gray"></i>
                             </li>
                         </ul>
+                    </div><!-- /.tab-pane -->
+                    <div class="tab-pane" style="margin: -10px;" ng-class="(activeTab == 1)?'active':''" >
+                        <div class="table-responsive">
+                            <table class="table table-hover border-bottom-table" style="margin-bottom: 0">
+                                <tbody>
+                                <tr>
+                                    <th style="padding-right: 20px">سیستم عامل</th>
+                                    <th>آی پی</th>
+                                    <th>تاریخ اتصال</th>
+                                    <th></th>
+                                </tr>
+                                <tr ng-repeat="us in curUser.ActiveSessions">
+                                    <td class="english-font" style="padding-right: 20px">{{us.DeviceName}}</td>
+                                    <td>{{us.IP |pNumber}}</td>
+                                    <td class="text-muted">{{us.LoginDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}</td>
+                                    <td class="text-center">
+                                        <div class="table-action-icons">
+                                            <i confirm="آیا مطمئن هستید که میخواهید این اتصال را حذف کنید؟"
+                                               class="fa fa-times palette-alizarin link hvr-grow-rotate"
+                                               ng-click="removeSession(us.ID)"></i>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div><!-- /.tab-pane -->
                     <div class="tab-pane row" ng-class="(activeTab == 2)?'active':''" >
                         <form class="form-horizontal col-md-9 col-xs-12 pull-right" style="direction: rtl">
