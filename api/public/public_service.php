@@ -199,13 +199,6 @@ $app->post('/signInUser', function() use ($app)  {
             $sessionID = generateSessionID(100);
             $resSessionIDQ = $db->insertToTable('user_session',"UserID,SessionID,LoginDate,DeviceName,IP","'"
                 .$user['ID']."','$sessionID',NOW(),'".getOperatingSystem()."','".getIPAddress()."'");
-//
-//            $db->deleteFromTable('LoginTime','ID IN (
-//     SELECT ID
-//     WHERE user_id = 1
-//     ORDER BY datetime DESC
-//     LIMIT 0, 5
-//)');
 
             $IsAdmin=false;
             $admin = $db->getOneRecord("select * from admin left join admin_permission on admin_permission.ID=admin.PermissionID

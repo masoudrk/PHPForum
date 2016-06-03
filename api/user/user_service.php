@@ -1389,10 +1389,29 @@ $app->post('/saveUserInfo', function() use ($app)  {
     }
 
     if(isset($data->Password)){
-        $pass = passwordHash::hash($data->Password);
 
-        $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+        if(!isset($data->OldPassword)){
+            echoError("OldPasswordIsNotValid");
+        }else if(strlen($data->OldPassword) < 5){
+            echoError("OldPasswordIsNotValid");
+        }
+
+        if(!isset($data->Password)){
+            echoError("PasswordIsNotValid");
+        }else if(strlen($data->Password) < 5){
+            echoError("PasswordIsNotValid");
+        }
+
+        $userPassword = $db->makeQuery("SELECT user.Password from user where user.ID='$sess->UserID'")->fetch_assoc()['Password'];
+        if(passwordHash::check_password($userPassword,$data->OldPassword)){
+
+            $pass = passwordHash::hash($data->Password);
+
+            $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
 `Tel`='$data->Tel',`Password`='$pass'","user.ID='$sess->UserID'");
+        }else{
+            echoError("OldPasswordIsNotValid");
+        }
     }else{
 
         $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',

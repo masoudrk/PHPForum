@@ -14,11 +14,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
                     $state.go('UserProfile',{id : message.AdminUserID});
                     $uibModalInstance.dismiss('cancel');
                 }
-                
-                $scope.cancel = function () {
-
-                    $uibModalInstance.dismiss('cancel');
-                }
+                $scope.cancel = function () { $uibModalInstance.dismiss('cancel'); }
             },
             size: 'md',
             resolve: {
