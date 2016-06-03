@@ -80,6 +80,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
 
     $scope.backFromSearch = function () {
         $rootScope.globalSearchActive = false;
+        $scope.searchResult = [];
     }
     $scope.getRandomColorClass = function(id){
         var i = id % $scope.bgColorArray.length;

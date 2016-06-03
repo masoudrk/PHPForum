@@ -415,9 +415,14 @@
         </treasure-overlay-spinner>
         <!-- Content Wrapper. Contains page content -->
 
-        <div ui-view ng-hide="globalSearchActive" id="mainContent" data-anim-speed="600"
-             class="anim-in-out anim-slide-below-fade" data-anim-sync="true"></div>
-        <div ng-show="globalSearchActive" ng-include src="'partials/GlobalSearch.html'" id="searchContent" ></div>
+        <div ng-hide="globalSearchActive" ui-view id="mainContent" data-anim-speed="600"
+             class="anim-in-out anim-slide-below-fade"
+             data-anim-sync="true"></div>
+
+        <div ng-show="globalSearchActive"
+             ng-include src="'partials/GlobalSearch.html'"
+             id="searchContent"
+             class="fx-bounce-normal fx-dur-600 fx-ease-none"></div>
         <!-- /.content-wrapper -->
     </div>
 
