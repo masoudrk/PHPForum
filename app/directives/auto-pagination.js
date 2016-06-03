@@ -61,11 +61,7 @@
                 data.pageIndex = $scope.page;
                 data.pageSize = $scope.pageSize;
 
-                if ($scope.lang)
-                    data.Lang = $scope.lang;
-
                 if($scope.scrollToBegin){
-
                     Extention.scrollTo(0);
                 }
 
@@ -73,20 +69,15 @@
                 .then(function (results) {
                     $scope.items = results.Items;
                     $scope.total = results.Total;
-                    //
-                    // if($scope.totalItems)
 
                     $scope.totalItems = results.Total;
 
                     if($scope.returnFullResult)
                         $scope.fullResult = results;
+
                     $scope.onLoadFinish();
                 });
             }
-
-            //$scope.$watch('[params]', function () {
-            //    $scope.getItems();
-            //}, true);
         }]
 
     };
@@ -96,8 +87,11 @@
 
             scope.$watchCollection('[actionName,params,page,pageSize]', function () {
 
-                if(!scope.onlyGetResultWhenUpdate) {
+                if(!scope.onlyGetResultWhenUpdate)
+                {
                     scope.getItems();
+                }else{
+                    scope.onlyGetResultWhenUpdate = false;
                 }
                 build(scope, attrs);
                 scope.onLoadFinish();
