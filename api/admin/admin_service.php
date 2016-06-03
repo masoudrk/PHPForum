@@ -319,7 +319,7 @@ LIMIT 1");
 			if($res){
                 if($data->State == 1){
                     $db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
-                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                     "'$sess->UserID','$data->UserID',NOW(),'".'ÊÇ??Ï ?Çã'."','".'?Çã ÔãÇ ÊÇ??Ï ÔÏ'."','0'");
                 }
 
@@ -442,12 +442,12 @@ LIMIT 1");
                 if($data->State == 1)
                 {
                     $db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
-                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                 "'$sess->UserID','$data->UserID',NOW(),'".'ÊÇ??Ï ÓæÇá'."','".'ÓæÇá ÔãÇ ÊÇ??Ï ÔÏ'."','0'");
                 }
                 else if($data->State == -1 && isset($data->Message))
                 {
-                    $db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
             "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','0'");
                 }
                 echoSuccess();
@@ -600,7 +600,7 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
 
     foreach ($data->Users as $value)
     {
-    	$db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+    	$db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
             "'$sess->UserID','$value->ID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','".$data->Message->MessageType."'");
 
         if($data->Message->MessageType == 1){
@@ -652,7 +652,7 @@ $app->post('/getAllMessages', function() use ($app)  {
 
 	$pageRes = $pr->getPage($db,"SELECT u.FullName ,fs.FullPath, u.Email , m.* FROM message as m
 INNER JOIN user as u on u.ID = m.UserID
-INNER join user as au on au.ID = m.AdminID
+INNER join user as au on au.ID = m.SenderUserID
 LEFT JOIN file_storage as fs on u.AvatarID = fs.ID ".$where." ORDER BY m.ID desc");
 
 	echoResponse(200, $pageRes);
