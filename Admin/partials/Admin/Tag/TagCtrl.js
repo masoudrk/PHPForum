@@ -31,6 +31,4 @@ angular.module(appName).controller('TagCtrl', function ($scope, $rootScope, $rou
 		});
 	}
 	activeElement('#SMeta', '#STag');
-	fixFooter();
-
 });

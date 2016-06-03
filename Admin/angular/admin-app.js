@@ -119,6 +119,18 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'کنترل ها';
                 }
             }
+        }).state("message", {
+            url: "/message/:id",
+            templateUrl: "partials/Admin/Message/Message.html",
+            controller: 'MessageCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/Message/Message.js']);
+                }],
+                $title: function () {
+                    return 'ارسال پیام';
+                }
+            }
         });
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');
