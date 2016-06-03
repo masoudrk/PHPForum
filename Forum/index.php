@@ -51,14 +51,31 @@
                     <li>
                         <a class="link" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                     </li>
+                    <!-- Notifications: style can be found in dropdown.less -->
+                    <li class="dropdown notifications-menu">
+                        <a class="dropdown-toggle link" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="label label-warning" ng-bind="'0'| pNumber"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header"> شما <span>{{'0'| pNumber}}</span> اعلان جدید دارید!</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                </ul>
+                            </li>
+                            <li class="footer"><a >نمایش همه</a></li>
+                        </ul>
+                    </li>
+
                     <!-- Messages: style can be found in dropdown.less-->
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="label label-success" ng-bind="UserMessages.NewMessages | pNumber"></span>
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-success" ng-bind="UserMessages.length | pNumber"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما <span>{{UserMessages.NewMessages| pNumber}}</span> پیام جدید دارید!</li>
+                            <li class="header">شما <span>{{UserMessages.length| pNumber}}</span> پیام جدید دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
@@ -103,53 +120,9 @@
                                             </p>
                                         </a>
                                     </li><!-- end event -->
-<!--                                    <li style="margin:10px" ng-repeat="item in UserMessages" class="persian-rtl link">-->
-<!--                                        <h5 class="text-right" ui-sref="question({id:item.EventID})">-->
-<!--                                                <span ng-show="item.EventType =='Person'">-->
-<!--                                                    <i class="fa fa-user" aria-hidden="true"></i>-->
-<!--                                                    سوال-->
-<!--                                                </span>-->
-<!--                                                <span ng-show="item.EventType =='Answer'">-->
-<!--                                                    <i class="fa fa-reply" aria-hidden="true"></i>-->
-<!--                                                    پاسخ-->
-<!--                                                </span>-->
-<!--                                                <span ng-show="item.EventType =='Question'">-->
-<!--                                                    <i class="fa fa-question" aria-hidden="true"></i>-->
-<!--                                                    سوال-->
-<!--                                                </span>-->
-<!--                                            <small>- {{item.EventUser}}</small>-->
-<!--                                            <i ng-show="item.EventView !=null" class="fa fa-check text-success pull-left hvr-pulse" aria-hidden="true"></i>-->
-<!--                                            <i ng-hide="item.EventView !=null" class="fa fa-eye text-danger pull-left hvr-pulse" aria-hidden="true"></i>-->
-<!--                                            <small class="pull-left">{{item.EventDate | fromNow}}-->
-<!--                                            </small>-->
-<!--                                        </h5>-->
-<!--                                        <h5 class="text-right text-info" ui-sref="question({id:item.EventID})">{{item.EventTitle | subString :35}}-->
-<!--                                                <span class="pull-left" dir="ltr" ng-show="item.EventScore !=null">-->
-<!--                                                    <i class="fa fa-thumbs-o-up"></i>-->
-<!--                                                    {{item.EventScore}}-->
-<!--                                                </span>-->
-<!--                                        </h5>-->
-<!--                                        <hr />-->
-<!--                                    </li>-->
                                 </ul>
                             </li>
                             <li class="footer"><a>نمایش همه پیام ها</a></li>
-                        </ul>
-                    </li>
-                    <!-- Notifications: style can be found in dropdown.less -->
-                    <li class="dropdown notifications-menu">
-                        <a class="dropdown-toggle link" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning" ng-bind="'0'| pNumber"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header"> شما <span>{{'0'| pNumber}}</span> اعلان جدید دارید!</li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                </ul>
-                            </li>
-                            <li class="footer"><a >نمایش همه</a></li>
                         </ul>
                     </li>
                     <!-- Tasks: style can be found in dropdown.less -->

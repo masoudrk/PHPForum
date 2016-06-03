@@ -29,6 +29,12 @@ class Pagination {
 		$this->PageIndex = $pin->PageIndex;
 	}
 
+
+	public function calculateOffset(){
+		$offset = ($this->PageIndex-1) * $this->PageSize;
+		return $offset;
+	}
+
 	public function getPage($db,$query){
 		$countFroms = substr_count($query, 'FROM');
 		if($countFroms == 1){
