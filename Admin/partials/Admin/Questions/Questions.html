@@ -46,10 +46,10 @@
                             <th>عکس</th>
                             <th> نام کامل نویسنده</th>
                             <th>تاریخ ارسال</th>
-                            <th>خلاصه</th>
+                            <th>زیر شاخه انجمن</th>
                             <th>وضعیت</th>
                             <th>ایمیل</th>
-                            <th style="width: 150px;"></th>
+                            <th style="width: 200px;"></th>
                         </tr>
                         <tr ng-repeat="u in question.all">
                             <td>
@@ -57,7 +57,7 @@
                             </td>
                             <td>{{u.FullName| pNumber}}</td>
                             <td>{{u.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
-                            <td>{{u.QuestionText | pNumber | subString:20}}</td>
+                            <td>{{u.SubjectName | pNumber | subString:20}}</td>
                             <td ng-switch="u.AdminAccepted">
                                 <span class="label label-success" ng-switch-when="1">تایید شده</span>
                                 <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
@@ -66,14 +66,15 @@
                             <td>{{u.Email}}</td>
                             <td>
                                 <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+                                    <i class="fa fa-exchange text-purple link hvr-grow" ng-click="openExchangeModal(u)" title="انتقال سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeQuestion(u.ID , u.AuthorID)" title="خذف سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1" style="color: #e67e22;"
+                                    <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1 || u.AdminAccepted==0" style="color: #e67e22;"
                                        ng-click="changeQuestionState(u.ID ,-1, u.AuthorID)" title="رد کردن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
                                        ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeQuestionState(u.ID ,1, u.AuthorID)" title="تایید سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.Title , u.QuestionText)" title="متن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <a class="link" href="../Forum/#/question/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
+                                    <a class="link" ng-href="../Forum/#/question/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -105,6 +106,72 @@
         {{Text}}
     </div>
     <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="ExchangeModal.html">
+    <div class="modal-header vazir-font text-right">
+        <label class="modal-title text-danger" style="font-size:15px">انجمن سوال را انتخاب کنید</label>
+    </div>
+    <div class="modal-body vazir-font text-right persian-rtl">
+        <div class="table-responsive mailbox-messages">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th>شماره</th>
+                        <th>نام انجمن</th>
+                        <th>زیر مجموعه</th>
+                        <th style="width : 25px"></th>
+                    </tr>
+                    <tr class="link" ng-repeat="u in subjects" ng-click="send(u)">
+                        <td class="persian-rtl">
+                            {{$index}}
+                        </td>
+                        <td class="persian-rtl">
+                            {{u.MainTitle | pNumber}}
+                        </td>
+                        <td class="persian-rtl">
+                            {{u.Title | pNumber}}
+                        </td>
+                        <td>
+                            <div class="table-action-icons">
+                                <i class="fa fa-exchange text-purple link hvr-grow" ng-click="send(u)" title="انتقال سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+
+
+</script>
+
+<script type="text/ng-template" id="DiscardQuestionModal.html">
+    <div class="table-responsive mailbox-messages">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <th>نام انجمن</th>
+                    <th>زیر مجموعه</th>
+                </tr>
+                <tr class="link" ng-repeat="u in subjects" ng-click="send(u)">
+                    <td class="persian-rtl">
+                        {{u.MainTitle | pNumber}}
+                    </td>
+                    <td class="persian-rtl">
+                        {{u.Title | pNumber}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-warning pull-right" type="button" ng-click="send(null)">رد سوال بدون فیدبک</button>
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
     </div>
 </script>

@@ -51,8 +51,8 @@ $app->post('/savePerson', function() use ($app) {
     }
 
 
-    $userID = $db->insertToTable('user','FullName,Email,Password,Tel,SignupDate,OrganizationID'
-        ,"'$r->FullName','$r->Email','$r->Password','$r->Tel',now(),'$r->OrganizationID'",true);
+    $userID = $db->insertToTable('user','FullName,Email,Password,PhoneNumber,SignupDate,OrganizationID'
+        ,"'$r->FullName','$r->Email','$r->Password','$r->PhoneNumber',now(),'$r->OrganizationID'",true);
 
 
     $linkID = generateRandomString(30);

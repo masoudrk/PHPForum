@@ -52,7 +52,6 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	    $scope.search();
 	}
 
-
 	$scope.openRoleModal = function (title , text ) {
 	    $uibModal.open({
 	        animation: true,
@@ -67,6 +66,69 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	        size: 'md'
 	    });
 	}
+
+	$scope.openExchangeModal = function (question) {
+	    Extention.post('getSubjects', { }).then(function (res) {
+	        if (res && res.Status == 'success') {
+	            var modalInstance = $uibModal.open({
+	                animation: true,
+	                templateUrl: 'ExchangeModal.html',
+	                controller: function ($scope, $uibModalInstance) {
+	                    $scope.subjects = res.Data;
+	                    $scope.question = question;
+	                    $scope.cancel = function () {
+	                        $uibModalInstance.dismiss('cancel');
+	                    };
+
+	                    $scope.send = function (subject) {
+	                        Extention.post('exchangeQuestion', { SubjectID: subject.ID, QuestionID: $scope.question.ID}).then(function (res) {
+	                            if (res && res.Status == 'success') {
+	                                Extention.popSuccess("سوال با موفقیت انتقال داده شد!");
+	                                $uibModalInstance.dismiss('cancel');
+	                            } else {
+	                                Extention.popError("مشکل در انتقال سوال ، لطفا دوباره امتحان کنید.");
+	                            }
+	                        });
+	                    };
+	                },
+	                size: 'md'
+	            });
+
+	            modalInstance.result.then(function () {
+	            }, function () {
+	                $scope.pagingController.update();
+	            });
+
+	        } else {
+	            return;
+	        }
+	    });
+	}
+
+	//$scope.openExchangeModal = function (question) {
+	//    Extention.post('getCommonMessages', { filter: 'رد سوال' }).then(function (res) {
+	//        if (res && res.Status == 'success') {
+	//            $uibModal.open({
+	//                animation: true,
+	//                templateUrl: 'ExchangeModal.html',
+	//                controller: function ($scope, $uibModalInstance) {
+	//                    $scope.common = res.Data;
+	//                    $scope.question = question;
+	//                    $scope.cancel = function () {
+	//                        $uibModalInstance.dismiss('cancel');
+	//                    };
+
+	//                    $scope.send = function (message) {
+
+	//                    };
+	//                },
+	//                size: 'md'
+	//            });
+	//        } else {
+	//            return;
+	//        }
+	//    });
+	//}
 
     console.log('#S' + $stateParams.id);
     activeElement('#SQuestions', '#SS' + $stateParams.id);
