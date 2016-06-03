@@ -352,7 +352,7 @@
                         </a>
                     </li>
                     <li id="SQuestions">
-                        <a ui-sref="new_question">
+                        <a>
                             <i class="fa fa-question-circle"></i>
                             <span>مدیریت سوال ها</span>
                             <i class="fa fa-angle-right pull-right"></i>
