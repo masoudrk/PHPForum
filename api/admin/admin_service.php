@@ -12,6 +12,18 @@ FROM tag as t  ORDER BY t.ID desc");
 	echoResponse(200, $pageRes);
 });
 
+$app->post('/getAllSkills', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+	$pr = new Pagination($data);
+
+	$pageRes = $pr->getPage($db,"SELECT t.* , (SELECT COUNT(*) FROM user_skill as tq WHERE tq.SkillID= t.ID) as UseCount
+FROM skill as t  ORDER BY t.ID desc");
+
+	echoResponse(200, $pageRes);
+});
+
 $app->post('/deleteTag', function() use ($app)  {
 
 	$db = new DbHandler(true);
@@ -33,6 +45,33 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
 		echoSuccess();
 	else
 		echoError("Cannot delete record.");
+});
+
+$app->post('/insertSkill', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $object = (object) [
+            'Skill' => $data->Skill
+          ];
+
+    $column_names = array( 'Skill');
+
+	$res = $db->insertIntoTable($object ,$column_names,'skill');
+	if($res)
+		echoSuccess();
+	else
+		echoError("Cannot update record.");
 });
 
 $app->post('/insertTag', function() use ($app)  {
@@ -92,6 +131,28 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
 
 	$res = $db->deleteFromTable('education' , "ID = $data->ID");
     $res2 = $db->deleteFromTable('user_education' , "EducationID = $data->ID");
+	if($res && $res2)
+		echoSuccess();
+	else
+		echoError("Cannot delete record.");
+});
+$app->post('/deleteSkill', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $db->deleteFromTable('skill' , "ID = $data->ID");
+    $res2 = $db->deleteFromTable('user_skill' , "SkillID = $data->ID");
 	if($res && $res2)
 		echoSuccess();
 	else

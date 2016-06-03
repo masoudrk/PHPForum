@@ -18,7 +18,7 @@
         }
         generateMetas();
         generateRequiredCMSCssFiles();
-    ?>
+        ?>
 
     <title>داشبورد</title>
     <link rel="icon" href="../images/title.png" />
@@ -455,6 +455,12 @@
                                 <a ui-sref="education">
                                     <i class="fa fa-circle-o"></i>
                                     مدیریت تحصیلات
+                                </a>
+                            </li>
+                            <li id="SSkill">
+                                <a ui-sref="skill">
+                                    <i class="fa fa-circle-o"></i>
+                                    مدیریت مهارت ها
                                 </a>
                             </li>
                         </ul>

@@ -89,6 +89,7 @@
     <Folder Include="Admin\partials\Admin\Education\" />
     <Folder Include="Admin\partials\Admin\Admin\" />
     <Folder Include="Admin\partials\Admin\Message\" />
+    <Folder Include="Admin\partials\Admin\Skill\" />
     <Folder Include="Admin\partials\Admin\Tag\" />
     <Folder Include="Admin\partials\Admin\Questions\" />
     <Folder Include="Admin\partials\Admin\Profile\" />
@@ -351,6 +352,8 @@
     <Content Include="Admin\partials\Admin\Answers\Answers.html" />
     <Content Include="Admin\partials\Admin\Questions\Questions.html" />
     <Content Include="Admin\partials\Admin\Questions\Questions.js" />
+    <Content Include="Admin\partials\Admin\Skill\Skill.html" />
+    <Content Include="Admin\partials\Admin\Skill\Skill.js" />
     <Content Include="Admin\partials\Admin\Tag\Tag.html" />
     <Content Include="Admin\partials\Admin\Tag\TagCtrl.js" />
     <Content Include="Admin\partials\Admin\User\AllUsers.html" />
