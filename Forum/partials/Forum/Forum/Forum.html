@@ -285,7 +285,8 @@
                     <i class="fa fa-question text-muted"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover" ng-show="question.bestAnswered.length > 0">
+                    <table class="table table-hover"
+                           ng-show="question.bestAnswered.length > 0">
                         <tbody>
                         <tr class="link fx-bounce-up fx-dur-600 fx-ease-none fx-stagger-80"
                             ng-repeat="q in question.bestAnswered">
@@ -294,7 +295,8 @@
                                      style="width:40px;"
                                      ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                    (q.Rate > 2.5)?activity.medium:activity.low}"
-                                     title="{{(q.score || '0' )| number:1 | pNumber | concat : ' امتیاز '}}" data-toggle="tooltip" data-placement="top"
+                                     title="{{(q.score || '0' )| number:1 | pNumber | concat : ' امتیاز '}}"
+                                     data-toggle="tooltip" data-placement="top"
                                      tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
                                      tooltip-append-to-body="true">
                             </td>
@@ -326,7 +328,7 @@
                                  data-params="pagingParams"
                                  items="question.bestAnswered"
                                  total-items="question.bestAnsweredTotal"
-                                 ng-show="question.allAnswered.length > 0">
+                                 ng-show="question.bestAnswered.length > 0">
                     </auto-paging>
                     <h4 class="text-center text-muted" ng-show="question.bestAnswered.length == 0">
                         بدون سوال
