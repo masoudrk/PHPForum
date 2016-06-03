@@ -143,19 +143,19 @@ from forum_question as q  where q.AuthorID = '$data->UserID' and q.AdminAccepted
 echoResponse(200 , $resp);
 });
 
-$app->post('/getUserMessages', function() use ($app)  {
+$app->post('/getUserNotifications', function() use ($app)  {
 
     $db = new DbHandler(true);
-    $data = json_decode($app->request->getBody());
-    if(!isset($data->UserID))
-    {echoResponse(201,"bad request"); return;}
+
+    $sess = new Session();
+
     $resQ= $db->makeQuery("select * from (select 'Question' as EventType , qv.ViewDate as EventView , fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
 (SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
 from subject_follow as sf
 inner join forum_question fq on fq.SubjectID = sf.SubjectID
 inner join user as u on u.ID = fq.AuthorID
 LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = sf.UserID
-where fq.adminAccepted = 1 and sf.UserID = '$data->UserID'
+where fq.adminAccepted = 1 and sf.UserID = '$sess->UserID'
 UNION
 select 'Answer' as EventType ,qv.ViewDate as EventView,fa.CreationDate as EventDate , q.ID as EventID , fa.AnswerText as EventTitle,
 (SELECT sum(RateValue) FROM answer_rate where AnswerID = fa.ID) as EventScore, u.FullName as EventUser
@@ -164,7 +164,7 @@ inner join forum_question as q on q.ID = fa.QuestionID
 inner join question_follow as qf on qf.QuestionID = q.ID
 inner join user as u on u.ID = fa.AuthorID
 LEFT JOIN question_view as qv on qv.QuestionID = q.ID and qv.UserID = qf.UserID
-where q.adminAccepted = 1 and fa.adminAccepted = 1 and qf.UserID = '$data->UserID'
+where q.adminAccepted = 1 and fa.adminAccepted = 1 and qf.UserID = '$sess->UserID'
 UNION
 select 'Question' as EventType ,qv.ViewDate as EventView,fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
 (SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
@@ -174,7 +174,7 @@ inner join forum_subject as fs on fs.ParentSubjectID = fms.ID
 inner join forum_question fq on fq.SubjectID = fs.ID
 inner join user as u on u.ID = fq.AuthorID
 LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = msf.UserID
-where fq.adminAccepted = 1 and msf.UserID = '$data->UserID'
+where fq.adminAccepted = 1 and msf.UserID = '$sess->UserID'
 UNION
 select 'Person' as EventType ,qv.ViewDate as EventView,fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
 (SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
@@ -182,7 +182,7 @@ from person_follow as pf
 inner join forum_question fq on fq.AuthorID = pf.TargetUserID
 inner join user as u on u.ID = fq.AuthorID
 LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = pf.UserID
-where fq.adminAccepted = 1 and pf.UserID = '$data->UserID') as resp
+where fq.adminAccepted = 1 and pf.UserID = '$sess->UserID') as resp
 order by resp.EventDate DESC limit 10");
 
     $resp = [];
@@ -190,6 +190,29 @@ order by resp.EventDate DESC limit 10");
         $resp[] = $r;}
 
     echoResponse(200 , $resp);
+});
+
+$app->post('/getUserMessages', function() use ($app)  {
+
+    require_once '../db/message.php';
+    $db = new DbHandler(true);
+    $sess = new Session();
+
+    $res = [];
+    $res['All'] = getUserUnreadMessages($db,$sess->UserID,20);
+    $res['Total'] = getUserUnreadMessagesCount($db,$sess->UserID);
+    echoResponse(200 , $res);
+});
+
+$app->post('/getUserMessageByID', function() use ($app)  {
+
+    require_once '../db/message.php';
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+    $sess = new Session();
+
+    $res = getUserMessageByID($db,$sess->UserID,$data->MessageID);
+    echoResponse(200 , $res);
 });
 
 $app->post('/getAllUserMessages', function() use ($app)  {
@@ -204,6 +227,23 @@ $app->post('/getAllUserMessages', function() use ($app)  {
     $res = getPageUserMessages($db,$sess->UserID,$pin);
 
     echoResponse(200, $res);
+});
+
+$app->post('/markAsReadMessage', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $db = new DbHandler(true);
+
+    $sess = new Session();
+    $resQ = $db->makeQuery("SELECT 1 FROM message where message.UserID='$sess->UserID' 
+AND message.ID='$data->MessageID' LIMIT 1");
+
+    $c = mysqli_num_rows($resQ);
+    if($c > 0){
+        $db->updateRecord('message',"MessageViewed=1","ID='$data->MessageID'");
+        echoSuccess($data->MessageID);
+    }
+    echoError("Error in updating because message '$data->MessageID' is not belong to you.");
 });
 
 $app->post('/getAllQuestions', function() use ($app)  {
@@ -344,7 +384,7 @@ FROM forum_main_subject as fms WHERE SubjectName='$data->MainSubjectName'");
 (SELECT count(*) FROM subject_follow where SubjectID = fs.ID) as FollowCount ,
 (SELECT count(*) FROM subject_follow where SubjectID = fs.ID and UserID = '$sess->UserID') as PersonFollow ,
 (SELECT Count(*) FROM forum_answer inner join forum_question on forum_question.ID=forum_answer.QuestionID WHERE 
-forum_question.SubjectID=fs.ID AND forum_question.AdminAccepted=1) as TotalAnswers
+forum_question.SubjectID=fs.ID AND forum_question.AdminAccepted=1 AND forum_answer.AdminAccepted=1) as TotalAnswers
 FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
 
     $subjectChilds = [];
@@ -387,7 +427,7 @@ SELECT cd.IntervalDay as date,
   where forum_subject.ParentSubjectID='$mainSubjectID'
   and forum_answer.AdminAccepted=1 
   and Date(forum_answer.CreationDate) = cd.IntervalDay)
-  as AnswerCount
+  as AnswerCount  
   
 from calendar_day as cd
 where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
@@ -396,6 +436,22 @@ where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
     while($r = $resQ->fetch_assoc())
         $cqData[] = $r;
     $res['ChartData'] = $cqData;
+
+    $res['PieChartData']=[];
+
+    $resQ = $db->makeQuery("select 'سوال' as Name, count(*) as Value from forum_question
+    inner join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID='$mainSubjectID' 
+  and forum_question.AdminAccepted=1 
+  ");
+    $res['PieChartData'][0] =$resQ->fetch_assoc();
+
+    $resQ = $db->makeQuery("select 'جواب' as Name, count(*) as Value from forum_answer
+    inner join forum_question on forum_answer.QuestionID=forum_question.ID
+    inner join forum_subject on forum_subject.ID=forum_question.SubjectID
+  where forum_subject.ParentSubjectID='$mainSubjectID'
+  and forum_answer.AdminAccepted=1 and forum_question.AdminAccepted=1");
+    $res['PieChartData'][1] =$resQ->fetch_assoc();
 
     echoResponse(200, $res);
 });
@@ -480,6 +536,13 @@ $app->post('/getLastFollowingQuestions', function() use ($app)  {
 SELECT count(*) as Total 
 FROM (
   (SELECT forum_question.*
+   FROM question_follow
+     inner JOIN user ON user.ID = question_follow.UserID
+     inner JOIN forum_question ON forum_question.ID = question_follow.QuestionID
+        AND forum_question.AdminAccepted=1 and question_follow.UserID='$sess->UserID'
+  )
+  UNION
+  (SELECT forum_question.*
    FROM person_follow
      LEFT JOIN user ON user.ID = person_follow.TargetUserID
      LEFT JOIN forum_question ON forum_question.AuthorID = user.ID
@@ -495,7 +558,16 @@ FROM main_subject_follow
   LEFT JOIN forum_question ON forum_question.SubjectID=forum_subject.ID
  WHERE main_subject_follow.UserID = '$sess->UserID'
       AND main_subject_follow.MainSubjectID = '$subjectID'
-        )
+  )
+  UNION
+  (SELECT forum_question.*
+FROM subject_follow
+  LEFT JOIN forum_subject ON forum_subject.ID=subject_follow.SubjectID
+  LEFT JOIN forum_question ON forum_question.SubjectID=forum_subject.ID
+ WHERE subject_follow.UserID = '$sess->UserID'
+      AND forum_subject.ParentSubjectID='$subjectID'
+      AND forum_question.AdminAccepted=1
+  )
 ) res ORDER BY res.CreationDate DESC")->fetch_assoc()['Total'];
 
         $offset = ($data->pageIndex - 1) * $data->pageSize;
@@ -508,6 +580,13 @@ FROM main_subject_follow
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=res.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
 FROM (
+  (SELECT forum_question.*
+   FROM question_follow
+     inner JOIN user ON user.ID = question_follow.UserID
+     inner JOIN forum_question ON forum_question.ID = question_follow.QuestionID
+        AND forum_question.AdminAccepted=1 and question_follow.UserID='$sess->UserID'
+  )
+  UNION
   (SELECT forum_question.*
    FROM person_follow
      LEFT JOIN user ON user.ID = person_follow.TargetUserID
@@ -526,6 +605,15 @@ FROM main_subject_follow
       AND main_subject_follow.MainSubjectID = '$subjectID'
       AND forum_question.AdminAccepted=1
   )
+  UNION
+  (SELECT forum_question.*
+FROM subject_follow
+  LEFT JOIN forum_subject ON forum_subject.ID=subject_follow.SubjectID
+  LEFT JOIN forum_question ON forum_question.SubjectID=forum_subject.ID
+ WHERE subject_follow.UserID = '$sess->UserID'
+      AND forum_subject.ParentSubjectID='$subjectID'
+      AND forum_question.AdminAccepted=1
+  )
 ) as res 
 LEFT JOIN user as u on u.ID=res.AuthorID
 LEFT JOIN file_storage on file_storage.ID=u.AvatarID
@@ -539,6 +627,13 @@ ORDER BY res.CreationDate DESC
         $pageRes['Total'] = $db->makeQuery("
 SELECT count(*) as Total 
 FROM (
+  (SELECT forum_question.*
+   FROM question_follow
+     inner JOIN user ON user.ID = question_follow.UserID
+     inner JOIN forum_question ON forum_question.ID = question_follow.QuestionID
+        AND forum_question.AdminAccepted=1 and question_follow.UserID='$sess->UserID'
+  )
+  UNION
   (SELECT forum_question.*
    FROM person_follow
      LEFT JOIN user ON user.ID = person_follow.TargetUserID
@@ -571,6 +666,13 @@ LEFT JOIN file_storage on file_storage.ID=u.AvatarID")->fetch_assoc()['Total'];
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=res.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
 FROM (
+  (SELECT forum_question.*
+   FROM question_follow
+     inner JOIN user ON user.ID = question_follow.UserID
+     inner JOIN forum_question ON forum_question.ID = question_follow.QuestionID
+        AND forum_question.AdminAccepted=1 and question_follow.UserID='$sess->UserID'
+  )
+  UNION
   (SELECT forum_question.*
    FROM person_follow
      LEFT JOIN user ON user.ID = person_follow.TargetUserID

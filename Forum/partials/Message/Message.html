@@ -65,7 +65,7 @@
             <div class="box box-warning">
                 <div class="box-header">
                     <h3 class="box-title vazir-font">پیام های دریافتی</h3>
-                    <i class="fa fa-envelope-o text-muted"></i>
+                    <i class="fa fa-envelope palette-sun-flower"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
@@ -74,18 +74,38 @@
                             <th colspan="2">از طرف</th>
                             <th>موضوع پیام</th>
                             <th> متن پیام</th>
+                            <th colspan="2"></th>
                             <th>تاریخ</th>
                         </tr>
-                        <tr ng-repeat="m in question.all"
+                        <tr ng-repeat="m in message.all"
                             class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-20"
                             ng-click="showMessage(m)">
                             <td  style="width: 50px;">
                                 <img class="img-circle" ng-src="{{m.Image}}"
                                      style="width:40px;">
                             </td>
-                            <td style="vertical-align: middle;">{{m.FullName | subString :20|pNumber}}</td>
-                            <td >{{m.MessageTitle| subString :50|pNumber}}</td>
-                            <td class="text-muted">{{m.Message| subString :50|pNumber}}</td>
+                            <td style="vertical-align: middle;">
+                                {{m.FullName | subString :20|pNumber}}
+                            </td>
+                            <td ng-style="{color: (m.MessageViewed == '0')?'rgb(234, 189, 54)':'#666'}" >
+                                {{m.MessageTitle| subString :30|pNumber}}
+                            </td>
+                            <td class="text-muted" ng-style="{color: (m.MessageViewed == '0')?'rgb(234, 189, 54)':'#666'}">
+                                {{m.Message| subString :30|pNumber}}
+                            </td>
+                            <td class="text-center">
+                                <span class="label label-info" style="font-size: 10px" ng-if="m.MessageType == '1'">
+ارسالی به ایمیل
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="label label-success" style="font-size: 10px" ng-if="m.MessageViewed == '0'">
+دیده نشده
+                                </span>
+                                <span class="label label-default" style="font-size: 10px" ng-if="m.MessageViewed == '1'">
+دیده شده
+                                </span>
+                            </td>
                             <td>
                                 <span class="persian-rtl text-muted">{{m.MessageDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}</span>
                             </td>
@@ -101,7 +121,7 @@
                                  data-params="pagingParams"
                                  ng-control="pagingController"
                                  on-load-finish="loadFinishPageData()"
-                                 items="question.all">
+                                 items="message.all">
                     </auto-paging>
                 </div>
             </div>

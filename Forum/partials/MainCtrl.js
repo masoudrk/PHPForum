@@ -37,19 +37,15 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         searchType : '0'
     };
 
-    Extention.post("getUserMessages", {UserID: $rootScope.user.UserID }).then(function (res) {
-
+    Extention.post("getUserNotifications").then(function (res) {
         $scope.notifications = res;
-        // $scope.UserMessages = res;
-        // var count =0;
-        // for (var i= 0; i < $scope.UserMessages.length; i++) {
-        //     if (!$scope.UserMessages[i].EventView)
-        //         count++;
-        // }
     });
-    // Extention.post("getUserLastQuestion", { UserID: $rootScope.user.UserID }).then(function (res) {
-    //     $scope.UserQuestions = res;
-    // });
+
+    Extention.post("getUserMessages").then(function (res) {
+
+        $scope.messages = res;
+    });
+
 
     $scope.fullSearchData = {SearchType : '0'};
 
@@ -94,14 +90,8 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
 
         if( !$scope.notificationsUpdating ){
             $scope.notificationsUpdating = true;
-            Extention.postAsync("getUserMessages", {UserID: $rootScope.user.UserID }).then(function (res) {
+            Extention.postAsync("getUserNotifications", {UserID: $rootScope.user.UserID }).then(function (res) {
                 $scope.notifications = res;
-                // var count =0;
-                // for (var i= 0; i < $scope.UserMessages.length; i++) {
-                //     if (!$scope.UserMessages[i].EventView)
-                //         count++;
-                // }
-
                 $scope.notificationsUpdating = false;
             });
         }else{

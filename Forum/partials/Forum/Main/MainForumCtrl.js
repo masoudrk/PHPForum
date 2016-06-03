@@ -39,6 +39,33 @@ angular.module(appName).controller('MainForumCtrl',
         $scope.getTab(0);
     });
 
+
+    $scope.pieChartOptions = {
+        "type": "pie",
+
+        "valueField": "Value",
+        "fontSize": 12,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginBottom": -80,
+        "marginTop": -80,
+        "theme": "light",
+        "autoMargins": false,
+        "dataProvider": $scope.chartData,
+        colors:["#00BBCC", "#e74c3c"],
+        labelFunction:function (graphDataItem){
+            var data = graphDataItem.dataContext.Name;
+
+            return persianJs( data + '' ).englishNumber().toString() ;
+        },
+        balloonFunction : function (graphDataItem){
+            var data = graphDataItem.dataContext.Value;
+
+            return "<b style=\"font-size: 13px\">" +
+                persianJs( data + '' ).englishNumber().toString() + "<br/>"+graphDataItem.dataContext.Name+"</b>";
+        }
+    };
+
     $scope.incrementChartOptions =[{
         id:"g1",
         type : "smoothedLine",

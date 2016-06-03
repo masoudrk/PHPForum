@@ -34,6 +34,7 @@ function generateRequiredCMSJavaFiles(){
 
     <script src="../js/am-charts/amcharts.js" type="text/javascript"></script>
     <script src="../js/am-charts/serial.js" type="text/javascript"></script>
+    <script src="../js/am-charts/pie.js" type="text/javascript"></script>
 
     <script src="../cms/js/d3.js"></script>
     <script src="../cms/js/nv.d3.js"></script>
@@ -61,6 +62,7 @@ function generateRequiredCMSJavaFiles(){
     <script type="text/javascript" src="../js/angular-confirm.min.js"></script>
 
     <script type="text/javascript" src="../app/directives/serial-chart-directive.js"></script>
+    <script type="text/javascript" src="../app/directives/pie-chart-directive.js"></script>
 
 
 <?php
