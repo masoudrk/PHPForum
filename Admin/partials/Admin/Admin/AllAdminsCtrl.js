@@ -52,4 +52,5 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
 	    }
 	    $scope.adminUserID = Number(admin.UserID);
 	}
+	activeElement('#SAdmins');
 });

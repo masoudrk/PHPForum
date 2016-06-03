@@ -339,13 +339,13 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
 
-                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
+                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SUsers">
                         <a ui-sref="all_users">
                             <i class="fa fa-user"></i>
                             <span>مدیریت اعضا</span>
                         </a>
                     </li>
-                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
+                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SAdmins">
                         <a ui-sref="all_admins">
                             <i class="fa fa-gavel"></i>
                             <span>مدیران</span>
@@ -458,6 +458,12 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SContact">
+                        <a ui-sref="message({id:session.UserID})">
+                            <i class="fa fa-user"></i>
+                            <span>ارسال پیام</span>
+                        </a>
                     </li>
                     <li id="SProfile">
                         <a href="../Forum/#/profile">

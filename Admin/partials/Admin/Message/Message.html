@@ -1,0 +1,197 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>پیام</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">پیام</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+            <a ng-click="showInbux = !showInbux" class="btn btn-primary btn-block margin-bottom">{{(showInbux)? 'ارسال ایمیل' : 'لیست ایمیل ها'}}</a>
+
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">پوشه</h3>
+
+                    <div class="box-tools">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="col-xs-12 no-padding"><a><i class="fa fa-envelope-o pull-left"></i> پیام های ارسالی</a></li>
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /. box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9" ng-show="showInbux">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"> پیام های ارسالی</h3>
+
+                    <div class="box-tools">
+                        <div class="input-group col-xs-9 col-md-4">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
+                                    {{dropDwonTitle}}
+                                    <span class="fa fa-caret-down"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی پیام ها</a></li>
+                                    <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">پیام های مستقیم</a></li>
+                                    <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">پیام های ایمیلی</a></li>
+                                </ul>
+                            </div>
+                            <input type="text" name="table_search" ng-model="pagingParams.searchValue"
+                                   ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
+                                   placeholder="جستجو ...">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default left-radius-btn"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <div class="table-responsive mailbox-messages">
+                        <table class="table table-hover table-striped" ng-show="Messages.length !=0">
+                            <tbody>
+                            <tr>
+                                <th>گیرنده</th>
+                                <th>عنوان پیام</th>
+                                <th>متن پیام</th>
+                                <th>تاریخ</th>
+                                <th>نوع پیام</th>
+                                <th style="width:75px"></th>
+                            </tr>
+                            <tr ng-repeat="mes in Messages">
+                                <td>{{mes.FullName | pNumber}}</td>
+                                <td class="persian-rtl">{{mes.MessageTitle | pNumber | subString:15}}</td>
+                                <td class="persian-rtl">{{mes.Message | pNumber | subString:20}}</td>
+                                <td>{{mes.MessageDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                                <td ng-switch="mes.MessageType">
+                                    <span class="label label-success" ng-switch-when="1">ایمیل</span>
+                                    <span class="label label-primary" ng-switch-when="0">پیام</span>
+                                </td>
+                                <td>
+                                    <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+                                        <i confirm="آیا مطمئن هستید که میخواهید این پیام را حذف کنید؟"
+                                           class="fa fa-trash text-red link hvr-grow" ng-click="deleteMessage(mes)" title="خذف پیام" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                        <i class="fa fa-eye text-blue link hvr-grow" ng-click="openMessageModal(mes)" title="متن پیام" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div ng-hide="Messages.length !=0" class="text-center">
+                            <h4 class="text-muted">موردی یافت نشد</h4>
+                        </div>
+                        <!-- /.table -->
+                    </div>
+                    <!-- /.mail-box-messages -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllMessages"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 items="Messages">
+                    </auto-paging>
+                </div>
+            </div>
+            <!-- /. box -->
+        </div>
+        <div class="col-md-9" ng-hide="showInbux">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">ارسال ایمیل</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="form-group">
+                        <ui-select multiple ng-model="user.selectedUser" theme="bootstrap" sortable="true" close-on-select="false" style="width: 800px;">
+                            <ui-select-match placeholder="انتخاب فرد">{{$item.FullName}} &lt;{{$item.Email}}&gt;</ui-select-match>
+                            <ui-select-choices refresh="getPersons($select.search)" refresh-delay="500" repeat="person in users">
+                                <div ng-bind="person.FullName"></div>
+                                <small>
+                                    email: {{person.Email}}
+                                </small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="form-group persian-rtl">
+                        <input class="form-control" ng-model="Message.MessageTitle" placeholder="عنوان">
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="10" ng-model="Message.Message" class="persian-rtl col-xs-12">
+                        </textarea>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <div class="pull-right">
+                        <button type="button" ng-click="sentMessage(1)" class="btn btn-primary"><i class="fa fa-envelope-o"></i> ارسال ایمیل </button>
+                        <button type="button" ng-click="sentMessage(0)" class="btn btn-primary"><i class="fa fa-envelope-o"></i> ارسال پیام </button>
+                    </div>
+                    <button type="button" ng-click="showInbux = !showInbux;Message={};user.selectedUser=[]" class="btn btn-danger"><i class="fa fa-times"></i> انصراف </button>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+            <!-- /. box -->
+        </div>
+        <!-- /.col -->
+    </div>
+</section>
+<script type="text/ng-template" id="MessageModal.html">
+    <div class="modal-header vazir-font text-right">
+        <h3 class="modal-title text-info">متن پیام</h3>
+    </div>
+    <div class="modal-body vazir-font text-right persian-rtl">
+        <div class="table-responsive mailbox-messages">
+            <table class="table no-border">
+                <tr class="text-center">
+                    <td colspan="5">گیرونده</td>
+                </tr>
+                <tr>
+                    <td><img class="img-circle" ng-src="{{message.FullPath}}" style="width: 40px;" /></td>
+                    <td>{{message.FullName | pNumber}}</td>
+                    <td>{{message.Email | pNumber}}</td>
+                    <td>{{message.MessageDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                    <td ng-switch="message.MessageType">
+                        <span class="label label-success" ng-switch-when="1">ایمیل</span>
+                        <span class="label label-primary" ng-switch-when="0">پیام</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <label style="font-size:15px;margin-top:25px" class="text-danger">عنوان پیام</label>
+        <hr />
+        {{message.MessageTitle}}
+        <br />
+        <label style="font-size:15px;margin-top:25px" class="text-danger ">متن پیام</label>
+        <hr />
+        {{message.Message}}
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
+
+
+
+

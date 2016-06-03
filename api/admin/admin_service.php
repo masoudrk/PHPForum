@@ -192,15 +192,11 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
                 </html>
 ';
     $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
     $headers .=  'From: sepantarai@sepantarai.com' . "\r\n" .
         'Reply-To: '.$res["Email"]."\r\n" .
         'X-Mailer: Sepantarai.com';
-
-    //if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', "::1")))
-    {
         mail($res["Email"], $subject, $message, $headers);
-    }
                 }
                 	echoSuccess();
             }
@@ -500,6 +496,115 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
 	$res = $db->deleteFromTable('admin',"ID='$data->AdminID'");
 	if($res)
 		echoSuccess();
+	else
+		echoError("Cannot update record.");
+});
+
+$app->post('/getUsersByName', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+    if(!isset($data->filter))
+        echoError("bad request");
+
+    $resQ = $db->makeQuery("SELECT u.FullName , u.Email , u.ID FROM user as u where u.FullName LIKE N'%$data->filter%' or u.Email LIKE N'%$data->filter%' limit 10");
+    $res=[];
+    while($r = $resQ->fetch_assoc())
+        $res[] = $r;
+	echoSuccess($res);
+});
+$app->post('/sendMessage', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+    $sess = new Session();
+        $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+    foreach ($data->Users as $value)
+    {
+    	$db->insertToTable('message','AdminID,UserID,MessageDate,MessageTitle,Message,MessageType',
+            "'$sess->UserID','$value->ID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','".$data->Message->MessageType."'");
+
+        if($data->Message->MessageType == 1){
+            $subject = 'Sepantarai.com';
+            $message = '
+                        <html>
+                        <head>
+                          <title></title>
+                        </head>
+                        <body>
+                        <p style="direction: rtl">'.$data->Message->MessageTitle.'
+                        </p>
+                        <br>
+                        <br>
+                        <p style="direction: rtl">'.$data->Message->Message.'
+                        </p>
+                        </body>
+                        </html>
+        ';
+            $headers  = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+            $headers .=  'From: sepantarai@sepantarai.com' . "\r\n" .
+            'Reply-To: '.$value->Email."\r\n" .
+            'X-Mailer: Sepantarai.com';
+            mail($value->Email, $subject, $message, $headers);
+        }
+    }
+	echoSuccess();
+});
+
+$app->post('/getAllMessages', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+	$pr = new Pagination($data);
+	$sess = new Session();
+    if(!isset($data->UserID) || isset($data->UserID) != $sess->UserID )
+        echoError('invalid UserID');
+	$where = "WHERE au.ID = '$data->UserID'";
+	$hasWhere = FALSE;
+    if(isset($data->MessageType)){
+        $where .=" AND (m.MessageType ='$data->MessageType')";
+	}
+	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
+		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
+		$where .= " AND ( m.Message LIKE '%".$s."%' OR m.MessageTitle LIKE '%".$s."%' OR u.FullName LIKE '%".$s."%')";
+		$hasWhere = TRUE;
+	}
+
+	$pageRes = $pr->getPage($db,"SELECT u.FullName ,fs.FullPath, u.Email , m.* FROM message as m
+INNER JOIN user as u on u.ID = m.UserID
+INNER join user as au on au.ID = m.AdminID
+LEFT JOIN file_storage as fs on u.AvatarID = fs.ID ".$where." ORDER BY m.ID desc");
+
+	echoResponse(200, $pageRes);
+});
+
+$app->post('/deleteMessage', function() use ($app)  {
+
+	$db = new DbHandler(true);
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+                    $resQ = $db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID'
+LIMIT 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $db->deleteFromTable('message',"ID='$data->MessageID'");
+	if($res){
+		echoSuccess();
+    }
 	else
 		echoError("Cannot update record.");
 });
