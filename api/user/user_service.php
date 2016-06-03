@@ -445,12 +445,10 @@ $app->post('/getLastFollowingQuestions', function() use ($app)  {
 
     $db = new DbHandler(true);
     $data = json_decode($app->request->getBody());
-
-    $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
-                                forum_main_subject.SubjectName='$data->MainSubjectName' ");
-
-    $subjectID= $resQ->fetch_assoc()['SubjectID'];
     $sess = new Session();
+    $pageRes = [];
+    $pageRes['Action'] = 'Get Following Questions';
+    $pageRes['Items'] = [];
 
     $rateSelection =
         "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
@@ -458,10 +456,13 @@ $app->post('/getLastFollowingQuestions', function() use ($app)  {
  (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
-    $pageRes = [];
-    $pageRes['Action'] = 'Get Following Questions';
-    $pageRes['Items'] = [];
-    $pageRes['Total'] = $db->makeQuery("
+    if(isset($data->MainSubjectName)){
+
+        $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+                                forum_main_subject.SubjectName='$data->MainSubjectName' ");
+
+        $subjectID= $resQ->fetch_assoc()['SubjectID'];
+        $pageRes['Total'] = $db->makeQuery("
 SELECT count(*) as Total 
 FROM (
   (SELECT forum_question.*
@@ -483,9 +484,9 @@ FROM main_subject_follow
         )
 ) res ORDER BY res.CreationDate DESC")->fetch_assoc()['Total'];
 
-    $offset = ($data->pageIndex - 1) * $data->pageSize;
+        $offset = ($data->pageIndex - 1) * $data->pageSize;
 
-    $resQ = $db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, ($rateSelection) as Rate,
+        $resQ = $db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, ($rateSelection) as Rate,
  (SELECT count(*) from forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
  
 (SELECT count(*) FROM question_view where QuestionID = res.ID) 
@@ -517,10 +518,74 @@ LEFT JOIN file_storage on file_storage.ID=u.AvatarID
 ORDER BY res.CreationDate DESC
 "." LIMIT $offset, $data->pageSize");
 
-    while($r = $resQ->fetch_assoc())
-        $pageRes['Items'][] = $r;
+        while($r = $resQ->fetch_assoc())
+            $pageRes['Items'][] = $r;
 
+    }else if(isset($data->SubjectID)){
+        $pageRes['Total'] = $db->makeQuery("
+SELECT count(*) as Total 
+FROM (
+  (SELECT forum_question.*
+   FROM person_follow
+     LEFT JOIN user ON user.ID = person_follow.TargetUserID
+     LEFT JOIN forum_question ON forum_question.AuthorID = user.ID
+   WHERE person_follow.UserID = '$sess->UserID'
+         AND forum_question.SubjectID = '$data->SubjectID'
+        AND forum_question.AdminAccepted=1
+  )
+  UNION
+  (SELECT forum_question.*
+FROM subject_follow
+  LEFT JOIN forum_subject ON forum_subject.ID=subject_follow.SubjectID
+  LEFT JOIN forum_question ON forum_question.SubjectID=forum_subject.ID
+ WHERE subject_follow.UserID = '$sess->UserID'
+      AND subject_follow.SubjectID = '$data->SubjectID'
+      AND forum_question.AdminAccepted=1
+  )
+) as res 
+LEFT JOIN user as u on u.ID=res.AuthorID
+LEFT JOIN file_storage on file_storage.ID=u.AvatarID")->fetch_assoc()['Total'];
+
+        $offset = ($data->pageIndex - 1) * $data->pageSize;
+
+        $resQ = $db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, 
+($rateSelection) as Rate,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
+ 
+(SELECT count(*) FROM question_view where QuestionID = res.ID) 
+ as 'ViewCount' ,
+ (SELECT question_view.ID from question_view 
+        where question_view.QuestionID=res.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
+FROM (
+  (SELECT forum_question.*
+   FROM person_follow
+     LEFT JOIN user ON user.ID = person_follow.TargetUserID
+     LEFT JOIN forum_question ON forum_question.AuthorID = user.ID
+   WHERE person_follow.UserID = '$sess->UserID'
+         AND forum_question.SubjectID = '$data->SubjectID'
+        AND forum_question.AdminAccepted=1
+  )
+  UNION
+  (SELECT forum_question.*
+FROM subject_follow
+  LEFT JOIN forum_subject ON forum_subject.ID=subject_follow.SubjectID
+  LEFT JOIN forum_question ON forum_question.SubjectID=forum_subject.ID
+ WHERE subject_follow.UserID = '$sess->UserID'
+      AND subject_follow.SubjectID = '$data->SubjectID'
+      AND forum_question.AdminAccepted=1
+  )
+) as res 
+LEFT JOIN user as u on u.ID=res.AuthorID
+LEFT JOIN file_storage on file_storage.ID=u.AvatarID
+ORDER BY res.CreationDate DESC
+"." LIMIT $offset, $data->pageSize");
+
+        while($r = $resQ->fetch_assoc())
+            $pageRes['Items'][] = $r;
+
+    }
     echoResponse(200, $pageRes);
+
 });
 
 $app->post('/getForumBestQuestions', function() use ($app)  {
@@ -583,19 +648,44 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
     }
     else if(isset($data->SubjectID)){
 
-        $query = "SELECT u.FullName ,u.score,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, 
-        `CreationDate`,
-`FullPath` as Image ,($rateSelection) as Rate,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1) as 'AnswersCount' ,
-(SELECT count(*) FROM question_view where QuestionID = forum_question.ID and forum_question.AdminAccepted=1) as 'ViewCount' ,
- (SELECT question_view.ID from question_view 
-        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' 
- FROM forum_question LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
-file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
-.AdminAccepted='1' 
-AND forum_question.SubjectID='$data->SubjectID' order by forum_question.score desc";
+        $offset = $pr->calculateOffset();
 
-        $pageRes = $pr->getPage($db,$query);
+        $query = "SELECT q.* from (SELECT u.score,u.FullName,forum_question.`ID`, `QuestionText`, forum_question
+        .`Title`, 
+        `AuthorID`, `CreationDate`,
+`FullPath` as Image ,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
+   as 'AnswersCount' ,
+(SELECT count(*) FROM question_view where QuestionID = forum_question.ID and forum_question.AdminAccepted=1) as 
+'ViewCount' ,
+ (SELECT question_view.ID from question_view 
+        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
+ ($rateSelection) as Rate,
+ (SELECT sum(question_rate.RateValue) FROM question_rate where question_rate.QuestionID=forum_question.ID) as 'QScore'
+ FROM forum_question 
+ LEFT JOIN user as u on u.ID=forum_question.AuthorID 
+ LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
+ LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
+ WHERE forum_question.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID)' ) as q 
+ order by q.QScore desc limit $offset , $data->pageSize";
+
+        $pageResQ = $db->makeQuery($query);
+        $items = [];
+        while($r = $pageResQ->fetch_assoc()){
+            $items[] = $r;
+        }
+
+        $total = $db->makeQuery("SELECT count(*) as Total
+ FROM forum_question 
+ LEFT JOIN user as u on u.ID=forum_question.AuthorID 
+ LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
+ LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
+ WHERE forum_question.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID' ")->fetch_assoc()['Total'];
+        $pageRes =[];
+        $pageRes['Items'] = $items;
+        $pageRes['Total'] = $total;
+        $pageRes['PageSize'] = $data->pageSize;
+        $pageRes['PageIndex'] = $data->pageIndex;
         echoResponse(200, $pageRes);
     }
 
@@ -616,12 +706,13 @@ $app->post('/getForumBestAnswers', function() use ($app)  {
  (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
+    $offset = $pr->calculateOffset();
+
     if(isset($data->MainSubjectName)){
         $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
                                 forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
-        $offset = $pr->calculateOffset();
 
         $query = "SELECT q.* from (SELECT u.score,u.FullName,fq.`ID`,
 forum_answer.AnswerText, forum_answer.`CreationDate`,
@@ -664,19 +755,43 @@ forum_answer.AnswerText, forum_answer.`CreationDate`,
     }
     else if(isset($data->SubjectID)){
 
-        $query = "SELECT u.FullName ,u.score,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, 
-        `CreationDate`,
-`FullPath` as Image ,($rateSelection) as Rate,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1) as 'AnswersCount' ,
-(SELECT count(*) FROM question_view where QuestionID = forum_question.ID and forum_question.AdminAccepted=1) as 'ViewCount' ,
+        $query = "SELECT q.* from (SELECT u.score,u.FullName,fq.`ID`,
+forum_answer.AnswerText, forum_answer.`CreationDate`,
+`FullPath` as Image ,
  (SELECT question_view.ID from question_view 
-        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' 
- FROM forum_question LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
-file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
-.AdminAccepted='1' 
-AND forum_question.SubjectID='$data->SubjectID' order by forum_question.score desc";
+        where question_view.QuestionID=fq.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
+ ($rateSelection) as Rate
+ ,
+  (SELECT sum(answer_rate.RateValue) FROM answer_rate 
+ Left join forum_answer on forum_answer.ID = answer_rate.AnswerID
+ Left join forum_question on forum_question.ID = forum_answer.QuestionID
+ where forum_question.ID=fq.ID) as 'AScore'
+ 
+ FROM forum_answer
+ LEFT JOIN forum_question as fq on fq.ID = forum_answer.QuestionID 
+ LEFT JOIN user as u on u.ID=forum_answer.AuthorID 
+ LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
+ LEFT JOIN forum_subject on forum_subject.ID=fq.SubjectID 
+ WHERE fq.AdminAccepted='1' AND  forum_answer.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID' ) as q 
+ order by q.AScore desc limit $offset , $data->pageSize";
 
-        $pageRes = $pr->getPage($db,$query);
+        $pageResQ = $db->makeQuery($query);
+        $items = [];
+        while($r = $pageResQ->fetch_assoc()){
+            $items[] = $r;
+        }
+
+        $total = $db->makeQuery("SELECT count(*) as Total
+ FROM forum_question 
+ LEFT JOIN user as u on u.ID=forum_question.AuthorID 
+ LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
+ LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
+ WHERE forum_question.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID' ")->fetch_assoc()['Total'];
+        $pageRes =[];
+        $pageRes['Items'] = $items;
+        $pageRes['Total'] = $total;
+        $pageRes['PageSize'] = $data->pageSize;
+        $pageRes['PageIndex'] = $data->pageIndex;
         echoResponse(200, $pageRes);
     }
 

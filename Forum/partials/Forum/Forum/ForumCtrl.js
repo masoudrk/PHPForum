@@ -19,6 +19,33 @@ angular.module(appName).controller('ForumCtrl',
         $scope.forumData = res;
 	});
 
+    $scope.pagingControllerLastQuestions = {};
+    $scope.pagingControllerBestQuestions = {};
+    $scope.pagingControllerAnswered = {};
+    $scope.pagingControllerFollowingQuestions = {};
+
+    $scope.getTab = function (id) {
+        switch (id){
+            case 0:
+                $scope.pagingControllerLastQuestions.update();
+                break;
+            case 1:
+                $scope.pagingControllerBestQuestions.update();
+                break;
+            case 2:
+                $scope.pagingControllerAnswered.update();
+                break;
+            case 3:
+                $scope.pagingControllerFollowingQuestions.update();
+                break;
+        }
+        $scope.activeTab = id;
+    }
+
+    $timeout(function () {
+        $scope.getTab(0);
+    });
+
     $scope.incrementChartOptions = [
     {
         id:"g1",

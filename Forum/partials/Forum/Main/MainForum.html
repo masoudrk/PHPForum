@@ -84,7 +84,7 @@
                             <table class="table border-bottom-table table-hover" ng-show="question.all.length > 0">
                                 <tbody>
                                 <tr ng-repeat="q in question.all"  repeat-end="onLastRepeatEnd()"
-                                    class="link fx-fade-normal fx-dur-600 fx-ease-none fx-stagger-99">
+                                    class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50">
                                     <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
                                               style="width:40px"
                                               ng-style="{'border': (q.Rate > 5) ? activity.high :
@@ -135,7 +135,7 @@
                             <table class="table border-bottom-table table-hover"
                                    ng-show="question.allBest.length > 0">
                                 <tbody>
-                                <tr class="link fx-fade-normal fx-dur-600 fx-ease-none fx-stagger-99"
+                                <tr class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
                                     ng-repeat="q in question.allBest">
                                     <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
                                               style="width:40px"
@@ -167,7 +167,7 @@
                         </div>
                         <div class="clearfix text-center" style="padding-bottom: 5px;">
                             <h4 class="text-center text-muted"
-                                ng-show="question.allFollowing.length == 0">
+                                ng-show="question.allBest.length == 0">
                                 بدون سوال
                             </h4>
                             <auto-paging page="1"
@@ -179,7 +179,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.allBest"
-                                         ng-show="question.all.length > 0">
+                                         ng-show="question.allBest.length > 0">
                             </auto-paging>
                         </div>
                     </div><!-- /.tab-pane -->
@@ -189,7 +189,7 @@
                         <div class="table-responsive no-padding">
                             <table class="table border-bottom-table table-hover" ng-show="question.allAnswered.length > 0">
                                 <tbody>
-                                <tr  class="link fx-fade-normal fx-dur-600 fx-ease-none fx-stagger-99"
+                                <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
                                      ng-repeat="q in question.allAnswered">
                                     <td  style="width: 50px;">
                                         <img class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
@@ -244,7 +244,7 @@
                             <table class="table border-bottom-table table-hover"
                                    ng-show="question.allFollowing.length > 0">
                                 <tbody>
-                                <tr  class="link fx-fade-normal fx-dur-600 fx-ease-none fx-stagger-99"
+                                <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
                                      ng-repeat="q in question.allFollowing">
                                     <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
                                               style="width:40px"
@@ -288,7 +288,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.allFollowing"
-                                         ng-show="question.all.length != 0">
+                                         ng-show="question.allFollowing.length != 0">
                             </auto-paging>
                         </div>
                     </div><!-- /.tab-pane -->
@@ -303,7 +303,8 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover" ng-show="question.bestAnswered.length > 0">
                         <tbody>
-                        <tr class="link" ng-repeat="q in question.bestAnswered">
+                        <tr class="link fx-bounce-up fx-dur-600 fx-ease-none fx-stagger-80"
+                            ng-repeat="q in question.bestAnswered">
                             <td  style="width: 50px;">
                                 <img class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
                                      style="width:40px;"
@@ -315,7 +316,7 @@
                             </td>
                             <td ui-sref="question({id:q.ID})">
                                 {{q.FullName | subString :20| pNumber}}
-                                <span class="badge bg-yellow">{{q.score | pNumber}}</span>
+                                <span class="badge bg-yellow"> {{q.score | pNumber}} </span>
                             </td>
                             <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
                                 {{q.AnswerText | subString :30|pNumber}}
@@ -341,9 +342,9 @@
                                  data-params="pagingParams"
                                  items="question.bestAnswered"
                                  total-items="question.bestAnsweredTotal"
-                                 ng-show="question.allAnswered.length > 0">
+                                 ng-show="question.bestAnswered.length > 0">
                     </auto-paging>
-                    <h4 class="text-center text-muted" ng-show="question.allAnswered.length == 0">
+                    <h4 class="text-center text-muted" ng-show="question.bestAnswered.length == 0">
                         بدون سوال
                     </h4>
                 </div>
