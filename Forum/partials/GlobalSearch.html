@@ -24,7 +24,8 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table border-bottom-table table-hover" >
                         <tbody>
-                        <tr class="link" ng-repeat="q in searchResult" ui-sref="question({id:q.ID})">
+                        <tr class="link fx-zoom-normal fx-dur-600 fx-ease-circ fx-stagger-30"
+                            ng-repeat="q in searchResult" ui-sref="question({id:q.ID})">
                             <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
                                       style="width:40px"
                                       ng-style="{'border': (q.Rate > 5) ? activity.high :
@@ -60,7 +61,8 @@
 
     <div class="col-xs-12" ng-show="fullSearchData.SearchType == 1 && searchResult.length > 0" >
 
-        <div class="col-md-4 col-sm-6 col-xs-12" ng-repeat="u in searchResult track by $index">
+        <div class="col-md-4 col-sm-6 col-xs-12 fx-zoom-normal fx-dur-600 fx-ease-circ fx-stagger-30"
+             ng-repeat="u in searchResult track by $index">
             <!-- Widget: user widget style 1 -->
             <div class="box box-widget widget-user">
                 <!-- Add the bg color to the header using any of the bg-* classes ng-class="getRandomColorClass()"-->

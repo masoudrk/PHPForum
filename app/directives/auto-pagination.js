@@ -20,6 +20,8 @@
             returnFullResult : '=',
             //This variable defained for fetched items from database.
             items: '=',
+            totalItems: '=',
+            scrollToBegin :'=',
             lang : '@',
 
             page: '=',
@@ -62,12 +64,18 @@
                 if ($scope.lang)
                     data.Lang = $scope.lang;
 
-                Extention.scrollTo(0);
+                if($scope.scrollToBegin){
+
+                    Extention.scrollTo(0);
+                }
 
                 Extention.post($scope.actionName, data)
                 .then(function (results) {
                     $scope.items = results.Items;
                     $scope.total = results.Total;
+                    //
+                    // if($scope.totalItems)
+                    //     $scope.totalItems = results.Total;
 
                     if($scope.returnFullResult)
                         $scope.fullResult = results;

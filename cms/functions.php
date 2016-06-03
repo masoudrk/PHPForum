@@ -45,6 +45,7 @@ function generateRequiredCMSJavaFiles(){
     <script src="../js/angular-animate.min.js" ></script>
     <script src="../js/angular-ui-router.js"></script>
 
+    <script src="../js/ng-fx/ng-fx.min.js"></script>
     <script src="../js/ng-file-upload-shim.min.js"></script>
     <script src="../js/anim-in-out.js"></script>
     <script src="../js/ng-file-upload.min.js"></script>

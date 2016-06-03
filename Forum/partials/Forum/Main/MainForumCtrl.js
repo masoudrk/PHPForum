@@ -1,7 +1,6 @@
 angular.module(appName).controller('MainForumCtrl', 
     function ($scope, $element, $rootScope, $stateParams, $state, $timeout, $timeout, Extention) {
 
-    $scope.activeTab = 0;
     $scope.activity = {
         low : 'solid 2px #e74c3c',
         medium : 'solid 2px #f1c40f',
@@ -11,6 +10,34 @@ angular.module(appName).controller('MainForumCtrl',
     if(!$stateParams.id || $stateParams.id ==''){
         $state.go('forum_home');
     }
+
+    $scope.pagingControllerLastQuestions = {};
+    $scope.pagingControllerBestQuestions = {};
+    $scope.pagingControllerAnswered = {};
+    $scope.pagingControllerFollowingQuestions = {};
+
+
+    $scope.getTab = function (id) {
+        switch (id){
+            case 0:
+                $scope.pagingControllerLastQuestions.update();
+                break;
+            case 1:
+                $scope.pagingControllerBestQuestions.update();
+                break;
+            case 2:
+                $scope.pagingControllerAnswered.update();
+                break;
+            case 3:
+                $scope.pagingControllerFollowingQuestions.update();
+                break;
+        }
+        $scope.activeTab = id;
+    }
+
+    $timeout(function () {
+        $scope.getTab(0);
+    });
 
     $scope.incrementChartOptions =[{
         id:"g1",

@@ -3,7 +3,7 @@ var serviceBaseURL = '../api/user/';
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
-    'ngFileUpload','anim-in-out','am-charts']);
+    'ngFileUpload','anim-in-out','am-charts','ng-fx']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -255,7 +255,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             } else {
                 obj.workers--;
                 if (obj.workers === 0)
-                    $timeout(obj.disableLoading, 500);
+                    $timeout(obj.disableLoading, 250);
                 //$rootScope.progressbar.complete();
             }
         };
