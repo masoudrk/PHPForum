@@ -51,7 +51,7 @@
                     <li>
                         <a class="link" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                     </li>
-                    <!-- Notifications: style can be found in dropdown.less -->
+                    <!-- Messages: style can be found in dropdown.less-->
                     <li class="dropdown notifications-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-envelope-o"></i>
@@ -68,18 +68,20 @@
                         </ul>
                     </li>
 
-                    <!-- Messages: style can be found in dropdown.less-->
+                    <!-- Notifications: style can be found in dropdown.less -->
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
-                            <span class="label label-success" ng-bind="UserMessages.length | pNumber"></span>
+                            <span class="label label-success" ng-bind="notifications.length | pNumber"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما <span>{{UserMessages.length| pNumber}}</span> پیام جدید دارید!</li>
+                            <li class="header">شما <span> {{notifications.length| pNumber}} </span> اعلان جدید
+                                دارید!</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li ng-repeat="item in UserMessages"><!-- start event -->
+                                    <li ng-repeat="item in notifications" ng-hide="notificationsUpdating"><!-- start
+                                    event -->
                                         <a ui-sref="question({id:item.EventID})">
                                             <div class="pull-right">
                                                 <img src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
@@ -122,7 +124,9 @@
                                     </li><!-- end event -->
                                 </ul>
                             </li>
-                            <li class="footer"><a>نمایش همه پیام ها</a></li>
+                            <li class="footer">
+                                <a class="link" ng-click="updateNotifications($event)">بروزرسانی</a>
+                            </li>
                         </ul>
                     </li>
                     <!-- Tasks: style can be found in dropdown.less -->
@@ -377,9 +381,14 @@
                         </li>
                     </ul>
                 </li>
+                <li id="SMessage">
+                    <a ui-sref="messages">
+                        <i class="fa fa-envelope"></i><span>  پیام های من </span>
+                    </a>
+                </li>
                 <li id="SProfile">
                     <a ui-sref="profile">
-                        <i class="fa fa-male"></i><span>  پروفایل من </span>
+                        <i class="fa fa-user"></i><span>  پروفایل من </span>
                         <small class="label pull-right bg-green">جدید</small>
                     </a>
                 </li>

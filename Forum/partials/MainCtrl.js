@@ -38,15 +38,15 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     };
 
     Extention.post("getUserMessages", {UserID: $rootScope.user.UserID }).then(function (res) {
-        $scope.UserMessages = res;
-        var count =0;
-        for (var i= 0; i < $scope.UserMessages.length; i++) {
-            if (!$scope.UserMessages[i].EventView)
-                count++;
-        }
-        $scope.UserMessages["NewMessages"] = count;
+
+        $scope.notifications = res;
+        // $scope.UserMessages = res;
+        // var count =0;
+        // for (var i= 0; i < $scope.UserMessages.length; i++) {
+        //     if (!$scope.UserMessages[i].EventView)
+        //         count++;
+        // }
     });
-    
     // Extention.post("getUserLastQuestion", { UserID: $rootScope.user.UserID }).then(function (res) {
     //     $scope.UserQuestions = res;
     // });
@@ -85,6 +85,29 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     $scope.getRandomColorClass = function(id){
         var i = id % $scope.bgColorArray.length;
         return $scope.bgColorArray[i];
+    }
+
+    $scope.notificationsUpdating = false;
+
+    $scope.updateNotifications = function (event) {
+        event.stopPropagation();
+
+        if( !$scope.notificationsUpdating ){
+            $scope.notificationsUpdating = true;
+            Extention.postAsync("getUserMessages", {UserID: $rootScope.user.UserID }).then(function (res) {
+                $scope.notifications = res;
+                // var count =0;
+                // for (var i= 0; i < $scope.UserMessages.length; i++) {
+                //     if (!$scope.UserMessages[i].EventView)
+                //         count++;
+                // }
+
+                $scope.notificationsUpdating = false;
+            });
+        }else{
+            Extention.popInfo('لطفا کمی صبر کنید...');
+        }
+
     }
 
 });

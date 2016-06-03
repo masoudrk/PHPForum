@@ -20,7 +20,7 @@
             returnFullResult : '=',
             //This variable defained for fetched items from database.
             items: '=',
-            totalItems: '=',
+            totalItems: '=?',
             scrollToBegin :'=',
             lang : '@',
 
@@ -48,7 +48,7 @@
             textTitleNext: '@',
             textTitlePrev: '@',
         },
-        controller: ['$scope','Extention', function ($scope, Extention) {
+        controller: ['$scope','$timeout','Extention', function ($scope, $timeout, Extention) {
             $scope.items = [];
 
             $scope.getItems = function () {
@@ -75,7 +75,8 @@
                     $scope.total = results.Total;
                     //
                     // if($scope.totalItems)
-                    //     $scope.totalItems = results.Total;
+
+                    $scope.totalItems = results.Total;
 
                     if($scope.returnFullResult)
                         $scope.fullResult = results;

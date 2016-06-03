@@ -192,6 +192,20 @@ order by resp.EventDate DESC limit 10");
     echoResponse(200 , $resp);
 });
 
+$app->post('/getAllUserMessages', function() use ($app)  {
+
+    require_once '../db/message.php';
+    $db = new DbHandler(true);
+
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+
+    $pin = new PaginationInput($data);
+    $res = getPageUserMessages($db,$sess->UserID,$pin);
+
+    echoResponse(200, $res);
+});
+
 $app->post('/getAllQuestions', function() use ($app)  {
 
     require_once '../db/question.php';

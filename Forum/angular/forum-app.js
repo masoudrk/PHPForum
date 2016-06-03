@@ -159,7 +159,22 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'پروفایل من';
                 }
             }
-        }); 
+        })
+        .state("messages", {
+            url: "/Messages/:id",
+            templateUrl: "partials/Message/Message.html",
+            controller: 'MessageCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Message/MessageCtrl.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'مدیریت پیام ها';
+                }
+            }
+        });
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');
         $state.go('home');

@@ -18,25 +18,41 @@
                 <ul class="nav nav-tabs">
                     <li class="link active">
                         <a ng-click="getTab(0)" data-toggle="tab" aria-expanded="true">
+                            <span class="badge bg-green"
+                                  ng-show="activeTab == 0"
+                                  ng-bind="question.allTotal || '0' | pNumber"
+                                  style="margin-right: 8px;margin-top: -3px;">
+                            </span>
                             جدیدترین سوالات
-
-                            <!--<span class="badge bg-yellow" ng-bind="question.bestAnsweredTotal | pNumber">-->
-                            <!--{{q.score | pNumber}}-->
-                            <!--</span>-->
                         </a>
                     </li>
                     <li class="link">
                         <a ng-click="getTab(1)" data-toggle="tab" aria-expanded="false">
+                            <span class="badge bg-green"
+                                  ng-show="activeTab == 1"
+                                  ng-bind="question.allBestTotal || '0' | pNumber"
+                                  style="margin-right: 8px;margin-top: -3px;">
+                            </span>
                             بهترین سوالات
                         </a>
                     </li>
                     <li class="link">
                         <a ng-click="getTab(2)" data-toggle="tab" aria-expanded="false">
+                            <span class="badge bg-green"
+                                  ng-show="activeTab == 2"
+                                  ng-bind="question.allAnsweredTotal || '0' | pNumber"
+                                  style="margin-right: 8px;margin-top: -3px;">
+                            </span>
                             جواب داده شده
                         </a>
                     </li>
                     <li class="link">
                         <a ng-click="getTab(3)" data-toggle="tab" aria-expanded="false">
+                            <span class="badge bg-green"
+                                  ng-show="activeTab == 3"
+                                  ng-bind="question.allFollowingTotal || '0' | pNumber"
+                                  style="margin-right: 8px;margin-top: -3px;">
+                            </span>
                             دنبال شده ها
                         </a>
                     </li>
@@ -89,6 +105,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.all"
+                                         total-items="question.allTotal"
                                          ng-show="question.all.length > 0">
                             </auto-paging>
                         </div>
@@ -143,6 +160,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.allBest"
+                                         total-items="question.allAnsweredTotal"
                                          ng-show="question.allBest.length > 0">
                             </auto-paging>
                         </div>
@@ -198,6 +216,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.allAnswered"
+                                         total-items="question.allAnsweredTotal"
                                          ng-show="question.allAnswered.length > 0">
                             </auto-paging>
                         </div>
@@ -252,6 +271,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.allFollowing"
+                                         total-items="question.allFollowing"
                                          ng-show="question.allFollowing.length != 0">
                             </auto-paging>
                         </div>
