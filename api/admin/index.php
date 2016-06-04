@@ -10,6 +10,7 @@ require '../libs/Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim();
+$app->db = new DbHandler(true);
 
 require_once 'admin_service.php';
 require_once '../generic_service.php';
