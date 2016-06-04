@@ -146,7 +146,6 @@
     <Folder Include="Forum\partials\MyActions\Answers\" />
     <Folder Include="Forum\partials\MyActions\NewQuestion\" />
     <Folder Include="Forum\partials\MyActions\Questions\" />
-    <Folder Include="Forum\partials\Profile\" />
     <Folder Include="Forum\partials\Question\" />
     <Folder Include="Forum\partials\Question\NewQuestion\" />
     <Folder Include="Forum\partials\Question\Questions\" />
@@ -551,8 +550,6 @@
     <Content Include="Forum\partials\MyActions\NewQuestion\NewQuestionCtrl.js" />
     <Content Include="Forum\partials\MyActions\Questions\Questions.html" />
     <Content Include="Forum\partials\MyActions\Questions\QuestionsCtrl.js" />
-    <Content Include="Forum\partials\Profile\Profile.html" />
-    <Content Include="Forum\partials\Profile\ProfileCtrl.js" />
     <Content Include="Forum\partials\Question\NewQuestion\NewQuestion.html" />
     <Content Include="Forum\partials\Question\NewQuestion\NewQuestionCtrl.js" />
     <Content Include="Forum\partials\Question\Questions\Questions.html" />

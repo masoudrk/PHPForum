@@ -40,20 +40,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'داشبورد';
                 }
             }
-        }).state("profile", {
-            url: "/Profile/:action",
-            templateUrl: "partials/Profile/Profile.html",
-            controller: 'ProfileCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Profile/ProfileCtrl.js']);
-                }],
-                $title: function () {
-                    return 'پروفایل من';
-                }
-            }
-        })
-        .state("forum_home", {
+        }).state("forum_home", {
             url: "/Home",
             templateUrl: "partials/Forum/_Home/Home.html",
             controller: 'HomeCtrl',
