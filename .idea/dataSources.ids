@@ -796,7 +796,7 @@
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="217" parent="34" name="AdminID">
+      <column id="217" parent="34" name="SenderUserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>

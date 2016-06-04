@@ -307,7 +307,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.allFollowing"
-                                         total-items="question.allFollowing"
+                                         total-items="question.allFollowingTotal"
                                          ng-show="question.allFollowing.length != 0">
                             </auto-paging>
                         </div>
@@ -321,7 +321,8 @@
                     <i class="fa fa-question text-muted"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover" ng-show="question.bestAnswered.length > 0">
+                    <table class="table table-hover"
+                           ng-show="question.bestAnswered.length > 0">
                         <tbody>
                         <tr class="link fx-bounce-up fx-dur-600 fx-ease-none fx-stagger-80"
                             ng-repeat="q in question.bestAnswered">
@@ -400,7 +401,7 @@
                       chart-id="chart1"
                       chart-data="forumData.ChartData"
                       chart-graphs="incrementChartOptions"
-                      chart-height="260"></serial-chart>
+                      chart-height="220"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <div class="box box-primary">
@@ -420,10 +421,24 @@
                             </li>
                         </ul>
                     </div>
-                    <serial-chart chart-id="chart2"
-                                  chart-data="forumData.ChartData"
-                                  chart-graphs="dailyChartOptions"
-                                  chart-height="260"></serial-chart>
+                    <serial-chart
+                        chart-id="chart2"
+                        chart-data="forumData.ChartData"
+                        chart-graphs="dailyChartOptions"
+                        chart-height="220"></serial-chart>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">آمار کلی {{forumData.MainSubject.Title}}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <pie-chart
+                            chart-id="chart3"
+                            chart-data="forumData.PieChartData"
+                            chart-options="pieChartOptions"
+                            chart-height="160"></pie-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 

@@ -152,7 +152,7 @@
                                 بدون سوال
                             </h4>
                             <auto-paging page="1"
-                                         page-size="20"
+                                         page-size="15"
                                          ul-class="pagination pagination-sm no-margin"
                                          action-name="getForumBestQuestions"
                                          data-params="pagingParams"
@@ -160,7 +160,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.allBest"
-                                         total-items="question.allAnsweredTotal"
+                                         total-items="question.allBestTotal"
                                          ng-show="question.allBest.length > 0">
                             </auto-paging>
                         </div>
@@ -207,7 +207,7 @@
                                 بدون سوال
                             </h4>
                             <auto-paging page="1"
-                                         page-size="20"
+                                         page-size="15"
                                          ul-class="pagination pagination-sm no-margin"
                                          action-name="getLastForumAnsweredQuestions"
                                          data-params="pagingParams"
@@ -249,9 +249,9 @@
                                     <td class="text-center" ui-sref="question({id:q.ID})" >{{q.AnswersCount || '0'|pNumber}} جواب
                                     </td>
                                     <td ui-sref="question({id:q.ID})" >
-                                <span class="persian-rtl text-muted" style="font-size: 12px;">
-                                    {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
-                                </span>
+                                        <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                            {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
+                                        </span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -263,7 +263,7 @@
                                 بدون سوال
                             </h4>
                             <auto-paging page="1"
-                                         page-size="20"
+                                         page-size="15"
                                          ul-class="pagination pagination-sm no-margin"
                                          action-name="getLastFollowingQuestions"
                                          data-params="pagingParams"
@@ -271,7 +271,7 @@
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
                                          items="question.allFollowing"
-                                         total-items="question.allFollowing"
+                                         total-items="question.allFollowingTotal"
                                          ng-show="question.allFollowing.length != 0">
                             </auto-paging>
                         </div>
@@ -285,7 +285,8 @@
                     <i class="fa fa-question text-muted"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover" ng-show="question.bestAnswered.length > 0">
+                    <table class="table table-hover"
+                           ng-show="question.bestAnswered.length > 0">
                         <tbody>
                         <tr class="link fx-bounce-up fx-dur-600 fx-ease-none fx-stagger-80"
                             ng-repeat="q in question.bestAnswered">
@@ -294,7 +295,8 @@
                                      style="width:40px;"
                                      ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                    (q.Rate > 2.5)?activity.medium:activity.low}"
-                                     title="{{(q.score || '0' )| number:1 | pNumber | concat : ' امتیاز '}}" data-toggle="tooltip" data-placement="top"
+                                     title="{{(q.score || '0' )| number:1 | pNumber | concat : ' امتیاز '}}"
+                                     data-toggle="tooltip" data-placement="top"
                                      tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
                                      tooltip-append-to-body="true">
                             </td>
@@ -320,13 +322,13 @@
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix text-center">
                     <auto-paging page="1"
-                                 page-size="20"
+                                 page-size="15"
                                  ul-class="pagination pagination-sm no-margin"
                                  action-name="getForumBestAnswers"
                                  data-params="pagingParams"
                                  items="question.bestAnswered"
                                  total-items="question.bestAnsweredTotal"
-                                 ng-show="question.allAnswered.length > 0">
+                                 ng-show="question.bestAnswered.length > 0">
                     </auto-paging>
                     <h4 class="text-center text-muted" ng-show="question.bestAnswered.length == 0">
                         بدون سوال
@@ -358,7 +360,7 @@
                             chart-id="chart1"
                             chart-data="forumData.ChartData"
                             chart-graphs="incrementChartOptions"
-                            chart-height="260"></serial-chart>
+                            chart-height="220"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <div class="box box-primary">
@@ -381,7 +383,7 @@
                     <serial-chart chart-id="chart2"
                                   chart-data="forumData.ChartData"
                                   chart-graphs="dailyChartOptions"
-                                  chart-height="260"></serial-chart>
+                                  chart-height="220"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 

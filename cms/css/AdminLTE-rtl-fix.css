@@ -393,3 +393,12 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .navbar-nav > .tasks-menu > .dropdown-menu > li.footer > a:hover {
     background-color: #f3f3f3;
 }
+
+.main-header .navbar .nav > li > a > .label {
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.fix-pie-chart-center{
+    text-align: center !important;
+}
