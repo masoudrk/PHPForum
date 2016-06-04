@@ -115,7 +115,7 @@
     }
 
     $scope.setLikeAnswers = function (answer,rate) {
-        Extention.post("rateAnswer", { AnswerID: answer.ID, UserID: $rootScope.user.UserID, RateValue: rate, TargetUserID: answer.UserID, AuthorID: $scope.answer.AuthorID, QuestionID: $stateParams.id }).then(function (res) {
+        Extention.post("rateAnswer", { AnswerID: answer.ID, UserID: $rootScope.user.UserID, RateValue: rate, TargetUserID: answer.UserID, AuthorID: answer.AuthorID, QuestionID: $stateParams.id }).then(function (res) {
             $scope.getQuestionByID();
         });
     }
