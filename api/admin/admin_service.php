@@ -320,7 +320,7 @@ LIMIT 1");
                 if($data->State == 1){
                     $db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
                     $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                    "'$sess->UserID','$data->UserID',NOW(),'".'تا??د پ?ام'."','".'پ?ام شما تا??د شد'."','0'");
+                    "'$sess->UserID','$data->UserID',NOW(),'".'تایید پیام'."','".'پیام شما تایید شد'."','0'");
                     if($data->UserID != $sess->UserID)
                         $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->UserID,10,now(),$sess->UserID,$data->QuestionID");
                     if($data->AuthorID != $data->UserID)
@@ -456,10 +456,10 @@ LIMIT 1");
                 {
                     $db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
                     $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                "'$sess->UserID','$data->UserID',NOW(),'".'تا??د سوال'."','".'سوال شما تا??د شد'."','0'");
+                "'$sess->UserID','$data->UserID',NOW(),'".'تایید سوال'."','".'سوال شما تایید شد'."','0'");
                     if($data->UserID != $sess->UserID)
                         $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->UserID,3,now(),$sess->UserID,$data->QuestionID");
-                        $pageRes = $db->makeQuery("SELECT pf.UserID FROM person_follow as pf WHERE pf.TargetUserID = $data->UserID'");
+                        $pageRes = $db->makeQuery("SELECT pf.UserID FROM person_follow as pf WHERE pf.TargetUserID = '$data->UserID'");
                         $res=[];
                         while($r = $pageRes->fetch_assoc())
                             $res[] = $r;
@@ -467,11 +467,26 @@ LIMIT 1");
                         {
                         	$db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"].",4,now(),$data->UserID,$data->QuestionID");
                         }
+//                        $pageRes = $db->makeQuery("SELECT msf.UserID FROM forum_subject as fs INNER JOIN
+//forum_main_subject as fms on fms.ID = fs.ParentSubjectID
+//INNER JOIN forum_question as fq on fq.SubjectID = fs.ID
+//INNER JOIN main_subject_follow as msf on msf.MainSubjectID = fms.ID
+//UNION
+//SELECT sf.UserID FROM forum_subject as fs
+//INNER JOIN forum_question as fq on fq.SubjectID = fs.ID
+//INNER JOIN subject_follow as sf on sf.SubjectID = fs.ID");
+//                        $res=[];
+//                        while($r = $pageRes->fetch_assoc())
+//                            $res[] = $r;
+//                        foreach ($res as $value)
+//                        {
+//                            $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"].",4,now(),$data->UserID,$data->QuestionID");
+//                        }
                 }
                 else if($data->State == -1 && isset($data->Message))
                 {
                     $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-            "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','0'");
+                        "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','0'");
                 }
                 echoSuccess();
             }
@@ -626,6 +641,8 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
     	$db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
             "'$sess->UserID','$value->ID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','".$data->Message->MessageType."'");
 
+        if($data->AuthorID != $data->UserID)
+                        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID',"$value->ID,5,now(),$sess->UserID");
         if($data->Message->MessageType == 1){
             $subject = 'Sepantarai.com';
             $message = '
