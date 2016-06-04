@@ -41,7 +41,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         }).state("profile", {
-            url: "/Profile",
+            url: "/Profile/:action",
             templateUrl: "partials/Profile/Profile.html",
             controller: 'ProfileCtrl',
             resolve: {

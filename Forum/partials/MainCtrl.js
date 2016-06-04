@@ -37,8 +37,11 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         searchType : '0'
     };
 
+    $scope.notificationsUpdating = true;
+
     Extention.post("getUserNotifications").then(function (res) {
-        $scope.notifications = res;
+        $scope.notifications = res.Data;
+        $scope.notificationsUpdating = false;
     });
 
     Extention.post("getUserMessages").then(function (res) {
@@ -83,15 +86,15 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         return $scope.bgColorArray[i];
     }
 
-    $scope.notificationsUpdating = false;
 
     $scope.updateNotifications = function (event) {
-        event.stopPropagation();
+        if(event)
+            event.stopPropagation();
 
         if( !$scope.notificationsUpdating ){
             $scope.notificationsUpdating = true;
-            Extention.postAsync("getUserNotifications", {UserID: $rootScope.user.UserID }).then(function (res) {
-                $scope.notifications = res;
+            Extention.postAsync("getUserNotifications").then(function (res) {
+                $scope.notifications = res.Data;
                 $scope.notificationsUpdating = false;
             });
         }else{
@@ -99,5 +102,20 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         }
 
     }
+
+    $scope.markLastNotifications = function (event) {
+        event.stopPropagation();
+
+        if( !$scope.notificationsUpdating ){
+            $scope.notificationsUpdating = true;
+            Extention.postAsync("markLastNotifications").then(function (res) {
+                $scope.notifications = res.Data;
+                $scope.notificationsUpdating = false;
+            });
+        }else{
+            Extention.popInfo('لطفا کمی صبر کنید...');
+        }
+    }
+
 
 });

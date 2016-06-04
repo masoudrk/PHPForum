@@ -1,14 +1,49 @@
 
-angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, Extention,Upload) {
+angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, $stateParams, $state, $location, $timeout, Extention,Upload) {
 
-    $scope.activeTab = 2;
+    if(!$stateParams.action){
+        $scope.activeTab = 2;
+    }else{
+        switch ($stateParams.action){
+            case 'Sessions':
+                $scope.activeTab = 1;
+                break;
+            case 'Info':
+                $scope.activeTab = 2;
+                break;
+            case 'AddentionalInfo':
+                $scope.activeTab = 3;
+                break;
+        }
+    }
+
+    $scope.getTab= function (tabId) {
+        $scope.activeTab = tabId;
+        var opt = {
+            location: true,
+            inherit: true,
+            relative: $state.$current,
+            notify: false
+        };
+        switch ($scope.activeTab){
+            case 1:
+                $state.transitionTo('profile', {action: 'Sessions'}, opt );
+                break;
+            case 2:
+                $state.transitionTo('profile', {action:'Info'}, opt);
+                break;
+            case 3:
+                $state.transitionTo('profile', {action: 'AddentionalInfo'}, opt);
+                break;
+        }
+    }
+
     $scope.isEqualWithVerify = true;
 
     $scope.getUser = function () {
 
         Extention.post('getUserProfile').then(function (res) {
             $scope.curUser = res;
-            
         });
     }
     $scope.getUser();

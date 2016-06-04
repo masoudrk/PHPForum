@@ -107,55 +107,44 @@
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
-                            <span class="label label-success" ng-bind="notifications.length | pNumber"></span>
+                            <span class="label label-success" ng-bind="notifications.Total | pNumber"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">شما <span> {{notifications.length| pNumber}} </span> اعلان جدید
-                                دارید!</li>
+                            <li class="header">شما <span> {{notifications.Total| pNumber}} </span> اعلان جدید
+                                دارید!
+                            </li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li ng-repeat="item in notifications"
-                                        class="fx-bounce-normal fx-dur-600 fx-ease-none fx-stagger-100"
+                                    <li ng-repeat="item in notifications.All"
+                                        class="fx-bounce-normal fx-dur-50 fx-ease-none fx-stagger-50"
                                         ng-hide="notificationsUpdating"><!-- start
                                     event -->
                                         <a ui-sref="question({id:item.EventID})">
                                             <div class="pull-right">
-                                                <img src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
+                                                <img src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
                                                      class="img-circle"
                                                      alt="User Image"
                                                      style="border: solid 2px #1abc9c">
-                                                <div class="text-center" style="margin: auto auto auto 10px;">
-                                                    <i class="fa fa-bell-o palette-turquoise" style="font-size: 19px;">
+                                                <div class="text-center" style="margin: -12px -15px auto 10px;">
+                                                    <i class="fa fa-bell palette-sun-flower" style="font-size: 19px;">
                                                     </i>
                                                 </div>
                                             </div>
                                             <h4 class="vazir-font">
-                                                {{ou.FullName}}
+                                                {{item.FullName}}
                                                 <small class="persian-rtl"><i class="fa fa-clock-o"></i>
                                                     {{item.EventDate | fromNow |pNumber}}</small>
                                             </h4>
-                                            <h5 class="text-right" style="margin-top: 0px;margin-bottom: 5px;">
-                                                {{item.EventUser|pNumber}}
-                                            </h5>
-                                            <p  ng-switch="item.EventType">
-                                                <span class="label label-warning" style="font-size: 10px"
-                                                      ng-switch-when="Person">
-                                                   سوال جدید
-                                                </span>
-                                                <span class="label label-warning" style="font-size: 10px"
-                                                      ng-switch-when="Answer">
-                                                    پاسخ
-                                                </span>
-                                                <span class="label label-warning" style="font-size: 10px"
-                                                      ng-switch-when="Question">
-                                                     سوال جدید
-                                                </span>
+                                            <p class="text-right persian-rtl"
+                                               style="margin-top: 8px;margin-bottom:5px;">
+                                                <span class="palette-turquoise"
+                                                      ng-bind="item.EventTypeFA"></span>
                                             </p>
                                             <p class="text-right text-info" ui-sref="question({id:item.EventID})"
                                                style="margin-top: 5px;">
-                                                <span style="margin-right: 5px;">
-                                                    سوال : {{item.EventTitle | subString :100|pNumber}}
+                                                <span style="">
+                                                    سرتیتر سوال : {{item.Title | subString :100|pNumber}}
                                                 </span>
                                                 <span class="pull-left" dir="ltr" ng-show="item.EventScore">
                                                     <i class="fa fa-thumbs-o-up"></i>
@@ -167,7 +156,9 @@
                                 </ul>
                             </li>
                             <li class="footer">
-                                <a class="link" ng-click="updateNotifications($event)">بروزرسانی</a>
+                                <a class="link" ng-click="updateNotifications($event)"
+                                   style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;">بروزرسانی</a>
+                                <a class="link" ng-click="markLastNotifications($event)">علامت زدن اعلان های نمایشی</a>
                             </li>
                         </ul>
                     </li>
@@ -387,12 +378,12 @@
                     </a>
                     <ul class="treeview-menu">
                         <li id="SRating">
-                            <a ui-sref="rating">
+                            <a ui-sref1="rating">
                                 <i class="fa fa-circle-o"></i>نظر سنجی
                             </a>
                         </li>
                         <li id="SQuiz">
-                            <a ui-sref="quiz">
+                            <a ui-sref1="quiz">
                                 <i class="fa fa-circle-o"></i>آزمون
                             </a>
                         </li>

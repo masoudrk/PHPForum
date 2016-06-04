@@ -158,25 +158,26 @@
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="63" parent="8" name="EventTypeID">
+      <column id="63" parent="8" name="EventUserID">
+        <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="64" parent="8" name="EventDate">
+      <column id="64" parent="8" name="EventTypeID">
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="65" parent="8" name="EventDate">
         <data-type>datetime</data-type>
       </column>
-      <column id="65" parent="8" name="EventCauseID">
+      <column id="66" parent="8" name="EventCauseID">
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="66" parent="8" name="EvenLinkID">
+      <column id="67" parent="8" name="EvenLinkID">
         <data-type>bigint(20)</data-type>
-      </column>
-      <column id="67" parent="8" name="ExpireDate">
-        <data-type>datetime</data-type>
       </column>
       <column id="68" parent="8" name="EventSeen">
         <mandatory>1</mandatory>
-        <data-type>tinyint(1)</data-type>
-        <default-expression>&apos;0&apos;</default-expression>
+        <data-type>bit(1)</data-type>
+        <default-expression>b&apos;0&apos;</default-expression>
       </column>
       <key id="69" parent="8" name="PRIMARY">
         <columns>ID</columns>
@@ -191,639 +192,641 @@
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <key id="72" parent="9" name="PRIMARY">
+      <column id="72" parent="9" name="EventTypeFA">
+        <mandatory>1</mandatory>
+        <data-type>text</data-type>
+      </column>
+      <key id="73" parent="9" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="73" parent="10" name="ID">
+      <column id="74" parent="10" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="74" parent="10" name="Filename">
+      <column id="75" parent="10" name="Filename">
         <mandatory>1</mandatory>
         <data-type>varchar(50)</data-type>
       </column>
-      <column id="75" parent="10" name="FullPath">
+      <column id="76" parent="10" name="FullPath">
         <mandatory>1</mandatory>
         <data-type>varchar(150)</data-type>
       </column>
-      <column id="76" parent="10" name="AbsolutePath">
+      <column id="77" parent="10" name="AbsolutePath">
         <data-type>varchar(120)</data-type>
       </column>
-      <column id="77" parent="10" name="UploadDate">
+      <column id="78" parent="10" name="UploadDate">
         <mandatory>1</mandatory>
         <data-type>datetime</data-type>
       </column>
-      <column id="78" parent="10" name="FileSize">
+      <column id="79" parent="10" name="FileSize">
         <mandatory>1</mandatory>
         <data-type>int(10) unsigned</data-type>
       </column>
-      <column id="79" parent="10" name="UserID">
+      <column id="80" parent="10" name="UserID">
         <comment>User that upload this file</comment>
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="80" parent="10" name="FileTypeID">
+      <column id="81" parent="10" name="FileTypeID">
         <data-type>int(11)</data-type>
         <default-expression>&apos;-1&apos;</default-expression>
       </column>
-      <column id="81" parent="10" name="Description">
+      <column id="82" parent="10" name="Description">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="82" parent="10" name="IsAvatar">
+      <column id="83" parent="10" name="IsAvatar">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <key id="83" parent="10" name="PRIMARY">
+      <key id="84" parent="10" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="84" parent="11" name="ID">
+      <column id="85" parent="11" name="ID">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="85" parent="11" name="TypeName">
+      <column id="86" parent="11" name="TypeName">
         <mandatory>1</mandatory>
         <data-type>varchar(10)</data-type>
       </column>
-      <column id="86" parent="11" name="GeneralType">
+      <column id="87" parent="11" name="GeneralType">
         <mandatory>1</mandatory>
         <data-type>varchar(20)</data-type>
       </column>
-      <column id="87" parent="11" name="Description">
+      <column id="88" parent="11" name="Description">
         <data-type>text</data-type>
       </column>
-      <key id="88" parent="11" name="PRIMARY">
+      <key id="89" parent="11" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="89" parent="12" name="ID">
+      <column id="90" parent="12" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="90" parent="12" name="QuestionID">
+      <column id="91" parent="12" name="QuestionID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="91" parent="12" name="AuthorID">
+      <column id="92" parent="12" name="AuthorID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="92" parent="12" name="CreationDate">
+      <column id="93" parent="12" name="CreationDate">
         <mandatory>1</mandatory>
         <data-type>datetime</data-type>
       </column>
-      <column id="93" parent="12" name="AnswerText">
+      <column id="94" parent="12" name="AnswerText">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="94" parent="12" name="AdminAccepted">
+      <column id="95" parent="12" name="AdminAccepted">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <key id="95" parent="12" name="PRIMARY">
+      <key id="96" parent="12" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="96" parent="13" name="ID">
+      <column id="97" parent="13" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="97" parent="13" name="Title">
+      <column id="98" parent="13" name="Title">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="98" parent="13" name="SubjectName">
+      <column id="99" parent="13" name="SubjectName">
         <data-type>varchar(50)</data-type>
       </column>
-      <column id="99" parent="13" name="SubjectID">
+      <column id="100" parent="13" name="SubjectID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="100" parent="13" name="Description">
+      <column id="101" parent="13" name="Description">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <key id="101" parent="13" name="PRIMARY">
+      <key id="102" parent="13" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="102" parent="14" name="ID">
+      <column id="103" parent="14" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="103" parent="14" name="SubjectID">
+      <column id="104" parent="14" name="SubjectID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="104" parent="14" name="QuestionText">
+      <column id="105" parent="14" name="QuestionText">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="105" parent="14" name="Title">
+      <column id="106" parent="14" name="Title">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="106" parent="14" name="AuthorID">
+      <column id="107" parent="14" name="AuthorID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="107" parent="14" name="CreationDate">
+      <column id="108" parent="14" name="CreationDate">
         <mandatory>1</mandatory>
         <data-type>datetime</data-type>
       </column>
-      <column id="108" parent="14" name="AdminAccepted">
+      <column id="109" parent="14" name="AdminAccepted">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="109" parent="14" name="BestAnswerID">
+      <column id="110" parent="14" name="BestAnswerID">
         <data-type>bigint(20)</data-type>
       </column>
-      <key id="110" parent="14" name="PRIMARY">
+      <key id="111" parent="14" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="111" parent="15" name="ID">
+      <column id="112" parent="15" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="112" parent="15" name="ParentSubjectID">
+      <column id="113" parent="15" name="ParentSubjectID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="113" parent="15" name="Title">
+      <column id="114" parent="15" name="Title">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <key id="114" parent="15" name="PRIMARY">
+      <key id="115" parent="15" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="115" parent="16" name="ID">
+      <column id="116" parent="16" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="116" parent="16" name="UserID">
+      <column id="117" parent="16" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="117" parent="16" name="MainSubjectID">
+      <column id="118" parent="16" name="MainSubjectID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="118" parent="16" name="MainSubjectFollowDate">
+      <column id="119" parent="16" name="MainSubjectFollowDate">
         <data-type>datetime</data-type>
       </column>
-      <key id="119" parent="16" name="PRIMARY">
+      <key id="120" parent="16" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="120" parent="17" name="ID">
+      <column id="121" parent="17" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="121" parent="17" name="OrganizationName">
+      <column id="122" parent="17" name="OrganizationName">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <key id="122" parent="17" name="PRIMARY">
+      <key id="123" parent="17" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="123" parent="18" name="ID">
+      <column id="124" parent="18" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="124" parent="18" name="UserID">
+      <column id="125" parent="18" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="125" parent="18" name="TargetUserID">
+      <column id="126" parent="18" name="TargetUserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="126" parent="18" name="PersonFollowDate">
+      <column id="127" parent="18" name="PersonFollowDate">
         <data-type>datetime</data-type>
       </column>
-      <key id="127" parent="18" name="PRIMARY">
+      <key id="128" parent="18" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="128" parent="19" name="ID">
+      <column id="129" parent="19" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="129" parent="19" name="QuestionID">
+      <column id="130" parent="19" name="QuestionID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="130" parent="19" name="FileID">
+      <column id="131" parent="19" name="FileID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <key id="131" parent="19" name="PRIMARY">
+      <key id="132" parent="19" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="132" parent="20" name="ID">
+      <column id="133" parent="20" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="133" parent="20" name="UserID">
+      <column id="134" parent="20" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="134" parent="20" name="QuestionID">
+      <column id="135" parent="20" name="QuestionID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="135" parent="20" name="QuestionFollowDate">
+      <column id="136" parent="20" name="QuestionFollowDate">
         <data-type>datetime</data-type>
       </column>
-      <key id="136" parent="20" name="PRIMARY">
+      <key id="137" parent="20" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="137" parent="21" name="ID">
+      <column id="138" parent="21" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="138" parent="21" name="UserID">
+      <column id="139" parent="21" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="139" parent="21" name="QuestionID">
+      <column id="140" parent="21" name="QuestionID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="140" parent="21" name="RateValue">
+      <column id="141" parent="21" name="RateValue">
         <mandatory>1</mandatory>
         <data-type>smallint(6)</data-type>
       </column>
-      <column id="141" parent="21" name="QuestionRateDate">
+      <column id="142" parent="21" name="QuestionRateDate">
         <data-type>datetime</data-type>
       </column>
-      <key id="142" parent="21" name="PRIMARY">
+      <key id="143" parent="21" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="143" parent="22" name="ID">
+      <column id="144" parent="22" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="144" parent="22" name="UserID">
+      <column id="145" parent="22" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="145" parent="22" name="QuestionID">
+      <column id="146" parent="22" name="QuestionID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="146" parent="22" name="ViewDate">
+      <column id="147" parent="22" name="ViewDate">
         <mandatory>1</mandatory>
         <data-type>datetime</data-type>
       </column>
-      <index id="147" parent="22" name="ID">
+      <index id="148" parent="22" name="ID">
         <columns>ID</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <key id="148" parent="22" name="ID">
+      <key id="149" parent="22" name="ID">
         <columns>ID</columns>
         <underlying-index>ID</underlying-index>
       </key>
-      <column id="149" parent="23" name="ID">
+      <column id="150" parent="23" name="ID">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="150" parent="23" name="HomeTitleIconURL">
+      <column id="151" parent="23" name="HomeTitleIconURL">
         <mandatory>1</mandatory>
         <data-type>varchar(300)</data-type>
       </column>
-      <column id="151" parent="23" name="HomeTitle">
+      <column id="152" parent="23" name="HomeTitle">
         <mandatory>1</mandatory>
         <data-type>varchar(100)</data-type>
       </column>
-      <column id="152" parent="23" name="ForumTitleIconURL">
+      <column id="153" parent="23" name="ForumTitleIconURL">
         <mandatory>1</mandatory>
         <data-type>varchar(300)</data-type>
       </column>
-      <column id="153" parent="23" name="ForumTitle">
+      <column id="154" parent="23" name="ForumTitle">
         <mandatory>1</mandatory>
         <data-type>varchar(100)</data-type>
       </column>
-      <key id="154" parent="23" name="PRIMARY">
+      <key id="155" parent="23" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="155" parent="24" name="ID">
+      <column id="156" parent="24" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="156" parent="24" name="Skill">
+      <column id="157" parent="24" name="Skill">
         <mandatory>1</mandatory>
         <data-type>varchar(200)</data-type>
       </column>
-      <key id="157" parent="24" name="PRIMARY">
+      <key id="158" parent="24" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="158" parent="25" name="ID">
+      <column id="159" parent="25" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="159" parent="25" name="SubjectID">
+      <column id="160" parent="25" name="SubjectID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="160" parent="25" name="UserID">
+      <column id="161" parent="25" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="161" parent="25" name="SubjectFollowDate">
+      <column id="162" parent="25" name="SubjectFollowDate">
         <data-type>datetime</data-type>
       </column>
-      <key id="162" parent="25" name="PRIMARY">
+      <key id="163" parent="25" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="163" parent="26" name="ID">
+      <column id="164" parent="26" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="164" parent="26" name="Text">
+      <column id="165" parent="26" name="Text">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <key id="165" parent="26" name="PRIMARY">
+      <key id="166" parent="26" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="166" parent="27" name="ID">
+      <column id="167" parent="27" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="167" parent="27" name="TagID">
+      <column id="168" parent="27" name="TagID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="168" parent="27" name="QuestionID">
+      <column id="169" parent="27" name="QuestionID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <key id="169" parent="27" name="PRIMARY">
+      <key id="170" parent="27" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="170" parent="28" name="ID">
+      <column id="171" parent="28" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="171" parent="28" name="FullName">
+      <column id="172" parent="28" name="FullName">
         <mandatory>1</mandatory>
         <data-type>varchar(130)</data-type>
       </column>
-      <column id="172" parent="28" name="Email">
+      <column id="173" parent="28" name="Email">
         <mandatory>1</mandatory>
         <data-type>varchar(150)</data-type>
       </column>
-      <column id="173" parent="28" name="Password">
+      <column id="174" parent="28" name="Password">
         <mandatory>1</mandatory>
         <data-type>varchar(100)</data-type>
       </column>
-      <column id="174" parent="28" name="Username">
+      <column id="175" parent="28" name="Username">
         <mandatory>1</mandatory>
         <data-type>varchar(50)</data-type>
       </column>
-      <column id="175" parent="28" name="PhoneNumber">
+      <column id="176" parent="28" name="PhoneNumber">
         <mandatory>1</mandatory>
         <data-type>varchar(30)</data-type>
       </column>
-      <column id="176" parent="28" name="Tel">
+      <column id="177" parent="28" name="Tel">
         <mandatory>1</mandatory>
         <data-type>varchar(30)</data-type>
       </column>
-      <column id="177" parent="28" name="SignupDate">
+      <column id="178" parent="28" name="SignupDate">
         <mandatory>1</mandatory>
         <data-type>datetime</data-type>
       </column>
-      <column id="178" parent="28" name="Gender">
+      <column id="179" parent="28" name="Gender">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
       </column>
-      <column id="179" parent="28" name="Description">
+      <column id="180" parent="28" name="Description">
         <mandatory>1</mandatory>
         <data-type>varchar(500)</data-type>
       </column>
-      <column id="180" parent="28" name="AvatarID">
+      <column id="181" parent="28" name="AvatarID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <default-expression>&apos;1&apos;</default-expression>
       </column>
-      <column id="181" parent="28" name="SessionID">
+      <column id="182" parent="28" name="SessionID">
         <data-type>varchar(100)</data-type>
       </column>
-      <column id="182" parent="28" name="ValidSessionID">
+      <column id="183" parent="28" name="ValidSessionID">
         <mandatory>1</mandatory>
         <data-type>tinyint(4)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="183" parent="28" name="UserAccepted">
+      <column id="184" parent="28" name="UserAccepted">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="184" parent="28" name="OrganizationID">
+      <column id="185" parent="28" name="OrganizationID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="185" parent="28" name="score">
+      <column id="186" parent="28" name="score">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="186" parent="28" name="MailAccepted">
+      <column id="187" parent="28" name="MailAccepted">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="187" parent="28" name="Event">
+      <column id="188" parent="28" name="Event">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
       </column>
-      <column id="188" parent="28" name="LastActiveTime">
+      <column id="189" parent="28" name="LastActiveTime">
         <mandatory>1</mandatory>
         <data-type>timestamp</data-type>
         <default-expression>&apos;CURRENT_TIMESTAMP&apos;</default-expression>
       </column>
-      <key id="189" parent="28" name="PRIMARY">
+      <key id="190" parent="28" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="190" parent="29" name="ID">
+      <column id="191" parent="29" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="191" parent="29" name="UserID">
+      <column id="192" parent="29" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="192" parent="29" name="EducationID">
+      <column id="193" parent="29" name="EducationID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <key id="193" parent="29" name="PRIMARY">
+      <key id="194" parent="29" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="194" parent="30" name="ID">
+      <column id="195" parent="30" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="195" parent="30" name="LinkID">
+      <column id="196" parent="30" name="LinkID">
         <mandatory>1</mandatory>
         <data-type>varchar(250)</data-type>
       </column>
-      <column id="196" parent="30" name="ExpireDate">
+      <column id="197" parent="30" name="ExpireDate">
         <mandatory>1</mandatory>
         <data-type>datetime</data-type>
       </column>
-      <column id="197" parent="30" name="UserID">
+      <column id="198" parent="30" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <key id="198" parent="30" name="PRIMARY">
+      <key id="199" parent="30" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="199" parent="31" name="ID">
+      <column id="200" parent="31" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="200" parent="31" name="UserID">
+      <column id="201" parent="31" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="201" parent="31" name="SessionID">
+      <column id="202" parent="31" name="SessionID">
         <mandatory>1</mandatory>
         <data-type>varchar(100)</data-type>
       </column>
-      <column id="202" parent="31" name="ValidSessionID">
+      <column id="203" parent="31" name="ValidSessionID">
         <mandatory>1</mandatory>
         <data-type>tinyint(4)</data-type>
       </column>
-      <column id="203" parent="31" name="LoginDate">
+      <column id="204" parent="31" name="LoginDate">
         <mandatory>1</mandatory>
         <data-type>datetime</data-type>
       </column>
-      <column id="204" parent="31" name="DeviceName">
+      <column id="205" parent="31" name="DeviceName">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="205" parent="31" name="IP">
+      <column id="206" parent="31" name="IP">
         <mandatory>1</mandatory>
         <data-type>varchar(60)</data-type>
       </column>
-      <column id="206" parent="31" name="Details">
+      <column id="207" parent="31" name="Details">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <key id="207" parent="31" name="PRIMARY">
+      <key id="208" parent="31" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="208" parent="32" name="ID">
+      <column id="209" parent="32" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="209" parent="32" name="SkillID">
+      <column id="210" parent="32" name="SkillID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="210" parent="32" name="UserID">
+      <column id="211" parent="32" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <key id="211" parent="32" name="PRIMARY">
+      <key id="212" parent="32" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="212" parent="33" name="ID">
+      <column id="213" parent="33" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="213" parent="33" name="MessageTitle">
+      <column id="214" parent="33" name="MessageTitle">
         <data-type>text</data-type>
       </column>
-      <column id="214" parent="33" name="Message">
+      <column id="215" parent="33" name="Message">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <key id="215" parent="33" name="PRIMARY">
+      <key id="216" parent="33" name="PRIMARY">
         <columns>ID</columns>
         <primary>1</primary>
       </key>
-      <column id="216" parent="34" name="ID">
+      <column id="217" parent="34" name="ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="217" parent="34" name="SenderUserID">
+      <column id="218" parent="34" name="SenderUserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="218" parent="34" name="UserID">
+      <column id="219" parent="34" name="UserID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="219" parent="34" name="MessageDate">
+      <column id="220" parent="34" name="MessageDate">
         <mandatory>1</mandatory>
         <data-type>datetime</data-type>
       </column>
-      <column id="220" parent="34" name="MessageTitle">
+      <column id="221" parent="34" name="MessageTitle">
         <data-type>text</data-type>
       </column>
-      <column id="221" parent="34" name="Message">
+      <column id="222" parent="34" name="Message">
         <mandatory>1</mandatory>
         <data-type>text</data-type>
       </column>
-      <column id="222" parent="34" name="MessageViewed">
+      <column id="223" parent="34" name="MessageViewed">
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
       </column>
-      <column id="223" parent="34" name="CommonMessageID">
-        <data-type>bigint(20)</data-type>
-      </column>
       <column id="224" parent="34" name="MessageType">
+        <comment>if equal to 0 it is direct message and if equal to 1 it is email</comment>
         <mandatory>1</mandatory>
         <data-type>tinyint(1)</data-type>
         <default-expression>&apos;0&apos;</default-expression>
