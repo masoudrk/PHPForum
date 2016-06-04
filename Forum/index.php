@@ -377,7 +377,8 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="SRating">
+                        <li id
+                            ="SRating">
                             <a ui-sref1="rating">
                                 <i class="fa fa-circle-o"></i>نظر سنجی
                             </a>

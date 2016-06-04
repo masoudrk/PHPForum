@@ -141,32 +141,6 @@ where u.UserID='".$sess->UserID."' AND u.SessionID='".$sess->SSN."' LIMIT 1");
     die();
 }
 
-function createSecureDbHandler(){
-    $db = new DbHandler();
-    $sess = new Session();
-//
-//    $rq = $db->makeQuery(
-//        "SELECT admin.ID FROM user left join admin on admin.UserID=user.ID left join admin_permission on admin_permission
-//.ID=admin.PermissionID where admin_permission.PermissionLevel in('$permissionLevels') AND user.ValidSessionID=1 and 
-//user
-//.SessionID='$sess->SSN'");
-
-    $rq = $db->makeQuery(
-        "SELECT admin.ID FROM user left join admin on admin.UserID=user.ID left join admin_permission on admin_permission
-.ID=admin.PermissionID where AND user.ValidSessionID=1 and 
-user
-.SessionID='$sess->SSN'");
-
-    $r = $rq->fetch_assoc();
-    if($r){
-        return $db;
-    }
-
-    $res = [];
-    $res['AuthState'] = 'UN_AUTH';
-    echoResponse(201,$res);
-    die('');
-}
 
 function getCurrentUser(){
     $db = new DbHandler();
@@ -180,15 +154,5 @@ function getCurrentUser(){
     die('Encrypted media , Admininistrator auth has been failed.');
 }
 
-function privilegeRequire($privilege){
-    $db = new DbHandler();
-    $sess = $db->getSession();
-    $rq = $db->makeQuery("SELECT privilege.Privilege FROM user JOIN admin on admin.UserID=user.ID JOIN admin_privilege on admin_privilege.ID =admin.PrivilegeID where privilege.Privilege='".$privilege."' AND user.ID='".$sess["UserID"]."'");
-    $r = $rq->fetch_assoc();
-    if($r){
-        return TRUE;
-    }
-    return False;
-}
 
 ?>
