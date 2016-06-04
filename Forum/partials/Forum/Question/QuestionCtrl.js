@@ -4,18 +4,19 @@
     $scope.isOnline = false;
     $scope.question = {};
 
-    Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
-        $scope.question = res;
-        $scope.checkNowOnline();
-    });
+    ($scope.getQuestionByID = function () {
+        Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
+            $scope.question = res;
+            $scope.checkNowOnline();
+        });
+    })();
+
+    
 
     $scope.setBestAnswer = function(AnswerID) {
         Extention.post("setBestAnswer", { QuestionID: $stateParams.id, AnswerID: AnswerID }).then(function (res) {
             if (res.Status == 'success') {
-                Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
-                    $scope.question = res;
-                    $scope.checkNowOnline();
-                });
+                $scope.getQuestionByID();
             }
         });
     }
@@ -89,7 +90,8 @@
             // file is uploaded successfully
             Extention.setBusy(false);
             $scope.answerText = '';
-            $scope.myFiles= [] ;
+            $scope.myFiles = [];
+            $scope.getQuestionByID();
             Extention.popInfo('پاسخ شما ثبت شد . در صورت تایید نمایش داده خواهد شد');
         }, function(resp) {
             // handle error
@@ -107,31 +109,21 @@
     }
 
     $scope.setLikeQuestion = function(rate) {
-        Extention.post("rateQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID, RateValue: rate, TargetUserID: $scope.question.UserID }).then(function (res) {
-            $scope.question.PersonQuestionRate = res;
-            $scope.question.QuestionScore = Number(res) + Number($scope.question.QuestionScore);
+        Extention.post("rateQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID, RateValue: rate, TargetUserID: $scope.question.UserID, AuthorID: $scope.question.AuthorID }).then(function (res) {
+            $scope.getQuestionByID();
         });
     }
 
     $scope.setLikeAnswers = function (answer,rate) {
-        Extention.post("rateAnswer", { AnswerID: answer.ID, UserID: $rootScope.user.UserID, RateValue: rate, TargetUserID: answer.UserID }).then(function (res) {
-            for (var i = 0; i < $scope.question.Answers.length ; i++) {
-                if ($scope.question.Answers[i].ID == answer.ID)
-                {
-                    $scope.question.Answers[i].PersonAnswerRate = res;
-                    $scope.question.Answers[i].AnswerScore = Number(res) + Number($scope.question.Answers[i].AnswerScore);
-                    return;
-                }
-            }
+        Extention.post("rateAnswer", { AnswerID: answer.ID, UserID: $rootScope.user.UserID, RateValue: rate, TargetUserID: answer.UserID, AuthorID: $scope.answer.AuthorID, QuestionID: $stateParams.id }).then(function (res) {
+            $scope.getQuestionByID();
         });
     }
 
     $scope.followQuestion = function () {
-        Extention.postAsync("followQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
-            console.log(res);
+        Extention.postAsync("followQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID, AuthorID: $scope.question.AuthorID }).then(function (res) {
             if (res.Status == 'success') {
-                $scope.question.FollowCount = Number($scope.question.FollowCount) + 1;
-                $scope.question.PersonFollow = 1;
+                $scope.getQuestionByID();
             }
         });
     }
@@ -139,8 +131,7 @@
     $scope.unFollowQuestion = function () {
         Extention.postAsync("unFollowQuestion", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
             if (res.Status == 'success') {
-                $scope.question.FollowCount = Number($scope.question.FollowCount) - 1;
-                $scope.question.PersonFollow = 0;
+                $scope.getQuestionByID();
             }
         });
     }
@@ -148,10 +139,7 @@
     $scope.followPerson = function (personID) {
         Extention.postAsync("followPerson", { TargetUserID: personID, UserID: $rootScope.user.UserID }).then(function (res) {
             if (res.Status == 'success') {
-                for (var i = 0; i < $scope.question.Answers.length ; i++) {
-                    if ($scope.question.Answers[i].UserID == personID)
-                        {$scope.question.Answers[i].PersonFollow = 1;return;}
-                }
+                $scope.getQuestionByID();
             }
         });
     }
@@ -159,10 +147,7 @@
     $scope.unFollowPerson = function (personID) {
         Extention.postAsync("unFollowPerson", { TargetUserID: personID, UserID: $rootScope.user.UserID }).then(function (res) {
             if (res.Status == 'success') {
-                for (var i = 0; i < $scope.question.Answers.length ; i++) {
-                    if ($scope.question.Answers[i].UserID == personID)
-                    { $scope.question.Answers[i].PersonFollow = 0; return; }
-                }
+                $scope.getQuestionByID();
             }
         });
     }
@@ -197,14 +182,49 @@
                 return 'label-success';
             case 2:
                 return 'label-warning';
-            case 3:
-                return 'label-info';
             case 4:
                 return 'label-primary';
             case 5:
                 return 'label-danger';
             default:
                 return 'label-success';
+        }
+    }
+    $scope.getBGColor = function(id) {
+        id = id % 15 + 1;
+        switch (id) {
+            case 1:
+                return 'bg-red-active';
+            case 2:
+                return 'bg-yellow-active';
+            case 3:
+                return 'bg-aqua-active';
+            case 4:
+                return 'bg-blue-active';
+            case 5:
+                return 'bg-light-blue-active';
+            case 6:
+                return 'bg-green-active';
+            case 7:
+                return 'bg-navy-active';
+            case 8:
+                return 'bg-teal-active';
+            case 9:
+                return 'bg-olive-active';
+            case 10:
+                return 'bg-lime-active';
+            case 11:
+                return 'bg-orange-active';
+            case 12:
+                return 'bg-fuchsia-active';
+            case 13:
+                return 'bg-purple-active';
+            case 14:
+                return 'bg-maroon-active';
+            case 15:
+                return 'bg-black-active';
+            default:
+                return 'bg-red-active';
         }
     }
 });

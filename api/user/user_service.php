@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $app->post('/getSocketData', function() use ($app)  {
     $db = new DbHandler(true);
     $s = new Session();
@@ -1119,7 +1119,7 @@ $app->post('/followQuestion', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
-    if(!isset($data->UserID) || !isset($data->QuestionID))
+    if(!isset($data->UserID) || !isset($data->QuestionID)|| !isset($data->AuthorID) )
         {echoResponse(201, 'bad request');return;}
 
     $resQ =$db->makeQuery("select count(*) as val from question_follow where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
@@ -1127,6 +1127,8 @@ $app->post('/followQuestion', function() use ($app)  {
     if($sql['val'] > 0)
     {echoError('you followed this question erlier');return;}
     $resQ =$db->makeQuery("insert into question_follow (UserID, QuestionID , QuestionFollowDate) values ('$data->UserID','$data->QuestionID',now())");
+    if($data->AuthorID != $data->UserID)
+        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,6,now(),$data->UserID,$data->QuestionID");
     echoSuccess();
     return;
 });
@@ -1143,6 +1145,8 @@ $app->post('/followPerson', function() use ($app)  {
     if($sql['val'] > 0)
         {echoError('you followed this question erlier');return;}
     $resQ =$db->makeQuery("insert into person_follow (UserID, TargetUserID , PersonFollowDate) values ('$data->UserID','$data->TargetUserID',now())");
+    if($data->TargetUserID != $data->UserID)
+        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID',"$data->TargetUserID,7,now(),$data->UserID");
     echoSuccess();
 });
 
@@ -1230,7 +1234,11 @@ $app->post('/rateQuestion', function() use ($app)  {
     else
     {
         if($data->RateValue == 1)
+        {
             $db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
+            if($data->AuthorID != $data->UserID)
+                $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,2,now(),$data->UserID,$data->QuestionID");
+        }
     	$db->insertToTable('question_rate',"UserID,QuestionID,RateValue,QuestionRateDate","'$data->UserID','$data->QuestionID','$data->RateValue',now()");
         echoResponse(200, $data->RateValue);
         return;
@@ -1259,7 +1267,11 @@ $app->post('/rateAnswer', function() use ($app)  {
     else
     {
         if($data->RateValue == 1)
+        {
             $db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
+            if($data->AuthorID != $data->UserID)
+                $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,1,now(),$data->UserID,$data->QuestionID");
+        }
     	$db->insertToTable('answer_rate',"UserID,AnswerID,RateValue,AnswerRateDate","'$data->UserID','$data->AnswerID','$data->RateValue',now()");
         echoResponse(200, $data->RateValue);
         return;
@@ -1278,6 +1290,7 @@ $app->post('/saveAnswer', function() use ($app)  {
     {
         $aID = $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate,AdminAccepted",
             "'$sess->UserID','$data->QuestionID','$data->AnswerText',now(),1",true);
+        $db->updateRecord('user',"score=(2+score)" , "ID = '$sess->UserID'");
     }
     else{
         $aID = $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate","'$sess->UserID',

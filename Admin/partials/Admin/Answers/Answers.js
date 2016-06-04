@@ -8,8 +8,8 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	$scope.search = function () {
 		$scope.pagingController.update();
 	}
-	$scope.changeAnswerState = function (uid, s, AuthorID) {
-	    Extention.post('changeAnswerAccepted', { State: s, AnswerID: uid, AdminPermissionLevel: session.AdminPermissionLevel, UserID: AuthorID }).then(function (res) {
+	$scope.changeAnswerState = function (uid, s) {
+	    Extention.post('changeAnswerAccepted', { State: s, AnswerID: uid.ID, AdminPermissionLevel: session.AdminPermissionLevel, UserID: uid.AuthorID, AuthorID: uid.QuestionAuthorID, QuestionID: uid.QuestionID }).then(function (res) {
 			if(res && res.Status == 'success'){
 			    Extention.popSuccess("وضعیت جواب با موفقیت تغییر کرد!");
 				$scope.pagingController.update();

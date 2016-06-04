@@ -1,4 +1,4 @@
-<?php
+๏ปฟ<?php
 
 $app->post('/getAllTags', function() use ($app)  {
 
@@ -243,9 +243,9 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
                   <title></title>
                 </head>
                 <body>
-<p style="direction: rtl">ำแวใ '.$res["FullName"].'</p><br>
+<p style="direction: rtl">ุณูุงู… '.$res["FullName"].'</p><br>
                 <p style="direction: rtl">
-ววไส ิใว สว??ฯ ิฯๅ . ิใว ใ? สๆวไ?ฯ ฯั วไฬใไ ิัๆฺ ศๅ Ýฺวแ?ส ไ?ฯ
+ุงฺฉุงูุช ุดู…ุง ุชุง??ุฏ ุดุฏู . ุดู…ุง ู…? ุชูุงู?ุฏ ุฏุฑ ุงูุฌู…ู ุดุฑูุน ุจู ูุนุงู?ุช ฺฉู?ุฏ
 <br>
 '.$res["Email"].'
                 </p>
@@ -320,7 +320,19 @@ LIMIT 1");
                 if($data->State == 1){
                     $db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
                     $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                    "'$sess->UserID','$data->UserID',NOW(),'".'สว??ฯ ?วใ'."','".'?วใ ิใว สว??ฯ ิฯ'."','0'");
+                    "'$sess->UserID','$data->UserID',NOW(),'".'ุชุง??ุฏ ูพ?ุงู…'."','".'ูพ?ุงู… ุดู…ุง ุชุง??ุฏ ุดุฏ'."','0'");
+                    if($data->UserID != $sess->UserID)
+                        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->UserID,10,now(),$sess->UserID,$data->QuestionID");
+                    if($data->AuthorID != $data->UserID)
+                        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,8,now(),$data->UserID,$data->QuestionID");
+                        $pageRes = $db->makeQuery("SELECT qf.UserID FROM question_follow as qf WHERE qf.QuestionID = '$data->QuestionID'");
+                        $res=[];
+                        while($r = $pageRes->fetch_assoc())
+                            $res[] = $r;
+                        foreach ($res as $value)
+                        {
+                        	$db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"].",9,now(),$data->UserID,$data->QuestionID");
+                        }
                 }
 
                 //else if($data->State == -1)
@@ -355,7 +367,8 @@ $app->post('/getAllAnswers', function() use ($app)  {
 		$hasWhere = TRUE;
 	}
 
-	$pageRes = $pr->getPage($db,"SELECT fa.* ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID FROM forum_answer as fa INNER JOIN forum_question as fq on fq.ID = fa.QuestionID
+	$pageRes = $pr->getPage($db,"SELECT fa.* ,fq.AuthorID as QuestionAuthorID , fq.ID as QuestionID ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID FROM forum_answer as fa 
+INNER JOIN forum_question as fq on fq.ID = fa.QuestionID
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
 INNER join user as u on u.ID = fa.AuthorID
@@ -443,7 +456,17 @@ LIMIT 1");
                 {
                     $db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
                     $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                "'$sess->UserID','$data->UserID',NOW(),'".'สว??ฯ ำๆวแ'."','".'ำๆวแ ิใว สว??ฯ ิฯ'."','0'");
+                "'$sess->UserID','$data->UserID',NOW(),'".'ุชุง??ุฏ ุณูุงู'."','".'ุณูุงู ุดู…ุง ุชุง??ุฏ ุดุฏ'."','0'");
+                    if($data->UserID != $sess->UserID)
+                        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->UserID,3,now(),$sess->UserID,$data->QuestionID");
+                        $pageRes = $db->makeQuery("SELECT pf.UserID FROM person_follow as pf WHERE pf.TargetUserID = $data->UserID'");
+                        $res=[];
+                        while($r = $pageRes->fetch_assoc())
+                            $res[] = $r;
+                        foreach ($res as $value)
+                        {
+                        	$db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"].",4,now(),$data->UserID,$data->QuestionID");
+                        }
                 }
                 else if($data->State == -1 && isset($data->Message))
                 {
