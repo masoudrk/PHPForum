@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="adminApp">
+<html ng-app="adminApp" ng-controller="MainCtrl as vm" style="background-color: #ECF0F5;">
 <head>
     <?php
         require_once  '../cms/functions.php';
@@ -20,8 +20,9 @@
         generateRequiredCMSCssFiles();
         ?>
 
-    <title>داشبورد</title>
+    <title ng-bind="($title || 'Loading ...')">Loading ...</title>
     <link rel="icon" href="../images/title.png" />
+    <link rel="icon" href="{{titleIcon}}" />
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
 </head>
@@ -338,7 +339,12 @@
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
-
+                    <li class="treeview" id="SDashboard">
+                        <a ui-sref="dashboard">
+                            <i class="fa fa-tachometer"></i>
+                            <span>داشبورد</span>
+                        </a>
+                    </li>
                     <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SUsers">
                         <a ui-sref="all_users">
                             <i class="fa fa-user"></i>
@@ -472,22 +478,62 @@
                         </a>
                     </li>
                     <li id="SProfile">
-                        <a href="../Forum/#/profile">
+                        <a href="../Forum/#/Profile">
                             <i class="fa fa-male"></i>
                             <span>پروفایل من </span>
                             <small class="label pull-right bg-green">جدید</small>
                         </a>
                     </li>
                     <li>
-                        <a href="../Forum/#/">
+                        <a>
                             <i class="fa fa-group"></i>
                             <span>ورود به فروم </span>
+                            <i class="fa fa-angle-right pull-right"></i>
                         </a>
+                        <ul class="treeview-menu">
+                            <li id="SSTransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
+                                <a href="../Forum/#/Home">
+                                    <i class="fa fa-circle-o"></i>
+                                    خانه
+                                </a>
+                            </li>
+                            <li id="SSTransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
+                                <a href="../Forum/#/MainForum/Transition">
+                                    <i class="fa fa-circle-o"></i>
+                                    خطوط انتقال
+                                </a>
+                            </li>
+                            <li id="SSTransportManagement" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement'">
+                                <a href="../Forum/#/MainForum/TransportManagement">
+                                    <i class="fa
+                        fa-circle-o"></i>
+                                    <span style="font-size:13px">نظارت بر سیستم های انتقال</span>
+                                </a>
+                            </li>
+                            <li id="SSDataSwitch" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch'">
+                                <a href="../Forum/#/MainForum/DataSwitch">
+                                    <i class="fa fa-circle-o"></i>
+                                    مراکز خودکار و دیتا سوئیچ
+                                </a>
+                            </li>
+                            <li id="SSRadio" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio'">
+                                <a href="../Forum/#/MainForum/Radio">
+                                    <i class="fa fa-circle-o"></i>
+                                    رادیوئی
+                                </a>
+                            </li>
+                            <li id="SSCommonTopics" class="active" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics'">
+                                <a href="../Forum/#/MainForum/CommonTopics">
+                                    <i class="fa fa-circle-o"></i>
+                                    مباحث مشترک
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="treeview">
                         <a class="link" ng-click="logout()">
                             <i class="fa fa-power-off"></i>
-                            <span>خارج شدن</span>
+                            <span>خروج</span>
                         </a>
                     </li>
                 </ul>
@@ -710,7 +756,7 @@
 
     <?php generateRequiredCMSJavaFiles() ?>
     <script src="angular/admin-app.js"></script>
-    <script src="partials/Admin/AdminCtrl.js"></script>
+    <script src="partials/MainCtrl.js"></script>
     <script src="../app/directives/auto-pagination.js"></script>
 
 </body>

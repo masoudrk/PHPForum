@@ -320,7 +320,7 @@ LIMIT 1");
                 if($data->State == 1){
                     $db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
                     $db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                    "'$sess->UserID','$data->UserID',NOW(),'".'تایید پیام'."','".'پیام شما تایید شد'."','0'");
+                    "'$sess->UserID','$data->UserID',NOW(),'".'تایید جواب'."','".'جواب شما تایید شد'."','0'");
                     if($data->UserID != $sess->UserID)
                         $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->UserID,10,now(),$sess->UserID,$data->QuestionID");
                     if($data->AuthorID != $data->UserID)
@@ -640,8 +640,6 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
     	$db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
             "'$sess->UserID','$value->ID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','".$data->Message->MessageType."'");
 
-        if($value->ID != $sess->UserID)
-                        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID',"$value->ID,5,now(),$sess->UserID");
         if($data->Message->MessageType == 1){
             $subject = 'Sepantarai.com';
             $message = '
