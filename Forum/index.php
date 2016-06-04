@@ -20,7 +20,7 @@
         }
         generateMetas();
         generateRequiredCMSCssFiles();
-    ?>
+                ?>
 
     <title ng-bind="($title || 'Loading ...')">Loading ...</title>
 
@@ -421,7 +421,7 @@
                 <li class="treeview">
                     <a class="link" ng-click="logout()">
                         <i class="fa fa-power-off"></i>
-                        <span>خارج شدن</span>
+                            <span>خروج</span>
                     </a>
                 </li>
             </ul>

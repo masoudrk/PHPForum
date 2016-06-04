@@ -1,8 +1,8 @@
 ﻿<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
-        <a ng-show="forumData.MainSubject.PersonFollow == 0" ng-click="followMainSubject(forumData.MainSubject.ID)" class="btn btn-primary btn-xs" style="margin: 5px"><b>دنبال کردن</b></a>
-        <a ng-hide="forumData.MainSubject.PersonFollow == 0" ng-click="unFollowMainSubject(forumData.MainSubject.ID)" class="btn btn-danger btn-xs" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
+        <a ng-show="forumData.MainSubject.PersonFollow == 0" ng-click="followMainSubject(forumData.MainSubject.ID)" class="btn btn-primary btn-xs fx-fade-left fx-dur-200 fx-ease-none" style="margin: 5px"><b>دنبال کردن</b></a>
+        <a ng-hide="forumData.MainSubject.PersonFollow == 0" ng-click="unFollowMainSubject(forumData.MainSubject.ID)" class="btn btn-danger btn-xs fx-fade-left fx-dur-50 fx-ease-none" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
         <small>{{forumData.MainSubject.Title}}</small>
         انجمن
     </h1>
@@ -25,8 +25,8 @@
                         <tr class="link" ng-repeat="sc in forumData.SubjectChilds">
                             <td style="vertical-align: middle;" ui-sref="forum({id:sc.ID})">{{sc.Title}}</td>
                             <td style="vertical-align: middle;width: 100px" class="text-center text-muted">
-                                <a ng-show="sc.PersonFollow == 0" ng-click="followSubject(sc.ID)" class="btn btn-primary btn-xs pull-left" style="margin: 5px"><b>دنبال کردن</b></a>
-                                <a ng-hide="sc.PersonFollow == 0" ng-click="unFollowSubject(sc.ID)" class="btn btn-danger btn-xs pull-left" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
+                                <a ng-show="sc.PersonFollow == 0" ng-click="followSubject(sc.ID)" class="btn btn-primary btn-xs pull-left fx-fade-left fx-dur-200 fx-ease-none" style="margin: 5px"><b>دنبال کردن</b></a>
+                                <a ng-hide="sc.PersonFollow == 0" ng-click="unFollowSubject(sc.ID)" class="btn btn-danger btn-xs pull-left fx-fade-left fx-dur-50 fx-ease-none" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
                             </td>
                             <td style="vertical-align: middle;width: 75px" class="text-center text-muted" ui-sref="forum({id:sc.ID})">
                                 <span class="badge1 bg-yellow1 " style="font-size: 20px">
