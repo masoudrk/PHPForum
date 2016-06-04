@@ -402,3 +402,9 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .fix-pie-chart-center{
     text-align: center !important;
 }
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu,
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu,
+.navbar-nav > .tasks-menu > .dropdown-menu > li .menu {
+    max-height: 260px;
+}

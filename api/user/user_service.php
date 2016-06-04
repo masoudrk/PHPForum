@@ -143,53 +143,34 @@ from forum_question as q  where q.AuthorID = '$data->UserID' and q.AdminAccepted
 echoResponse(200 , $resp);
 });
 
-$app->post('/getUserNotifications', function() use ($app)  {
+$app->post('/markLastNotifications', function() use ($app)  {
 
+    require_once '../db/event.php';
     $db = new DbHandler(true);
 
     $sess = new Session();
 
-    $resQ= $db->makeQuery("select * from (select 'Question' as EventType , qv.ViewDate as EventView , fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
-(SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
-from subject_follow as sf
-inner join forum_question fq on fq.SubjectID = sf.SubjectID
-inner join user as u on u.ID = fq.AuthorID
-LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = sf.UserID
-where fq.adminAccepted = 1 and sf.UserID = '$sess->UserID'
-UNION
-select 'Answer' as EventType ,qv.ViewDate as EventView,fa.CreationDate as EventDate , q.ID as EventID , fa.AnswerText as EventTitle,
-(SELECT sum(RateValue) FROM answer_rate where AnswerID = fa.ID) as EventScore, u.FullName as EventUser
-from forum_answer as fa
-inner join forum_question as q on q.ID = fa.QuestionID
-inner join question_follow as qf on qf.QuestionID = q.ID
-inner join user as u on u.ID = fa.AuthorID
-LEFT JOIN question_view as qv on qv.QuestionID = q.ID and qv.UserID = qf.UserID
-where q.adminAccepted = 1 and fa.adminAccepted = 1 and qf.UserID = '$sess->UserID'
-UNION
-select 'Question' as EventType ,qv.ViewDate as EventView,fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
-(SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
-from forum_main_subject as fms
-inner join main_subject_follow as msf on msf.MainSubjectID = fms.ID
-inner join forum_subject as fs on fs.ParentSubjectID = fms.ID
-inner join forum_question fq on fq.SubjectID = fs.ID
-inner join user as u on u.ID = fq.AuthorID
-LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = msf.UserID
-where fq.adminAccepted = 1 and msf.UserID = '$sess->UserID'
-UNION
-select 'Person' as EventType ,qv.ViewDate as EventView,fq.CreationDate as EventDate , fq.ID as EventID , fq.Title as EventTitle,
-(SELECT sum(RateValue) FROM question_rate where QuestionID = fq.ID) as EventScore, u.FullName as EventUser
-from person_follow as pf
-inner join forum_question fq on fq.AuthorID = pf.TargetUserID
-inner join user as u on u.ID = fq.AuthorID
-LEFT JOIN question_view as qv on qv.QuestionID = fq.ID and qv.UserID = pf.UserID
-where fq.adminAccepted = 1 and pf.UserID = '$sess->UserID') as resp
-order by resp.EventDate DESC limit 10");
+    $resQ= $db->makeQuery("update event set event.EventSeen='1' 
+                           where event.EventUserID='$sess->UserID' and event.EventSeen='0' 
+                           order by event.EventDate desc limit 25");
 
-    $resp = [];
-    while($r = $resQ->fetch_assoc()){
-        $resp[] = $r;}
+    $notify = [];
+    $notify['Total']= getUserTotalNotifications($db,$sess->UserID);
+    $notify['All'] = getUserLastNotifications($db, $sess->UserID , 25);
+    echoSuccess($notify);
+});
 
-    echoResponse(200 , $resp);
+$app->post('/getUserNotifications', function() use ($app)  {
+
+    require_once '../db/event.php';
+    $db = new DbHandler(true);
+
+    $sess = new Session();
+
+    $notify = [];
+    $notify['Total']= getUserTotalNotifications($db,$sess->UserID);
+    $notify['All'] = getUserLastNotifications($db, $sess->UserID , 25);
+    echoSuccess($notify);
 });
 
 $app->post('/getUserMessages', function() use ($app)  {
