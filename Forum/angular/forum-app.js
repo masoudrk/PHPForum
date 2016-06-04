@@ -252,10 +252,6 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
     $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
         Extention.setBusy(false);
 
-        if(toState.name != 'main_forum' && toState.name != 'forum'
-            && toState.name != 'UserProfile'&& toState.name != 'question'){
-            Extention.addRoute( toState.resolve.$title(),$state.href(toState.name));
-        }
     });
     $rootScope.$on('$stateChangeError',
         function(event, toState, toParams, fromState, fromParams, error){

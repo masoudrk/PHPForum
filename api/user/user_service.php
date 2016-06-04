@@ -461,7 +461,9 @@ $app->post('/getSubForumData', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $db = new DbHandler(true);
 
-    $resQ = $db->makeQuery("SELECT forum_subject.*,forum_main_subject.Title as MainTitle FROM forum_subject left join 
+    $resQ = $db->makeQuery("SELECT forum_subject.*,forum_main_subject.Title as MainTitle,
+  forum_main_subject.SubjectName as MainSubjectName
+  FROM forum_subject left join 
     forum_main_subject on   forum_main_subject.SubjectID=forum_subject.ParentSubjectID WHERE  forum_subject
     .ID='$data->SubjectID'");
 

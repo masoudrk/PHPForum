@@ -8,7 +8,9 @@ angular.module(appName).controller('UserProfileCtrl', function ($scope, $rootSco
     Extention.post("getProfile", { TargetUserID:$scope.userID , UserID: $rootScope.user.UserID }).then(function (res) {
         $scope.profile = res;
 
-        Extention.addRoute(' پروفایل ' +'\''+ res.FullName +'\'', $state.href($state.current.name,$stateParams));
+        $rootScope.breadcrumbs = [];
+        $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home' ,icon : 'fa-home' });
+        $rootScope.breadcrumbs.push({title : ' پروفایل ' +'\''+ res.FullName +'\'' });
     });
 
     $rootScope.$on("socketDataChanged", function(){
