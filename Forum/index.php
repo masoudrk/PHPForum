@@ -379,9 +379,32 @@
                         </li>
                     </ul>
                 </li>
+
+                <li id="SQuestion" class="treeview">
+                    <a class="link">
+                        <i class="fa fa-graduation-cap"></i> <span>سنجش</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="SRating">
+                            <a ui-sref="rating">
+                                <i class="fa fa-circle-o"></i>نظر سنجی
+                            </a>
+                        </li>
+                        <li id="SQuiz">
+                            <a ui-sref="quiz">
+                                <i class="fa fa-circle-o"></i>آزمون
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li id="SMessage">
                     <a ui-sref="messages">
                         <i class="fa fa-envelope"></i><span>  پیام های من </span>
+                        <small class="label pull-right bg-orange">
+                            <span ng-bind="messages.Total ||'0'| pNumber"></span>
+                        </small>
+
                     </a>
                 </li>
                 <li id="SProfile">

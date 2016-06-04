@@ -49,7 +49,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return $ocLazyLoad.load(['partials/Profile/ProfileCtrl.js']);
                 }],
                 $title: function () {
-                    return 'پروفایل';
+                    return 'پروفایل من';
                 }
             }
         })
@@ -174,6 +174,36 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'مدیریت پیام ها';
                 }
             }
+        })
+        .state("rating", {
+            url: "/Rating/:id",
+            templateUrl: "partials/Evaluation//Rating/Rating.html",
+            controller: 'RatingCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Evaluation/Rating/RatingCtrl.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'نظرسنجی';
+                }
+            }
+        })
+        .state("quiz", {
+            url: "/Quiz/:id",
+            templateUrl: "partials/Evaluation/Quiz/Quiz.html",
+            controller: 'QuizCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Evaluation/Quiz/QuizCtrl.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'آزمون';
+                }
+            }
         });
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');
@@ -214,10 +244,18 @@ var hideCMS = function (hide) {
 
 app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention,OnlineSocket) {
 
+    $rootScope.breadcrumbs = [];
+    $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home'});
+
     $rootScope.spinner ={};
 
-    $rootScope.$on("$stateChangeSuccess", function () {
+    $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
         Extention.setBusy(false);
+
+        if(toState.name != 'main_forum' && toState.name != 'forum'
+            && toState.name != 'UserProfile'&& toState.name != 'question'){
+            Extention.addRoute( toState.resolve.$title(),$state.href(toState.name));
+        }
     });
     $rootScope.$on('$stateChangeError',
         function(event, toState, toParams, fromState, fromParams, error){
@@ -230,7 +268,10 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
         Extention.setBusy(true);
-        $rootScope.globalSearchActive = false;
+
+        if($rootScope.globalSearchActive)
+            $rootScope.globalSearchActive = false;
+
     });
 
 
@@ -261,6 +302,20 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.noImageClass = 'fa fa-2x fa-user';
 
+        obj.addRoute = function (title , url) {
+
+            $rootScope.breadcrumbs.push({title :title  , url:url});
+            if($rootScope.breadcrumbs.length > 2)
+                $rootScope.breadcrumbs.splice(0,1);
+        }
+
+        obj.subString = function (text, length) {
+            if (text && text.length > length) {
+                return text.substr(0, length) + "...";
+            }
+            return text;
+        }
+        
         obj.setBusy = function (en) {
             if (en) {
                 if (obj.workers === 0)

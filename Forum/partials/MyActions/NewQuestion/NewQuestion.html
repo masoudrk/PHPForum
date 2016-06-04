@@ -4,10 +4,8 @@
         <small>انجمن</small>
         {{form.header}}
     </h1>
-    <ol class="breadcrumb">
-        <li><a ui-sref="questions"><i class="fa fa-dashboard"></i> همه سوالات</a></li>
-        <li class="active">{{form.header}}</li>
-    </ol>
+
+    <ol ng-include src="'partials/breadcrumb.html'" class="breadcrumb"></ol>
 </section>
 <div class="row">
     <div class="col-xs-12">

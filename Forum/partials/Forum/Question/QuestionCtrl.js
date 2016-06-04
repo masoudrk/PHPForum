@@ -8,10 +8,13 @@
         Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
             $scope.question = res;
             $scope.checkNowOnline();
+
+            $rootScope.breadcrumbs = [];
+            $rootScope.breadcrumbs.push({title : res.MainSubject , url : $state.href('main_forum', {id:res.SubjectName}) });
+            $rootScope.breadcrumbs.push({title : res.Subject , url : $state.href('forum', {id:res.SubjectID}) });
+            $rootScope.breadcrumbs.push({title : Extention.subString(res.Title,12)});
         });
     })();
-
-    
 
     $scope.setBestAnswer = function(AnswerID) {
         Extention.post("setBestAnswer", { QuestionID: $stateParams.id, AnswerID: AnswerID }).then(function (res) {

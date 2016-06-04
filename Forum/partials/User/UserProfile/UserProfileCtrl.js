@@ -4,9 +4,11 @@ angular.module(appName).controller('UserProfileCtrl', function ($scope, $rootSco
     $scope.isOnline = false;
     $scope.profile = null;
     $scope.userID = $stateParams.id;
+
     Extention.post("getProfile", { TargetUserID:$scope.userID , UserID: $rootScope.user.UserID }).then(function (res) {
         $scope.profile = res;
-        console.log($scope.profile);
+
+        Extention.addRoute(' پروفایل ' +'\''+ res.FullName +'\'', $state.href($state.current.name,$stateParams));
     });
 
     $rootScope.$on("socketDataChanged", function(){

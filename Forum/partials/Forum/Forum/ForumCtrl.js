@@ -1,5 +1,5 @@
 angular.module(appName).controller('ForumCtrl',
-    function ($scope, $element, $rootScope, $stateParams, $state, $timeout, $timeout, Extention) {
+    function ($scope, $element, $rootScope, $stateParams, $state, $timeout, Extention) {
 
     if(!$stateParams.id || $stateParams.id ==''){
         $state.go('forum_home');
@@ -16,7 +16,9 @@ angular.module(appName).controller('ForumCtrl',
 
 	Extention.post('getSubForumData',{SubjectID: $stateParams.id})
 		.then(function (res) {
+
         $scope.forumData = res;
+        Extention.addRoute(res.Subject.Title,$state.href($state.current.name,$stateParams));
 	});
 
     $scope.pagingControllerLastQuestions = {};

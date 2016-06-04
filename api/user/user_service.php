@@ -276,7 +276,7 @@ $app->post('/getAllMyAnswers', function() use ($app)  {
 
 $app->post('/saveQuestion', function() use ($app)  {
     
-    $data = json_decode($_POST['data']);
+    $data = json_decode($_POST['formData']);
     $db = new DbHandler(true);
     $sess = new Session();
 
