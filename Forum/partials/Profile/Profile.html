@@ -15,23 +15,21 @@
         <div class="col-md-9 col-xs-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li
-                            class="link active"><a ng-click="activeTab = 2" data-toggle="tab" aria-expanded="true">اطلاعات
-                    </a>
+                    <li class="link" ng-class="(activeTab == 2)?'active':''">
+                        <a ng-click="getTab(2)" data-toggle="tab" aria-expanded="true">اطلاعات</a>
                     </li>
-                    <li class="link">
-                        <a ng-click="activeTab = 3" data-toggle="tab" aria-expanded="false">
-             <small class="badge bg-red" style="margin-top: -3px;margin-right: 8px"
-                                  ng-show="curUser.Educations.length==0||curUser.Skills.length==0||!curUser.Description">ناقص</small>
+                    <li class="link" ng-class="(activeTab == 3)?'active':''">
+                        <a ng-click="getTab(3)" data-toggle="tab" aria-expanded="false">
+                            <small class="badge bg-red" style="margin-top: -3px;margin-right: 8px"
+                              ng-show="curUser.Educations.length==0||curUser.Skills.length==0||!curUser.Description">ناقص</small>
                             اطلاعات تکمیلی
                         </a>
                     </li>
-                    <li class="link">
-                        <a ng-click="activeTab = 1" data-toggle="tab" aria-expanded="false">
+                    <li class="link" ng-class="(activeTab == 1)?'active':''">
+                        <a ng-click="getTab(1)" data-toggle="tab" aria-expanded="false">
 
                             <small class="badge bg-green" style="margin-top: -3px;margin-right: 8px"
-                                   ng-bind="curUser.ActiveSessions.length | pNumber"
-                            ></small>
+                                   ng-bind="curUser.ActiveSessions.length | pNumber"></small>
                             <span>اتصال ها</span>
                         </a>
 
