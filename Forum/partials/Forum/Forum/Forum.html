@@ -4,10 +4,8 @@
         <small>{{forumData.Subject.MainTitle| pNumber}}</small>
            انجمن
     </h1>
-    <ol class="breadcrumb">
-        <li><a href="#/"><i class="fa fa-dashboard"></i> {{forumData.Subject.Title | pNumber}}</a></li>
-        <li class="active">انجمن</li>
-    </ol>
+
+    <ol ng-include src="'partials/breadcrumb.html'" class="breadcrumb"></ol>
 </section>
 <div class="row">
     <div class="col-xs-12">

@@ -8,6 +8,7 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
 
         Extention.post('getUserProfile').then(function (res) {
             $scope.curUser = res;
+            
         });
     }
     $scope.getUser();

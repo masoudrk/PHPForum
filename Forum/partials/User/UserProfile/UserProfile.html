@@ -4,10 +4,8 @@
         <small>مدیریت</small>
         پروفایل کاربری
     </h1>
-    <ol class="breadcrumb">
-        <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
-        <li class="active">پروفایل من</li>
-    </ol>
+
+    <ol ng-include src="'partials/breadcrumb.html'" class="breadcrumb"></ol>
 </section>
 <section class="text-center col-xs-12"  ng-show="profile==null">
     <h1 style="font-size: 90px;">404<small><small> not found</small></small></h1>

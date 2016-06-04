@@ -69,7 +69,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
             url: serviceBaseURL + 'saveQuestion',
             method: 'POST',
             file: $scope.myFiles,
-            data: {data : angular.toJson($scope.question) }
+            data: {formData : angular.toJson($scope.question) }
         });
 
         u.then(function(resp) {

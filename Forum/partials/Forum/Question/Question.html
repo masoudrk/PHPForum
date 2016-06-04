@@ -4,10 +4,7 @@
         <small>خانه</small>
         انجمن
     </h1>
-    <ol class="breadcrumb">
-        <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
-        <li class="active">انجمن</li>
-    </ol>
+    <ol ng-include src="'partials/breadcrumb.html'" class="breadcrumb"></ol>
 </section>
 
 <section class="text-center col-xs-12" ng-show="question==null">

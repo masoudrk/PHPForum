@@ -1,5 +1,5 @@
 angular.module(appName).controller('MainForumCtrl', 
-    function ($scope, $element, $rootScope, $stateParams, $state, $timeout, $timeout, Extention) {
+    function ($scope, $element, $rootScope, $stateParams, $state, $timeout, Extention) {
 
     $scope.activity = {
         low : 'solid 2px #e74c3c',
@@ -182,6 +182,8 @@ angular.module(appName).controller('MainForumCtrl',
 	Extention.post('getMainForumData',{MainSubjectName: $stateParams.id})
 		.then(function (res) {
 		    $scope.forumData = res;
+
+            Extention.addRoute(res.MainSubject.Title,$state.href($state.current.name,$stateParams));
 		});
 
 	$scope.followSubject = function (id) {
