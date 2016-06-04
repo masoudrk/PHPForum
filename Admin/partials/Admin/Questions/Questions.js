@@ -9,8 +9,8 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 		$scope.pagingController.update();
 	}
 
-	$scope.changeQuestionState = function (uid, s, AuthorID ) {
-	    Extention.post('changeQuestionAccepted', { State: s, QuestionID: uid, AdminPermissionLevel: session.AdminPermissionLevel, UserID: AuthorID }).then(function (res) {
+	$scope.changeQuestionState = function (uid, s ) {
+	    Extention.post('changeQuestionAccepted', { State: s, QuestionID: uid.ID, AdminPermissionLevel: session.AdminPermissionLevel, UserID: uid.AuthorID, QuestionSubjectID: uid.SubjectID }).then(function (res) {
 			if(res && res.Status == 'success'){
 			    Extention.popSuccess("وضعیت سوال با موفقیت تغییر کرد!");
 				$scope.pagingController.update();

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $app->post('/getAllTags', function() use ($app)  {
 
@@ -467,21 +467,20 @@ LIMIT 1");
                         {
                         	$db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"].",4,now(),$data->UserID,$data->QuestionID");
                         }
-//                        $pageRes = $db->makeQuery("SELECT msf.UserID FROM forum_subject as fs INNER JOIN
-//forum_main_subject as fms on fms.ID = fs.ParentSubjectID
-//INNER JOIN forum_question as fq on fq.SubjectID = fs.ID
-//INNER JOIN main_subject_follow as msf on msf.MainSubjectID = fms.ID
-//UNION
-//SELECT sf.UserID FROM forum_subject as fs
-//INNER JOIN forum_question as fq on fq.SubjectID = fs.ID
-//INNER JOIN subject_follow as sf on sf.SubjectID = fs.ID");
-//                        $res=[];
-//                        while($r = $pageRes->fetch_assoc())
-//                            $res[] = $r;
-//                        foreach ($res as $value)
-//                        {
-//                            $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"].",4,now(),$data->UserID,$data->QuestionID");
-//                        }
+                        $pageRes = $db->makeQuery("SELECT msf.UserID FROM forum_subject as fs INNER JOIN
+                        forum_main_subject as fms on fms.ID = fs.ParentSubjectID
+                        INNER JOIN main_subject_follow as msf on msf.MainSubjectID = fms.ID where fs.ID = '$data->QuestionSubjectID'
+                        UNION
+                        SELECT sf.UserID FROM forum_subject as fs
+                        INNER JOIN subject_follow as sf on sf.SubjectID = fs.ID
+                        where fs.ID = '$data->QuestionSubjectID'");
+                        $res=[];
+                        while($r = $pageRes->fetch_assoc())
+                            $res[] = $r;
+                        foreach ($res as $value)
+                        {
+                            $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"].",11,now(),$data->UserID,$data->QuestionID");
+                        }
                 }
                 else if($data->State == -1 && isset($data->Message))
                 {
@@ -641,7 +640,7 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
     	$db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
             "'$sess->UserID','$value->ID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','".$data->Message->MessageType."'");
 
-        if($data->AuthorID != $data->UserID)
+        if($value->ID != $sess->UserID)
                         $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID',"$value->ID,5,now(),$sess->UserID");
         if($data->Message->MessageType == 1){
             $subject = 'Sepantarai.com';
