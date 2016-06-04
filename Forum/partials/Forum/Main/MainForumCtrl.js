@@ -183,7 +183,10 @@ angular.module(appName).controller('MainForumCtrl',
 		.then(function (res) {
 		    $scope.forumData = res;
 
-            Extention.addRoute(res.MainSubject.Title,$state.href($state.current.name,$stateParams));
+            $rootScope.breadcrumbs = [];
+            $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home' ,icon : 'fa-home' });
+            $rootScope.breadcrumbs.push({title : res.MainSubject.Title });
+
 		});
 
 	$scope.followSubject = function (id) {
