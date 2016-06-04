@@ -66,8 +66,5 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	    });
 	}
 
-    console.log('#S' + $stateParams.id);
 	activeElement('#SAnswers', '#S' + $stateParams.id);
-	fixFooter();
-
 });

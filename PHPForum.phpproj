@@ -359,6 +359,7 @@
     <Content Include="Admin\partials\Admin\Elements\Tables.html" />
     <Content Include="Admin\partials\Admin\Elements\_Elements.html" />
     <Content Include="Admin\partials\Admin\Elements\_ElementsCtrl.js" />
+    <Content Include="Admin\partials\MainCtrl.js" />
     <Content Include="Admin\partials\Admin\Message\Message.html" />
     <Content Include="Admin\partials\Admin\Message\Message.js" />
     <Content Include="Admin\partials\Admin\Profile\Profile.html" />
