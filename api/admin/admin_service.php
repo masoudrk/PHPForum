@@ -1,5 +1,21 @@
 ﻿<?php
 
+$app->post('/getSocketData', function() use ($app)  {
+$s = new Session();
+
+$resQ = $app->db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image from user LEFT JOIN file_storage on
+    file_storage.ID=user.AvatarID
+ where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 3 MINUTE");
+
+$arr = [];
+$res = [];
+while($r = $resQ->fetch_assoc()){
+    $arr[] = $r;
+}
+
+$res['OnlineUsers'] = $arr;
+echoResponse(200, $res);
+});
 
 $app->post('/getAllTags', function() use ($app)  {
 
@@ -777,6 +793,45 @@ LIMIT 1");
 	}
 
 	echoError("Bad request!");
+});
+
+$app->post('/getUserNotifications', function() use ($app)  {
+
+    require_once '../db/event.php';
+
+    $sess = new Session();
+
+    $notify = [];
+    $notify['Total']= getUserTotalNotifications($app->db,$sess->UserID);
+    $notify['All'] = getUserLastNotifications($app->db, $sess->UserID , 25);
+    echoSuccess($notify);
+});
+
+$app->post('/getUserMessages', function() use ($app)  {
+
+    require_once '../db/message.php';
+    $sess = new Session();
+
+    $res = [];
+    $res['All'] = getUserUnreadMessages($app->db,$sess->UserID,20);
+    $res['Total'] = getUserUnreadMessagesCount($app->db,$sess->UserID);
+    echoResponse(200 , $res);
+});
+
+$app->post('/markLastNotifications', function() use ($app)  {
+
+    require_once '../db/event.php';
+
+    $sess = new Session();
+
+    $resQ= $app->db->makeQuery("update event set event.EventSeen='1'
+                           where event.EventUserID='$sess->UserID' and event.EventSeen='0'
+                           order by event.EventDate desc limit 25");
+
+    $notify = [];
+    $notify['Total']= getUserTotalNotifications($app->db,$sess->UserID);
+    $notify['All'] = getUserLastNotifications($app->db, $sess->UserID , 25);
+    echoSuccess($notify);
 });
 
 ?>

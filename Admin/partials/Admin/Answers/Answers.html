@@ -67,13 +67,13 @@
                             <td>
                                 <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
                                     <i confirm="آیا مطمئن هستید که میخواهید این جواب را حذف کنید؟"
-                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeAnswer(u.ID)" title="خذف جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeAnswer(u.ID ,u.AuthorID )" title="حذف جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1" style="color: #e67e22;"
                                        ng-click="changeAnswerState(u,-1)" title="رد کردن جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
                                        ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeAnswerState(u ,1)" title="تایید جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.AnswerText)" title="دیدن متن جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <a class="link" href="../Forum/#/question/{{u.QuestionID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
+                                    <a class="link" href="../Forum/#/Question/{{u.QuestionID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
                         </tr>

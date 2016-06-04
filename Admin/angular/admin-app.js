@@ -483,7 +483,32 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         return obj;
     }]);
 
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies,Extention) {
+app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
+    function ($http, $timeout, $rootScope, Extention) { // This service connects to our REST API
+
+        var obj = {};
+        obj.getData = function () {
+            $timeout(function () {
+                obj.fetch();
+            }, 50000);
+        };
+
+        obj.fetch = function () {
+            Extention.postAsync('getSocketData').then(function (res) {
+                $rootScope.socketData = res;
+                $timeout(function () {
+                    $rootScope.$broadcast('socketDataChanged');
+                });
+                obj.getData();
+            });
+        }
+
+        obj.fetch();
+
+        return obj;
+    }]);
+
+app.run(function ($rootScope, $templateCache, $state, $location, $cookies, Extention, OnlineSocket) {
 
     $rootScope.spinner ={};
 
@@ -532,6 +557,12 @@ app.filter('subString', function () {
             return text.substr(0, length) + "...";
         }
         return text;
+    }
+});
+app.filter('fromNow', function () {
+    return function (inputDate) {
+        var date = moment(inputDate);
+        return date.fromNow();
     }
 });
 

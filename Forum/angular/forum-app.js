@@ -229,8 +229,8 @@ var hideCMS = function (hide) {
     }
 }
 
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore,Extention,OnlineSocket) {
-
+app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore, Extention, OnlineSocket) {
+    
     $rootScope.breadcrumbs = [];
     $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home'});
 

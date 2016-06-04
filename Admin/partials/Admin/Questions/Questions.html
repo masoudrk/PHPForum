@@ -68,13 +68,13 @@
                                 <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
                                     <i class="fa fa-exchange text-purple link hvr-grow" ng-click="openExchangeModal(u)" title="انتقال سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"
-                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeQuestion(u.ID , u.AuthorID)" title="خذف سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeQuestion(u.ID , u.AuthorID)" title="حذف سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1 || u.AdminAccepted==0" style="color: #e67e22;"
                                        ng-click="openDiscardModal(u.ID , u.AuthorID)" title="رد کردن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
                                        ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeQuestionState(u,1)" title="تایید سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.Title , u.QuestionText)" title="متن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <a class="link" ng-href="../Forum/#/question/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
+                                    <a class="link" ng-href="../Forum/#/Question/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
                         </tr>

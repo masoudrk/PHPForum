@@ -20,22 +20,6 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
             }
         }
     }
-    $scope.activity = {
-        low: '#e74c3c',
-        medium: '#f1c40f',
-        high: '#2ecc71'
-    };
-
-    $scope.bgColorArray = ["bg-aqua-active", "bg-purple-active", "bg-red-active", "bg-navy-active", "bg-orange-active",
-        "bg-blue-active", "bg-green-active", "bg-olive-active", "bg-lime-active",
-        "bg-fuchsia-active", "bg-teal-active", "bg-yellow-active", "bg-maroon-active", "bg-light-blue-active", "bg-black-active",
-        "bg-green", "bg-navy", "bg-teal", "bg-olive", "bg-lime", "bg-orange", "bg-fuchsia", "bg-purple", "bg-maroon", "bg-red",
-        "bg-yellow", "bg-aqua", "bg-blue", "bg-light-blue", "bg-black"];
-
-    $scope.pagingParams = {
-        searchValue: '',
-        searchType: '0'
-    };
 
     $scope.notificationsUpdating = true;
 
@@ -51,8 +35,6 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
 
 
     $scope.fullSearchData = { SearchType: '0' };
-
-    $scope.pagingControllerSearch = {};
 
     $scope.search = function () {
         if (!$scope.pagingParams.searchValue) {

@@ -292,7 +292,7 @@
                     </div>
                 </div>
                 <!-- search form -->
-                <form action="#" method="get" class="sidebar-form">
+                <!--<form action="#" method="get" class="sidebar-form">
                     <div class="input-group persian-rtl">
                         <input type="text" name="q" class="form-control vazir-font" placeholder="جستجو ..." />
                         <span class="input-group-btn">
@@ -301,7 +301,7 @@
                             </button>
                         </span>
                     </div>
-                </form>
+                </form>-->
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
@@ -437,19 +437,6 @@
                             </li>
                         </ul>
                     </li>
-                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SContact">
-                        <a ui-sref="message({id:session.UserID})">
-                            <i class="fa fa-user"></i>
-                            <span>ارسال پیام</span>
-                        </a>
-                    </li>
-                    <li id="SProfile">
-                        <a href="../Forum/#/Profile">
-                            <i class="fa fa-male"></i>
-                            <span>پروفایل من </span>
-                            <small class="label pull-right bg-green">جدید</small>
-                        </a>
-                    </li>
                     <li>
                         <a>
                             <i class="fa fa-group"></i>
@@ -495,6 +482,19 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SContact">
+                        <a ui-sref="message({id:session.UserID})">
+                            <i class="fa fa-user"></i>
+                            <span>ارسال پیام</span>
+                        </a>
+                    </li>
+                    <li id="SProfile">
+                        <a href="../Forum/#/Profile">
+                            <i class="fa fa-male"></i>
+                            <span>پروفایل من </span>
+                            <small class="label pull-right bg-green">جدید</small>
+                        </a>
                     </li>
                     <li class="treeview">
                         <a class="link" ng-click="logout()">
