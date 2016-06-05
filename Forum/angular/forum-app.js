@@ -247,8 +247,6 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
 
-        hideCMS(next.name == 'forum_home');
-
         Extention.setBusy(true);
 
         if($rootScope.globalSearchActive)

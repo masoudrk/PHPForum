@@ -31,7 +31,7 @@
 <body class="hold-transition skin-blue sidebar-mini vazir-font">
 <div class="wrapper">
 
-    <header class="main-header" style="display: none;">
+    <header class="main-header"">
         <!-- Logo -->
         <a class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -168,8 +168,8 @@
                                 </ul>
                             </li>
                             <li class="footer">
-                                <a class="link col-xs-6 faa-parent animated-hover" ui-sref="profile
-                                ({action:'Timeline'})"
+                                <a class="link col-xs-6 faa-parent animated-hover"
+                                   ui-sref="profile({action:'Timeline'})"
                                    style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;
                                    ">تایم لاین
                                     <i class="fa fa-clock-o faa-spin"></i>
@@ -255,8 +255,8 @@
                                     </a>
                                 </div>
                                 <div class="col-xs-4 text-center no-padding">
-                                    <a >
-                                        <small class="vazir-font">دوستان</small>
+                                    <a ui-sref="profile({action:'Timeline'})">
+                                        <small class="vazir-font">تایم لاین</small>
                                     </a>
                                 </div>
                             </li>
@@ -276,7 +276,7 @@
         </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar" style="display: none">
+    <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <!-- Sidebar user panel -->
@@ -457,7 +457,7 @@
 
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 
-    <div class="content-wrapper" id="cont" style="min-height: 600px;margin-right: 0px">
+    <div class="content-wrapper" id="cont" style="min-height: 600px">
         <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60">
         </treasure-overlay-spinner>
         <!-- Content Wrapper. Contains page content -->
@@ -473,7 +473,7 @@
         <!-- /.content-wrapper -->
     </div>
 
-    <footer class="main-footer persian-rtl" style="margin-right: 0px">
+    <footer class="main-footer persian-rtl" style="">
         <div class="pull-left hidden-xs">
             <b>نسخه</b> {{websiteInfo.Version| pNumber}}
         </div>
