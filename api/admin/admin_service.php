@@ -306,6 +306,8 @@ LIMIT 1");
 	$res = $app->db->deleteFromTable('forum_answer',"ID='$data->AnswerID'");
 	if($res)
     {
+        $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                   "'$sess->UserID','$data->UserID',NOW(),'".'حذف جواب'."','".'جواب شما حذف شد'."','0'");
         echoSuccess();
     }
 	else
@@ -411,13 +413,13 @@ $app->post('/getAllQuestions', function() use ($app)  {
 		$hasWhere = TRUE;
 	}
 
-	$pageRes = $pr->getPage($app->db,"SELECT fq.* ,fs.Title as SubjectName ,u.FullName , lq.LinkedQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID
+	$pageRes = $pr->getPage($app->db,"SELECT fq.* ,fs.Title as SubjectName ,u.FullName , lq.TargetQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID
 FROM forum_question as fq
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
 INNER join user as u on u.ID = fq.AuthorID
 LEFT JOIN file_storage as fis on fis.ID = u.AvatarID
-LEFT JOIN link_question as lq on lq.TargetQuestionID = fq.ID ".$where." GROUP BY fq.ID ORDER BY fq.ID desc");
+LEFT JOIN link_question as lq on lq.LinkedQuestionID = fq.ID ".$where." GROUP BY fq.ID ORDER BY fq.ID desc");
 
 	echoResponse(200, $pageRes);
 });
@@ -441,6 +443,8 @@ LIMIT 1");
     $res = $app->db->deleteFromTable('link_question',"TargetQuestionID='$data->QuestionID' or LinkedQuestionID = '$data->QuestionID'");
     $res = $app->db->deleteFromTable('forum_question',"ID='$data->QuestionID'");
 	if($res){
+        $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                "'$sess->UserID','$data->UserID',NOW(),'".'حذف سوال'."','".'سوال شما حذف شد'."','0'");
 		echoSuccess();
     }
 	else
@@ -515,6 +519,8 @@ LIMIT 1");
         echoError('You don\'t have permision to do this action');
 
 			$res = $app->db->updateRecord('forum_question',"AdminAccepted='-2'","ID='$data->LinkedQuestionID'");
+            if($data->LinkedQuestionID == $data->TargetQuestionID)
+                echoError('you cant link a queston to it self');
             $app->db->insertToTable('link_question',"LinkedQuestionID , TargetQuestionID , LinkedDate","'$data->LinkedQuestionID' ,'$data->TargetQuestionID' , NOW()");
 			if($res)
             {

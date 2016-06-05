@@ -104,14 +104,13 @@
                                                         <span class="palette-concrete">متن پیام :</span>
                                                         {{item.Message | subString :100|pNumber}}
                                                     </p>
-                                                </p>
                                             </a>
                                         </li>
                                         <!-- end event -->
                                     </ul>
                                 </li>
                                 <li class="footer">
-                                    <a class="link" ui-sref="messages">نمایش همه</a>
+                                    <a class="link" href="../Forum/#/Messages/">نمایش همه</a>
                                 </li>
                             </ul>
                         </li>

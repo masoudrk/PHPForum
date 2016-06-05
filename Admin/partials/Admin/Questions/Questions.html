@@ -49,7 +49,7 @@
                             <th>زیر شاخه انجمن</th>
                             <th>وضعیت</th>
                             <th>ایمیل</th>
-                            <th style="width: 200px;"></th>
+                            <th style="width: 225px;"></th>
                         </tr>
                         <tr ng-repeat="u in question.all">
                             <td>
@@ -77,7 +77,7 @@
                                        ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeQuestionState(u,1)" title="تایید سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u)" title="متن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <a ng-if="u.AdminAccepted==1" class="link" ng-href="../Forum/#/Question/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
-                                    <a ng-if="u.AdminAccepted==-2" class="link" ng-href="../Forum/#/Question/{{u.LinkedQuestionID}}"><i class="fa fa-angle-double-left text-maroon link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
+                                    <a ng-if="u.AdminAccepted==-2" class="link" ng-href="../Forum/#/Question/{{u.TargetQuestionID}}"><i class="fa fa-angle-double-left text-maroon link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
                         </tr>
