@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $app->post('/getSocketData', function() use ($app)  {
 $s = new Session();
@@ -441,6 +441,55 @@ LIMIT 1");
 	$res = $app->db->deleteFromTable('forum_question',"ID='$data->QuestionID'");
 	if($res){
         $app->db->updateRecord('user',"score=(score-5)" , "ID = '$data->UserID'");
+		echoSuccess();
+    }
+	else
+		echoError("Cannot update record.");
+});
+$app->post('/editQuestion', function() use ($app)  {
+
+
+	$data = json_decode($app->request->getBody());
+    if(!isset($data->QuestionText) || !isset($data->Title))
+        echoError("Bad Request");
+
+	$sess = new Session();
+                    $resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
+LIMIT 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $app->db->updateRecord('forum_question',"QuestionText = '$data->QuestionText' , Title = '$data->Title' ","ID='$data->QuestionID'");
+	if($res){
+		echoSuccess();
+    }
+	else
+		echoError("Cannot update record.");
+});
+
+$app->post('/editAnswer', function() use ($app)  {
+
+
+	$data = json_decode($app->request->getBody());
+    if(!isset($data->AnswerText) || !isset($data->AnswerID))
+        echoError("Bad Request");
+
+	$sess = new Session();
+                    $resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
+LIMIT 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $app->db->updateRecord('forum_answer',"AnswerText = '$data->AnswerText'","ID='$data->AnswerID'");
+	if($res){
 		echoSuccess();
     }
 	else

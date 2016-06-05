@@ -53,18 +53,35 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	    $scope.search();
 	}
 
-	$scope.openRoleModal = function (title , text ) {
-	    $uibModal.open({
+	$scope.openRoleModal = function (Question ) {
+	    var modalInstance = $uibModal.open({
 	        animation: true,
 	        templateUrl: 'myModalContent.html',
 	        controller: function ($scope, $uibModalInstance) {
-	            $scope.Text = text;
-	            $scope.Title = title;
+	            $scope.Question = Question;
+	            $scope.QuestionText = $scope.Question.QuestionText;
+	            $scope.Title = $scope.Question.Title;
 	            $scope.cancel = function () {
 	                $uibModalInstance.dismiss('cancel');
 	            };
+	            $scope.editQuestion = function() {
+	                if ($scope.Title && $scope.QuestionText) {
+	                    Extention.post('editQuestion', { QuestionID: $scope.Question.ID, QuestionText: $scope.QuestionText, Title: $scope.Title }).then(function (res) {
+	                        if (res && res.Status == 'success') {
+	                            Extention.popSuccess("سوال با موفقیت ویرایش شد!");
+	                            $scope.editMode = false;
+	                        } else {
+	                            Extention.popError("مشکل در ویرایش سوال ، لطفا دوباره امتحان کنید.");
+	                        }
+	                    });
+	                }
+	            }
 	        },
 	        size: 'md'
+	    });
+	    modalInstance.result.then(function () {
+	    }, function () {
+	        $scope.pagingController.update();
 	    });
 	}
 

@@ -53,7 +53,7 @@
                         </tr>
                         <tr ng-repeat="u in answer.all">
                             <td>
-                                <img src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
+                                <img ng-src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
                             </td>
                             <td>{{u.FullName| pNumber}}</td>
                             <td>{{u.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
@@ -72,7 +72,7 @@
                                        ng-click="changeAnswerState(u,-1)" title="رد کردن جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
                                        ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeAnswerState(u ,1)" title="تایید جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.AnswerText)" title="دیدن متن جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u)" title="دیدن متن جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <a class="link" href="../Forum/#/Question/{{u.QuestionID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
@@ -96,13 +96,22 @@
 </section>
 
 <script type="text/ng-template" id="myModalContent.html">
-    <div class="modal-header vazir-font text-right">
-        <h3 class="modal-title text-info">متن جواب</h3>
+    <div class="modal-header vazir-font text-right" ng-init="editMode = false">
+        <h3 class="modal-title text-info">
+            <i class="fa fa-pencil text-blue link hvr-grow" title="" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editMode = !editMode" data-original-title="ویرایش جواب"></i>
+            متن جواب
+        </h3>
     </div>
     <div class="modal-body vazir-font text-right persian-rtl">
-        {{Text}}
+        <div ng-hide="editMode">
+            {{AnswerText}}
+        </div>
+        <div ng-show="editMode">
+            <textarea rows="6" class="col-xs-12" ng-model="AnswerText"></textarea>
+        </div>
     </div>
     <div class="modal-footer vazir-font">
+        <button ng-show="editMode" class="btn btn-success pull-right" type="button" ng-click="editAnswer()">ویرایش</button>
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
     </div>
 </script>
