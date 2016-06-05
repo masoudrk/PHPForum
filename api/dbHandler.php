@@ -5,7 +5,7 @@ class DbHandler {
     private $conn;
     private $db;
 
-    function __construct($userRequire = false) {
+    function __construct($userRequire = false, $adminRequire = false) {
         require_once 'dbConnect.php';
         // opening db connection
         $db = new dbConnect();
@@ -14,7 +14,7 @@ class DbHandler {
         $this->conn->query('SET CHARACTER SET utf8') or die($this->conn->error.__LINE__);
 
         if($userRequire)
-            userRequire($this);
+            userRequire($this, $adminRequire);
     }
     /**
      * Fetching single record

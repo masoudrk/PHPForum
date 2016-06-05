@@ -162,6 +162,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
+        .state("profile", {
+            url: "/Profile/:action",
+            templateUrl: "partials/Profile/Profile.html",
+            controller: 'ProfileCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Profile/ProfileCtrl.js']);
+                }],
+                $title: function () {
+                    return 'پروفایل';
+                }
+            }
+        })
         .state("rating", {
             url: "/Rating/:id",
             templateUrl: "partials/Evaluation//Rating/Rating.html",

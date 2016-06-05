@@ -122,11 +122,22 @@ function getIPAddress(){
     }
 }
 
-function userRequire($db){
-    $sess = new Session();
+function userRequire($db,$adminRequire = false){
 
-    $rq = $db->makeQuery("SELECT u.ID FROM user_session as u
-where u.UserID='".$sess->UserID."' AND u.SessionID='".$sess->SSN."' LIMIT 1");
+    $sess = new Session();
+    $rq =null;
+    $res = [];
+
+    if($adminRequire){
+        $rq = $db->makeQuery("SELECT us.ID FROM user_session as us
+inner join user on user.ID =us.UserID
+inner join admin on admin.UserID =user.ID
+where us.UserID='$sess->UserID' AND us.SessionID='$sess->SSN' LIMIT 1");
+
+    }else{
+        $rq = $db->makeQuery("SELECT u.ID FROM user_session as u
+where u.UserID='$sess->UserID' AND u.SessionID='$sess->SSN' LIMIT 1");
+    }
 
     $c=mysqli_num_rows($rq);
     if($c > 0){
@@ -135,12 +146,10 @@ where u.UserID='".$sess->UserID."' AND u.SessionID='".$sess->SSN."' LIMIT 1");
     }
 
     $sess->destroySession();
-    $res = [];
     $res['AuthState'] = 'UN_AUTH';
     echoResponse(201,$res);
     die();
 }
-
 
 function getCurrentUser(){
     $db = new DbHandler();
