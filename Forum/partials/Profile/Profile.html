@@ -1,0 +1,358 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>مدیریت</small>
+       پروفایل من
+    </h1>
+
+    <ol class="breadcrumb">
+        <li><a href="#/home"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">پروفایل من</li>
+    </ol>
+</section>
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-md-9 col-xs-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="link" ng-class="(activeTab == 2)?'active':''">
+                        <a ng-click="getTab(2)" data-toggle="tab" aria-expanded="true">اطلاعات</a>
+                    </li>
+                    <li class="link" ng-class="(activeTab == 3)?'active':''">
+                        <a ng-click="getTab(3)" data-toggle="tab" aria-expanded="false">
+                            <small class="badge bg-red" style="margin-top: -3px;margin-right: 8px"
+                              ng-show="curUser.Educations.length==0||curUser.Skills.length==0||!curUser.Description">ناقص</small>
+                            اطلاعات تکمیلی
+                        </a>
+                    </li>
+                    <li class="link" ng-class="(activeTab == 1)?'active':''">
+                        <a ng-click="getTab(1)" data-toggle="tab" aria-expanded="false">
+
+                            <small class="badge bg-green" style="margin-top: -3px;margin-right: 8px"
+                                   ng-bind="curUser.ActiveSessions.length | pNumber"></small>
+                            <span>اتصال ها</span>
+                        </a>
+
+                    </li>
+                    <!--<li class="link"><a ng-click="activeTab = 0" data-toggle="tab"
+                    aria-expanded="false">تایم لاین</a></li>-->
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane"
+                         ng-class="(activeTab == 0)?'active':''" >
+                        <!-- The timeline -->
+                        <ul class="timeline timeline-inverse">
+                            <!-- timeline time label -->
+                            <li class="time-label">
+                        <span class="bg-red">
+                          10 Feb. 2014
+                        </span>
+                            </li>
+                            <!-- /.timeline-label -->
+                            <!-- timeline item -->
+                            <li>
+                                <i class="fa fa-envelope bg-blue"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                                    <h3 class="timeline-header"><a href="#/">Support Team</a> sent you an email</h3>
+                                    <div class="timeline-body">
+                                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                                        quora plaxo ideeli hulu weebly balihoo...
+                                    </div>
+                                    <div class="timeline-footer">
+                                        <a class="btn btn-primary btn-xs">Read more</a>
+                                        <a class="btn btn-danger btn-xs">Delete</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <!-- timeline item -->
+                            <li>
+                                <i class="fa fa-user bg-aqua"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
+                                    <h3 class="timeline-header no-border"><a href="#/">Sarah Young</a> accepted your friend request</h3>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <!-- timeline item -->
+                            <li>
+                                <i class="fa fa-comments bg-yellow"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+                                    <h3 class="timeline-header"><a href="#/">Jay White</a> commented on your post</h3>
+                                    <div class="timeline-body">
+                                        Take me to your leader!
+                                        Switzerland is small and neutral!
+                                        We are more like Germany, ambitious and misunderstood!
+                                    </div>
+                                    <div class="timeline-footer">
+                                        <a class="btn btn-warning btn-flat btn-xs">View comment</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <!-- timeline time label -->
+                            <li class="time-label">
+                        <span class="bg-green">
+                          3 Jan. 2014
+                        </span>
+                            </li>
+                            <!-- /.timeline-label -->
+                            <!-- timeline item -->
+                            <li>
+                                <i class="fa fa-camera bg-purple"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+                                    <h3 class="timeline-header"><a href="#/">Mina Lee</a> uploaded new photos</h3>
+                                    <div class="timeline-body">
+                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <li>
+                                <i class="fa fa-clock-o bg-gray"></i>
+                            </li>
+                        </ul>
+                    </div><!-- /.tab-pane -->
+                    <div class="tab-pane" style="margin: -10px;" ng-class="(activeTab == 1)?'active':''" >
+                        <div class="table-responsive">
+                            <table class="table table-hover border-bottom-table" style="margin-bottom: 0">
+                                <tbody>
+                                <tr>
+                                    <th style="padding-right: 20px">سیستم عامل</th>
+                                    <th>آی پی</th>
+                                    <th>تاریخ اتصال</th>
+                                    <th></th>
+                                </tr>
+                                <tr ng-repeat="us in curUser.ActiveSessions">
+                                    <td class="english-font" style="padding-right: 20px">{{us.DeviceName}}</td>
+                                    <td>{{us.IP |pNumber}}</td>
+                                    <td class="text-muted">{{us.LoginDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}</td>
+                                    <td class="text-center">
+                                        <div class="table-action-icons">
+                                            <i confirm="آیا مطمئن هستید که میخواهید این اتصال را حذف کنید؟"
+                                               class="fa fa-times palette-alizarin link hvr-grow-rotate"
+                                               ng-click="removeSession(us.ID)"></i>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!-- /.tab-pane -->
+                    <div class="tab-pane row" ng-class="(activeTab == 2)?'active':''" >
+                        <form class="form-horizontal col-md-9 col-xs-12 pull-right" style="direction: rtl">
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="curUser.FullName" class="form-control" id="inputName"
+                                           placeholder="نام کامل ... ">
+                                </div>
+                                <label for="inputName" class="col-sm-3 control-label">نام کامل</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <input type="email" ng-model="curUser.Email" class="form-control" id="inputEmail" placeholder="ایمیل ... ">
+                                </div>
+                                <label for="inputEmail" class="col-sm-3 control-label">ایمیل</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="curUser.Username" ng-disabled="true"
+                                           class="form-control"
+                                           id="inputPhone"
+                                           placeholder="نام کاربری ...">
+                                </div>
+                                <label for="inputPhone" class="col-sm-3 control-label">نام کاربری</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="curUser.Tel" class="form-control" id="inputTel"
+                                           placeholder="شماره تلفن ثابت ... ">
+                                </div>
+                                <label for="inputTel" class="col-sm-3 control-label">شماره تلفن ثابت</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="curUser.PhoneNumber" class="form-control"
+                                           id="inputPhone1"
+                                           placeholder="شماره تلفن همراه ... ">
+                                </div>
+                                <label for="inputPhone1" class="col-sm-3 control-label">موبایل</label>
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <input type="password" ng-model="curUser.OldPassword" class="form-control"
+                                           id="pass_old"
+                                           placeholder="رمز فعلی ...">
+                                </div>
+                                <label for="pass_old" class="col-sm-3 control-label">رمز فعلی</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <input type="password" ng-model="curUser.Password" class="form-control"
+                                           id="pass" ng-change="passwordChanged()" ng-model-options="{debounce:100}"
+                                           placeholder="رمز جدید ...">
+                                </div>
+                                <label for="pass" class="col-sm-3 control-label">رمز جدید</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9" ng-class="(isEqualWithVerify)?'':'has-error'">
+                                    <input type="password" ng-model="curUser.VerifyPassword" class="form-control"
+                                           id="passVerify" ng-change="passwordChanged()" ng-model-options="{debounce:100}"
+                                           placeholder="تکرار رمز جدید ...">
+                                </div>
+                                <label for="passVerify" class="col-sm-3 control-label">تکرار رمز جدید</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <button type="submit" ng-click="saveUserInfo()" class="btn btn-success pull-left">بروزرسانی</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.tab-pane -->
+                    <div class="tab-pane row" ng-class="(activeTab == 3)?'active':''" >
+                        <form class="form-horizontal col-md-9 col-xs-12 pull-right" style="direction: rtl">
+
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <div class="form-group text-right">
+                                        <div class="radio col-xs-12">
+                                            <label>
+                                                <input type="radio"
+                                                       data-ng-model="curUser.GenderSelected"
+                                                       data-ng-checked="curUser.Gender == 0" ng-value="false">
+                                                آقا
+                                            </label>
+                                        </div>
+                                        <div class="radio col-xs-12">
+                                            <label>
+                                                <input type="radio"
+                                                       data-ng-model="curUser.GenderSelected"
+                                                       data-ng-checked="curUser.Gender == 1" ng-value="true" >
+                                                خانم
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--{{(curUser.GenderSelected==1)?'true':'false'}}-->
+                                <label for="inputExperience" class="col-sm-3 control-label">جنسیت</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <textarea ng-model="curUser.Description" class="form-control" id="inputExperience"
+                                              placeholder="درباره من ... " rows="5"></textarea>
+                                </div>
+                                <label for="inputExperience" class="col-sm-3 control-label">درباره من</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <ui-select multiple ng-model="curUser.Educations" theme="bootstrap" ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
+                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Name}}</ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in curUser.AllEducations | propsFilter: {Name: $select.search}">
+                                            <div compile="edu.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label for="inputExperience" class="col-sm-3 control-label">رشته تحصیلی</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <ui-select multiple id="" ng-model="curUser.Skills" theme="bootstrap"
+                                               ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
+                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Skill}}</ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in curUser.AllSkills | propsFilter: {Skill: $select.search}">
+                                            <div compile="edu.Skill | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label for="inputExperience" class="col-sm-3 control-label">مهارت ها</label>
+                            </div>
+                            <div class="form-group">
+                                <!--<input class="col-sm-9 control-label" type="file" id="exampleInputFile">-->
+                                <div class="col-sm-9">
+                                <span class="btn btn-primary btn-file ">
+                                    انتخاب فایل  <input type="file" id="inputFile" ngf-select ng-model="avatarFile" name="file"
+                                                        accept="image/*" ngf-max-size="1MB" required
+                                                        ngf-model-invalid="errorFile">
+                                </span>
+                                </div>
+                                <label class="col-sm-3 control-label" for="inputFile">تصویر پروفایل</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <button type="submit" ng-click="saveUserAddintionalInfo()" class="btn btn-success pull-left">بروزرسانی
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.tab-pane -->
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+        <div class="col-md-3 col-xs-12">
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <img class="profile-user-img img-responsive img-circle" ng-src="{{user.Image}}"
+                         alt="User profile picture">
+                    <h3 class="profile-username text-center">{{curUser.FullName}}</h3>
+                    <p class="text-muted text-center">{{curUser.Educations[0].Name}}</p>
+
+                    <ul class="list-group list-group-unbordered" style="margin-bottom: -8px">
+                        <li class="list-group-item">
+                            <a class="">{{curUser.FollowersCount| pNumber}}</a> <b class="pull-right">دنبال کنندگان</b>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="">{{curUser.AnswersCount| pNumber}}</a> <b class="pull-right">جواب ها</b>
+                        </li>
+                        <li class="list-group-item" style="border-bottom: none">
+                            <a class="">{{curUser.QuestionsCount| pNumber}}</a> <b class="pull-right">سوالات</b>
+                        </li>
+                    </ul>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+            <!-- About Me Box -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">درباره من</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body" style="direction: rtl;">
+                    <strong><i class="fa fa-book margin-r-5"></i>  تحصیلات</strong>
+                    <p class="text-muted">
+                     {{curUser.Educations[0].Name}}
+                    </p>
+
+                    <hr>
+
+
+                    <strong><i class="fa fa-pencil margin-r-5"></i> مهارت ها</strong>
+                    <p style="font-family:'Vazir','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px">
+                        <span ng-repeat="s in curUser.Skills" class="label label-{{randomColor(s.ID)}}">{{s
+                            .Skill}}</span>
+                    </p>
+
+                    <hr>
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> درباره من</strong>
+                    <p class="text-muted">{{curUser.Description}}</p>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+
+
+
