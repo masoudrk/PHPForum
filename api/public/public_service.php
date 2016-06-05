@@ -46,7 +46,7 @@ $app->post('/savePerson', function() use ($app) {
 
     if ($res['resp'] > 0 )
     {
-        $response["Status"] = "error-captcha";
+        $response["Status"] = "emailError";
         echoResponse(201, $response);
     }
 
@@ -70,6 +70,9 @@ $app->post('/savePerson', function() use ($app) {
 <br>
                  ----> <a href="http://www.sepantarai.com/verify.php?link='.$linkID.'"> Verify account link </a> 
                  <----
+                </p>
+<p style="direction: rtl">
+بعد از تایید مدیر، شما می توانید وارد انجمن شوید
                 </p>
                 </body>
                 </html>
@@ -107,12 +110,11 @@ $app->post('/forgetPassword', function() use ($app)  {
     $res = $reqsql->fetch_assoc();
     if(!$res)
         echoError('this email is not valid');
-    if($res["UserAccepted"] != 1)
-        echoError('this user is not accepted yet . you dont have permission to change password');
 
     $newPassword = generateRandomString(10);
     require_once '../passwordHash.php';
     $password = passwordHash::hash($newPassword);
+    $reqsql = $db->updateRecord('user' , "Password ='".$password."'" , "ID = ".$res["ID"]);
     $reqsql = $db->updateRecord('user' , "Password ='".$password."'" , "ID = ".$res["ID"]);
     if(!$reqsql)
         echoError('failed to update password');
@@ -164,9 +166,9 @@ $app->post('/checkEmail', function() use ($app)  {
     $res = $resq->fetch_assoc();
     if ($res['resp'] > 0 )
     {
-        echoResponse(200, false);
+        echoSuccess(false);
     }else
-        echoResponse(200, true);
+        echoSuccess(true);
 });
 
 $app->post('/checkUserName', function() use ($app)  {
@@ -189,11 +191,11 @@ $app->post('/signInUser', function() use ($app)  {
     $password = $r->Password;
     $email = $r->Username;
 
-    $user = $db->getOneRecord("select user.ID,FullName,Email,Password,Username,SignupDate,file_storage.FullPath as Image from 
+    $user = $db->getOneRecord("select user.ID,UserAccepted,FullName,Email,Password,Username,SignupDate,file_storage.FullPath as Image from 
     user LEFT JOIN 
-    file_storage ON file_storage.ID=user.AvatarID where Email='$email' and UserAccepted = 1");
+    file_storage ON file_storage.ID=user.AvatarID where Email='$email'");
 
-    if ($user != NULL) {
+    if ($user != NULL && $user["UserAccepted"] == 1) {
         if(passwordHash::check_password($user['Password'],$password)){
 
             $sessionID = generateSessionID(100);
@@ -262,6 +264,8 @@ $app->post('/signInUser', function() use ($app)  {
     }else {
         $response['Status'] = "error";
         $response['Message'] = 'No such user is registered';
+        if($user != NULL && $user["UserAccepted"] == 0)
+            $response['Status'] = "notAccepted";
     }
     echoResponse(200, $response);
 });

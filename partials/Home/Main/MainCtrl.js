@@ -4,7 +4,7 @@
     $scope.user = {};
     $scope.emailError = false;
     $scope.userNameError = false;
-    $scope.userNameRegex = (/^(?=.*[a-z])[0-9a-zA-Z]{3,}$/);
+    $scope.userNameRegex = (/[أ-ي]/);
     $scope.allPositions = [];
     $scope.Position = {};
 
@@ -15,9 +15,14 @@
     $scope.checkEmail = function (value) {
         if (value) {
             Extention.postAsync('checkEmail', { value: value }).then(function (msg) {
-                $scope.emailError = !msg;
-                if ($scope.emailError)
-                    Extention.popError('این ایمیل قبلا ثبت شده است');
+                if (msg.Status == 'success') {
+                    $scope.emailError = !msg.Data;
+                    if ($scope.emailError)
+                        Extention.popError('این ایمیل قبلا ثبت شده است');
+                } else {
+                    Extention.popError('خطا در ارتباط');
+
+                }
             });
         }
     }
@@ -45,11 +50,11 @@
             Extention.post('savePerson', $scope.user).then(function (msg) {
                 console.log(msg);
                 if (msg.Status == 'success') {
-                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد .لطفا ایمیل خود را بررسی کنید تا از صحت ایمیل شما مطمئن شویم. بعد از تایید مدیر، شما می توانید وارد انجمن شوید',12000);
-                } else if (msg.Status == 'notAccepted') {
-                    Extention.popInfo('ایمیل فعال سازی جدیدی برای شما ارسال شده است');
+                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد .لطفا ایمیل خود را بررسی کنید. ',10000);
+                } else if (msg.Status == 'emailError') {
+                    Extention.popError('این ایمیل قبلا ثبت شده است');
                 } else {
-                    Extention.popError('اطلاعات شما نا معتبر است.');
+                    Extention.popError('اطلاعات شما نا معتبر است');
                 }
             });
         }
@@ -75,7 +80,8 @@
                     } else {
                         getPage('Forum');
                     }
-                    
+                } else if (msg.Status == 'notAccepted') {
+                    Extention.popError('اکانت شما هنوز  توسط ادمین تایید نشده است');
                 } else {
                     console.log(msg);
                     Extention.popError('اطلاعات شما نا معتبر است.');
