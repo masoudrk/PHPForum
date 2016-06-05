@@ -78,50 +78,51 @@
                 </div>
             </div><!-- /.box -->
         </div>
-        <div class="col-md-4">
-            <!-- Widget: user widget style 1 -->
-            <div class="box box-widget widget-user">
-                <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header" ng-class="getBGColor(question.UserID)">
-                    <a href="#/" style="cursor: pointer; color: white">
-                        <h3 class="widget-user-username">{{question.FullName | pNumber}}</h3><br>
+    <div class="col-md-4">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header" ng-class="getBGColor(question.UserID)">
+                <a ui-sref="UserProfile({id:question.UserID})" style="cursor: pointer; color: white">
+                    <h3 class="widget-user-username">{{question.FullName | pNumber}}</h3><br>
 
-                    </a>
-                    <h5 class="widget-user-desc" ng-show="isOnline">
-                                آنلاین <i class="fa fa-circle text-green"></i> </h5>
-                </div>
-                    <div class="widget-user-image" style="cursor: pointer">
-                        <img class="img-circle" ui-sref="UserProfile({id:question.UserID})" src="{{question.FullPath}}" alt="User Avatar">
-                    </div>
-                    <div class="box-footer">
-                        <div class="row">
-                            <div class="col-xs-4 border-left">
-                                <div class="description-block">
-                                    <h5 class="description-header">{{question.score | pNumber}}</h5>
-                                    <span class="description-text">امتیاز</span>
-                                </div><!-- /.description-block -->
-                            </div><!-- /.col -->
-                            <div class="col-xs-4 border-left">
-                                <div class="description-block">
-                                    <h5 class="description-header">{{question.QuestionsCount | pNumber}}</h5>
-                                    <span class="description-text">سوالات پرسیده</span>
-                                </div><!-- /.description-block -->
-                            </div><!-- /.col -->
-                            <div class="col-xs-4">
-                                <div class="description-block">
-                                    <h5 class="description-header">{{question.AnswerCount | pNumber}}</h5>
-                                    <span class="description-text">جواب ها</span>
-                                </div><!-- /.description-block -->
-                            </div><!-- /.col -->
-                        </div><!-- /.row -->
-                    </div>
-            </div><!-- /.widget-user -->
-        </div>
+                </a>
+                <h5 class="widget-user-desc" ng-show="isOnline">
+                    آنلاین <i class="fa fa-circle text-green"></i> </h5>
+            </div>
+            <div class="widget-user-image" style="cursor: pointer">
+                <img class="img-circle" ui-sref="UserProfile({id:question.UserID})" src="{{question.FullPath}}" alt="User Avatar">
+            </div>
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-xs-4 border-left">
+                        <div class="description-block">
+                            <h5 class="description-header">{{question.score | pNumber}}</h5>
+                            <span class="description-text">امتیاز</span>
+                        </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-xs-4 border-left">
+                        <div class="description-block">
+                            <h5 class="description-header">{{question.QuestionsCount | pNumber}}</h5>
+                            <span class="description-text">سوالات پرسیده</span>
+                        </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-xs-4">
+                        <div class="description-block">
+                            <h5 class="description-header">{{question.AnswerCount | pNumber}}</h5>
+                            <span class="description-text">جواب ها</span>
+                        </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div>
+        </div><!-- /.widget-user -->
+    </div>
+        
             <div class="col-xs-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">
-                            سوال <i class="fa fa-question" aria-hidden="true"></i>
+                            سوال <i class="fa fa-question text-blue" aria-hidden="true"></i>
                         </h3>
                         <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o text-yellow" aria-hidden="true"></i>   {{question.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
                     </div><!-- /.box-header -->
@@ -162,13 +163,35 @@
                     </div>
                 </div>
             </div>
-
+        <div class="col-xs-12" ng-show="question.RelatedQuestions && question.RelatedQuestions.length !=0">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        افراد زیر سوالاتی مشابه داشته اند <i class="fa fa-link text-blue" aria-hidden="true"></i>
+                    </h3>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <div class="box-body box-profile">
+                    <ul class="nav nav-pills" style="padding-right: 0px;">
+                        <li ng-repeat="at in question.RelatedQuestions" class="active fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50">
+                            <a class="english-font link" ui-sref="UserProfile({id:at.AuthorID})">
+                                {{at.FullName}}
+                                <img ng-src="{{at.FullPath}}"
+                                     style="width:30px;height: 30px;"
+                                     class="img-circle">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
             <div class="col-xs-12 fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50" ng-repeat="answer in question.Answers track by $index">
                 <div class="box" ng-class="getBoxColor(answer.ID)">
                     <div class="box-body box-profile">
                         <div class="col-sm-3 col-xs-12">
-                            <img class="profile-user-img img-responsive img-circle" alt="User profile picture"
-                                 ui-sref="UserProfile({id:answer.UserID})" src="../images/Avatar.jpg"
+                            <img class="profile-user-img img-responsive img-circle link" alt="User profile picture"
+                                 ui-sref="UserProfile({id:answer.AuthorID})" src="../images/Avatar.jpg"
                                  ng-src="{{answer.FullPath}}">
                             <!--<a href="#/" style="cursor: pointer; color: black">
                                 <h3 class="text-center profile-username">نادیا معصومی</h3></a>-->
@@ -191,7 +214,8 @@
                         <div class="col-sm-9 col-xs-12 persian-rtl" style="padding: 0;">
                             <div class="box-header with-border">
                                 <h3 class="profile-username box-title">
-                                    {{answer.FullName}} <small>{{answer.OrganizationName}}</small>
+                                    <i ng-hide="answer.BestAnswer == 0" class="fa fa-check text-green faa-tada animated"></i>  
+                                    {{answer.FullName}} <small>{{answer.OrganizationName}}</small> 
                                 </h3>
                                 <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o text-yellow" aria-hidden="true"></i>   {{answer.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
                             </div>
@@ -221,7 +245,7 @@
                         <div ng-if="user.AdminPermissionLevel == 'Base' || user.AdminPermission == question.SubjectName">
                             <a ng-show="answer.BestAnswer == 0" ng-click="setBestAnswer(answer.ID)" class="btn btn-primary btn-xs pull-right" style="margin: 5px"><b>ثبت به عنوان بهترین جواب</b> <i class="fa fa-check"></i> </a>
                         </div>
-                        <span ng-hide="answer.BestAnswer == 0" class="label bg-green pull-right" style="margin: 5px"><b>بهتربن جواب</b></span>
+                        <span ng-hide="answer.BestAnswer == 0" class="label bg-green pull-right" style="margin: 5px"> <b>بهتربن جواب</b> <i class="fa fa-check"></i></span>
                         <i class="fa fa-thumbs-up palette-nephritis" ng-show="answer.PersonAnswerRate == 1" style="font-size: 20px" aria-hidden="true"></i>
                         <i ng-click="setLikeAnswers(answer,1)" class="fa fa-thumbs-o-up link hvr-pulse" ng-show="answer.PersonAnswerRate != 1" style="font-size: 20px;" aria-hidden="true"></i>
                         <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(answer.AnswerScore)?answer.AnswerScore:0 | pNumber}}</span>
@@ -261,7 +285,7 @@
                 <div class="box box-warning">
                     <div class="box-header with-border">
                         <h3 class="box-title vazir-font"> فایل های ضمیمه پاسخ </h3>
-                        <i class="fa fa-paperclip fa-2x text-muted"></i>
+                        <i class="fa fa-paperclip fa-2x text-muted faa-ring animated"></i>
                     </div><!-- /.box-header -->
                     <div class="box-body persian-rtl" >
                         <div ng-repeat="f in myFiles">

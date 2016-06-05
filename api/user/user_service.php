@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $app->post('/getSocketData', function() use ($app)  {
     
     $s = $app->session;
@@ -1143,6 +1143,17 @@ where tg.QuestionID = '$r->QuestionID'");
     while($item = $resQ->fetch_assoc())
             $tags[] = $item;
     $resp['Tags'] = $tags;
+
+        $resQ = $app->db->makeQuery("SELECT fq.*, u.Email , u.FullName ,fs.FullPath FROM link_question lq
+INNER JOIN forum_question fq on fq.ID = lq.LinkedQuestionID
+INNER JOIN user u on u.ID = fq.AuthorID
+INNER JOIN file_storage as fs on fs.ID = u.AvatarID
+where lq.TargetQuestionID = '$r->QuestionID'");
+
+    $Related = [];
+    while($item = $resQ->fetch_assoc())
+            $Related[] = $item;
+    $resp['RelatedQuestions'] = $Related;
 
         $resQ = $app->db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,

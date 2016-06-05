@@ -1,7 +1,9 @@
 angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention) {
 
     $scope.UserMessages = [];
-
+    $scope.AnswerBadge = {};
+    $scope.QuestionBadge = {};
+    $scope.UserBadge = {};
     // $rootScope.$on("socketDataChanged", function(){
     //     if($rootScope.globalSearchActive && $scope.pagingParams.searchType==1)
     //         $scope.checkNowOnline();
@@ -23,7 +25,13 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
 
     $scope.notificationsUpdating = true;
     $scope.messagesUpdating = true;
-
+    
+    Extention.post("getAdminBadges").then(function (res) {
+        console.log(res);
+        $scope.AnswerBadge = res.Data.Answer;
+        $scope.QuestionBadge = res.Data.Question;
+        $scope.UserBadge = res.Data.User;
+    });
     Extention.post("getUserNotifications").then(function (res) {
         $scope.notifications = res.Data;
         $scope.notificationsUpdating = false;

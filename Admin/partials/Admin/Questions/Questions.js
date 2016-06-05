@@ -32,7 +32,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	}
 
 	$scope.changeTypeFilter = function(type) {
-	    $scope.pagingParams.answerType = type;
+	    $scope.pagingParams.questionType = type;
 	    switch (type) {
 	        case null:
 	            $scope.dropDwonTitle = 'همه ی سوال ها';
@@ -79,6 +79,41 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	        },
 	        size: 'md'
 	    });
+	    modalInstance.result.then(function () {
+	    }, function () {
+	        $scope.pagingController.update();
+	    });
+	}
+	
+	$scope.openQuestionModal = function (question) {
+	    var modalInstance = $uibModal.open({
+	        animation: true,
+	        templateUrl: 'QuestionModal.html',
+	        controller: function ($scope, $uibModalInstance) {
+	            $scope.question = question;
+	            $scope.questionsPagingParams = { SubjectName: $stateParams.id , questionType: 1 };
+	            $scope.questionsQagingController = {};
+	            $scope.cancel = function () {
+	                $uibModalInstance.dismiss('cancel');
+	            };
+	            $scope.search = function () {
+	                $scope.questionsQagingController.update();
+	            }
+
+	            $scope.Link = function (question) {
+	                Extention.post('linkQuestion', { TargetQuestionID: question.ID, LinkedQuestionID: $scope.question.ID, UserID: $scope.question.AuthorID }).then(function (res) {
+	                    if (res && res.Status == 'success') {
+	                        Extention.popSuccess("سوال با موفقیت لینک داده شد!");
+	                        $uibModalInstance.dismiss('cancel');
+	                    } else {
+	                        Extention.popError("مشکل در لینک دادن سوال ، لطفا دوباره امتحان کنید.");
+	                    }
+	                });
+	            };
+	        },
+	        size: 'lg'
+	    });
+
 	    modalInstance.result.then(function () {
 	    }, function () {
 	        $scope.pagingController.update();
