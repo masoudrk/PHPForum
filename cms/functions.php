@@ -77,6 +77,7 @@ function generateRequiredCMSCssFiles(){
     <link rel="stylesheet" href="../cms/css/treasure-overlay-spinner.min.css">
     <link rel="stylesheet" href="../cms/css/select/select.css">
 <!--    <link rel="stylesheet" href="../css/angular-notification-icons.min.css">-->
+    <link rel="stylesheet" href="../css/font-awesome-animation.min.css">
 
     <link rel="stylesheet" href="../css/hover-min.css">
 

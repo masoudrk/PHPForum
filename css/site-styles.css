@@ -54,7 +54,10 @@
 }
 
 .link {
-	cursor: pointer;
+    cursor: pointer;
+}
+.unlink {
+    cursor: default !important;
 }
 
 
