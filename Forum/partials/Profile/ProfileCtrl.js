@@ -1,10 +1,18 @@
 
 angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, $stateParams, $state, $location, $timeout, Extention,Upload) {
 
+    $scope.timelinePagingController = {};
+
     if(!$stateParams.action){
         $scope.activeTab = 2;
     }else{
         switch ($stateParams.action){
+            case 'Timeline':
+                $timeout(function () {
+                    $scope.timelinePagingController.update();
+                });
+                $scope.activeTab = 0;
+                break;
             case 'Sessions':
                 $scope.activeTab = 1;
                 break;
@@ -17,6 +25,68 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
         }
     }
 
+    $scope.bgColorArray= ["bg-aqua-active",
+        "bg-blue-active","bg-green-active",
+        "bg-yellow-active","bg-maroon-active","bg-light-blue-active",
+        "bg-green","bg-orange","bg-purple","bg-red",
+        "bg-yellow","bg-light-blue"];
+
+    $scope.getRandomColorClass = function(id){
+        var i = id % $scope.bgColorArray.length;
+        return $scope.bgColorArray[i];
+    }
+
+    $scope.getIconClass= function (item){
+        switch (item.EventTypeID){
+            // ثبت نام
+            case '-1':
+                return 'fa-user-plus ipalette-bg-sun-flower';
+            // <tr><td>1</td><td>به جواب شما امتیاز مثبت داد.</td></tr>
+            case '1':
+            // <tr><td>2</td><td>به سوال شما امتیاز مثبت داد.</td></tr>
+            case '2':
+                return 'fa-star ipalette-bg-sun-flower';
+
+            // <tr><td>3</td><td>سوال شما را تایید کرد.</td></tr>
+            case '3':
+                return 'fa-check ipalette-bg-peter-river';
+
+            // <tr><td>4</td><td>سوال جدید مطرح کرده.</td></tr>
+            case '4':
+                return 'fa-flask  ipalette-bg-pomegranate';
+
+            // <tr><td>5</td><td>پیام جدید برای شما ارسال کرد.</td></tr>
+            case '5':
+                return 'fa-envelope  ipalette-bg-pumpkin';
+
+            // <tr><td>6</td><td>سوال شما را دنبال کرد.</td></tr>
+            case '6':
+                return 'fa-user  ipalette-bg-emerald';
+
+            // <tr><td>7</td><td>فعالیت شما را پیگیر می شود.</td></tr>
+            case '7':
+                return 'fa-eye ipalette-bg-pomegranate';
+
+            // <tr><td>8</td><td>به سوال شما جواب داده است.</td></tr>
+            case '8':
+                return 'fa-hand-pointer-o ipalette-bg-alizarin';
+
+            // <tr><td>9</td><td>جواب جدید ، برای سوال دنبال شده شما ثبت کرده است.</td></tr>
+            case '9':
+                return 'fa-comments ipalette-bg-amethyst';
+
+            // <tr><td>10</td><td>جواب شما را تایید کرد.</td></tr>
+            case '10':
+                return 'fa-check ipalette-bg-green-sea';
+
+            // <tr><td>11</td><td>سوال جدید برای موضوع دنبال شده شما ارسال کرد.</td></tr>
+            case '11':
+                return 'fa-flask ipalette-bg-orange';
+            default :
+                return 'fa-clone ipalette-bg-orange';
+        }
+    }
+
     $scope.getTab= function (tabId) {
         $scope.activeTab = tabId;
         var opt = {
@@ -26,6 +96,10 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
             notify: false
         };
         switch ($scope.activeTab){
+            case 0:
+                $state.transitionTo('profile', {action: 'Timeline'}, opt );
+                $scope.timelinePagingController.update();
+                break;
             case 1:
                 $state.transitionTo('profile', {action: 'Sessions'}, opt );
                 break;

@@ -34,92 +34,92 @@
                         </a>
 
                     </li>
-                    <!--<li class="link"><a ng-click="activeTab = 0" data-toggle="tab"
-                    aria-expanded="false">تایم لاین</a></li>-->
+                    <li class="link" ng-class="(activeTab == 0)?'active':''">
+                        <a ng-click="getTab(0)" data-toggle="tab"
+                    aria-expanded="false">تایم لاین</a>
+                    </li>
+
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane"
-                         ng-class="(activeTab == 0)?'active':''" >
+                    <div class="tab-pane" ng-class="(activeTab == 0)?'active':''" >
                         <!-- The timeline -->
                         <ul class="timeline timeline-inverse">
                             <!-- timeline time label -->
-                            <li class="time-label">
-                        <span class="bg-red">
-                          10 Feb. 2014
-                        </span>
+                            <li class="time-label" ng-repeat="item in timelineItems" ng-switch="item.EventType">
+                                <span ng-class="getRandomColorClass(item.CID)"
+                                      ng-switch-when="DayBP" style="font-weight: 400;">
+                                  {{item.EventDate | jalaliDateSimple : 'jYY/jMM/jDD' | pNumber}}
+                                </span>
+
+                                <i class="fa" ng-class="getIconClass(item)" style="color: #fff;" ng-switch-default></i>
+
+                                <div class="timeline-item" ng-switch-default>
+                                    <span class="time persian-rtl">
+                                        <i class="fa fa-clock-o"></i>
+                                        {{item.EventDateTime | jalaliDate : 'jYYYY/jMM/jDD' | pNumber}}
+                                    </span>
+                                    <h3 class="timeline-header persian-rtl">
+                                        <img  class="img-circle" ng-src="{{item.FullPath}}" src="../images/Avatar.jpg"
+                                              style="width:27px">
+                                        <a ui-sref="UserProfile({id:'{{item.EventCauseID}}'})">{{item.FullName}}</a>
+                                        <span style="font-size: 12px">{{item.EventTypeFA}}</span>
+                                    </h3>
+                                    <div class="timeline-body" ng-if="item.HasQuestion=='1'">
+                                        <b>{{item.Title}}</b>
+                                        <br>
+                                        <div style="margin-right: 5px">
+                                            <small>
+                                                {{item.QuestionText}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-footer text-left" ng-if="item.HasQuestion=='1'">
+                                        <a class="btn btn-primary btn-xs"
+                                           ui-sref="question({id:item.QuestionID})">مشاهده سوال</a>
+                                    </div>
+                                </div>
+
+                                <i class="fa" ng-class="getIconClass(item)"
+                                   style="color: #fff;width: 50px;height: 50px;right: 8px;
+                                            font-size: 25px;padding: 10px;top: 52px;"
+                                   ng-switch-when="SU"></i>
+
+                                <div class="timeline-item" ng-switch-when="SU" style="margin-right: 70px">
+                                    <div class="timeline-body row"
+                                         style="height: 100px;" >
+                                        <div class="col-xs-12 text-center">
+                                            <img  class="img-circle" ng-src="{{user.Image}}" src="../images/Avatar.jpg"
+                                                  style="width:50px;border: solid 3px #f1c40f;margin-bottom: 8px">
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="text-center persian-rtl">
+                                                <span>شما در تاریخ </span>
+                                                <b
+                                                ng-bind="item.User.SignupDate | jalaliDateSimple : 'HH:MM jYYYY/jMM/jDD' | pNumber"
+                                                class="text-blue">
+
+                                                </b>
+                                                <span>ثبت نام کردید.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                             <!-- /.timeline-label -->
-                            <!-- timeline item -->
-                            <li>
-                                <i class="fa fa-envelope bg-blue"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                                    <h3 class="timeline-header"><a href="#/">Support Team</a> sent you an email</h3>
-                                    <div class="timeline-body">
-                                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                        quora plaxo ideeli hulu weebly balihoo...
-                                    </div>
-                                    <div class="timeline-footer">
-                                        <a class="btn btn-primary btn-xs">Read more</a>
-                                        <a class="btn btn-danger btn-xs">Delete</a>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- END timeline item -->
-                            <!-- timeline item -->
-                            <li>
-                                <i class="fa fa-user bg-aqua"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-                                    <h3 class="timeline-header no-border"><a href="#/">Sarah Young</a> accepted your friend request</h3>
-                                </div>
-                            </li>
-                            <!-- END timeline item -->
-                            <!-- timeline item -->
-                            <li>
-                                <i class="fa fa-comments bg-yellow"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-                                    <h3 class="timeline-header"><a href="#/">Jay White</a> commented on your post</h3>
-                                    <div class="timeline-body">
-                                        Take me to your leader!
-                                        Switzerland is small and neutral!
-                                        We are more like Germany, ambitious and misunderstood!
-                                    </div>
-                                    <div class="timeline-footer">
-                                        <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- END timeline item -->
-                            <!-- timeline time label -->
-                            <li class="time-label">
-                        <span class="bg-green">
-                          3 Jan. 2014
-                        </span>
-                            </li>
-                            <!-- /.timeline-label -->
-                            <!-- timeline item -->
-                            <li>
-                                <i class="fa fa-camera bg-purple"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-                                    <h3 class="timeline-header"><a href="#/">Mina Lee</a> uploaded new photos</h3>
-                                    <div class="timeline-body">
-                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- END timeline item -->
-                            <li>
-                                <i class="fa fa-clock-o bg-gray"></i>
-                            </li>
                         </ul>
+
+                        <div class="text-center">
+                            <auto-paging page="1"
+                                         page-size="40"
+                                         ul-class="pagination pagination-sm no-margin"
+                                         action-name="getUserTimeline"
+                                         data-params="pagingParams"
+                                         ng-control="timelinePagingController"
+                                         only-get-result-when-update="true"
+                                         items="timelineItems"
+                                         total-items="question.bestAnsweredTotal">
+                            </auto-paging>
+                        </div>
                     </div><!-- /.tab-pane -->
                     <div class="tab-pane" style="margin: -10px;" ng-class="(activeTab == 1)?'active':''" >
                         <div class="table-responsive">

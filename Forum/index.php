@@ -479,13 +479,15 @@
         </div>
             <strong class="persian-rtl"></strong>
             <span ng-bind="websiteInfo.CopyrightText | pNumber"></span>
-          Copyright &copy;
-        <span ng-bind="nowDate() | jalaliDateSimple : 'YYYY' "></span>
-        -
-        <span ng-bind="websiteInfo.CopyrightStartDate | jalaliDateSimple : 'YYYY' "></span> <!--<a
-        class="persian-rtl">طراحی شده توسط
-        MagicCube
-        .ir</a>-->.
+
+            <span class="text-muted">
+
+              Copyright &copy;
+                <span ng-bind="nowDate() | jalaliDateSimple : 'YYYY' "></span>
+            -
+            <span ng-bind="websiteInfo.CopyrightStartDate | jalaliDateSimple : 'YYYY' "></span>
+            </span>
+
     </footer>
 
     <!-- Control Sidebar -->
