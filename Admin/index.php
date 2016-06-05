@@ -484,7 +484,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li id="SSTransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
-                                <a href="../Forum/#/Home">
+                                <a href="../Forum/home.php">
                                     <i class="fa fa-circle-o"></i>
                                     خانه
                                 </a>
