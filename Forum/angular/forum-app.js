@@ -222,25 +222,6 @@ var activeElement = function (parent , name) {
     elemP.addClass('active').siblings().removeClass('active');
 }
 
-var cmsVars = {};
-var hideCMS = function (hide) {
-    if(hide){
-        cmsVars.v1 = $('.content-wrapper').css('marginRight');
-        cmsVars.v2 = $('.main-footer').css('marginRight');
-        cmsVars.v3 = $('.main-header').css('display');
-        cmsVars.v4 = $('.main-sidebar').css('display');
-        $('.content-wrapper').css('margin-right','0');
-        $('.main-footer').css('margin-right','0');
-        $('.main-header').css('display','none');
-        $('.main-sidebar').css('display','none');
-    }
-    else{
-        $('.content-wrapper').css('margin-right',cmsVars.v1);
-        $('.main-footer').css('margin-right',cmsVars.v2);
-        $('.main-header').css('display',cmsVars.v3);
-        $('.main-sidebar').css('display',cmsVars.v4);
-    }
-}
 
 app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore, Extention, OnlineSocket) {
     
@@ -253,16 +234,25 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
         Extention.setBusy(false);
 
     });
+
     $rootScope.$on('$stateChangeError',
         function(event, toState, toParams, fromState, fromParams, error){
         Extention.setBusy(false);
     });
+
     $rootScope.$on('$stateNotFound',
         function(event, unfoundState, fromState, fromParams){
         Extention.setBusy(false);
-    })
+    });
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
+
+        if(next.name == 'forum_home'){
+            hideCMS(true);
+        }else{
+            hideCMS(false);
+        }
+        
         Extention.setBusy(true);
 
         if($rootScope.globalSearchActive)

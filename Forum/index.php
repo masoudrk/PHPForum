@@ -31,7 +31,7 @@
 <body class="hold-transition skin-blue sidebar-mini vazir-font">
 <div class="wrapper">
 
-    <header class="main-header">
+    <header class="main-header" style="display: none;">
         <!-- Logo -->
         <a class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -276,7 +276,7 @@
         </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
+    <aside class="main-sidebar" style="display: none">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <!-- Sidebar user panel -->
@@ -457,7 +457,7 @@
 
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 
-    <div class="content-wrapper" id="cont" style="min-height: 600px;">
+    <div class="content-wrapper" id="cont" style="min-height: 600px;margin-right: 0px">
         <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60">
         </treasure-overlay-spinner>
         <!-- Content Wrapper. Contains page content -->
@@ -473,7 +473,7 @@
         <!-- /.content-wrapper -->
     </div>
 
-    <footer class="main-footer persian-rtl">
+    <footer class="main-footer persian-rtl" style="margin-right: 0px">
         <div class="pull-left hidden-xs">
             <b>نسخه</b> {{'1.0.0'| pNumber}}
         </div>
