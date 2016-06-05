@@ -127,6 +127,8 @@
     <Folder Include="cms\js\pages\" />
     <Folder Include="cms\js\select\" />
     <Folder Include="cms\js\slimScroll\" />
+    <Folder Include="content\" />
+    <Folder Include="content\avatars\" />
     <Folder Include="css\" />
     <Folder Include="css\material\" />
     <Folder Include="fonts\" />
@@ -135,6 +137,9 @@
     <Folder Include="Forum\partials\" />
     <Folder Include="Forum\partials\Dashboard\" />
     <Folder Include="Forum\partials\Elements\" />
+    <Folder Include="Forum\partials\Evaluation\" />
+    <Folder Include="Forum\partials\Evaluation\Quiz\" />
+    <Folder Include="Forum\partials\Evaluation\Rating\" />
     <Folder Include="Forum\partials\Forum\" />
     <Folder Include="Forum\partials\Forum\Forum\" />
     <Folder Include="Forum\partials\Forum\Main\" />
@@ -471,8 +476,11 @@
     <Content Include="cms\js\slimScroll\jquery.slimscroll.min.js" />
     <Content Include="cms\js\treasure-overlay-spinner.js" />
     <Content Include="cms\js\treasure-overlay-spinner.min.js" />
+    <Content Include="content\avatars\HnYKIWjraSpRJHbCht.jpg" />
     <Content Include="css\ADM-dateTimePicker.css" />
     <Content Include="css\ADM-dateTimePicker.min.css" />
+    <Content Include="css\angular-notification-icons.css" />
+    <Content Include="css\angular-notification-icons.min.css" />
     <Content Include="css\angular-tooltips.css" />
     <Content Include="css\angular-tooltips.min.css" />
     <Content Include="css\anim-in-out.css" />
@@ -480,6 +488,8 @@
     <Content Include="css\bootstrap-plus.min.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\eeh-navigation.css" />
+    <Content Include="css\font-awesome-animation.css" />
+    <Content Include="css\font-awesome-animation.min.css" />
     <Content Include="css\font-awesome.css" />
     <Content Include="css\font-awesome.min.css" />
     <Content Include="css\full-page-styles.css" />
@@ -519,6 +529,7 @@
     <Content Include="fonts\Vazir.ttf" />
     <Content Include="fonts\Vazir.woff" />
     <Content Include="Forum\angular\forum-app.js" />
+    <Content Include="Forum\partials\breadcrumb.html" />
     <Content Include="Forum\partials\Dashboard\Dashboard.html" />
     <Content Include="Forum\partials\Dashboard\DashboardCtrl.js" />
     <Content Include="Forum\partials\Elements\Buttons.html" />
@@ -529,6 +540,10 @@
     <Content Include="Forum\partials\Elements\Widgets.html" />
     <Content Include="Forum\partials\Elements\_Elements.html" />
     <Content Include="Forum\partials\Elements\_ElementsCtrl.js" />
+    <Content Include="Forum\partials\Evaluation\Quiz\Quiz.html" />
+    <Content Include="Forum\partials\Evaluation\Quiz\QuizCtrl.js" />
+    <Content Include="Forum\partials\Evaluation\Rating\Rating.html" />
+    <Content Include="Forum\partials\Evaluation\Rating\RatingCtrl.js" />
     <Content Include="Forum\partials\Forum\Forum\Forum.html" />
     <Content Include="Forum\partials\Forum\Forum\ForumCtrl.js" />
     <Content Include="Forum\partials\Forum\Main\MainForum.html" />
@@ -767,6 +782,8 @@
     <Content Include="js\angular-messages.js" />
     <Content Include="js\angular-messages.min.js" />
     <Content Include="js\angular-nestable.js" />
+    <Content Include="js\angular-notification-icons.js" />
+    <Content Include="js\angular-notification-icons.min.js" />
     <Content Include="js\angular-pageslide-directive.js" />
     <Content Include="js\angular-pageslide-directive.min.js" />
     <Content Include="js\angular-recaptcha.js" />

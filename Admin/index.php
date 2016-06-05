@@ -315,6 +315,9 @@
                         <a ui-sref="all_users">
                             <i class="fa fa-user"></i>
                             <span>مدیریت اعضا</span>
+                            <small ng-show="UserBadge.UserCount != 0" class="label pull-right bg-orange">
+                                <span ng-bind="UserBadge.UserCount | pNumber"></span>
+                            </small>
                         </a>
                     </li>
                     <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SAdmins">
@@ -328,12 +331,18 @@
                             <i class="fa fa-question-circle"></i>
                             <span>مدیریت سوال ها</span>
                             <i class="fa fa-angle-right pull-right"></i>
+                            <small ng-show="QuestionBadge.AllQuestions != 0" class="label bg-green">
+                                <span ng-bind="QuestionBadge.AllQuestions | pNumber"></span>
+                            </small>
                         </a>
                         <ul class="treeview-menu">
                             <li id="SSTransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
                                 <a ui-sref="questions({id:'Transition'})" href="#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
+                                    <small ng-show="QuestionBadge.QuestionTransition != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="QuestionBadge.QuestionTransition | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                             <li id="SSTransportManagement" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement'">
@@ -341,24 +350,36 @@
                                     <i class="fa
                         fa-circle-o"></i>
                                     <span style="font-size:13px">نظارت بر سیستم های انتقال</span>
+                                    <small ng-show="QuestionBadge.QuestionTransportManagement != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="QuestionBadge.QuestionTransportManagement | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                             <li id="SSDataSwitch" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch'">
                                 <a ui-sref="questions({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
+                                    <small ng-show="QuestionBadge.QuestionDataSwitch != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="QuestionBadge.QuestionDataSwitch | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                             <li id="SSRadio" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio'">
                                 <a ui-sref="questions({id:'Radio'})" href="#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
+                                    <small ng-show="QuestionBadge.QuestionRadio != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="QuestionBadge.QuestionRadio | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                             <li id="SSCommonTopics" class="active" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics'">
                                 <a ui-sref="questions({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
+                                    <small ng-show="QuestionBadge.QuestionCommonTopics != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="QuestionBadge.QuestionCommonTopics | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                         </ul>
@@ -368,6 +389,9 @@
                             <i class="fa fa-pencil"></i>
                             <span>مدیریت جواب ها</span>
                             <i class="fa fa-angle-right pull-right"></i>
+                            <small ng-show="AnswerBadge.AllAnswers != 0" class="label bg-green">
+                                <span ng-bind="AnswerBadge.AllAnswers | pNumber"></span>
+                            </small>
                         </a>
 
                         <ul class="treeview-menu">
@@ -375,6 +399,9 @@
                                 <a ui-sref="answers({id:'Transition'})" href="#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
+                                    <small ng-show="AnswerBadge.AnswerTransition != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="AnswerBadge.AnswerTransition | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                             <li id="STransportManagement" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement'">
@@ -382,24 +409,36 @@
                                     <i class="fa
                         fa-circle-o"></i>
                                     نظارت بر سیستم های انتقال
+                                    <small ng-show="AnswerBadge.AnswerTransportManagement != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="AnswerBadge.AnswerTransportManagement | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                             <li id="SDataSwitch" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch'">
                                 <a ui-sref="answers({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
+                                    <small ng-show="AnswerBadge.AnswerDataSwitch != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="AnswerBadge.AnswerDataSwitch | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                             <li id="SRadio" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio'">
                                 <a ui-sref="answers({id:'Radio'})" href="#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
+                                    <small ng-show="AnswerBadge.AnswerRadio != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="AnswerBadge.AnswerRadio | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                             <li id="SCommonTopics" class="active" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics'">
                                 <a ui-sref="answers({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
+                                    <small ng-show="AnswerBadge.AnswerCommonTopics != 0" class="label bg-orange pull-right">
+                                        <span ng-bind="AnswerBadge.AnswerCommonTopics | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                         </ul>

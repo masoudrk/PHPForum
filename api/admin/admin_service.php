@@ -306,7 +306,6 @@ LIMIT 1");
 	$res = $app->db->deleteFromTable('forum_answer',"ID='$data->AnswerID'");
 	if($res)
     {
-        $app->db->updateRecord('user',"score=(score-2)" , "ID = '$data->UserID'");
         echoSuccess();
     }
 	else
@@ -403,7 +402,7 @@ $app->post('/getAllQuestions', function() use ($app)  {
 
 	$where = "WHERE fms.SubjectName = '$data->SubjectName'";
 	$hasWhere = FALSE;
-    if(isset($data->answerType)){
+    if(isset($data->questionType)){
         $where .=" AND (fq.AdminAccepted ='$data->questionType')";
 	}
 	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
@@ -412,12 +411,13 @@ $app->post('/getAllQuestions', function() use ($app)  {
 		$hasWhere = TRUE;
 	}
 
-	$pageRes = $pr->getPage($app->db,"SELECT fq.* ,fs.Title as SubjectName ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID
+	$pageRes = $pr->getPage($app->db,"SELECT fq.* ,fs.Title as SubjectName ,u.FullName , lq.LinkedQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID
 FROM forum_question as fq
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
 INNER join user as u on u.ID = fq.AuthorID
-LEFT JOIN file_storage as fis on fis.ID = u.AvatarID ".$where." ORDER BY fq.ID desc");
+LEFT JOIN file_storage as fis on fis.ID = u.AvatarID
+LEFT JOIN link_question as lq on lq.TargetQuestionID = fq.ID ".$where." GROUP BY fq.ID ORDER BY fq.ID desc");
 
 	echoResponse(200, $pageRes);
 });
@@ -438,9 +438,9 @@ LIMIT 1");
     if(!$sql)
         echoError('You don\'t have permision to do this action');
 
-	$res = $app->db->deleteFromTable('forum_question',"ID='$data->QuestionID'");
+    $res = $app->db->deleteFromTable('link_question',"TargetQuestionID='$data->QuestionID' or LinkedQuestionID = '$data->QuestionID'");
+    $res = $app->db->deleteFromTable('forum_question',"ID='$data->QuestionID'");
 	if($res){
-        $app->db->updateRecord('user',"score=(score-5)" , "ID = '$data->UserID'");
 		echoSuccess();
     }
 	else
@@ -496,6 +496,39 @@ LIMIT 1");
 		echoError("Cannot update record.");
 });
 
+
+$app->post('/linkQuestion', function() use ($app)  {
+
+
+	$data = json_decode($app->request->getBody());
+
+	if(isset($data->LinkedQuestionID) && isset($data->TargetQuestionID) && isset($data->UserID)){
+        $sess = new Session();
+                    $resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
+LIMIT 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+			$res = $app->db->updateRecord('forum_question',"AdminAccepted='-2'","ID='$data->LinkedQuestionID'");
+            $app->db->insertToTable('link_question',"LinkedQuestionID , TargetQuestionID , LinkedDate","'$data->LinkedQuestionID' ,'$data->TargetQuestionID' , NOW()");
+			if($res)
+            {
+                    $app->db->updateRecord('user',"score=(score+1)" , "ID = '$data->UserID'");
+                    $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType,LinkQuestionID',
+                "'$sess->UserID','$data->UserID',NOW(),'".'لینک سوال'."','".'سوال شما به سوال دیگری لینک داده شد'."','0','$data->TargetQuestionID'");
+                echoSuccess();
+            }
+			else
+				echoError("Cannot update record.");
+	}
+
+	echoError("User state is not set!");
+});
 $app->post('/changeQuestionAccepted', function() use ($app)  {
 
 	
@@ -883,4 +916,63 @@ $app->post('/markLastNotifications', function() use ($app)  {
     echoSuccess($notify);
 });
 
+$app->post('/getAdminBadges', function() use ($app)  {
+
+    	$sess = new Session();
+                    $resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
+LIMIT 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $resp = [];
+    $resQ = $app->db->makeQuery("SELECT COUNT(CASE WHEN fms.SubjectName = 'DataSwitch' THEN 1
+                  ELSE NULL
+             END) AS QuestionDataSwitch
+       ,COUNT(CASE WHEN fms.SubjectName = 'Radio' THEN 1
+                   ELSE NULL
+              END) AS QuestionRadio
+                  ,COUNT(CASE WHEN fms.SubjectName = 'TransportManagement' THEN 1
+                         ELSE NULL
+                         END) AS QuestionTransportManagement
+                  ,COUNT(CASE WHEN fms.SubjectName = 'Transition' THEN 1
+                         ELSE NULL
+                         END) AS QuestionTransition
+                  ,COUNT(CASE WHEN fms.SubjectName = 'CommonTopics' THEN 1
+                         ELSE NULL
+                         END) AS QuestionCommonTopics
+       ,COUNT(*) AS AllQuestions
+    FROM forum_question as fq INNER JOIN
+    forum_subject as fs on fs.ID = fq.SubjectID
+    INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
+    WHERE fq.AdminAccepted = 0");
+    $resp["Question"] = $resQ->fetch_assoc();
+        $resQ = $app->db->makeQuery("SELECT COUNT(CASE WHEN fms.SubjectName = 'DataSwitch' THEN 1
+                  ELSE NULL
+             END) AS AnswerDataSwitch
+       ,COUNT(CASE WHEN fms.SubjectName = 'Radio' THEN 1
+                   ELSE NULL
+              END) AS AnswerRadio
+                  ,COUNT(CASE WHEN fms.SubjectName = 'TransportManagement' THEN 1
+                         ELSE NULL
+                         END) AS AnswerTransportManagement
+                  ,COUNT(CASE WHEN fms.SubjectName = 'Transition' THEN 1
+                         ELSE NULL
+                         END) AS AnswerTransition
+                  ,COUNT(CASE WHEN fms.SubjectName = 'CommonTopics' THEN 1
+                         ELSE NULL
+                         END) AS AnswerCommonTopics
+       ,COUNT(*) AS AllAnswers
+    FROM forum_answer as fa INNER JOIN
+    forum_question as fq on fa.QuestionID = fq.ID INNER JOIN
+    forum_subject as fs on fs.ID = fq.SubjectID
+    INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
+    WHERE fa.AdminAccepted = 0");
+    $resp["Answer"] = $resQ->fetch_assoc();
+            $resQ = $app->db->makeQuery("SELECT COUNT(*) as UserCount FROM user as u WHERE u.UserAccepted = 0");
+    $resp["User"] = $resQ->fetch_assoc();
+    echoSuccess($resp);
+});
 ?>
