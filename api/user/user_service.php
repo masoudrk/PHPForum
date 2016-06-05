@@ -428,6 +428,19 @@ where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
   and forum_answer.AdminAccepted=1 and forum_question.AdminAccepted=1");
     $res['PieChartData'][1] =$resQ->fetch_assoc();
 
+    $resQ = $app->db->makeQuery("select 
+admin.UserID ,user.FullName ,user.Email ,user.PhoneNumber , file_storage.FullPath as Image 
+from admin_permission 
+left join admin on admin.PermissionID=admin_permission.ID
+inner join user on user.ID =admin.UserID
+left join file_storage on file_storage.ID=user.AvatarID
+where admin_permission.Permission='$data->MainSubjectName'");
+
+    $admins = [];
+    while($r = $resQ->fetch_assoc())
+        $admins[] =$r;
+    $res["Admins"] = $admins;
+
     echoResponse(200, $res);
 });
 

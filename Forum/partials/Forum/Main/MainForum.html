@@ -1,8 +1,12 @@
 ﻿<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
-        <a ng-show="forumData.MainSubject.PersonFollow == 0" ng-click="followMainSubject(forumData.MainSubject.ID)" class="btn btn-primary btn-xs fx-fade-left fx-dur-200 fx-ease-none" style="margin: 5px"><b>دنبال کردن</b></a>
-        <a ng-hide="forumData.MainSubject.PersonFollow == 0" ng-click="unFollowMainSubject(forumData.MainSubject.ID)" class="btn btn-danger btn-xs fx-fade-left fx-dur-50 fx-ease-none" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
+        <a ng-show="forumData.MainSubject.PersonFollow == 0"
+           ng-click="followMainSubject(forumData.MainSubject.ID)"
+           class="btn btn-primary btn-xs fx-fade-left fx-dur-200 fx-ease-none" style="margin: 5px"><b>دنبال کردن</b></a>
+        <a ng-hide="forumData.MainSubject.PersonFollow == 0"
+           ng-click="unFollowMainSubject(forumData.MainSubject.ID)"
+           class="btn btn-danger btn-xs fx-fade-left fx-dur-50 fx-ease-none" style="margin: 5px"><b>حذف از دنبال کننده ها</b></a>
         <small>{{forumData.MainSubject.Title}}</small>
         انجمن
     </h1>
@@ -22,7 +26,8 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tbody>
-                        <tr class="link" ng-repeat="sc in forumData.SubjectChilds">
+                        <tr ng-repeat="sc in forumData.SubjectChilds"
+                            class="link fx-zoom-right fx-dur-600 fx-ease-none fx-stagger-50">
                             <td style="vertical-align: middle;" ui-sref="forum({id:sc.ID})">{{sc.Title}}</td>
                             <td style="vertical-align: middle;width: 100px" class="text-center text-muted">
                                 <a ng-show="sc.PersonFollow == 0" ng-click="followSubject(sc.ID)" class="btn btn-primary btn-xs pull-left fx-fade-left fx-dur-200 fx-ease-none" style="margin: 5px"><b>دنبال کردن</b></a>
@@ -377,6 +382,38 @@
                     <!--<div class="box-body persian-rtl" compile="forumData.MainSubject.Description">-->
                     <!--</div>&lt;!&ndash; /.box-body &ndash;&gt;-->
                 <!--</div>&lt;!&ndash; /.box &ndash;&gt;-->
+            <div class="box box-widget widget-user-2 fx-zoom-left fx-dur-400 fx-ease-none fx-stagger-50"
+                 ng-repeat="admin in forumData.Admins">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header" ng-class="getRandomColorClass(admin.UserID)">
+                    <div class="widget-user-image">
+                        <img class="img-circle" src="../images/Avatar.jpg"
+                             alt="Admin Avatar" ng-src="{{admin.Image}}">
+                    </div><!-- /.widget-user-image -->
+                    <h3 class="widget-user-username persian-rtl link"
+                        ui-sref="UserProfile({id:'{{admin.UserID}}'})"
+                        ng-bind="admin.FullName | pNumber"></h3>
+                    <h5 class="widget-user-desc persian-rtl">
+                        ادمین بخش
+                        {{forumData.MainSubject.Title |subString:50 | pNumber}}
+                    </h5>
+                </div>
+                <div class="box-footer no-padding">
+                    <ul class="nav nav-stacked">
+                        <li>
+                            <a >ایمیل
+                                <span class="pull-left english-font"
+                                      ng-bind="admin.Email |subString:50 | lowercase | capitalize"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>موبایل
+                                <span class="pull-left" ng-bind="admin.PhoneNumber |pNumber">۵</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title vazir-font">نمودار افزایشی {{forumData.MainSubject.Title}}</h3>

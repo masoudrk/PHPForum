@@ -664,6 +664,13 @@ app.filter('split', function () {
     }
 });
 
+app.filter('capitalize', function() {
+    return function(input, all) {
+        var reg = (all) ? /([^\W_]+[^\s-]*) */g : /([^\W_]+[^\s-]*)/;
+        return (!!input) ? input.replace(reg, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) : '';
+    }
+});
+
 app.directive('slideable', function () {
     return {
         restrict: 'C',
@@ -735,21 +742,6 @@ app.directive('compile', [
     }
 ]);
 
-app.directive('rotateAnim', function() {
-    return function($scope, $element, $attributes) {
-        var degrees = 90;
-
-        $element.css('transition', '-webkit-transform 800ms ease');
-
-        var rotate = function() {
-            $element.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
-            degrees += -90;
-            setTimeout(rotate, 1000);
-        };
-
-        rotate();
-    }
-});
 
 angular.module("ui.router.title", ["ui.router"])
 	.run(["$rootScope", "$timeout", "$state", "Extention", function ($rootScope, $timeout, $state, Extention) {
