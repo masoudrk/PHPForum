@@ -6,4 +6,10 @@ $app->post('/logout', function() use ($app)  {
     $res = $sess->destroySession();
     echoResponse(200, $res);
 });
+
+$app->post('/getSiteInfo', function() use ($app)  {
+
+    $resQ =$app->db->makeQuery("select * from site_config limit 1");
+    echoResponse(200, $resQ->fetch_assoc());
+});
 ?>

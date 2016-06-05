@@ -12,7 +12,7 @@ require '../libs/Slim/Slim.php';
 $app = new \Slim\Slim();
 
 $app->session = new Session();
-$app->db = new DbHandler($app->session ,true ,true);
+$app->db = new DbHandler($app->session);
 
 require_once 'public_service.php';
 require_once '../generic_service.php';

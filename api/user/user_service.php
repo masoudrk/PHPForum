@@ -428,6 +428,19 @@ where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
   and forum_answer.AdminAccepted=1 and forum_question.AdminAccepted=1");
     $res['PieChartData'][1] =$resQ->fetch_assoc();
 
+    $resQ = $app->db->makeQuery("select 
+admin.UserID ,user.FullName ,user.Email ,user.PhoneNumber , file_storage.FullPath as Image 
+from admin_permission 
+left join admin on admin.PermissionID=admin_permission.ID
+inner join user on user.ID =admin.UserID
+left join file_storage on file_storage.ID=user.AvatarID
+where admin_permission.Permission='$data->MainSubjectName'");
+
+    $admins = [];
+    while($r = $resQ->fetch_assoc())
+        $admins[] =$r;
+    $res["Admins"] = $admins;
+
     echoResponse(200, $res);
 });
 
@@ -1549,7 +1562,7 @@ $app->post('/updateAvatar', function() use ($app)  {
     $sess = $app->session;
 
     $fileID = $app->db->insertToTable('file_storage','FullPath,UploadDate,UserID,IsAvatar',"'$destination',NOW(),
-    '$sess->UserID','1'");
+    '$sess->UserID','1'",true);
     $resUpdate = $app->db->updateRecord('user',"AvatarID='$fileID'","ID='$sess->UserID'");
 
     if($resUpdate){
@@ -1583,5 +1596,72 @@ $app->post('/setBestAnswer', function() use ($app)  {
 
         echoError('you dont have permission to do this action');
     }
+});
+
+
+$app->post('/getUserTimeline', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $p = new Pagination($data);
+
+    $session = $app->session;
+    $offset = $p->calculateOffset();
+
+    $total = $app->db->makeQuery("select count(*) as Total from event 
+where event.EventUserID='$session->UserID'")->fetch_assoc()['Total'];
+
+    $resQ = $app->db->makeQuery("
+select
+  event.ID ,event.EventDate as EventDateTime, Date( event.EventDate ) as EventDate, event_type.EventTypeFA ,
+  user.FullName , file_storage.FullPath ,event.EventSeen ,event_type.EventType ,
+   event.EventCauseID ,event_type.HasQuestion, forum_question.Title ,forum_question.QuestionText ,
+    forum_question.ID as QuestionID , event.EventTypeID
+from event
+  left join user on user.ID=event.EventCauseID
+  left join file_storage on file_storage.ID=user.AvatarID
+  left join event_type on event_type.ID=event.EventTypeID
+  left join forum_question on forum_question.ID=event.EvenLinkID
+where event.EventUserID='$session->UserID'
+order by Date(event.EventDate) desc
+limit $offset,$data->pageSize");
+
+    $cqData = [];
+    while($r = $resQ->fetch_assoc())
+        $cqData[] = $r;
+
+    $lastDate = '';
+    $i = 0;
+    foreach ($cqData as $value){
+        if($lastDate != $value['EventDate']){
+            $dateItem =[];
+            $dateItem['CID'] = $value['ID'];
+            $dateItem['EventDate'] = $value['EventDate'];
+            $dateItem['EventType'] = 'DayBP';
+            if($i == 0)
+                array_splice($cqData, 0, 0, array($dateItem));
+            else
+                array_splice($cqData, $i+1, 0, array($dateItem));
+            $lastDate= $value['EventDate'];
+        }
+        $i++;
+    }
+
+    if($total <= $offset + $data->pageSize){
+        $dateItem =[];
+        $dateItem['CID'] = $value['ID'];
+        $dateItem['EventDate'] = $value['EventDate'];
+        $dateItem['EventTypeID'] = '-1';
+        $dateItem['EventType'] = 'SU';
+        $dateItem['User'] =$app->db->makeQuery("select user.SignupDate from user where ID='$session->UserID'");
+        array_push($cqData, $dateItem);
+    }
+
+    $page = [];
+    $page['Items'] = $cqData;
+    $page['Total'] = $total;
+    $page['PageSize'] = $data->pageSize;
+    $page['PageIndex'] = $data->pageIndex;
+
+    echoResponse(200, $page);
 });
 ?>
