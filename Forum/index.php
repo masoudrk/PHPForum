@@ -343,7 +343,7 @@
                     </a>
                         <ul class="treeview-menu">
                             <li id="SForumHome">
-                                <a ui-sref="forum_home">
+                                <a ui-sref1="forum_home" href="home.php">
                                     <i class="fa fa-circle-o"></i>
                                     خانه
                                 </a>
