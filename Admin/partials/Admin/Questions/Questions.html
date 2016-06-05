@@ -73,7 +73,7 @@
                                        ng-click="openDiscardModal(u.ID , u.AuthorID)" title="رد کردن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
                                        ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeQuestionState(u,1)" title="تایید سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u.Title , u.QuestionText)" title="متن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u)" title="متن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <a class="link" ng-href="../Forum/#/Question/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
@@ -97,16 +97,34 @@
 </section>
 
 <script type="text/ng-template" id="myModalContent.html">
-    <div class="modal-body vazir-font text-right persian-rtl">
-        <h4  class="text-danger">تیتر سوال</h4>
+    <div class="modal-body vazir-font text-right persian-rtl" ng-init="editMode = false">
+        <div>
+            <h4 class="text-danger">
+                تیتر سوال
+                <i class="fa fa-pencil text-blue link hvr-grow" title="" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editMode = !editMode" data-original-title="ویرایش سوال"></i>
+            </h4>
+        </div>
         <hr />
-        {{Title}}
-        <h4 style="margin-top:25px" class="text-danger ">متن سوال</h4>
+        <div ng-hide="editMode">
+            {{Title}}
+        </div>
+        <div style="margin-top:25px" ng-show="editMode">
+            <textarea rows="2" class="col-xs-12" ng-model="Title"></textarea>
+        </div>
+        <div style="margin-top:25px" >
+            <h4 class="text-danger ">متن سوال</h4>
+        </div>
         <hr />
-        {{Text}}
+        <div ng-hide="editMode">
+            {{QuestionText}}
+        </div>
+        <div style="margin-top:25px" ng-show="editMode">
+            <textarea rows="6" class="col-xs-12" ng-model="QuestionText"></textarea>
+        </div>
     </div>
     <div class="modal-footer vazir-font">
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+        <button  ng-show="editMode" class="btn btn-success pull-right" type="button" ng-click="editQuestion()">ویرایش</button>
     </div>
 </script>
 
