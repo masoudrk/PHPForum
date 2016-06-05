@@ -50,11 +50,13 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         $scope.messagesUpdating = false;
     });
 
-    Extention.post("getUserMessages").then(function (res) {
-
-        $scope.messages = res;
+    Extention.post("getSiteInfo").then(function (res) {
+        $rootScope.websiteInfo = res;
     });
 
+    $scope.nowDate = function () {
+        return new Date();
+    }
 
     $scope.fullSearchData = {SearchType : '0'};
 

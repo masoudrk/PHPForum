@@ -475,12 +475,17 @@
 
     <footer class="main-footer persian-rtl" style="margin-right: 0px">
         <div class="pull-left hidden-xs">
-            <b>نسخه</b> {{'1.0.0'| pNumber}}
+            <b>نسخه</b> {{websiteInfo.Version| pNumber}}
         </div>
             <strong class="persian-rtl"></strong>
-            کلیه حقوق مادی و معنوی این سایت متعلق به اداره کل ارتباطات و علائم الکتریکی راه آهن جمهوری اسلامی ایران می باشد.
+            <span ng-bind="websiteInfo.CopyrightText | pNumber"></span>
           Copyright &copy;
-        2014-2015 <!--<a class="persian-rtl">طراحی شده توسط MagicCube.ir</a>-->.
+        <span ng-bind="nowDate() | jalaliDateSimple : 'YYYY' "></span>
+        -
+        <span ng-bind="websiteInfo.CopyrightStartDate | jalaliDateSimple : 'YYYY' "></span> <!--<a
+        class="persian-rtl">طراحی شده توسط
+        MagicCube
+        .ir</a>-->.
     </footer>
 
     <!-- Control Sidebar -->
