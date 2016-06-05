@@ -39,9 +39,9 @@ $app->post('/savePerson', function() use ($app) {
     $password = $r->Password;
     $r->Password = passwordHash::hash($password);
 
-    $db = new DbHandler();
+    
 
-    $resq = $db->makeQuery("select COUNT(*) as resp FROM user WHERE Email = '$r->Email'");
+    $resq = $app->db->makeQuery("select COUNT(*) as resp FROM user WHERE Email = '$r->Email'");
     $res = $resq->fetch_assoc();
 
     if ($res['resp'] > 0 )
@@ -51,7 +51,7 @@ $app->post('/savePerson', function() use ($app) {
     }
 
 
-    $userID = $db->insertToTable('user','FullName,Email,Password,PhoneNumber,SignupDate,OrganizationID'
+    $userID = $app->db->insertToTable('user','FullName,Email,Password,PhoneNumber,SignupDate,OrganizationID'
         ,"'$r->FullName','$r->Email','$r->Password','$r->PhoneNumber',now(),'$r->OrganizationID'",true);
 
 
@@ -89,7 +89,7 @@ $app->post('/savePerson', function() use ($app) {
     }
 
 
-    $db->insertToTable('user_mail','UserID,LinkID,ExpireDate',"'$userID','$linkID','".date('M d, Y', $dateplus_1)."'");
+    $app->db->insertToTable('user_mail','UserID,LinkID,ExpireDate',"'$userID','$linkID','".date('M d, Y', $dateplus_1)."'");
 
     $result = [];
     if($userID){
@@ -102,11 +102,11 @@ $app->post('/savePerson', function() use ($app) {
 });
 
 $app->post('/forgetPassword', function() use ($app)  {
-    $db = new DbHandler();
+    
     $data = json_decode($app->request->getBody());
     if(!isset($data->Email))
         echoError('bad request');
-    $reqsql = $db->makeQuery("select u.FullName ,u.UserAccepted, u.ID from user as u where u.Email = '$data->Email'");
+    $reqsql = $app->db->makeQuery("select u.FullName ,u.UserAccepted, u.ID from user as u where u.Email = '$data->Email'");
     $res = $reqsql->fetch_assoc();
     if(!$res)
         echoError('this email is not valid');
@@ -114,8 +114,8 @@ $app->post('/forgetPassword', function() use ($app)  {
     $newPassword = generateRandomString(10);
     require_once '../passwordHash.php';
     $password = passwordHash::hash($newPassword);
-    $reqsql = $db->updateRecord('user' , "Password ='".$password."'" , "ID = ".$res["ID"]);
-    $reqsql = $db->updateRecord('user' , "Password ='".$password."'" , "ID = ".$res["ID"]);
+    $reqsql = $app->db->updateRecord('user' , "Password ='".$password."'" , "ID = ".$res["ID"]);
+    $reqsql = $app->db->updateRecord('user' , "Password ='".$password."'" , "ID = ".$res["ID"]);
     if(!$reqsql)
         echoError('failed to update password');
 
@@ -151,8 +151,8 @@ $app->post('/forgetPassword', function() use ($app)  {
 });
 
 $app->post('/getAllPositions', function() use ($app)  {
-    $db = new DbHandler();
-    $resq = $db->makeQuery("SELECT * FROM `organ_position` WHERE 1");
+    
+    $resq = $app->db->makeQuery("SELECT * FROM `organ_position` WHERE 1");
     $res=[];
     while($r = $resq->fetch_assoc())
         $res[] = $r;
@@ -161,8 +161,8 @@ $app->post('/getAllPositions', function() use ($app)  {
 
 $app->post('/checkEmail', function() use ($app)  {
     $r = json_decode($app->request->getBody());
-    $db = new DbHandler();
-    $resq = $db->makeQuery("select COUNT(*) as resp FROM user WHERE Email = '$r->value'");
+    
+    $resq = $app->db->makeQuery("select COUNT(*) as resp FROM user WHERE Email = '$r->value'");
     $res = $resq->fetch_assoc();
     if ($res['resp'] > 0 )
     {
@@ -173,8 +173,8 @@ $app->post('/checkEmail', function() use ($app)  {
 
 $app->post('/checkUserName', function() use ($app)  {
     $r = json_decode($app->request->getBody());
-    $db = new DbHandler();
-    $resq = $db->makeQuery("select COUNT(*) as resp FROM user WHERE Username = '$r->value'");
+    
+    $resq = $app->db->makeQuery("select COUNT(*) as resp FROM user WHERE Username = '$r->value'");
     $res = $resq->fetch_assoc();
     if ($res['resp'] > 0 )
     {
@@ -187,11 +187,11 @@ $app->post('/signInUser', function() use ($app)  {
     require_once '../passwordHash.php';
     $r = json_decode($app->request->getBody());
     $response = array();
-    $db = new DbHandler();
+    
     $password = $r->Password;
     $email = $r->Username;
 
-    $user = $db->getOneRecord("select user.ID,UserAccepted,FullName,Email,Password,Username,SignupDate,file_storage.FullPath as Image from 
+    $user = $app->db->getOneRecord("select user.ID,UserAccepted,FullName,Email,Password,Username,SignupDate,file_storage.FullPath as Image from 
     user LEFT JOIN 
     file_storage ON file_storage.ID=user.AvatarID where Email='$email'");
 
@@ -199,11 +199,11 @@ $app->post('/signInUser', function() use ($app)  {
         if(passwordHash::check_password($user['Password'],$password)){
 
             $sessionID = generateSessionID(100);
-            $resSessionIDQ = $db->insertToTable('user_session',"UserID,SessionID,LoginDate,DeviceName,IP","'"
+            $resSessionIDQ = $app->db->insertToTable('user_session',"UserID,SessionID,LoginDate,DeviceName,IP","'"
                 .$user['ID']."','$sessionID',NOW(),'".getOperatingSystem()."','".getIPAddress()."'");
 
             $IsAdmin=false;
-            $admin = $db->getOneRecord("select * from admin left join admin_permission on admin_permission.ID=admin.PermissionID
+            $admin = $app->db->getOneRecord("select * from admin left join admin_permission on admin_permission.ID=admin.PermissionID
              where UserID=".$user['ID']);
 
             if($admin){
@@ -270,31 +270,25 @@ $app->post('/signInUser', function() use ($app)  {
     echoResponse(200, $response);
 });
 
-$app->post('/session', function() use ($app)  {
-    $sess = new Session();
-    $s = $sess->getSession();
-    echoResponse(200, $s);
-});
-
 $app->post('/getSiteTitleIcon', function() use ($app)  {
-    $db = new DbHandler();
+    
     //$data = json_decode($app->request->getBody());
-    $r = $db -> makeQuery("SELECT SiteTitleIcon FROM `global_settings` ORDER BY ID DESC LIMIT 1");
+    $r = $app->db -> makeQuery("SELECT SiteTitleIcon FROM `global_settings` ORDER BY ID DESC LIMIT 1");
     $res = $r->fetch_assoc();
     echoResponse(200, $res);
 });
 $app->post('/getSiteName', function() use ($app)  {
-    $db = new DbHandler();
+    
     //$data = json_decode($app->request->getBody());
-    $r = $db -> makeQuery("SELECT SiteName FROM `global_settings` ORDER BY ID DESC LIMIT 1");
+    $r = $app->db -> makeQuery("SELECT SiteName FROM `global_settings` ORDER BY ID DESC LIMIT 1");
     $res = $r->fetch_assoc();
 
     echoResponse(200, $res);
 });
 $app->post('/getSiteNameEN', function() use ($app)  {
-    $db = new DbHandler();
+    
     //$data = json_decode($app->request->getBody());
-    $r = $db -> makeQuery("SELECT SiteNameEN as SiteName FROM `global_settings` ORDER BY ID DESC LIMIT 1");
+    $r = $app->db -> makeQuery("SELECT SiteNameEN as SiteName FROM `global_settings` ORDER BY ID DESC LIMIT 1");
     $res = $r->fetch_assoc();
     echoResponse(200, $res);
 });
