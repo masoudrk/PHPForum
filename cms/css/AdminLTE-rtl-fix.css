@@ -408,3 +408,6 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .navbar-nav > .tasks-menu > .dropdown-menu > li .menu {
     max-height: 260px;
 }
+.dropdown-menu > li > a > .glyphicon, .dropdown-menu > li > a > .fa, .dropdown-menu > li > a > .ion {
+     margin-left: 5px;
+}

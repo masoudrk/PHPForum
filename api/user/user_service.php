@@ -147,7 +147,6 @@ $app->post('/markLastNotifications', function() use ($app)  {
 
     require_once '../db/event.php';
 
-
     $sess = $app->session;
 
     $app->db->makeQuery("update event set event.EventSeen='1' 
@@ -163,7 +162,6 @@ $app->post('/markLastNotifications', function() use ($app)  {
 $app->post('/getUserNotifications', function() use ($app)  {
 
     require_once '../db/event.php';
-
 
     $sess = $app->session;
 
@@ -200,7 +198,6 @@ $app->post('/getAllUserMessages', function() use ($app)  {
 
     require_once '../db/message.php';
 
-
     $data = json_decode($app->request->getBody());
     $sess = $app->session;
 
@@ -213,7 +210,6 @@ $app->post('/getAllUserMessages', function() use ($app)  {
 $app->post('/markAsReadMessage', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
-
 
     $sess = $app->session;
     $resQ = $app->db->makeQuery("SELECT 1 FROM message where message.UserID='$sess->UserID' 
@@ -231,7 +227,6 @@ $app->post('/getAllQuestions', function() use ($app)  {
 
     require_once '../db/question.php';
 
-
     $data = json_decode($app->request->getBody());
     $sess = $app->session;
 
@@ -244,7 +239,6 @@ $app->post('/getAllQuestions', function() use ($app)  {
 $app->post('/getAllMyAnswers', function() use ($app)  {
 
     require_once '../db/forum_answer.php';
-
 
     $data = json_decode($app->request->getBody());
     $sess = $app->session;

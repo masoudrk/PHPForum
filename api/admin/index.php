@@ -9,6 +9,7 @@ require '../libs/Slim/Slim.php';
 
 \Slim\Slim::registerAutoloader();
 
+$app = new \Slim\Slim();
 $app->session = new Session();
 $app->db = new DbHandler($app->session ,true ,true);
 

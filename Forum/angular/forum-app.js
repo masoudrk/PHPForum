@@ -735,6 +735,22 @@ app.directive('compile', [
     }
 ]);
 
+app.directive('rotateAnim', function() {
+    return function($scope, $element, $attributes) {
+        var degrees = 90;
+
+        $element.css('transition', '-webkit-transform 800ms ease');
+
+        var rotate = function() {
+            $element.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
+            degrees += -90;
+            setTimeout(rotate, 1000);
+        };
+
+        rotate();
+    }
+});
+
 angular.module("ui.router.title", ["ui.router"])
 	.run(["$rootScope", "$timeout", "$state", "Extention", function ($rootScope, $timeout, $state, Extention) {
 

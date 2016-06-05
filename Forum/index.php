@@ -100,8 +100,9 @@
                             </li>
                             <li class="footer">
                                 <a class="link" ng-click="updateMessages($event)"
-                                   style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;">بروزرسانی</a>
-                                <a class="link" ui-sref="messages">نمایش همه پیام ها</a>
+                                   style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;">بروزرسانی<i
+                                        class="fa fa-refresh"></i></a>
+                                <a class="link" ui-sref="messages">نمایش همه پیام ها<i class="fa fa-paper-plane-o"></i></a>
                             </li>
                         </ul>
                     </li>
@@ -110,7 +111,9 @@
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
-                            <span class="label label-success" ng-bind="notifications.Total | pNumber"></span>
+                            <span class="label label-success"
+                                  ng-bind="notifications.Total | pNumber"
+                                  ></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">شما <span> {{notifications.Total| pNumber}} </span> اعلان جدید
@@ -161,11 +164,17 @@
                             <li class="footer">
                                 <a class="link col-xs-6" ui-sref="profile({action:'Timeline'})"
                                    style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;
-                                   ">تایم لاین</a>
+                                   ">تایم لاین
+                                    <i class="fa fa-clock-o"></i>
+                                </a>
                                 <a class="link col-xs-6" ng-click="updateNotifications($event)"
-                                   style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;">بروزرسانی</a>
+                                   style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;">بروزرسانی
+                                    <i class="fa fa-refresh"></i>
+                                </a>
 
-                                <a class="link" ng-click="markLastNotifications($event)">علامت زدن اعلان های نمایشی</a>
+                                <a class="link" ng-click="markLastNotifications($event)">علامت زدن اعلان های نمایشی
+                                    <i class="fa fa-check"></i>
+                                </a>
                             </li>
                         </ul>
                     </li>
