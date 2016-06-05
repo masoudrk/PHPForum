@@ -15,19 +15,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     });
 
     $stateProvider 
-        .state('home', {
-            url: "/",
-            templateUrl: "partials/Forum/_Home/Home.html",
-            controller: 'HomeCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/_Home/HomeCtrl.js']);
-                }],
-                $title: function () {
-                    return 'انجمن';
-                }
-            }
-        })
+        // .state('home', {
+        //     url: "/",
+        //     templateUrl: "partials/Forum/_Home/Home.html",
+        //     controller: 'HomeCtrl',
+        //     resolve: {
+        //         deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+        //             return $ocLazyLoad.load(['partials/Forum/_Home/HomeCtrl.js']);
+        //         }],
+        //         $title: function () {
+        //             return 'انجمن';
+        //         }
+        //     }
+        // })
         .state("dashboard", {
             url: "/Dashboard",
             templateUrl: "partials/Dashboard/Dashboard.html",
@@ -40,19 +40,20 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'داشبورد';
                 }
             }
-        }).state("forum_home", {
-            url: "/Home",
-            templateUrl: "partials/Forum/_Home/Home.html",
-            controller: 'HomeCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/_Home/HomeCtrl.js']);
-                }],
-                $title: function () {
-                    return 'انجمن خانه';
-                }
-            }
         })
+        // .state("forum_home", {
+        //     url: "/Home",
+        //     templateUrl: "partials/Forum/_Home/Home.html",
+        //     controller: 'HomeCtrl',
+        //     resolve: {
+        //         deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+        //             return $ocLazyLoad.load(['partials/Forum/_Home/HomeCtrl.js']);
+        //         }],
+        //         $title: function () {
+        //             return 'انجمن خانه';
+        //         }
+        //     }
+        // })
         .state("main_forum", {
             url: "/MainForum/:id",
             templateUrl: "partials/Forum/Main/MainForum.html",
@@ -205,10 +206,10 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         });
-    $urlRouterProvider.otherwise(function ($injector, $location) {
-        var $state = $injector.get('$state');
-        $state.go('home');
-    }); 
+        $urlRouterProvider.otherwise(function ($injector, $location) {
+            var $state = $injector.get('$state');
+            $state.go('main_forum',{id:'Transition'});
+        });
 }
 ]);
 
@@ -246,8 +247,6 @@ app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cook
     });
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
-
-        hideCMS(next.name == 'forum_home');
 
         Extention.setBusy(true);
 

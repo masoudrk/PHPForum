@@ -51,7 +51,8 @@
                                   {{item.EventDate | jalaliDateSimple : 'jYY/jMM/jDD' | pNumber}}
                                 </span>
 
-                                <i class="fa" ng-class="getIconClass(item)" style="color: #fff;" ng-switch-default></i>
+                                <i class="fa  faa-vertical animated-hover" ng-class="getIconClass(item)"
+                                   style="color: #fff;" ng-switch-default></i>
 
                                 <div class="timeline-item" ng-switch-default>
                                     <span class="time persian-rtl">
@@ -79,7 +80,7 @@
                                     </div>
                                 </div>
 
-                                <i class="fa" ng-class="getIconClass(item)"
+                                <i class="fa faa-shake animated-hover" ng-class="getIconClass(item)"
                                    style="color: #fff;width: 50px;height: 50px;right: 8px;
                                             font-size: 25px;padding: 10px;top: 52px;"
                                    ng-switch-when="SU"></i>
@@ -110,7 +111,7 @@
 
                         <div class="text-center">
                             <auto-paging page="1"
-                                         page-size="40"
+                                         page-size="25"
                                          ul-class="pagination pagination-sm no-margin"
                                          action-name="getUserTimeline"
                                          data-params="pagingParams"

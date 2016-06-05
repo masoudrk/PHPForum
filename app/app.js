@@ -240,11 +240,6 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                     console.log(err.data);
                 }
 
-                if(err.data.AuthState && err.data.AuthState == 'UN_AUTH'){
-                    console.log('State : UN_AUTHORIZED_USER');
-                    window.location = '../';
-                }
-
                 obj.setBusy(false);
                 return err;
             });

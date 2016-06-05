@@ -1652,7 +1652,8 @@ limit $offset,$data->pageSize");
         $dateItem['EventDate'] = $value['EventDate'];
         $dateItem['EventTypeID'] = '-1';
         $dateItem['EventType'] = 'SU';
-        $dateItem['User'] =$app->db->makeQuery("select user.SignupDate from user where ID='$session->UserID'");
+        $dateItem['User'] =
+            $app->db->makeQuery("select user.SignupDate from user where ID='$session->UserID'")->fetch_assoc();
         array_push($cqData, $dateItem);
     }
 

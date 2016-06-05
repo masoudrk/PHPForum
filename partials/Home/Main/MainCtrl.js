@@ -61,7 +61,7 @@
     }
 
     $scope.logInUser = function () {
-        getPage('Forum');
+        getPage('Forum/home.php');
     }
 
     $scope.signOutUser = function () {
@@ -78,7 +78,8 @@
                     if (msg.IsAdmin) {
                         getPage('Admin');
                     } else {
-                        getPage('Forum');
+                        //getPage('Forum');
+                        getPage('Forum/home.php');
                     }
                 } else if (msg.Status == 'notAccepted') {
                     Extention.popError('اکانت شما هنوز  توسط ادمین تایید نشده است');
