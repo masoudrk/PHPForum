@@ -38,10 +38,16 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     };
 
     $scope.notificationsUpdating = true;
+    $scope.messagesUpdating = true;
 
     Extention.post("getUserNotifications").then(function (res) {
         $scope.notifications = res.Data;
         $scope.notificationsUpdating = false;
+    });
+
+    Extention.post("getUserMessages").then(function (res) {
+        $scope.messages = res;
+        $scope.messagesUpdating = false;
     });
 
     Extention.post("getUserMessages").then(function (res) {
@@ -84,6 +90,21 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     $scope.getRandomColorClass = function(id){
         var i = id % $scope.bgColorArray.length;
         return $scope.bgColorArray[i];
+    }
+
+    $scope.updateMessages = function (event) {
+        if (event)
+            event.stopPropagation();
+
+        if (!$scope.messagesUpdating) {
+            $scope.messagesUpdating = true;
+            Extention.postAsync("getUserMessages").then(function (res) {
+                $scope.messages = res;
+                $scope.messagesUpdating = false;
+            });
+        } else {
+            Extention.popInfo('لطفا کمی صبر کنید...');
+        }
     }
 
 

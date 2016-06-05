@@ -1,9 +1,9 @@
 ﻿<?php
 $app->post('/getSocketData', function() use ($app)  {
-    $db = new DbHandler(true);
-    $s = new Session();
+    
+    $s = $app->session;
 
-    $resQ = $db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image from user LEFT JOIN file_storage on 
+    $resQ = $app->db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image from user LEFT JOIN file_storage on 
     file_storage.ID=user.AvatarID 
  where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 3 MINUTE");
 
@@ -18,9 +18,9 @@ $app->post('/getSocketData', function() use ($app)  {
 });
 
 $app->post('/globalSearch', function() use ($app)  {
-    $db = new DbHandler(true);
+    
     $data = json_decode($app->request->getBody());
-    $sess = new Session();
+    $sess = $app->session;
 
     $searchValue = $data->searchValue;
     $searchType = $data->searchType;
@@ -43,7 +43,7 @@ $app->post('/globalSearch', function() use ($app)  {
  (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
  (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
-        $res = $p->getPage($db,"SELECT forum_question.* , u.score, u.FullName , file_storage.FullPath as Image,
+        $res = $p->getPage($app->db,"SELECT forum_question.* , u.score, u.FullName , file_storage.FullPath as Image,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate
@@ -69,7 +69,7 @@ WHERE forum_question.AdminAccepted=1 $searchQuery");
  (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
-        $res = $p->getPage($db,"SELECT u.* , fs.FullPath as Image, 
+        $res = $p->getPage($app->db,"SELECT u.* , fs.FullPath as Image, 
 ( SELECT count(*) FROM forum_answer where AuthorID = u.ID and forum_answer.AdminAccepted=1 ) as AnswersCount, 
 ( SELECT count(*) FROM forum_question where AuthorID = u.ID and  forum_question.AdminAccepted=1 ) as QuestionsCount ,
 ($rateSelection) as Rate
@@ -87,11 +87,11 @@ WHERE u.UserAccepted=1 ".$searchQuery);
 $app->post('/deleteQuestion', function() use ($app)  {
 
     require_once '../db/question.php';
-    $db = new DbHandler(true);
+
 
     $data = json_decode($app->request->getBody());
-    $sess = new Session();
-    $res = deleteQuestion($db, $data->QuestionID, $sess->UserID);
+    $sess = $app->session;
+    $res = deleteQuestion($app->db, $data->QuestionID, $sess->UserID);
 
     if($res){
         $d = [];
@@ -106,16 +106,16 @@ $app->post('/deleteQuestion', function() use ($app)  {
 $app->post('/deleteSession', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess= new Session();
 
-    $resQ = $db->makeQuery("select * from user_session where user_session.ID='".$data->ID."'");
+    $sess= $app->session;
+
+    $resQ = $app->db->makeQuery("select * from user_session where user_session.ID='".$data->ID."'");
     $s = $resQ->fetch_assoc();
 
     if($s['SessionID'] == $sess->SSN)
         echoError("CurrentSession");
 
-    $res = $db->deleteFromTable('user_session',"ID='".$data->ID."'");
+    $res = $app->db->deleteFromTable('user_session',"ID='".$data->ID."'");
 
     if($res)
         echoSuccess();
@@ -125,11 +125,11 @@ $app->post('/deleteSession', function() use ($app)  {
 
 $app->post('/getUserLastQuestion', function() use ($app)  {
 
-    $db = new DbHandler(true);
+
     $data = json_decode($app->request->getBody());
     if(!isset($data->UserID))
     {echoResponse(201,"bad request"); return;}
-    $resQ= $db->makeQuery("select DISTINCT q.ID ,q.Title ,q.CreationDate,
+    $resQ= $app->db->makeQuery("select DISTINCT q.ID ,q.Title ,q.CreationDate,
 (select sum(RateValue) from question_rate where QuestionID = q.ID) as QuestionRate,
 (select count(*) from question_follow where QuestionID = q.ID) as QuestionUserFollow,
 (select count(*) from question_view where QuestionID = q.ID) as questionView,
@@ -146,42 +146,42 @@ echoResponse(200 , $resp);
 $app->post('/markLastNotifications', function() use ($app)  {
 
     require_once '../db/event.php';
-    $db = new DbHandler(true);
 
-    $sess = new Session();
 
-    $resQ= $db->makeQuery("update event set event.EventSeen='1' 
+    $sess = $app->session;
+
+    $app->db->makeQuery("update event set event.EventSeen='1' 
                            where event.EventUserID='$sess->UserID' and event.EventSeen='0' 
                            order by event.EventDate desc limit 25");
 
     $notify = [];
-    $notify['Total']= getUserTotalNotifications($db,$sess->UserID);
-    $notify['All'] = getUserLastNotifications($db, $sess->UserID , 25);
+    $notify['Total']= getUserTotalNotifications($app->db,$sess->UserID);
+    $notify['All'] = getUserLastNotifications($app->db, $sess->UserID , 25);
     echoSuccess($notify);
 });
 
 $app->post('/getUserNotifications', function() use ($app)  {
 
     require_once '../db/event.php';
-    $db = new DbHandler(true);
 
-    $sess = new Session();
+
+    $sess = $app->session;
 
     $notify = [];
-    $notify['Total']= getUserTotalNotifications($db,$sess->UserID);
-    $notify['All'] = getUserLastNotifications($db, $sess->UserID , 25);
+    $notify['Total']= getUserTotalNotifications($app->db,$sess->UserID);
+    $notify['All'] = getUserLastNotifications($app->db, $sess->UserID , 25);
     echoSuccess($notify);
 });
 
 $app->post('/getUserMessages', function() use ($app)  {
 
     require_once '../db/message.php';
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
 
     $res = [];
-    $res['All'] = getUserUnreadMessages($db,$sess->UserID,20);
-    $res['Total'] = getUserUnreadMessagesCount($db,$sess->UserID);
+    $res['All'] = getUserUnreadMessages($app->db,$sess->UserID,20);
+    $res['Total'] = getUserUnreadMessagesCount($app->db,$sess->UserID);
     echoResponse(200 , $res);
 });
 
@@ -189,23 +189,23 @@ $app->post('/getUserMessageByID', function() use ($app)  {
 
     require_once '../db/message.php';
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
 
-    $res = getUserMessageByID($db,$sess->UserID,$data->MessageID);
+    $sess = $app->session;
+
+    $res = getUserMessageByID($app->db,$sess->UserID,$data->MessageID);
     echoResponse(200 , $res);
 });
 
 $app->post('/getAllUserMessages', function() use ($app)  {
 
     require_once '../db/message.php';
-    $db = new DbHandler(true);
+
 
     $data = json_decode($app->request->getBody());
-    $sess = new Session();
+    $sess = $app->session;
 
     $pin = new PaginationInput($data);
-    $res = getPageUserMessages($db,$sess->UserID,$pin);
+    $res = getPageUserMessages($app->db,$sess->UserID,$pin);
 
     echoResponse(200, $res);
 });
@@ -213,15 +213,15 @@ $app->post('/getAllUserMessages', function() use ($app)  {
 $app->post('/markAsReadMessage', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
 
-    $sess = new Session();
-    $resQ = $db->makeQuery("SELECT 1 FROM message where message.UserID='$sess->UserID' 
+
+    $sess = $app->session;
+    $resQ = $app->db->makeQuery("SELECT 1 FROM message where message.UserID='$sess->UserID' 
 AND message.ID='$data->MessageID' LIMIT 1");
 
     $c = mysqli_num_rows($resQ);
     if($c > 0){
-        $db->updateRecord('message',"MessageViewed=1","ID='$data->MessageID'");
+        $app->db->updateRecord('message',"MessageViewed=1","ID='$data->MessageID'");
         echoSuccess($data->MessageID);
     }
     echoError("Error in updating because message '$data->MessageID' is not belong to you.");
@@ -230,13 +230,13 @@ AND message.ID='$data->MessageID' LIMIT 1");
 $app->post('/getAllQuestions', function() use ($app)  {
 
     require_once '../db/question.php';
-    $db = new DbHandler(true);
+
 
     $data = json_decode($app->request->getBody());
-    $sess = new Session();
+    $sess = $app->session;
 
     $pin = new PaginationInput($data);
-    $res = getPageAuthorQuestions($db,$sess->UserID,$pin);
+    $res = getPageAuthorQuestions($app->db,$sess->UserID,$pin);
 
     echoResponse(200, $res);
 });
@@ -244,33 +244,33 @@ $app->post('/getAllQuestions', function() use ($app)  {
 $app->post('/getAllMyAnswers', function() use ($app)  {
 
     require_once '../db/forum_answer.php';
-    $db = new DbHandler(true);
+
 
     $data = json_decode($app->request->getBody());
-    $sess = new Session();
+    $sess = $app->session;
 
     $pin = new PaginationInput($data);
-    $res = getPageUserAnswers($db,$sess->UserID,$pin);
+    $res = getPageUserAnswers($app->db,$sess->UserID,$pin);
 
     echoResponse(200, $res);
 });
 
 $app->post('/saveQuestion', function() use ($app)  {
-    
+
     $data = json_decode($_POST['formData']);
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
 
     $qID = -1;
 
     if(isset($data->ID)){
         $qID = $data->ID;
-        $db->updateRecord('forum_question',"SubjectID='".$data->Subject->ID."',QuestionText='$data->QuestionText',
+        $app->db->updateRecord('forum_question',"SubjectID='".$data->Subject->ID."',QuestionText='$data->QuestionText',
         Title='$data->Title'",
             "ID='$qID'");
-        $d = $db->deleteFromTable('tag_question','QuestionID='.$qID);
+        $d = $app->db->deleteFromTable('tag_question','QuestionID='.$qID);
     }else{
-        $qID = $db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID,CreationDate',
+        $qID = $app->db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID,CreationDate',
             "'$data->QuestionText','$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW()",true);
 
         if (isset($_FILES['file'])) {
@@ -288,19 +288,19 @@ $app->post('/saveQuestion', function() use ($app)  {
                 $destination ='content/user_upload/'.$rand.'.'.$ext;
                 $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
                 if($uploadSuccess){
-                    $fileTypeQ = $db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+                    $fileTypeQ = $app->db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
 
                     $fileTypeID = -1;
                     if(mysqli_num_rows($fileTypeQ) > 0)
                         $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
 
                     $fileSize = $file['size'] / 1024;
-                    $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
+                    $fid = $app->db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
                 FileSize,UploadDate',
                         "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID','$fileSize',NOW()",
                         true);
 
-                    $db->insertToTable('question_attachment','QuestionID,FileID',
+                    $app->db->insertToTable('question_attachment','QuestionID,FileID',
                         "'$qID','$fid'");
                 }
             }
@@ -310,7 +310,7 @@ $app->post('/saveQuestion', function() use ($app)  {
     if(isset($data->Tags)){
 
         foreach($data->Tags as $tag){
-            $cq = $db->insertToTable('tag_question',"TagID,QuestionID","'$tag->ID','$qID'");
+            $cq = $app->db->insertToTable('tag_question',"TagID,QuestionID","'$tag->ID','$qID'");
         }
     }
 
@@ -327,21 +327,21 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
     require_once '../db/forum_subject.php';
     $data = json_decode($app->request->getBody());
 
-    $db = new DbHandler(true);
+
     $res = [];
 
     if(isset($data)) {
-        $resQ = $db->makeQuery("select * from forum_question where forum_question.ID='$data->QuestionID'");
+        $resQ = $app->db->makeQuery("select * from forum_question where forum_question.ID='$data->QuestionID'");
         $res['Question'] = $resQ->fetch_assoc();
 
-        $res['Question']['Subject'] = getQuestionSubject($db , $data->QuestionID);
-        $res['Question']['MainSubject'] = getSubjectParent($db , $res['Question']['Subject']['ID']);
-        $res['Question']['Tags'] = getQuestionTags($db , $data->QuestionID);
+        $res['Question']['Subject'] = getQuestionSubject($app->db , $data->QuestionID);
+        $res['Question']['MainSubject'] = getSubjectParent($app->db , $res['Question']['Subject']['ID']);
+        $res['Question']['Tags'] = getQuestionTags($app->db , $data->QuestionID);
 
     }
 
-    $res['AllTags'] = getAllTags($db);
-    $res['AllSubjects'] = getAllMainSubjectsWithChilds($db);
+    $res['AllTags'] = getAllTags($app->db);
+    $res['AllSubjects'] = getAllMainSubjectsWithChilds($app->db);
 
     echoResponse(200, $res);
 });
@@ -349,18 +349,18 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
 $app->post('/getMainForumData', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
 
     $res = [];
-    $resQ = $db->makeQuery("SELECT * ,
+    $resQ = $app->db->makeQuery("SELECT * ,
 (SELECT count(*) FROM main_subject_follow where MainSubjectID = fms.ID and UserID = '$sess->UserID') as PersonFollow 
 FROM forum_main_subject as fms WHERE SubjectName='$data->MainSubjectName'");
     $mainSubject = $resQ->fetch_assoc();
     $res['MainSubject'] = $mainSubject;
     $mainSubjectID = $mainSubject['SubjectID'];
 
-    $resQ = $db->makeQuery("SELECT fs.*,
+    $resQ = $app->db->makeQuery("SELECT fs.*,
 (SELECT Count(*) FROM forum_question WHERE SubjectID=fs.ID AND AdminAccepted=1) as TotalQuestions,
 (SELECT count(*) FROM subject_follow where SubjectID = fs.ID) as FollowCount ,
 (SELECT count(*) FROM subject_follow where SubjectID = fs.ID and UserID = '$sess->UserID') as PersonFollow ,
@@ -376,10 +376,10 @@ FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
     $res['SubjectChilds'] = $subjectChilds;
 
     $curDate = date('Y-m-d');
-    $resCQ = $db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
     $resC  = $resCQ->fetch_assoc();
 
-    $resQ = $db->makeQuery("
+    $resQ = $app->db->makeQuery("
 
 SELECT cd.IntervalDay as date,
   (select count(*) from forum_question
@@ -420,14 +420,14 @@ where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
     $res['PieChartData']=[];
 
-    $resQ = $db->makeQuery("select 'سوال' as Name, count(*) as Value from forum_question
+    $resQ = $app->db->makeQuery("select 'سوال' as Name, count(*) as Value from forum_question
     inner join forum_subject on forum_subject.ID=forum_question.SubjectID
   where forum_subject.ParentSubjectID='$mainSubjectID' 
   and forum_question.AdminAccepted=1 
   ");
     $res['PieChartData'][0] =$resQ->fetch_assoc();
 
-    $resQ = $db->makeQuery("select 'جواب' as Name, count(*) as Value from forum_answer
+    $resQ = $app->db->makeQuery("select 'جواب' as Name, count(*) as Value from forum_answer
     inner join forum_question on forum_answer.QuestionID=forum_question.ID
     inner join forum_subject on forum_subject.ID=forum_question.SubjectID
   where forum_subject.ParentSubjectID='$mainSubjectID'
@@ -440,9 +440,9 @@ where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 $app->post('/getSubForumData', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
 
-    $resQ = $db->makeQuery("SELECT forum_subject.*,forum_main_subject.Title as MainTitle,
+
+    $resQ = $app->db->makeQuery("SELECT forum_subject.*,forum_main_subject.Title as MainTitle,
   forum_main_subject.SubjectName as MainSubjectName
   FROM forum_subject left join 
     forum_main_subject on   forum_main_subject.SubjectID=forum_subject.ParentSubjectID WHERE  forum_subject
@@ -453,10 +453,10 @@ $app->post('/getSubForumData', function() use ($app)  {
 
 
     $curDate = date('Y-m-d');
-    $resCQ = $db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
     $resC  = $resCQ->fetch_assoc();
 
-    $resQ = $db->makeQuery("
+    $resQ = $app->db->makeQuery("
 SELECT cd.IntervalDay as date,
   (select count(*) from forum_question
   where forum_question.SubjectID='$data->SubjectID' 
@@ -496,9 +496,9 @@ where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
 $app->post('/getLastFollowingQuestions', function() use ($app)  {
 
-    $db = new DbHandler(true);
+
     $data = json_decode($app->request->getBody());
-    $sess = new Session();
+    $sess = $app->session;
     $pageRes = [];
     $pageRes['Action'] = 'Get Following Questions';
     $pageRes['Items'] = [];
@@ -511,11 +511,11 @@ $app->post('/getLastFollowingQuestions', function() use ($app)  {
 
     if(isset($data->MainSubjectName)){
 
-        $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+        $resQ = $app->db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
                                 forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
-        $pageRes['Total'] = $db->makeQuery("
+        $pageRes['Total'] = $app->db->makeQuery("
 SELECT count(*) as Total 
 FROM (
   (SELECT forum_question.*
@@ -555,7 +555,7 @@ FROM subject_follow
 
         $offset = ($data->pageIndex - 1) * $data->pageSize;
 
-        $resQ = $db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, ($rateSelection) as Rate,
+        $resQ = $app->db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, ($rateSelection) as Rate,
  (SELECT count(*) from forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
  
 (SELECT count(*) FROM question_view where QuestionID = res.ID) 
@@ -607,7 +607,7 @@ ORDER BY res.CreationDate DESC
             $pageRes['Items'][] = $r;
 
     }else if(isset($data->SubjectID)){
-        $pageRes['Total'] = $db->makeQuery("
+        $pageRes['Total'] = $app->db->makeQuery("
 SELECT count(*) as Total 
 FROM (
   (SELECT forum_question.*
@@ -640,7 +640,7 @@ LEFT JOIN file_storage on file_storage.ID=u.AvatarID")->fetch_assoc()['Total'];
 
         $offset = ($data->pageIndex - 1) * $data->pageSize;
 
-        $resQ = $db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, 
+        $resQ = $app->db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, 
 ($rateSelection) as Rate,
  (SELECT count(*) from forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
  
@@ -689,9 +689,9 @@ ORDER BY res.CreationDate DESC
 
 $app->post('/getForumBestQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
 
-    $sess = new Session();
+
+    $sess = $app->session;
     $pr = new Pagination($data);
 
     $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
@@ -701,7 +701,7 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
  INTERVAL 7 DAY))";
 
     if(isset($data->MainSubjectName)){
-        $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+        $resQ = $app->db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
                                 forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
@@ -726,13 +726,13 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
  WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' ) as q 
  order by q.QScore desc limit $offset , $data->pageSize";
 
-        $pageResQ = $db->makeQuery($query);
+        $pageResQ = $app->db->makeQuery($query);
         $items = [];
         while($r = $pageResQ->fetch_assoc()){
             $items[] = $r;
         }
 
-        $total = $db->makeQuery("SELECT count(*) as Total
+        $total = $app->db->makeQuery("SELECT count(*) as Total
  FROM forum_question 
  LEFT JOIN user as u on u.ID=forum_question.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
@@ -768,13 +768,13 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
  WHERE forum_question.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID)' ) as q 
  order by q.QScore desc limit $offset , $data->pageSize";
 
-        $pageResQ = $db->makeQuery($query);
+        $pageResQ = $app->db->makeQuery($query);
         $items = [];
         while($r = $pageResQ->fetch_assoc()){
             $items[] = $r;
         }
 
-        $total = $db->makeQuery("SELECT count(*) as Total
+        $total = $app->db->makeQuery("SELECT count(*) as Total
  FROM forum_question 
  LEFT JOIN user as u on u.ID=forum_question.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
@@ -794,9 +794,9 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
 
 $app->post('/getForumBestAnswers', function() use ($app)  {
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
 
-    $sess = new Session();
+
+    $sess = $app->session;
     $pr = new Pagination($data);
 
     $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
@@ -808,7 +808,7 @@ $app->post('/getForumBestAnswers', function() use ($app)  {
     $offset = $pr->calculateOffset();
 
     if(isset($data->MainSubjectName)){
-        $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+        $resQ = $app->db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
                                 forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
@@ -833,13 +833,13 @@ forum_answer.AnswerText, forum_answer.`CreationDate`,
  WHERE fq.AdminAccepted='1' AND  forum_answer.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' ) as q 
  order by q.AScore desc limit $offset , $data->pageSize";
 
-        $pageResQ = $db->makeQuery($query);
+        $pageResQ = $app->db->makeQuery($query);
         $items = [];
         while($r = $pageResQ->fetch_assoc()){
             $items[] = $r;
         }
 
-        $total = $db->makeQuery("SELECT count(*) as Total
+        $total = $app->db->makeQuery("SELECT count(*) as Total
  FROM forum_question 
  LEFT JOIN user as u on u.ID=forum_question.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
@@ -874,13 +874,13 @@ forum_answer.AnswerText, forum_answer.`CreationDate`,
  WHERE fq.AdminAccepted='1' AND  forum_answer.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID' ) as q 
  order by q.AScore desc limit $offset , $data->pageSize";
 
-        $pageResQ = $db->makeQuery($query);
+        $pageResQ = $app->db->makeQuery($query);
         $items = [];
         while($r = $pageResQ->fetch_assoc()){
             $items[] = $r;
         }
 
-        $total = $db->makeQuery("SELECT count(*) as Total
+        $total = $app->db->makeQuery("SELECT count(*) as Total
  FROM forum_question 
  LEFT JOIN user as u on u.ID=forum_question.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
@@ -900,9 +900,9 @@ forum_answer.AnswerText, forum_answer.`CreationDate`,
 
 $app->post('/getForumLastQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
 
-    $sess = new Session();
+
+    $sess = $app->session;
     $pr = new Pagination($data);
 
     $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
@@ -912,7 +912,7 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
  INTERVAL 7 DAY))";
 
     if(isset($data->MainSubjectName)){
-        $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+        $resQ = $app->db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
                                 forum_main_subject.SubjectName='$data->MainSubjectName' ");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
@@ -932,7 +932,7 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
  WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' 
  order by forum_question.CreationDate desc";
 
-        $pageRes = $pr->getPage($db,$query);
+        $pageRes = $pr->getPage($app->db,$query);
         echoResponse(200, $pageRes);
     }
     else if(isset($data->SubjectID)){
@@ -949,19 +949,19 @@ file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_qu
 .AdminAccepted='1' 
 AND forum_question.SubjectID='$data->SubjectID' order by forum_question.CreationDate desc";
 
-        $pageRes = $pr->getPage($db,$query);
+        $pageRes = $pr->getPage($app->db,$query);
         echoResponse(200, $pageRes);
     }
-    
+
     echoError('Subject ID is not found.');
 
 });
 
 $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
 
-    $sess= new Session();
+
+    $sess= $app->session;
     $pr = new Pagination($data);
 
     $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
@@ -971,7 +971,7 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
  INTERVAL 7 DAY))";
 
     if(isset($data->MainSubjectName)){
-        $resQ = $db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
+        $resQ = $app->db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE 
                                 forum_main_subject.SubjectName='$data->MainSubjectName'");
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
@@ -990,7 +990,7 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
  by s.AnswersCount 
  desc";
 
-        $pageRes = $pr->getPage($db,$query);
+        $pageRes = $pr->getPage($app->db,$query);
         echoResponse(200, $pageRes);
     }
     else if(isset($data->SubjectID)){
@@ -1009,7 +1009,7 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
  by s.AnswersCount 
  desc";
 
-        $pageRes = $pr->getPage($db,$query);
+        $pageRes = $pr->getPage($app->db,$query);
         echoResponse(200, $pageRes);
     }
 
@@ -1023,11 +1023,11 @@ $app->post('/getUserProfile', function() use ($app)  {
     require_once '../db/skill.php';
     require_once '../db/user_session.php';
 
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
 
 
-    $resQ = $db->makeQuery("SELECT user.`ID`,user.Description, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, 
+    $resQ = $app->db->makeQuery("SELECT user.`ID`,user.Description, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, 
     `SignupDate`,
  `Gender` , FullPath as AvatarImagePath ,
  (SELECT count(*) FROM forum_question where forum_question.AuthorID='$sess->UserID') as QuestionsCount,
@@ -1037,13 +1037,13 @@ $app->post('/getUserProfile', function() use ($app)  {
 
     $user = $resQ->fetch_assoc();
 
-    $user['Educations'] = getUserEducations($db,$sess->UserID);
-    $user['AllEducations'] = getAllEducations($db);
+    $user['Educations'] = getUserEducations($app->db,$sess->UserID);
+    $user['AllEducations'] = getAllEducations($app->db);
 
-    $user['Skills'] = getUserSkills($db,$sess->UserID);
-    $user['AllSkills'] = getAllSkills($db);
-    
-    $user['ActiveSessions'] = getAllUserActiveSessions($db,$sess->UserID);
+    $user['Skills'] = getUserSkills($app->db,$sess->UserID);
+    $user['AllSkills'] = getAllSkills($app->db);
+
+    $user['ActiveSessions'] = getAllUserActiveSessions($app->db,$sess->UserID);
 
     echoResponse(200, $user);
 });
@@ -1051,17 +1051,17 @@ $app->post('/getUserProfile', function() use ($app)  {
 $app->post('/getProfile', function() use ($app)  {
 
     $r = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
+
 
     if(!$r->UserID || !$r->TargetUserID)
         echoResponse(201, 'bad request');
 
-    $resQ =$db->makeQuery("select count(*) as val from user where ID = '$r->TargetUserID' and UserAccepted = 1");
+    $resQ =$app->db->makeQuery("select count(*) as val from user where ID = '$r->TargetUserID' and UserAccepted = 1");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
         {echoResponse(200, null);return;}
-        
-    $resQ = $db->makeQuery("select u.FullName , u.Email ,u.PhoneNumber, u.Tel , u.SignupDate ,u.Gender, u.Description ,u.score, f.FullPath , o.OrganizationName,
+
+    $resQ = $app->db->makeQuery("select u.FullName , u.Email ,u.PhoneNumber, u.Tel , u.SignupDate ,u.Gender, u.Description ,u.score, f.FullPath , o.OrganizationName,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT count(*) FROM person_follow where TargetUserID = '$r->TargetUserID' and UserID = '$r->UserID' ) as PersonFollow
@@ -1071,7 +1071,7 @@ left join organ_position as o on u.OrganizationID = o.ID
 where u.UserAccepted = 1 and u.ID = '$r->TargetUserID'");
 
     $resp = $resQ->fetch_assoc();
-    $resQ = $db->makeQuery("select distinct s.Skill from skill as s
+    $resQ = $app->db->makeQuery("select distinct s.Skill from skill as s
 inner join user_skill as us on us.UserID = s.ID
 where us.UserID = '$r->UserID'");
 
@@ -1080,11 +1080,11 @@ where us.UserID = '$r->UserID'");
             $skills[] = $item;
     $resp['Skills'] = $skills;
 
-    $resQ = $db->makeQuery("select * from forum_question as q where q.AuthorID = '$r->TargetUserID' order by q.CreationDate desc");
+    $resQ = $app->db->makeQuery("select * from forum_question as q where q.AuthorID = '$r->TargetUserID' order by q.CreationDate desc");
 
     $resp['LastQuestion'] = $resQ->fetch_assoc();
 
-    $resQ = $db->makeQuery("select q.* ,(SELECT sum(RateValue) FROM question_rate where QuestionID = q.ID) as QuestionRate
+    $resQ = $app->db->makeQuery("select q.* ,(SELECT sum(RateValue) FROM question_rate where QuestionID = q.ID) as QuestionRate
 from forum_question as q
 where q.AuthorID = '$r->TargetUserID' and q.AdminAccepted = 1
 order by QuestionRate desc
@@ -1098,23 +1098,23 @@ order by QuestionRate desc
 $app->post('/getQuestionByID', function() use ($app)  {
 
     $r = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
+
 
     if(!isset($r->UserID) || !isset($r->QuestionID))
         {echoResponse(201, 'bad request');return;}
 
 
-    $resQ =$db->makeQuery("select count(*) as val from forum_question where ID = '$r->QuestionID' and AdminAccepted = 1");
+    $resQ =$app->db->makeQuery("select count(*) as val from forum_question where ID = '$r->QuestionID' and AdminAccepted = 1");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
         {echoResponse(200, null);return;}
 
-    $resQ =$db->makeQuery("select count(*) as val from question_view where UserID = '$r->UserID' and QuestionID = '$r->QuestionID'");
+    $resQ =$app->db->makeQuery("select count(*) as val from question_view where UserID = '$r->UserID' and QuestionID = '$r->QuestionID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
-        {$resQ =$db->makeQuery("insert into question_view (UserID, QuestionID , ViewDate) values ('$r->UserID','$r->QuestionID',now())");}
+        {$resQ =$app->db->makeQuery("insert into question_view (UserID, QuestionID , ViewDate) values ('$r->UserID','$r->QuestionID',now())");}
 
-    $resQ = $db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainSubject , ms.SubjectName , o.OrganizationName ,
+    $resQ = $app->db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainSubject , ms.SubjectName , o.OrganizationName ,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT count(*) FROM question_view where QuestionID = q.ID) as ViewCount ,
@@ -1131,7 +1131,7 @@ inner join organ_position as o on u.OrganizationID = o.ID
 where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
-    $resQ = $db->makeQuery("select fs.*,ft.GeneralType from question_attachment as qt
+    $resQ = $app->db->makeQuery("select fs.*,ft.GeneralType from question_attachment as qt
 inner join file_storage as fs on fs.ID = qt.FileID
 left join file_type as ft on ft.ID=fs.FileTypeID
 where qt.QuestionID='$r->QuestionID'");
@@ -1141,7 +1141,7 @@ where qt.QuestionID='$r->QuestionID'");
         $aAtt[] = $item;
     $resp['Attachments'] = $aAtt;
 
-    $resQ = $db->makeQuery("select t.* from tag as t
+    $resQ = $app->db->makeQuery("select t.* from tag as t
 inner join tag_question as tg on tg.tagID = t.ID
 where tg.QuestionID = '$r->QuestionID'");
 
@@ -1150,7 +1150,7 @@ where tg.QuestionID = '$r->QuestionID'");
             $tags[] = $item;
     $resp['Tags'] = $tags;
 
-        $resQ = $db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
+        $resQ = $app->db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID' and q.AnswerID = a.ID limit 1) as PersonAnswerRate ,
@@ -1167,7 +1167,7 @@ where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 o
     while($item = $resQ->fetch_assoc()){
         $aID = $item['ID'];
 
-        $resaQ = $db->makeQuery("select fs.*,ft.GeneralType from answer_attachment as att
+        $resaQ = $app->db->makeQuery("select fs.*,ft.GeneralType from answer_attachment as att
 inner join file_storage as fs on fs.ID = att.FileID
 left join file_type as ft on ft.ID=fs.FileTypeID
 where att.AnswerID='$aID'");
@@ -1187,33 +1187,33 @@ where att.AnswerID='$aID'");
 $app->post('/followMainSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
     if(!isset($data->MainSubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$db->makeQuery("select count(*) as val from main_subject_follow where UserID = '$sess->UserID' and MainSubjectID = '$data->MainSubjectID'");
+    $resQ =$app->db->makeQuery("select count(*) as val from main_subject_follow where UserID = '$sess->UserID' and MainSubjectID = '$data->MainSubjectID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
         {echoError('you followed this main subject erlier');return;}
-    $resQ =$db->makeQuery("insert into main_subject_follow (UserID, MainSubjectID , MainSubjectFollowDate) values ('$sess->UserID','$data->MainSubjectID',now())");
+    $resQ =$app->db->makeQuery("insert into main_subject_follow (UserID, MainSubjectID , MainSubjectFollowDate) values ('$sess->UserID','$data->MainSubjectID',now())");
     echoSuccess();
 });
 
 $app->post('/followQuestion', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
+
     if(!isset($data->UserID) || !isset($data->QuestionID)|| !isset($data->AuthorID) )
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$db->makeQuery("select count(*) as val from question_follow where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    $resQ =$app->db->makeQuery("select count(*) as val from question_follow where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
     {echoError('you followed this question erlier');return;}
-    $resQ =$db->makeQuery("insert into question_follow (UserID, QuestionID , QuestionFollowDate) values ('$data->UserID','$data->QuestionID',now())");
+    $resQ =$app->db->makeQuery("insert into question_follow (UserID, QuestionID , QuestionFollowDate) values ('$data->UserID','$data->QuestionID',now())");
     if($data->AuthorID != $data->UserID)
-        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,6,now(),$data->UserID,$data->QuestionID");
+        $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,6,now(),$data->UserID,$data->QuestionID");
     echoSuccess();
     return;
 });
@@ -1221,85 +1221,86 @@ $app->post('/followQuestion', function() use ($app)  {
 $app->post('/followPerson', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
+
     if(!isset($data->UserID) || !isset($data->TargetUserID))
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$db->makeQuery("select count(*) as val from person_follow where UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
+    $resQ =$app->db->makeQuery("select count(*) as val from person_follow where UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
         {echoError('you followed this question erlier');return;}
-    $resQ =$db->makeQuery("insert into person_follow (UserID, TargetUserID , PersonFollowDate) values ('$data->UserID','$data->TargetUserID',now())");
+    $resQ =$app->db->makeQuery("insert into person_follow (UserID, TargetUserID , PersonFollowDate) values ('$data->UserID','$data->TargetUserID',now())");
     if($data->TargetUserID != $data->UserID)
-        $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID',"$data->TargetUserID,7,now(),$data->UserID");
+        $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID',"$data->TargetUserID,7,now(),$data->UserID");
     echoSuccess();
 });
 
 $app->post('/followSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
     if( !isset($data->SubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$db->makeQuery("select count(*) as val from subject_follow where UserID = '$sess->UserID' and SubjectID = '$data->SubjectID'");
+    $resQ =$app->db->makeQuery("select count(*) as val from subject_follow where UserID = '$sess->UserID' and SubjectID = '$data->SubjectID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
         {echoError('you followed this subject erlier');return;}
-    $resQ =$db->makeQuery("insert into subject_follow (UserID, SubjectID , SubjectFollowDate) values ('$sess->UserID','$data->SubjectID',now())");
+    $resQ = $app->db->makeQuery("insert into subject_follow (UserID, SubjectID , SubjectFollowDate) values 
+    ('$sess->UserID','$data->SubjectID',now())");
     echoSuccess();
 });
 
 $app->post('/unFollowSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
     if( !isset($data->SubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $db->deleteFromTable('subject_follow',"UserID = '$sess->UserID' and SubjectID = '$data->SubjectID'");
+    $app->db->deleteFromTable('subject_follow',"UserID = '$sess->UserID' and SubjectID = '$data->SubjectID'");
     echoSuccess();
 });
 
 $app->post('/unFollowMainSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
     if(!isset($data->MainSubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $db->deleteFromTable('main_subject_follow',"UserID = '$sess->UserID' and MainSubjectID = '$data->MainSubjectID'");
+    $app->db->deleteFromTable('main_subject_follow',"UserID = '$sess->UserID' and MainSubjectID = '$data->MainSubjectID'");
     echoSuccess();
 });
 
 $app->post('/unFollowPerson', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
+
     if(!isset($data->UserID) || !isset($data->TargetUserID))
         {echoResponse(201, 'bad request');return;}
 
-    $db->deleteFromTable('person_follow',"UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
+    $app->db->deleteFromTable('person_follow',"UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
     echoSuccess();
 });
 
 $app->post('/unFollowQuestion', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
+
     if(!isset($data->UserID) || !isset($data->QuestionID))
         {echoResponse(201, 'bad request');return;}
 
-    $db->deleteFromTable('Question_follow',"UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    $app->db->deleteFromTable('Question_follow',"UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
     echoSuccess();
 });
 
 $app->post('/rateQuestion', function() use ($app)  {
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
+
     if(!isset($data->UserID) || !isset($data->QuestionID) || !isset($data->RateValue)|| !isset($data->TargetUserID) || $data->RateValue ==0)
         {echoResponse(201, 0);return;}
 
@@ -1308,11 +1309,11 @@ $app->post('/rateQuestion', function() use ($app)  {
     else if($data->RateValue < -1)
         $data->RateValue = -1;
 
-    $resQ =$db->makeQuery("select count(*) as val from question_rate where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    $resQ =$app->db->makeQuery("select count(*) as val from question_rate where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
     {
-        $db->updateRecord('question_rate',"RateValue='$data->RateValue' , QuestionRateDate = now()" , "UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+        $app->db->updateRecord('question_rate',"RateValue='$data->RateValue' , QuestionRateDate = now()" , "UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
         echoResponse(200, $data->RateValue);
         return;
     }
@@ -1320,11 +1321,11 @@ $app->post('/rateQuestion', function() use ($app)  {
     {
         if($data->RateValue == 1)
         {
-            $db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
+            $app->db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
             if($data->AuthorID != $data->UserID)
-                $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,2,now(),$data->UserID,$data->QuestionID");
+                $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,2,now(),$data->UserID,$data->QuestionID");
         }
-    	$db->insertToTable('question_rate',"UserID,QuestionID,RateValue,QuestionRateDate","'$data->UserID','$data->QuestionID','$data->RateValue',now()");
+    	$app->db->insertToTable('question_rate',"UserID,QuestionID,RateValue,QuestionRateDate","'$data->UserID','$data->QuestionID','$data->RateValue',now()");
         echoResponse(200, $data->RateValue);
         return;
     }
@@ -1332,7 +1333,7 @@ $app->post('/rateQuestion', function() use ($app)  {
 
 $app->post('/rateAnswer', function() use ($app)  {
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
+
     if(!isset($data->UserID) || !isset($data->AnswerID) || !isset($data->RateValue)|| !isset($data->TargetUserID) || $data->RateValue==0)
         {echoResponse(201, 0);return;}
 
@@ -1341,11 +1342,11 @@ $app->post('/rateAnswer', function() use ($app)  {
     else if($data->RateValue < -1)
         $data->RateValue = -1;
 
-    $resQ =$db->makeQuery("select count(*) as val from answer_rate where UserID = '$data->UserID' and AnswerID = '$data->AnswerID'");
+    $resQ =$app->db->makeQuery("select count(*) as val from answer_rate where UserID = '$data->UserID' and AnswerID = '$data->AnswerID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
     {
-        $db->updateRecord('answer_rate',"RateValue='$data->RateValue' , AnswerRateDate = now()" , "UserID = '$data->UserID' and AnswerID = '$data->AnswerID'");
+        $app->db->updateRecord('answer_rate',"RateValue='$data->RateValue' , AnswerRateDate = now()" , "UserID = '$data->UserID' and AnswerID = '$data->AnswerID'");
         echoResponse(200, $data->RateValue);
         return;
     }
@@ -1353,11 +1354,11 @@ $app->post('/rateAnswer', function() use ($app)  {
     {
         if($data->RateValue == 1)
         {
-            $db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
+            $app->db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
             if($data->AuthorID != $data->UserID)
-                $db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,1,now(),$data->UserID,$data->QuestionID");
+                $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,1,now(),$data->UserID,$data->QuestionID");
         }
-    	$db->insertToTable('answer_rate',"UserID,AnswerID,RateValue,AnswerRateDate","'$data->UserID','$data->AnswerID','$data->RateValue',now()");
+    	$app->db->insertToTable('answer_rate',"UserID,AnswerID,RateValue,AnswerRateDate","'$data->UserID','$data->AnswerID','$data->RateValue',now()");
         echoResponse(200, $data->RateValue);
         return;
     }
@@ -1365,20 +1366,20 @@ $app->post('/rateAnswer', function() use ($app)  {
 
 $app->post('/saveAnswer', function() use ($app)  {
     $data = json_decode($_POST['data']);
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
     if(!isset($data->QuestionID) || !isset($data->AnswerText))
         {echoResponse(201, 'bad Request');return;}
 
     $aID = -1;
     if($sess->IsAdmin)
     {
-        $aID = $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate,AdminAccepted",
+        $aID = $app->db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate,AdminAccepted",
             "'$sess->UserID','$data->QuestionID','$data->AnswerText',now(),1",true);
-        $db->updateRecord('user',"score=(2+score)" , "ID = '$sess->UserID'");
+        $app->db->updateRecord('user',"score=(2+score)" , "ID = '$sess->UserID'");
     }
     else{
-        $aID = $db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate","'$sess->UserID',
+        $aID = $app->db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate","'$sess->UserID',
         '$data->QuestionID','$data->AnswerText',now()",true);
     }
 
@@ -1397,19 +1398,19 @@ $app->post('/saveAnswer', function() use ($app)  {
             $destination ='content/user_upload/'.$rand.'.'.$ext;
             $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
             if($uploadSuccess){
-                $fileTypeQ = $db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+                $fileTypeQ = $app->db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
 
                 $fileTypeID = -1;
                 if(mysqli_num_rows($fileTypeQ) > 0)
                     $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
 
                 $fileSize = $file['size'] / 1024;
-                $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
+                $fid = $app->db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
                 FileSize,UploadDate',
                     "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID','$fileSize',NOW()",
                     true);
 
-                $db->insertToTable('answer_attachment','AnswerID,FileID',
+                $app->db->insertToTable('answer_attachment','AnswerID,FileID',
                     "'$aID','$fid'");
             }
         }
@@ -1421,8 +1422,8 @@ $app->post('/saveAnswer', function() use ($app)  {
 $app->post('/saveMainSubject', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
     $session = $sess->getSession();
 
     $resQ = null;
@@ -1430,11 +1431,11 @@ $app->post('/saveMainSubject', function() use ($app)  {
     if(isset($data->Password)){
         $pass = passwordHash::hash($data->Password);
 
-        $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+        $resQ = $app->db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
 `Tel`='$data->Tel',`Password`='$pass'","user.ID='".$session['ID']."'");
     }else{
 
-        $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+        $resQ = $app->db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
 `Tel`='$data->Tel'","user.ID='".$session['ID']."'");
     }
 
@@ -1448,24 +1449,24 @@ $app->post('/saveMainSubject', function() use ($app)  {
 $app->post('/saveUserAddintionalInfo', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
 
     $q = "Description='$data->Description'".((isset($data->GenderSelected))?",Gender='$data->GenderSelected'":"");
 
-    $db->updateRecord('user' ,$q ,"ID='$sess->UserID'");
+    $app->db->updateRecord('user' ,$q ,"ID='$sess->UserID'");
 
-    $d = $db->deleteFromTable('user_skill','UserID='.$sess->UserID);
+    $d = $app->db->deleteFromTable('user_skill','UserID='.$sess->UserID);
     if(isset($data->Skills)){
         foreach($data->Skills as &$s){
-            $cq = $db->insertToTable('user_skill',"UserID,SkillID","'$sess->UserID','$s->ID'");
+            $cq = $app->db->insertToTable('user_skill',"UserID,SkillID","'$sess->UserID','$s->ID'");
         }
     }
 
-    $d = $db->deleteFromTable('user_education','UserID='.$sess->UserID);
+    $d = $app->db->deleteFromTable('user_education','UserID='.$sess->UserID);
     if(isset($data->Educations)){
         foreach($data->Educations as &$e){
-            $cq = $db->insertToTable('user_education',"UserID,EducationID","'$sess->UserID','$e->ID'");
+            $cq = $app->db->insertToTable('user_education',"UserID,EducationID","'$sess->UserID','$e->ID'");
         }
     }
 
@@ -1477,10 +1478,10 @@ $app->post('/saveUserAddintionalInfo', function() use ($app)  {
 $app->post('/saveUserInfo', function() use ($app)  {
     //adminRequire();
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
 
-    $resQ = $db->makeQuery("select 1 from user where Email='$data->Email' and ID!='$sess->UserID' LIMIT 1");
+    $sess = $app->session;
+
+    $resQ = $app->db->makeQuery("select 1 from user where Email='$data->Email' and ID!='$sess->UserID' LIMIT 1");
     $count = mysqli_num_rows($resQ);
     if($count > 0){
         echoError("EmailExists");
@@ -1500,19 +1501,19 @@ $app->post('/saveUserInfo', function() use ($app)  {
             echoError("PasswordIsNotValid");
         }
 
-        $userPassword = $db->makeQuery("SELECT user.Password from user where user.ID='$sess->UserID'")->fetch_assoc()['Password'];
+        $userPassword = $app->db->makeQuery("SELECT user.Password from user where user.ID='$sess->UserID'")->fetch_assoc()['Password'];
         if(passwordHash::check_password($userPassword,$data->OldPassword)){
 
             $pass = passwordHash::hash($data->Password);
 
-            $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+            $resQ = $app->db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
 `Tel`='$data->Tel',`Password`='$pass'","user.ID='$sess->UserID'");
         }else{
             echoError("OldPasswordIsNotValid");
         }
     }else{
 
-        $resQ = $db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
+        $resQ = $app->db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
 `Tel`='$data->Tel'","user.ID='$sess->UserID'");
     }
 
@@ -1540,11 +1541,11 @@ $app->post('/updateAvatar', function() use ($app)  {
     $destination =$absPath.$rand.'.'.$ext;
     move_uploaded_file( $_FILES['file']['tmp_name'] , '../'.$destination );
 
-    $sess = new Session();
-    $db = new DbHandler(true);
-    $fileID = $db->insertToTable('file_storage','FullPath,UploadDate,UserID,IsAvatar',"'$destination',NOW(),
+    $sess = $app->session;
+
+    $fileID = $app->db->insertToTable('file_storage','FullPath,UploadDate,UserID,IsAvatar',"'$destination',NOW(),
     '$sess->UserID','1'");
-    $resUpdate = $db->updateRecord('user',"AvatarID='$fileID'","ID='$sess->UserID'");
+    $resUpdate = $app->db->updateRecord('user',"AvatarID='$fileID'","ID='$sess->UserID'");
 
     if($resUpdate){
         $sess->updateImage($destination);
@@ -1562,15 +1563,15 @@ $app->post('/updateAvatar', function() use ($app)  {
 $app->post('/setBestAnswer', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
-    $db = new DbHandler(true);
-    $sess = new Session();
+
+    $sess = $app->session;
 
     if(!isset($data->QuestionID) || !isset($data->AnswerID))
         {echoResponse(201, 'bad Request');return;}
 
     if($sess->IsAdmin)
     {
-        $db->updateRecord('forum_question',"BestAnswerID = '$data->AnswerID'" , "ID = '$data->QuestionID'");
+        $app->db->updateRecord('forum_question',"BestAnswerID = '$data->AnswerID'" , "ID = '$data->QuestionID'");
         echoSuccess();
         return;
     }else{

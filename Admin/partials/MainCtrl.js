@@ -22,6 +22,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     }
 
     $scope.notificationsUpdating = true;
+    $scope.messagesUpdating = true;
 
     Extention.post("getUserNotifications").then(function (res) {
         $scope.notifications = res.Data;
@@ -29,8 +30,8 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     });
 
     Extention.post("getUserMessages").then(function (res) {
-
         $scope.messages = res;
+        $scope.messagesUpdating = false;
     });
 
 
@@ -68,6 +69,21 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         return $scope.bgColorArray[i];
     }
 
+
+    $scope.updateMessages = function (event) {
+        if (event)
+            event.stopPropagation();
+
+        if (!$scope.messagesUpdating) {
+            $scope.messagesUpdating = true;
+            Extention.postAsync("getUserMessages").then(function (res) {
+                $scope.messages = res;
+                $scope.messagesUpdating = false;
+            });
+        } else {
+            Extention.popInfo('لطفا کمی صبر کنید...');
+        }
+    }
 
     $scope.updateNotifications = function (event) {
         if (event)

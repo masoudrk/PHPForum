@@ -9,8 +9,8 @@ require '../libs/Slim/Slim.php';
 
 \Slim\Slim::registerAutoloader();
 
-$app = new \Slim\Slim();
-$app->db = new DbHandler(true,true);
+$app->session = new Session();
+$app->db = new DbHandler($app->session ,true ,true);
 
 require_once 'admin_service.php';
 require_once '../generic_service.php';

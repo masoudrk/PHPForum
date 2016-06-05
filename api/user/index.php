@@ -11,27 +11,11 @@ require '../libs/Slim/Slim.php';
 
 $app = new \Slim\Slim();
 
-// User id from db - Global Variable
-$user_id = NULL;
+$app->session = new Session();
+$app->db = new DbHandler($app->session ,true);
 
 require_once 'user_service.php';
 require_once '../generic_service.php';
-
-
-function reArrayFiles(&$file_post) {
-
-    $file_ary = array();
-    $file_count = count($file_post['name']);
-    $file_keys = array_keys($file_post);
-
-    for ($i=0; $i<$file_count; $i++) {
-        foreach ($file_keys as $key) {
-            $file_ary[$i][$key] = $file_post[$key][$i];
-        }
-    }
-
-    return $file_ary;
-}
 
 $app->run();
 ?>

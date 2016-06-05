@@ -122,45 +122,20 @@ function getIPAddress(){
     }
 }
 
-function userRequire($db,$adminRequire = false){
 
-    $sess = new Session();
-    $rq =null;
-    $res = [];
+function reArrayFiles(&$file_post) {
 
-    if($adminRequire){
-        $rq = $db->makeQuery("SELECT us.ID FROM user_session as us
-inner join user on user.ID =us.UserID
-inner join admin on admin.UserID =user.ID
-where us.UserID='$sess->UserID' AND us.SessionID='$sess->SSN' LIMIT 1");
+    $file_ary = array();
+    $file_count = count($file_post['name']);
+    $file_keys = array_keys($file_post);
 
-    }else{
-        $rq = $db->makeQuery("SELECT u.ID FROM user_session as u
-where u.UserID='$sess->UserID' AND u.SessionID='$sess->SSN' LIMIT 1");
+    for ($i=0; $i<$file_count; $i++) {
+        foreach ($file_keys as $key) {
+            $file_ary[$i][$key] = $file_post[$key][$i];
+        }
     }
 
-    $c=mysqli_num_rows($rq);
-    if($c > 0){
-        $db->updateRecord('user',"LastActiveTime=Now()","ID='$sess->UserID' LIMIT 1");
-        return TRUE;
-    }
-
-    $sess->destroySession();
-    $res['AuthState'] = 'UN_AUTH';
-    echoResponse(201,$res);
-    die();
-}
-
-function getCurrentUser(){
-    $db = new DbHandler();
-    $sess = $db->getSession();
-    $rq = $db->makeQuery(
-        "SELECT * ,user.ID as UserID,admin.ID as AdminID FROM user Left JOIN admin on admin.UserID=user.ID where user.SessionID='".$sess["SSN"]
-        ."' AND SessionValid=1");
-
-    $r = $rq->fetch_assoc();
-    return $r;
-    die('Encrypted media , Admininistrator auth has been failed.');
+    return $file_ary;
 }
 
 

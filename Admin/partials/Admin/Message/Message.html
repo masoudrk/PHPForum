@@ -88,7 +88,7 @@
                                 <td>
                                     <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
                                         <i confirm="آیا مطمئن هستید که میخواهید این پیام را حذف کنید؟"
-                                           class="fa fa-trash text-red link hvr-grow" ng-click="deleteMessage(mes)" title="خذف پیام" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                           class="fa fa-trash text-red link hvr-grow" ng-click="deleteMessage(mes)" title="حذف پیام" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                         <i class="fa fa-eye text-blue link hvr-grow" ng-click="openMessageModal(mes)" title="متن پیام" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     </div>
                                 </td>
@@ -124,10 +124,11 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="form-group">
-                        <ui-select multiple ng-model="user.selectedUser" theme="bootstrap" sortable="true" close-on-select="false" style="width: 800px;">
+                        <ui-select multiple ng-model="user.selectedUser" theme="bootstrap" sortable="true" close-on-select="false"
+                                   style="width: 100%;direction: rtl">
                             <ui-select-match placeholder="انتخاب فرد">{{$item.FullName}} &lt;{{$item.Email}}&gt;</ui-select-match>
                             <ui-select-choices refresh="getPersons($select.search)" refresh-delay="500" repeat="person in users">
-                                <div ng-bind="person.FullName"></div>
+                                <div ng-bind="person.FullName" class="text-right"></div>
                                 <small>
                                     email: {{person.Email}}
                                 </small>
@@ -145,10 +146,11 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <div class="pull-right">
-                        <button type="button" ng-click="sentMessage(1)" class="btn btn-primary"><i class="fa fa-envelope-o"></i> ارسال ایمیل </button>
-                        <button type="button" ng-click="sentMessage(0)" class="btn btn-primary"><i class="fa fa-envelope-o"></i> ارسال پیام </button>
+                        <button type="button" ng-click="sentMessage(1)" class="btn btn-primary"> ارسال پیام و ایمیل <i
+                                class="fa fa-internet-explorer"></i></button>
+                        <button type="button" ng-click="sentMessage(0)" class="btn btn-primary"> ارسال پیام <i class="fa fa-envelope"></i></button>
                     </div>
-                    <button type="button" ng-click="showInbux = !showInbux;Message={};user.selectedUser=[]" class="btn btn-danger"><i class="fa fa-times"></i> انصراف </button>
+                    <button type="button" ng-click="showInbux = !showInbux;Message={};user.selectedUser=[]" class="btn btn-danger"> انصراف <i class="fa fa-times"></i></button>
                 </div>
                 <!-- /.box-footer -->
             </div>

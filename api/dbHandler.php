@@ -5,7 +5,7 @@ class DbHandler {
     private $conn;
     private $db;
 
-    function __construct($userRequire = false, $adminRequire = false) {
+    function __construct($session ,$userRequire = false, $adminRequire = false) {
         require_once 'dbConnect.php';
         // opening db connection
         $db = new dbConnect();
@@ -14,8 +14,37 @@ class DbHandler {
         $this->conn->query('SET CHARACTER SET utf8') or die($this->conn->error.__LINE__);
 
         if($userRequire)
-            userRequire($this, $adminRequire);
+            $this->userRequire($this,$session, $adminRequire);
     }
+
+    function userRequire($db, $session,$adminRequire = false){
+
+        $rq =null;
+        $res = [];
+
+        if($adminRequire){
+            $rq = $db->makeQuery("SELECT us.ID FROM user_session as us
+inner join user on user.ID =us.UserID
+inner join admin on admin.UserID =user.ID
+where us.UserID='$session->UserID' AND us.SessionID='$session->SSN' LIMIT 1");
+
+        }else{
+            $rq = $db->makeQuery("SELECT u.ID FROM user_session as u
+where u.UserID='$session->UserID' AND u.SessionID='$session->SSN' LIMIT 1");
+        }
+
+        $c=mysqli_num_rows($rq);
+        if($c > 0){
+            $db->updateRecord('user',"LastActiveTime=Now()","ID='$session->UserID' LIMIT 1");
+            return TRUE;
+        }
+
+        $session->destroySession();
+        $res['AuthState'] = 'UN_AUTH';
+        echoResponse(201,$res);
+        die();
+    }
+
     /**
      * Fetching single record
      */
