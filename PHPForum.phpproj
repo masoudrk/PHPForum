@@ -96,7 +96,6 @@
     <Folder Include="Admin\partials\Admin\Skill\" />
     <Folder Include="Admin\partials\Admin\Tag\" />
     <Folder Include="Admin\partials\Admin\Questions\" />
-    <Folder Include="Admin\partials\Admin\Profile\" />
     <Folder Include="Admin\partials\Admin\User\" />
     <Folder Include="Admin\plugins\" />
     <Folder Include="Admin\plugins\fastclick\" />
@@ -361,8 +360,6 @@
     <Content Include="Admin\partials\MainCtrl.js" />
     <Content Include="Admin\partials\Admin\Message\Message.html" />
     <Content Include="Admin\partials\Admin\Message\Message.js" />
-    <Content Include="Admin\partials\Admin\Profile\Profile.html" />
-    <Content Include="Admin\partials\Admin\Profile\ProfileCtrl.js" />
     <Content Include="Admin\partials\Admin\Answers\Answers.html" />
     <Content Include="Admin\partials\Admin\Questions\Questions.html" />
     <Content Include="Admin\partials\Admin\Questions\Questions.js" />

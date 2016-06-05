@@ -50,7 +50,9 @@
         <div class="hr col-xs-12"></div>
     </div>
     <div class="col-sm-4 col-sm-offset-2 col-xs-12">
-        <form ng-submit="savePerson()" name="signUpForm" class="vazir-font">
+        <form ng-submit="savePerson()" name="signUpForm" class="vazir-font" autocomplete="off">
+            <input style="display:none" type="text" name="email" />
+            <input style="display:none" type="password" name="password" />
             <!--<div class="col-xs-12">
                 <div class="text-center">
                     <label style="font-size: 20px">ثبت نام <i class="fa fa-sign-in" aria-hidden="true"></i></label>
@@ -59,7 +61,7 @@
             </div>-->
             <div class="form-group col-xs-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.name.$valid && signUpForm.name.$touched]">
                 <div class="col-xs-12">
-                    <input type="text" dir="rtl" class="form-control" name="name" ng-model="user.FullName" id="name" placeholder="نام و نام خانوادگی" required>
+                    <input type="text" dir="rtl" class="form-control" ng-pattern="userNameRegex" name="name" ng-model="user.FullName" id="name" placeholder="نام و نام خانوادگی (فارسی)" required>
                 </div>
             </div>
             <!--<div class="form-group col-xs-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.userName.$valid && signUpForm.userName.$touched || userNameError]">
@@ -108,7 +110,7 @@
                     <input class="pull-right" ng-click="openRoleModal()" type="checkbox" ng-model="user.roleAccepted" value="true" style="margin-left: 20px">
                 </div>
             </div>
-            <div class="row col-xs-12"  ng-show="user.roleAccepted">
+            <div class="row col-xs-12" ng-show="user.roleAccepted">
                 <div class="form-group col-xs-12">
                     <div class="form-group col-xs-12" vc-recaptcha ng-model="user.myRecaptchaResponse"></div>
                 </div>

@@ -26,15 +26,6 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'داشبورد';
                 }
             }
-        }).state("profile", {
-            url: "/profile",
-            templateUrl: "partials/Admin/Profile/Profile.html",
-            controller: 'ProfileCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Profile/ProfileCtrl.js']);
-                }]
-            }
         }).state("tag", {
             url: "/tag",
             templateUrl: "partials/Admin/Tag/Tag.html",
