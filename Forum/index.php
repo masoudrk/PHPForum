@@ -54,7 +54,8 @@
                     <!-- Messages: style can be found in dropdown.less-->
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
-                            <i class="fa fa-envelope-o"></i>
+                            <i class="fa fa-envelope-o"
+                               ng-class="(messages && messages.Total != '0' )?'faa-horizontal animated':''"></i>
                             <span class="label label-warning" ng-bind="messages.Total || '0'| pNumber"></span>
                         </a>
                         <ul class="dropdown-menu">
@@ -99,10 +100,14 @@
                                 </ul>
                             </li>
                             <li class="footer">
-                                <a class="link" ng-click="updateMessages($event)"
+                                <a class="link faa-parent animated-hover" ng-click="updateMessages($event)"
+                                   ng-class="(messagesUpdating)? 'text-muted unlink':''"
                                    style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;">بروزرسانی<i
-                                        class="fa fa-refresh"></i></a>
-                                <a class="link" ui-sref="messages">نمایش همه پیام ها<i class="fa fa-paper-plane-o"></i></a>
+                                        class="fa fa-refresh faa-spin animated-hover"
+                                        ng-class="(messagesUpdating)? 'fa-spin ':''"></i></a>
+                                <a class="link faa-parent animated-hover" ui-sref="messages">
+                                    نمایش همه پیام ها<i class="fa fa-paper-plane-o faa-burst animated-hover"></i>
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -110,7 +115,8 @@
                     <!-- Notifications: style can be found in dropdown.less -->
                     <li class="dropdown messages-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
+                            <i class="fa fa-bell-o"
+                            ng-class="(notifications && notifications.Total != '0' )?'faa-shake animated':''"></i>
                             <span class="label label-success"
                                   ng-bind="notifications.Total | pNumber"
                                   ></span>
@@ -162,18 +168,22 @@
                                 </ul>
                             </li>
                             <li class="footer">
-                                <a class="link col-xs-6" ui-sref="profile({action:'Timeline'})"
+                                <a class="link col-xs-6 faa-parent animated-hover" ui-sref="profile
+                                ({action:'Timeline'})"
                                    style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;
                                    ">تایم لاین
-                                    <i class="fa fa-clock-o"></i>
+                                    <i class="fa fa-clock-o faa-spin"></i>
                                 </a>
-                                <a class="link col-xs-6" ng-click="updateNotifications($event)"
-                                   style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;">بروزرسانی
-                                    <i class="fa fa-refresh"></i>
+                                <a class="link col-xs-6 faa-parent animated-hover" ng-click="updateNotifications($event)"
+                                   style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;"
+                                   ng-class="(notificationsUpdating)? 'text-muted unlink':''"
+                                >بروزرسانی
+                                    <i class="fa fa-refresh faa-spin"
+                                       ng-class="(notificationsUpdating)? 'fa-spin ':''"></i>
                                 </a>
 
-                                <a class="link" ng-click="markLastNotifications($event)">علامت زدن اعلان های نمایشی
-                                    <i class="fa fa-check"></i>
+                                <a class="link faa-parent animated-hover" ng-click="markLastNotifications($event)">علامت زدن اعلان های نمایشی
+                                    <i class="fa fa-check faa-flash animated-hover"></i>
                                 </a>
                             </li>
                         </ul>
