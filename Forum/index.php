@@ -263,7 +263,7 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a ui-sref="profile" class="btn btn-default btn-flat">پروفایل</a>
+                                    <a ui-sref="profile({action:'Info'})" class="btn btn-default btn-flat">پروفایل</a>
                                 </div>
                                 <div class="pull-right">
                                     <a ng-click="logout()" class="btn btn-default btn-flat">خروج</a>
@@ -422,6 +422,11 @@
                             <span ng-bind="messages.Total ||'0'| pNumber"></span>
                         </small>
 
+                    </a>
+                </li>
+                <li id="SFollowers">
+                    <a ui-sref="my_following">
+                        <i class="fa fa-microphone"></i><span> دنبال شده ها </span>
                     </a>
                 </li>
                 <li id="SProfile">

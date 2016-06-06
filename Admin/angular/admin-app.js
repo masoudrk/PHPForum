@@ -1,5 +1,5 @@
 ﻿var appName = 'adminApp';
-var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
+var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
     'ngFileUpload','anim-in-out' ]);
 
@@ -499,7 +499,7 @@ app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
         return obj;
     }]);
 
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies, Extention, OnlineSocket) {
+app.run(function ($rootScope, $templateCache, $state, $location, Extention, OnlineSocket) {
 
     $rootScope.spinner ={};
 

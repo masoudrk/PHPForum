@@ -1,7 +1,7 @@
 ﻿var appName = 'forumApp';
 var serviceBaseURL = '../api/user/';
 
-var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
+var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
     'ngFileUpload','anim-in-out','am-charts','ng-fx']);
 
@@ -119,6 +119,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
+        .state("my_following", {
+            url: "/Follow/:action",
+            templateUrl: "partials/MyActions/Follow/Follow.html",
+            controller: 'FollowCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/MyActions/Follow/FollowCtrl.js']);
+                }],
+                $title: function () {
+                    return 'دنبال شده ها';
+                }
+            }
+        })
         .state("question", {
             url: "/Question/:id",
             templateUrl: "partials/Forum/Question/Question.html",
@@ -224,7 +237,7 @@ var activeElement = function (parent , name) {
 }
 
 
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore, Extention, OnlineSocket) {
+app.run(function ($rootScope, $templateCache, $state, $location, Extention, OnlineSocket) {
     
     $rootScope.breadcrumbs = [];
     $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home'});

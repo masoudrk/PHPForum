@@ -17,7 +17,7 @@ FROM forum_answer
 INNER JOIN forum_question on forum_question.ID=forum_answer.QuestionID 
 INNER JOIN user on user.ID=forum_question.AuthorID 
 LEFT JOIN file_storage on file_storage.ID=user.AvatarID 
-WHERE forum_answer.AuthorID = '17' ORDER BY forum_answer.CreationDate ASC");
+WHERE forum_answer.AuthorID = '$uID' ORDER BY forum_answer.CreationDate ASC");
     return $res;
 }
 ?>

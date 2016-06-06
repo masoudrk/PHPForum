@@ -69,7 +69,8 @@ WHERE forum_question.AdminAccepted=1 $searchQuery");
  (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
-        $res = $p->getPage($app->db,"SELECT u.* , fs.FullPath as Image, 
+        $res = $p->getPage($app->db,"SELECT u.FullName,u.Email ,u.ID,u.Gender,u.PhoneNumber,u.SignupDate 
+, u.Description,u.LastActiveTime ,u.Username,u.score, fs.FullPath as Image, 
 ( SELECT count(*) FROM forum_answer where AuthorID = u.ID and forum_answer.AdminAccepted=1 ) as AnswersCount, 
 ( SELECT count(*) FROM forum_question where AuthorID = u.ID and  forum_question.AdminAccepted=1 ) as QuestionsCount ,
 ($rateSelection) as Rate
@@ -101,6 +102,93 @@ $app->post('/deleteQuestion', function() use ($app)  {
         return ;
     }
     echoResponse(201, "Error:".$data->QuestionID);
+});
+
+$app->post('/getMyFollowing', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+
+    $session = $app->session;
+    $pr = new Pagination($data);
+    $pageRes = null;
+
+    switch ($data->FollowType){
+        case 'Person' :
+            $query = "select 
+            u.FullName , u.Email , u.ID as UserID ,person_follow.ID as PersonFollowID , u.score,
+             person_follow.PersonFollowDate , file_storage.FullPath as Image,
+             (select count(*) from forum_question where forum_question.AuthorID=u.ID) as QuestionsCount,
+             (select count(*) from forum_answer where forum_answer.AuthorID=u.ID) as AnswersCount
+            FROM person_follow
+              inner join user as u on u.ID=person_follow.TargetUserID
+              left join file_storage on file_storage.ID= u.AvatarID
+              
+            where person_follow.UserID='$session->UserID'
+            ORDER by person_follow.PersonFollowDate desc";
+            break;
+        case 'Question' :
+            $query = "select 
+             u.FullName , u.Email , u.ID as UserID ,question_follow.ID as PersonFollowID , u.score
+            ,question_follow.ID as QuestionFollowID, question_follow.QuestionFollowDate , file_storage.FullPath as Image
+            ,fq.Title , question_follow.QuestionID,
+             (select question_view.ID from question_view 
+        where question_view.QuestionID=fq.ID AND question_view.UserID=$session->UserID LIMIT 1) as 'QViewID'
+            FROM question_follow
+              inner join forum_question as fq on fq.ID=question_follow.QuestionID
+              inner join user as u on u.ID=fq.AuthorID
+              left join file_storage on file_storage.ID= u.AvatarID
+              
+            where question_follow.UserID='$session->UserID'
+            ORDER by question_follow.QuestionFollowDate desc";
+            break;
+        case 'MainSubject' :
+            $query = "select 
+             msf.ID as MainSubjectFollowID, msf.MainSubjectFollowDate ,fms.Title , fms.SubjectName 
+            FROM main_subject_follow as msf
+              inner join forum_main_subject as fms on fms.SubjectID=msf.MainSubjectID              
+            where msf.UserID='$session->UserID'
+            ORDER by msf.MainSubjectFollowDate desc";
+            break;
+        case 'Subject' :
+            $query = "select 
+             sf.ID as SubjectFollowID , sf.SubjectID, sf.SubjectFollowDate ,fs.Title , fms.Title as MainSubjectTitle
+            FROM subject_follow as sf
+              inner join forum_subject as fs on fs.ID=sf.SubjectID    
+              inner join forum_main_subject as fms on fs.ParentSubjectID=fms.SubjectID              
+            where sf.UserID='$session->UserID'
+            ORDER by sf.SubjectFollowDate desc";
+            break;
+    }
+
+    $pageRes = $pr->getPage($app->db,$query);
+    echoResponse(200, $pageRes);
+});
+
+$app->post('/deleteFollow', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+
+    $session = $app->session;
+
+    switch ($data->FollowType){
+        case 'Person' :
+            $res = $app->db->deleteFromTable("person_follow","ID='$data->ID' and UserID='$session->UserID'");
+            echoSuccess($data->FollowType);
+            break;
+        case 'Question' :
+            $res = $app->db->deleteFromTable("question_follow","ID='$data->ID' and UserID='$session->UserID'");
+            echoSuccess($data->FollowType);
+            break;
+        case 'MainSubject' :
+            $res = $app->db->deleteFromTable("main_subject_follow","ID='$data->ID' and UserID='$session->UserID'");
+            echoSuccess($data->FollowType);
+            break;
+        case 'Subject' :
+            $res = $app->db->deleteFromTable("subject_follow","ID='$data->ID' and UserID='$session->UserID'");
+            echoSuccess($data->FollowType);
+            break;
+    }
+    echoError("Cannot detect type of follow.");
 });
 
 $app->post('/deleteSession', function() use ($app)  {
@@ -1648,8 +1736,7 @@ limit $offset,$data->pageSize");
 
     if($total <= $offset + $data->pageSize){
         $dateItem =[];
-        $dateItem['CID'] = $value['ID'];
-        $dateItem['EventDate'] = $value['EventDate'];
+        $dateItem['CID'] = 1;
         $dateItem['EventTypeID'] = '-1';
         $dateItem['EventType'] = 'SU';
         $dateItem['User'] =
@@ -1665,4 +1752,5 @@ limit $offset,$data->pageSize");
 
     echoResponse(200, $page);
 });
+
 ?>

@@ -1,0 +1,270 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>جواب های شما</small>
+        همه جواب ها
+    </h1>
+
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active"> فعالیت ها </li>
+        <li class="active">جواب های شما</li>
+    </ol>
+</section>
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="col-xs-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="link" ng-class="(activeTab == 'Person')?'active':''">
+                        <a ng-click="getTab('Person')" data-toggle="tab" aria-expanded="true">
+                            <span class="badge bg-green"
+                                  ng-show="activeTab == 'Person'"
+                                  ng-bind="follow.personTotal || '0' | pNumber"
+                                  style="margin-right: 8px;margin-top: -3px;">
+                            </span>
+                            اشخاص دنبال شده
+                        </a>
+                    </li>
+                    <li class="link" ng-class="(activeTab == 'Question')?'active':''">
+                        <a ng-click="getTab('Question')" data-toggle="tab" aria-expanded="false">
+                            <span class="badge bg-green"
+                                  ng-show="activeTab == 'Question'"
+                                  ng-bind="follow.questionTotal || '0' | pNumber"
+                                  style="margin-right: 8px;margin-top: -3px;">
+                            </span>
+                            سوالات دنبال شده
+                        </a>
+                    </li>
+                    <li class="link" ng-class="(activeTab == 'MainSubject')?'active':''">
+                        <a ng-click="getTab('MainSubject')" data-toggle="tab" aria-expanded="false">
+                            <span class="badge bg-green"
+                                  ng-show="activeTab == 'MainSubject'"
+                                  ng-bind="follow.mainSubjectTotal || '0' | pNumber"
+                                  style="margin-right: 8px;margin-top: -3px;">
+                            </span>
+                            انجمن دنبال شده
+                        </a>
+                    </li>
+                    <li class="link" ng-class="(activeTab == 'Subject')?'active':''">
+                        <a ng-click="getTab('Subject')" data-toggle="tab" aria-expanded="false">
+                            <span class="badge bg-green"
+                                  ng-show="activeTab == 'Subject'"
+                                  ng-bind="follow.subjectTotal || '0' | pNumber"
+                                  style="margin-right: 8px;margin-top: -3px;">
+                            </span>
+                            موضوع دنبال شده
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content" style="padding: 0">
+                    <!-- Last questions -->
+                    <div class="tab-pane" ng-class="(activeTab == 'Person')?'active':''" >
+                        <div class="table-responsive no-padding">
+                            <table class="table border-bottom-table table-hover" ng-show="follow.person.length > 0">
+                                <tbody>
+                                <tr ng-repeat="p in follow.person"
+                                    class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50">
+                                    <td style="width: 40px;"
+                                        ui-sref="UserProfile({id:'{{p.UserID}}'})">
+                                        <img  class="img-circle" ng-src="{{p.Image}}"
+                                                        src="../images/Avatar.jpg"
+                                              style="width:40px;border: solid 2px #f1c40f"></td>
+                                    <td ui-sref="UserProfile({id:'{{p.UserID}}'})">
+                                        {{p.FullName | subString :20|pNumber}}
+                                    </td>
+                                    <td ui-sref="UserProfile({id:'{{p.UserID}}'})">
+                                        {{p.score | subString :20|pNumber}} امتیاز
+                                    </td>
+
+                                    <td class="text-center" ui-sref="UserProfile({id:'{{p.UserID}}'})">
+                                        {{p.AnswersCount || '0'|pNumber}} جواب
+                                    </td>
+                                    <td class="text-center" ui-sref="UserProfile({id:'{{p.UserID}}'})">
+                                        {{p.QuestionsCount || '0'|pNumber}} سوال
+                                    </td>
+                                    <td class="text-center" ui-sref="UserProfile({id:'{{p.UserID}}'})">
+                                        <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                            {{p.PersonFollowDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
+                                        </span>
+                                    </td>
+                                    <td class="text-left">
+                                        <div class="btn btn-danger btn-sm"
+                                             ng-click="removeFollow(p.PersonFollowID , 'Person')">
+                                            حذف دنبال شده
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix text-center" style="padding-bottom: 5px;">
+                            <h4 class="text-center text-muted" ng-show="follow.person.length == 0">
+                                هیچ شخصی توسط شما دنبال نشده
+                            </h4>
+                            <auto-paging page="1"
+                                         page-size="20"
+                                         ul-class="pagination pagination-sm no-margin"
+                                         action-name="getMyFollowing"
+                                         data-params="pagingParams"
+                                         ng-control="pcfPerson"
+                                         scroll-to-begin="false"
+                                         only-get-result-when-update="true"
+                                         items="follow.person"
+                                         total-items="follow.personTotal"
+                                         ng-show="follow.person.length > 0">
+                            </auto-paging>
+                        </div>
+                    </div><!-- /.tab-pane -->
+                    <!-- Best questions -->
+                    <div class="tab-pane" ng-class="(activeTab == 'Question')?'active':''" >
+                        <div class="table-responsive no-padding">
+                            <table class="table border-bottom-table table-hover"
+                                   ng-show="follow.question.length > 0">
+                                <tbody>
+                                <tr class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
+                                    ng-repeat="q in follow.question">
+                                    <td style="width:40px;" ui-sref="question({id:q.QuestionID})">
+                                        <img  class="img-circle" ng-src="{{q.Image}}"
+                                    src="../images/Avatar.jpg"
+                                              style="width:40px;border: solid 2px #f1c40f"></td>
+                                    <td  ui-sref="question({id:q.QuestionID})">
+                                        {{q.FullName | subString :20|pNumber}}
+                                        <span class="badge bg-yellow">{{q.score | pNumber}}</span>
+                                    </td>
+                                    <td ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}"
+                                        ui-sref="question({id:q.QuestionID})">
+                                        {{q.Title | subString :30|pNumber}}
+                                    </td>
+                                    <td class="text-center" ui-sref="question({id:q.QuestionID})">
+                                        <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                            {{q.QuestionFollowDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
+                                        </span>
+                                    </td>
+                                    <td class="text-left">
+                                        <div class="btn btn-danger btn-sm"
+                                             ng-click="removeFollow(q.QuestionFollowID , 'Question')">
+                                            حذف دنبال شده
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix text-center" style="padding-bottom: 5px;">
+                            <h4 class="text-center text-muted"
+                                ng-show="follow.question.length == 0">
+                                بدون سوال
+                            </h4>
+                            <auto-paging page="1"
+                                         page-size="15"
+                                         ul-class="pagination pagination-sm no-margin"
+                                         action-name="getMyFollowing"
+                                         data-params="pagingParams"
+                                         ng-control="pcfQuestion"
+                                         scroll-to-begin="false"
+                                         only-get-result-when-update="true"
+                                         items="follow.question"
+                                         total-items="follow.questionTotal"
+                                         ng-show="follow.question.length > 0">
+                            </auto-paging>
+                        </div>
+                    </div><!-- /.tab-pane -->
+                    <!-- Answered questions -->
+                    <div class="tab-pane" ng-class="(activeTab == 'MainSubject')?'active':''" >
+
+                        <div class="table-responsive no-padding">
+                            <table class="table border-bottom-table table-hover" ng-show="follow.mainSubject.length > 0">
+                                <tbody>
+                                <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
+                                     ng-repeat="q in follow.mainSubject">
+                                    <td style="padding-right: 15px" ui-sref="main_forum({id:q.SubjectName})"
+                                            ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
+                                        {{q.Title | subString :30|pNumber}}
+                                    </td>
+                                    <td class="text-center" ui-sref="main_forum({id:q.SubjectName})">
+                                        <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                            {{q.MainSubjectFollowDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
+                                        </span>
+                                    </td>
+                                    <td class="text-left">
+                                        <div class="btn btn-danger btn-sm"
+                                             ng-click="removeFollow(q.MainSubjectFollowID, 'MainSubject')">
+                                            حذف دنبال شده
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix text-center" style="padding-bottom: 5px;">
+                            <h4 class="text-center text-muted" ng-show="follow.mainSubject.length == 0">
+                               هیچ انجمنی دنبال نشده
+                            </h4>
+                            <auto-paging page="1"
+                                         page-size="15"
+                                         ul-class="pagination pagination-sm no-margin"
+                                         action-name="getMyFollowing"
+                                         data-params="pagingParams"
+                                         on-load-finish="loadFinishPageData()"
+                                         ng-control="pcfMainSubject"
+                                         scroll-to-begin="false"
+                                         only-get-result-when-update="true"
+                                         items="follow.mainSubject"
+                                         total-items="follow.mainSubjectTotal"
+                                         ng-show="follow.mainSubject.length > 0">
+                            </auto-paging>
+                        </div>
+                    </div><!-- /.tab-pane -->
+                    <!-- Following questions -->
+                    <div class="tab-pane" ng-class="(activeTab == 'Subject')?'active':''" >
+                        <div class="table-responsive no-padding">
+                            <table class="table border-bottom-table table-hover"
+                                   ng-show="follow.subject.length > 0">
+                                <tbody>
+                                <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
+                                     ng-repeat="q in follow.subject">
+                                    <td style="padding-right: 15px" ui-sref="forum({id:q.SubjectID})">
+                                        {{q.Title +' ['+ q.MainSubjectTitle+'] '|pNumber}}
+                                    </td>
+                                    <td class="text-center" ui-sref="forum({id:q.SubjectID})">
+                                        <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                            {{q.SubjectFollowDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
+                                        </span>
+                                    </td>
+                                    <td class="text-left" >
+                                        <div class="btn btn-danger btn-sm"
+                                             ng-click="removeFollow(q.SubjectFollowID, 'Subject')">
+                                            حذف دنبال شده
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clearfix text-center" style="padding-bottom: 5px;">
+                            <h4 class="text-center text-muted"
+                                ng-show="follow.subject.length == 0">
+                                هیچ موضوعی دنبال نشده
+                            </h4>
+                            <auto-paging page="1"
+                                         page-size="15"
+                                         ul-class="pagination pagination-sm no-margin"
+                                         action-name="getMyFollowing"
+                                         data-params="pagingParams"
+                                         ng-control="pcfSubject"
+                                         scroll-to-begin="false"
+                                         only-get-result-when-update="true"
+                                         items="follow.subject"
+                                         total-items="follow.subjectTotal"
+                                         ng-show="follow.subject.length != 0">
+                            </auto-paging>
+                        </div>
+                    </div><!-- /.tab-pane -->
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+
+    </div>
+</div>
