@@ -1,7 +1,7 @@
 ﻿var appName = 'adminApp';
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
-    'ngFileUpload','anim-in-out' ]);
+    'ngFileUpload','anim-in-out','am-charts' ]);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
