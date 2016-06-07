@@ -1,4 +1,6 @@
 ﻿var appName = 'adminApp';
+var debugMode = false;
+
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
     'ngFileUpload','anim-in-out','am-charts' ]);
@@ -8,7 +10,7 @@ app.config([
 function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     // Add nested user links to the "foo" menu.
     $ocLazyLoadProvider.config({
-        debug: false,
+        debug: debugMode,
         events: true
     });
 
@@ -204,7 +206,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         var obj = {};
         obj.workers = 0;
         obj.serviceBase = serviceBase;
-        obj.debugMode = true;
+        obj.debugMode = debugMode;
 
         obj.noImageClass = 'fa fa-2x fa-user';
 

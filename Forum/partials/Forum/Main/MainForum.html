@@ -383,7 +383,7 @@
                     <!--</div>&lt;!&ndash; /.box-body &ndash;&gt;-->
                 <!--</div>&lt;!&ndash; /.box &ndash;&gt;-->
             <div class="box box-widget widget-user-2 fx-zoom-left fx-dur-400 fx-ease-none fx-stagger-50"
-                 ng-repeat="admin in data.Admins">
+                 ng-repeat="admin in forumData.Admins">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header" ng-class="getRandomColorClass(admin.UserID)">
                     <div class="widget-user-image">
@@ -407,8 +407,13 @@
                             </a>
                         </li>
                         <li>
+                            <a>تلفن
+                                <span class="pull-left" ng-bind="admin.Tel |pNumber"></span>
+                            </a>
+                        </li>
+                        <li>
                             <a>موبایل
-                                <span class="pull-left" ng-bind="admin.PhoneNumber |pNumber">۵</span>
+                                <span class="pull-left" ng-bind="admin.PhoneNumber |pNumber"></span>
                             </a>
                         </li>
                     </ul>
