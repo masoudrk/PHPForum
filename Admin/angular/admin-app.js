@@ -98,18 +98,6 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'مدیریت سوال ها';
                 }
             }
-        }).state("elements", {
-            url: "/elements",
-            templateUrl: "partials/Admin/Elements/_Elements.html",
-            controller: 'ElementsCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Elements/_ElementsCtrl.js']);
-                }],
-                $title: function () {
-                    return 'کنترل ها';
-                }
-            }
         }).state("message", {
             url: "/message/:id",
             templateUrl: "partials/Admin/Message/Message.html",

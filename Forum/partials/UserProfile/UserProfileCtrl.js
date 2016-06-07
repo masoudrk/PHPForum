@@ -1,61 +1,53 @@
-angular.module(appName).controller('ForumCtrl',
-    function ($scope, $element, $rootScope, $stateParams, $state, $timeout, Extention) {
 
-    if(!$stateParams.id || $stateParams.id ==''){
-        $state.go('forum_home');
-    }
-        
-    $scope.activity = {
-        low : 'solid 2px #e74c3c',
-        medium : 'solid 2px #f1c40f',
-        high : 'solid 2px #2ecc71'
-    };
+angular.module(appName).controller('UserProfileCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $stateParams, Extention) {
 
-    $scope.pagingParams = { SubjectID : $stateParams.id };
-    $scope.question = {};
+    $scope.isOnline = false;
+    $scope.profile = null;
+    $scope.userID = $stateParams.id;
 
-	Extention.post('getSubForumData',{SubjectID: $stateParams.id})
-		.then(function (res) {
+    Extention.post("getProfile", { TargetUserID:$scope.userID  }).then(function (res) {
+        $scope.profile = res;
 
-        $scope.forumData = res;
-        // Extention.addRoute(res.Subject.Title,$state.href($state.current.name,$stateParams));
         $rootScope.breadcrumbs = [];
         $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php' ,icon : 'fa-home' });
-        $rootScope.breadcrumbs.push({title : res.Subject.MainTitle ,
-                url : $state.href('main_forum', {id:res.Subject.MainSubjectName}) });
-        $rootScope.breadcrumbs.push({title : res.Subject.Title });
-
-	});
-
-    $scope.pagingControllerLastQuestions = {};
-    $scope.pagingControllerBestQuestions = {};
-    $scope.pagingControllerAnswered = {};
-    $scope.pagingControllerFollowingQuestions = {};
-
-    $scope.getTab = function (id) {
-        switch (id){
-            case 0:
-                $scope.pagingControllerLastQuestions.update();
-                break;
-            case 1:
-                $scope.pagingControllerBestQuestions.update();
-                break;
-            case 2:
-                $scope.pagingControllerAnswered.update();
-                break;
-            case 3:
-                $scope.pagingControllerFollowingQuestions.update();
-                break;
-        }
-        $scope.activeTab = id;
-    }
-
-    $timeout(function () {
-        $scope.getTab(0);
+        $rootScope.breadcrumbs.push({title : ' پروفایل ' +'\''+ res.FullName +'\'' });
     });
 
-    $scope.incrementChartOptions = [
-    {
+    $rootScope.$on("socketDataChanged", function(){
+        $scope.checkNowOnline();
+    });
+
+    $scope.followPerson = function () {
+        Extention.postAsync("followPerson", { TargetUserID: $scope.userID, UserID: $rootScope.user.UserID }).then(function (res) {
+            if (res.Status == 'success') {
+                $scope.profile.PersonFollow = 1;
+            }
+        });
+    }
+
+    $scope.unFollowPerson = function () {
+        Extention.postAsync("unFollowPerson", { TargetUserID: $scope.userID, UserID: $rootScope.user.UserID }).then(function (res) {
+            if (res.Status == 'success') {
+                $scope.profile.PersonFollow = 0;
+            }
+        });
+    }
+
+    $scope.checkNowOnline = function () {
+        var ous =  $scope.socketData.OnlineUsers;
+        
+        for (var i = 0 ; i < ous.length ; i++){
+            if($scope.userID == ous[i].ID ){
+                $scope.isOnline = true;
+                return;
+            }
+        }
+        $scope.isOnline = false;
+    }
+    $scope.checkNowOnline();
+
+
+    $scope.incrementChartOptions =[{
         id:"g1",
         type : "smoothedLine",
         lineColor: "#00BBCC",
@@ -81,7 +73,7 @@ angular.module(appName).controller('ForumCtrl',
                 persianJs( value + " سوال <br>" +'<span class="text-muted">'+
                     d + '</span>').englishNumber().toString() + "</b>";
         }
-        },
+    },
         {
             id:"g2",
             type : "smoothedLine",
@@ -165,5 +157,5 @@ angular.module(appName).controller('ForumCtrl',
         }
     ];
 
-	activeElement('#SForum','#S' + $stateParams.id);
+    activeElement('#SProfile');
 });

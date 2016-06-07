@@ -10,7 +10,7 @@
             $scope.checkNowOnline();
             
             $rootScope.breadcrumbs = [];
-            $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home' ,icon : 'fa-home' });
+            $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php' ,icon : 'fa-home' });
             $rootScope.breadcrumbs.push({title : res.MainSubject , url : $state.href('main_forum', {id:res.SubjectName}) });
             $rootScope.breadcrumbs.push({title : res.Subject , url : $state.href('forum', {id:res.SubjectID}) });
             $rootScope.breadcrumbs.push({title : Extention.subString(res.Title,22)});
