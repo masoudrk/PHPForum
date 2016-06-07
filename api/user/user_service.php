@@ -1461,7 +1461,7 @@ $app->post('/unFollowQuestion', function() use ($app)  {
     if(!isset($data->UserID) || !isset($data->QuestionID))
         {echoResponse(201, 'bad request');return;}
 
-    $app->db->deleteFromTable('Question_follow',"UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    $app->db->deleteFromTable('question_follow',"UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
     echoSuccess();
 });
 
@@ -1727,6 +1727,34 @@ $app->post('/updateAvatar', function() use ($app)  {
     echoError("Error");
 });
 
+$app->post('/deleteBestAnswer', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+
+    $sess = $app->session;
+
+    if(!isset($data->QuestionID))
+        {echoResponse(201, 'bad Request');return;}
+
+                        $resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
+LIMIT 1");
+
+    $sql = $resQ->fetch_assoc();
+
+    if($sess->IsAdmin && $sql)
+    {
+        $app->db->updateRecord('forum_question',"BestAnswerID = null" , "ID = '$data->QuestionID'");
+        echoSuccess();
+        return;
+    }else{
+
+        echoError('you dont have permission to do this action');
+    }
+});
+
 $app->post('/setBestAnswer', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
@@ -1735,8 +1763,15 @@ $app->post('/setBestAnswer', function() use ($app)  {
 
     if(!isset($data->QuestionID) || !isset($data->AnswerID))
         {echoResponse(201, 'bad Request');return;}
+$resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
+LIMIT 1");
 
-    if($sess->IsAdmin)
+    $sql = $resQ->fetch_assoc();
+
+    if($sess->IsAdmin && $sql)
     {
         $app->db->updateRecord('forum_question',"BestAnswerID = '$data->AnswerID'" , "ID = '$data->QuestionID'");
         echoSuccess();
