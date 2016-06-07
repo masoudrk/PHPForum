@@ -566,8 +566,6 @@
     <Content Include="Forum\partials\Question\NewQuestion\NewQuestionCtrl.js" />
     <Content Include="Forum\partials\Question\Questions\Questions.html" />
     <Content Include="Forum\partials\Question\Questions\QuestionsCtrl.js" />
-    <Content Include="Forum\partials\User\AllUsers.html" />
-    <Content Include="Forum\partials\User\AllUsersCtrl.js" />
     <Content Include="Forum\partials\User\UserProfile\UserProfile.html" />
     <Content Include="Forum\partials\User\UserProfile\UserProfileCtrl.js" />
     <Content Include="Images\avatar.png" />

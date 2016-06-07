@@ -528,7 +528,7 @@
                         </a>
                     </li>
                     <li id="SProfile">
-                        <a href="../Forum/#/Profile">
+                        <a href="../Forum/#/Profile/Info">
                             <i class="fa fa-male"></i>
                             <span>پروفایل من </span>
                             <small class="label pull-right bg-green">جدید</small>

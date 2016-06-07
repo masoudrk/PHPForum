@@ -244,6 +244,7 @@
                     <div class="box-footer">
                         <div ng-if="user.AdminPermissionLevel == 'Base' || user.AdminPermission == question.SubjectName">
                             <a ng-show="answer.BestAnswer == 0" ng-click="setBestAnswer(answer.ID)" class="btn btn-primary btn-xs pull-right" style="margin: 5px"><b>ثبت به عنوان بهترین جواب</b> <i class="fa fa-check"></i> </a>
+                            <a ng-hide="answer.BestAnswer == 0" ng-click="deleteBestAnswer(answer.ID)" class="btn btn-danger btn-xs pull-right" style="margin: 5px"><b>حذف بهترین جواب</b> <i class="fa fa-times"></i> </a>
                         </div>
                         <span ng-hide="answer.BestAnswer == 0" class="label bg-green pull-right" style="margin: 5px"> <b>بهتربن جواب</b> <i class="fa fa-check"></i></span>
                         <i class="fa fa-thumbs-up palette-nephritis" ng-show="answer.PersonAnswerRate == 1" style="font-size: 20px" aria-hidden="true"></i>

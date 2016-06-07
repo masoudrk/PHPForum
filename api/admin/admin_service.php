@@ -671,20 +671,24 @@ $app->post('/getAllUsers', function() use ($app)  {
 	$sess = new Session();
 
 	$where = "WHERE (user.ID!='$sess->UserID')";
-	$hasWhere = FALSE;
     if(isset($data->userType)){
         $where .=" AND (user.UserAccepted ='$data->userType')";
 	}
 	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
 		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
 		$where .= " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
-		$hasWhere = TRUE;
 	}
 
-	$pageRes = $pr->getPage($app->db,"SELECT user.`ID`, `FullName`, `Email`, `Password`, `Username`,
-`PhoneNumber`, `Tel`, `SignupDate`, `Gender`, `Description`, `SessionID`,
-`MailAccepted`, `ValidSessionID`, `UserAccepted`,  admin.ID as 
-AdminID FROM user LEFT JOIN admin on admin.UserID = user.ID  ".$where." ORDER BY user.ID desc");
+	$pageRes = $pr->getPage($app->db,"SELECT (SELECT COUNT(*) FROM forum_answer as fa WHERE fa.AuthorID = user.`ID`) as AnswerCount ,
+(SELECT COUNT(*) FROM forum_question as fq WHERE fq.AuthorID = user.`ID`) as QuestionCount ,
+(SELECT COUNT(*) FROM person_follow as pf WHERE pf.TargetUserID = user.`ID`) as FollowersCount ,
+(SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount ,
+user.`ID`, `FullName`, `Email`, `Username`,
+`PhoneNumber`, `Tel`, `SignupDate`, `Gender`, user.`Description`, `SessionID`,
+`MailAccepted`, `ValidSessionID`, `UserAccepted`,  admin.ID as
+AdminID , user.LastActiveTime, user.SignupDate , user.score , file_storage.FullPath
+FROM user LEFT JOIN admin on admin.UserID = user.ID
+LEFT JOIN file_storage on file_storage.ID = user.AvatarID ".$where." ORDER BY user.ID desc");
 
 	echoResponse(200, $pageRes);
 });
@@ -730,7 +734,10 @@ LIMIT 1");
         $resQ = $app->db->insertToTable('admin',"`UserID`, `PermissionID`","'$data->UserID','$data->PermissionID'");
     }else
     {
-        $resQ = $app->db->updateRecord('admin',"`PermissionID`= '$data->PermissionID'","UserID = '$data->UserID'");
+        if($data->UserID != $sess->UserID)
+            $resQ = $app->db->updateRecord('admin',"`PermissionID`= '$data->PermissionID'","UserID = '$data->UserID'");
+        else
+            echoError('you cannot change your own permission level');
     }
     if($sql)
         echoSuccess();

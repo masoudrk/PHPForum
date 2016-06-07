@@ -17,6 +17,14 @@
         });
     })();
 
+    $scope.deleteBestAnswer = function (AnswerID) {
+        Extention.post("deleteBestAnswer", { QuestionID: $stateParams.id, AnswerID: AnswerID }).then(function (res) {
+            if (res.Status == 'success') {
+                $scope.getQuestionByID();
+            }
+        });
+    }
+
     $scope.setBestAnswer = function(AnswerID) {
         Extention.post("setBestAnswer", { QuestionID: $stateParams.id, AnswerID: AnswerID }).then(function (res) {
             if (res.Status == 'success') {

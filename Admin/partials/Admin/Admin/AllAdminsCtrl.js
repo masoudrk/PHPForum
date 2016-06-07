@@ -1,12 +1,14 @@
 
 angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, Extention) {
 
+    $scope.action = 'افزودن';
     $scope.pagingParams = {};
 	$scope.pagingController = {};
 	$scope.user = {};
 	$scope.adminType = { selected : {} }
 	$scope.adminTypes = [];
-	$scope.selectedAdmin = {};
+    $scope.Person = {};
+    $scope.selectedAdmin = {};
 
 	Extention.post('getAllAdminTypes', { }).then(function (res) {
 	    if (res && res.Status == 'success') {
@@ -19,13 +21,18 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
 	}
 
 	$scope.updateAdmin = function() {
-	    if ($scope.adminType.selected && $scope.adminUserID) {
+	    if ($scope.adminType.selected && $scope.Person.selected) {
 	        $scope.selectedAdmin["PermissionID"] = $scope.adminType.selected.ID;
-	        $scope.selectedAdmin["UserID"] = $scope.adminUserID;
+	        $scope.selectedAdmin["UserID"] = $scope.Person.selected.ID;
 	        console.log($scope.selectedAdmin);
 	        Extention.post('updateAdmin', $scope.selectedAdmin).then(function (res) {
 	            if (res && res.Status == 'success') {
-	                Extention.popSuccess("مدیر با موفقیت اضافه شد!");
+	                if($scope.action == 'افزودن')
+	                    Extention.popSuccess("مدیر با موفقیت اضافه شد!");
+	                else if ($scope.action == 'ویرایش') {
+	                    Extention.popSuccess("مدیر با موفقیت ویرایش شد!");
+	                    $scope.action = 'افزودن';
+	                }
 	                $scope.pagingController.update();
 	            }
 	        });
@@ -50,7 +57,19 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
                 break;
 	        }
 	    }
-	    $scope.adminUserID = Number(admin.UserID);
+	    $scope.Person.selected = { ID: admin.UserID, FullName: admin.FullName };
+	    $scope.action = 'ویرایش';
 	}
+
+	$scope.getPersons = function (filter) {
+	    Extention.postAsync('getUsersByName', { filter: filter }).then(function (res) {
+	        if (res && res.Status == 'success') {
+	            $scope.users = res.Data;
+	        } else {
+	            Extention.popError("مشکل در اتصال.");
+	        }
+	    });
+	}
+
 	activeElement('#SAdmins');
 });

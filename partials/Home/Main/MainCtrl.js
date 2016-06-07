@@ -50,6 +50,7 @@
             Extention.post('savePerson', $scope.user).then(function (msg) {
                 console.log(msg);
                 if (msg.Status == 'success') {
+                    $scope.user = {};
                     Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد .لطفا ایمیل خود را بررسی کنید. ',10000);
                 } else if (msg.Status == 'emailError') {
                     Extention.popError('این ایمیل قبلا ثبت شده است');
@@ -57,6 +58,10 @@
                     Extention.popError('اطلاعات شما نا معتبر است');
                 }
             });
+        } else if (!$scope.signUpForm.name.$valid) {
+            Extention.popError('لطفا نام خودرا فارسی وارد کنید');
+        } else {
+            Extention.popError('لطفا تمام اطلاعات را وارد کنید');
         }
     }
 
