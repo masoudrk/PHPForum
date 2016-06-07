@@ -193,7 +193,7 @@ angular.module(appName).controller('MainForumCtrl',
 		    $scope.forumData = res;
 
             $rootScope.breadcrumbs = [];
-            $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home' ,icon : 'fa-home' });
+            $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php' ,icon : 'fa-home' });
             $rootScope.breadcrumbs.push({title : res.MainSubject.Title });
 
 		});

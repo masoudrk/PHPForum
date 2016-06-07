@@ -1,7 +1,7 @@
 ﻿var appName = 'adminApp';
-var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
+var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
-    'ngFileUpload','anim-in-out' ]);
+    'ngFileUpload','anim-in-out','am-charts' ]);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -96,18 +96,6 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }],
                 $title: function () {
                     return 'مدیریت سوال ها';
-                }
-            }
-        }).state("elements", {
-            url: "/elements",
-            templateUrl: "partials/Admin/Elements/_Elements.html",
-            controller: 'ElementsCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Elements/_ElementsCtrl.js']);
-                }],
-                $title: function () {
-                    return 'کنترل ها';
                 }
             }
         }).state("message", {
@@ -499,7 +487,7 @@ app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
         return obj;
     }]);
 
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies, Extention, OnlineSocket) {
+app.run(function ($rootScope, $templateCache, $state, $location, Extention, OnlineSocket) {
 
     $rootScope.spinner ={};
 

@@ -17,6 +17,65 @@ $res['OnlineUsers'] = $arr;
 echoResponse(200, $res);
 });
 
+
+$app->post('/getDashboardData', function() use ($app)  {
+
+    $r = json_decode($app->request->getBody());
+    $session = $app->session;
+
+    $curDate = date('Y-m-d');
+    $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $cid  = $resCQ->fetch_assoc()['ID'];
+
+    $resQ = $app->db->makeQuery("
+
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+  where forum_question.AdminAccepted=1 
+  and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+  where forum_answer.AdminAccepted=1
+  and Date(forum_answer.CreationDate) = cd.IntervalDay) 
+  as AnswerCount,
+  (select count(*) from forum_question
+  where forum_question.AdminAccepted=1 
+  and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
+  ,
+  (select count(*) from forum_answer
+  where forum_answer.AdminAccepted=1
+  and Date(forum_answer.CreationDate) < cd.IntervalDay) 
+  as IAnswerCount
+from calendar_day as cd
+where cd.ID BETWEEN ".($cid - 20)." and ".($cid+1));
+
+    $resp= [];
+    $cqData = [];
+    while($r = $resQ->fetch_assoc())
+        $cqData[] = $r;
+    $resp['ChartData'] = $cqData;
+
+    $resQ = $app->db->makeQuery("
+select forum_main_subject.ID , forum_main_subject.Title , forum_main_subject.SubjectName,
+  sum((select count(*) from forum_question
+  where forum_question.SubjectID=forum_subject.ID and forum_question.AdminAccepted =1) )as QTotal,
+  sum((select count(*) from forum_answer
+    inner join forum_question on forum_question.ID=forum_answer.QuestionID
+  where forum_question.SubjectID=forum_subject.ID and forum_answer.AdminAccepted =1
+        and forum_question.AdminAccepted =1) )as ATotal
+from forum_main_subject
+  LEFT JOIN forum_subject on forum_subject.ParentSubjectID=forum_main_subject.SubjectID
+GROUP BY forum_main_subject.ID");
+
+    $cqDataRadar = [];
+    while($r = $resQ->fetch_assoc())
+        $cqDataRadar[] = $r;
+    $resp['RadarChartData'] = $cqDataRadar;
+
+
+    echoResponse(200, $resp);
+});
+
 $app->post('/getAllTags', function() use ($app)  {
 
 	

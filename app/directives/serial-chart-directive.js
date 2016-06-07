@@ -9,6 +9,7 @@ angular.module('am-charts', []).directive('serialChart', function () {
             chartData : '=',
             chartHeight : '@',
             chartGraphs : '=',
+            enableScrollBar : '=',
             chartId : '@',
             delay : '@'
         },
@@ -22,7 +23,7 @@ angular.module('am-charts', []).directive('serialChart', function () {
 
                 $timeout(function () {
 
-                    AmCharts.makeChart($scope.chartId, {
+                    var opt= {
 
                         type: "serial",
                         dataProvider: $scope.chartData,
@@ -68,7 +69,15 @@ angular.module('am-charts', []).directive('serialChart', function () {
                         },
                         mouseWheelZoomEnabled: true,
 
-                    });
+                    };
+
+                    if ($scope.enableScrollBar){
+                        opt.chartScrollbar= {};
+                    }
+
+                    AmCharts.makeChart($scope.chartId, opt);
+
+
                 });
             });
 

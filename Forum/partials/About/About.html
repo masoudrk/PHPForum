@@ -1,0 +1,63 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>انجمن</small>
+      درباره سایت
+    </h1>
+
+    <ol class="breadcrumb">
+        <li><a href="home.php"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">درباره</li>
+    </ol>
+</section>
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-6 col-md-4 fx-zoom-left fx-dur-400 fx-ease-none fx-stagger-50"
+             ng-repeat="admin in data.Admins">
+
+            <div class="box box-widget widget-user-2" >
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header" ng-class="getRandomColorClass(admin.UserID)">
+                    <div class="widget-user-image">
+                        <img class="img-circle" src="../images/Avatar.jpg"
+                             alt="Admin Avatar" ng-src="{{admin.Image}}">
+                    </div><!-- /.widget-user-image -->
+                    <h3 class="widget-user-username persian-rtl">
+                        <a ui-sref="UserProfile({id:'{{admin.UserID}}'})" style="color: #fff;"
+                           ng-bind="admin.FullName | pNumber"></a>
+                    </h3>
+                    <h5 class="widget-user-desc persian-rtl">
+                        <a ui-sref="main_forum({id:admin.SubjectName})" style="color: #fff;">
+                        ادمین بخش
+                        {{(admin.PermissionLevel != 'Base')?admin.Title:'اصلی' |subString:15 | pNumber}}
+                        </a>
+                    </h5>
+                </div>
+                <div class="box-footer no-padding">
+                    <ul class="nav nav-stacked">
+                        <li>
+                            <a >ایمیل
+                                <span class="pull-left english-font"
+                                      ng-bind="admin.Email |subString:50 | lowercase | capitalize"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>تلفن
+                                <span class="pull-left" ng-bind="admin.Tel |pNumber"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>موبایل
+                                <span class="pull-left" ng-bind="admin.PhoneNumber |pNumber"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+

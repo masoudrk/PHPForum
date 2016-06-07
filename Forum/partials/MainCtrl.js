@@ -80,8 +80,20 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         }
     }
 
+    $scope.searchIconClass = 'fa-search';
     $scope.searchTypeChanges = function (type) {
         $scope.pagingParams.searchType = type;
+        switch (type){
+            case 0:
+                $scope.searchIconClass = 'fa-question';
+                break;
+            case 1:
+                $scope.searchIconClass = 'fa-male';
+                break;
+            case 2:
+                $scope.searchIconClass = 'fa-bullhorn';
+                break;
+        }
         $scope.search();
     }
 
@@ -140,5 +152,26 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         }
     }
 
+    $scope.markAsReadNotification = function (event , eventObj) {
+        event.stopPropagation();
 
+        var index = $scope.notifications.All.indexOf(eventObj);
+        $scope.notifications.All.splice(index,1);
+        $scope.notifications.Total -= 1;
+        Extention.postAsync("markAsReadNotification",{EventID : eventObj.EventID}).then(function (res) {
+
+        });
+    }
+
+    $scope.markAsReadMessage = function (event , msgObj) {
+        event.stopPropagation();
+
+        var index = $scope.messages.All.indexOf(msgObj);
+        $scope.messages.All.splice(index,1);
+        $scope.messages.Total -= 1;
+        
+        Extention.postAsync("markAsReadMessage",{MessageID : msgObj.ID}).then(function (res) {
+
+        });
+    }
 });

@@ -20,7 +20,7 @@ angular.module(appName).controller('ForumCtrl',
         $scope.forumData = res;
         // Extention.addRoute(res.Subject.Title,$state.href($state.current.name,$stateParams));
         $rootScope.breadcrumbs = [];
-        $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home' ,icon : 'fa-home' });
+        $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php' ,icon : 'fa-home' });
         $rootScope.breadcrumbs.push({title : res.Subject.MainTitle ,
                 url : $state.href('main_forum', {id:res.Subject.MainSubjectName}) });
         $rootScope.breadcrumbs.push({title : res.Subject.Title });

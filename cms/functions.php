@@ -30,19 +30,16 @@ function generateRequiredCMSJavaFiles(){
     <script src="dist/js/pages/dashboard.js"></script> -->
     <!-- AdminLTE for demo purposes -->
     <script src="../cms/js/demo.js"></script>
-    <script src="../js/canvas-snow.js"></script>
 
     <script src="../js/am-charts/amcharts.js" type="text/javascript"></script>
     <script src="../js/am-charts/serial.js" type="text/javascript"></script>
     <script src="../js/am-charts/pie.js" type="text/javascript"></script>
+    <script src="../js/am-charts/radar.js" type="text/javascript"></script>
 
-    <script src="../cms/js/d3.js"></script>
-    <script src="../cms/js/nv.d3.js"></script>
     <script src="../js/persian.min.js"></script>
 
     <script src="../js/angular.js"></script>
     <script src="../js/angular-route.min.js"></script>
-    <script src="../js/angular-cookies.min.js"></script>
     <script src="../js/angular-animate.min.js" ></script>
     <script src="../js/angular-ui-router.js"></script>
 
@@ -64,6 +61,7 @@ function generateRequiredCMSJavaFiles(){
 
     <script type="text/javascript" src="../app/directives/serial-chart-directive.js"></script>
     <script type="text/javascript" src="../app/directives/pie-chart-directive.js"></script>
+    <script type="text/javascript" src="../app/directives/radar-chart-directive.js"></script>
 
 
 <?php
@@ -71,7 +69,6 @@ function generateRequiredCMSJavaFiles(){
 
 function generateRequiredCMSCssFiles(){
     ?>
-    <link href="../cms/css/nv.d3.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/anim-in-out.css">
     <link rel="stylesheet" href="../css/toaster.css">
     <link rel="stylesheet" href="../cms/css/treasure-overlay-spinner.min.css">

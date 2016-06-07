@@ -1,7 +1,7 @@
 ﻿var appName = 'forumApp';
 var serviceBaseURL = '../api/user/';
 
-var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ngCookies', 'ui.router', 'angular-confirm',
+var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
     'ngFileUpload','anim-in-out','am-charts','ng-fx']);
 
@@ -119,6 +119,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
+        .state("my_following", {
+            url: "/Follow/:action",
+            templateUrl: "partials/MyActions/Follow/Follow.html",
+            controller: 'FollowCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/MyActions/Follow/FollowCtrl.js']);
+                }],
+                $title: function () {
+                    return 'دنبال شده ها';
+                }
+            }
+        })
         .state("question", {
             url: "/Question/:id",
             templateUrl: "partials/Forum/Question/Question.html",
@@ -135,16 +148,16 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         }).state("UserProfile", {
             url: "/UserProfile/:id",
-            templateUrl: "partials/User/UserProfile/UserProfile.html",
+            templateUrl: "partials/UserProfile/UserProfile.html",
             controller: 'UserProfileCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/User/UserProfile/UserProfileCtrl.js']);
+                        return $ocLazyLoad.load(['partials/UserProfile/UserProfileCtrl.js']);
                     }
                 ],
                 $title: function () {
-                    return 'پروفایل من';
+                    return 'پروفایل';
                 }
             }
         })
@@ -172,7 +185,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return $ocLazyLoad.load(['partials/Profile/ProfileCtrl.js']);
                 }],
                 $title: function () {
-                    return 'پروفایل';
+                    return 'پروفایل من';
                 }
             }
         })
@@ -205,6 +218,36 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'آزمون';
                 }
             }
+        })
+        .state("about", {
+            url: "/About",
+            templateUrl: "partials/About/About.html",
+            controller: 'AboutCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/About/AboutCtrl.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'درباره ما';
+                }
+            }
+        })
+        .state("help", {
+            url: "/Help",
+            templateUrl: "partials/Help/Help.html",
+            controller: 'HelpCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Help/HelpCtrl.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'راهنمای سایت';
+                }
+            }
         });
         $urlRouterProvider.otherwise(function ($injector, $location) {
             var $state = $injector.get('$state');
@@ -224,10 +267,10 @@ var activeElement = function (parent , name) {
 }
 
 
-app.run(function ($rootScope, $templateCache, $state, $location, $cookies, $cookieStore, Extention, OnlineSocket) {
+app.run(function ($rootScope, $templateCache, $state, $location, Extention, OnlineSocket) {
     
     $rootScope.breadcrumbs = [];
-    $rootScope.breadcrumbs.push({title : 'خانه' , url : '#/home'});
+    $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php'});
 
     $rootScope.spinner ={};
 

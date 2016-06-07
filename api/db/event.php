@@ -9,10 +9,11 @@
 function getUserLastNotifications($db, $uid, $limit){
 
     $resQ = $db->makeQuery("select 
-event.EventDate , file_storage.FullPath , user.FullName , forum_question.Title , event_type.EventTypeFA
+event.EventDate , file_storage.FullPath , user.FullName , forum_question.Title , forum_question.ID as QuestionID
+ , event_type.EventTypeFA, event_type.HasQuestion , event.ID as EventID
 from event 
 left join event_type on event_type.ID = event.EventTypeID
-left join forum_question on forum_question.ID = event.EvenLinkID
+inner join forum_question on forum_question.ID = event.EvenLinkID
 left join user on user.ID = event.EventCauseID
 left join file_storage on file_storage.ID = user.AvatarID
 where event.EventUserID='$uid' and event.EventSeen='0' 

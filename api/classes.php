@@ -43,7 +43,6 @@ class Pagination {
 			$countQ = $db->makeQuery("SELECT count(*) as Total ".$startFromStr);
 			$countRes = $countQ->fetch_assoc();
 			$total = $countRes['Total'];
-
 			$offset = ($this->PageIndex-1) * $this->PageSize;
 
 			$q = $db->makeQuery($query." LIMIT $offset, $this->PageSize");
