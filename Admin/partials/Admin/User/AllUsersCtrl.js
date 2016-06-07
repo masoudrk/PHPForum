@@ -1,10 +1,25 @@
 
-angular.module(appName).controller('AllUsersCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, Extention) {
+angular.module(appName).controller('AllUsersCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, Extention , $uibModal) {
 
     $scope.pagingParams = { userType: null };
 	$scope.pagingController = {};
 	$scope.user = {};
     $scope.dropDwonTitle = 'نمایش اعضا';
+
+    $scope.openUserModal = function (user) {
+         $uibModal.open({
+            animation: true,
+            templateUrl: 'UserDetail.html',
+            controller: function ($scope, $uibModalInstance) {
+                $scope.user = user;
+                console.log($scope.user);
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+            },
+            size: 'md'
+        });
+    }
 
 	$scope.search = function () {
 		$scope.pagingController.update();

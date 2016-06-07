@@ -19,8 +19,8 @@
                     <div class="box-tools">
                         <div class="input-group col-xs-9 col-md-4">
                             <div class="input-group-btn">
-                                <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius:3px;border-top-right-radius:3px;">
-                                  {{dropDwonTitle}}
+                                <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
+                                    {{dropDwonTitle}}
                                     <span class="fa fa-caret-down"></span>
                                 </button>
                                 <ul class="dropdown-menu pull-right">
@@ -50,7 +50,7 @@
                             <th>وضعیت</th>
                             <th>ایمیل</th>
                             <th>وضعیت ایمیل</th>
-                            <th style="width: 100px;"></th>
+                            <th style="width: 125px;"></th>
                         </tr>
                         <tr ng-repeat="u in user.all">
                             <td>{{u.ID| pNumber}}</td>
@@ -69,6 +69,7 @@
                             </td>
                             <td>
                                 <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openUserModal(u)" title="جزئیات کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i confirm="آیا مطمئن هستید که میخواهید این کاربر '{{u.FullName}}' را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeUser(u.ID)" title="حذف کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-times link hvr-grow" ng-if="u.UserAccepted==1" style="color: #e67e22;"
@@ -82,14 +83,6 @@
                     </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer clearfix text-center">
-                    <!--<ul class="pagination pagination-sm no-margin">-->
-                        <!--<li><a href="#/">«</a></li>-->
-                        <!--<li><a href="#/">۱</a></li>-->
-                        <!--<li><a href="#/">۲</a></li>-->
-                        <!--<li><a href="#/">۳</a></li>-->
-                        <!--<li><a href="#/">»</a></li>-->
-                    <!--</ul>-->
-
                     <auto-paging page="1"
                                  page-size="20"
                                  ul-class="pagination pagination-sm no-margin"
@@ -103,6 +96,87 @@
         </div>
     </div>
 </section>
+
+<script type="text/ng-template" id="UserDetail.html">
+    <div class="modal-header">
+        <h3 class="modal-title text-right">{{user.FullName |subString :40|pNumber}}
+            <img class="img-circle" ng-src="{{user.FullPath}}" style="width: 40px;"></h3>
+    </div>
+    <div class="modal-body form">
+        <div class="row persian-rtl">
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                     نام :
+                </div>
+                <div class="col-xs-9">
+                    <a class="link palette-emerald">
+                        {{user.FullName | subString :40|pNumber}}&nbsp;&nbsp;
+                        <small ng-show="user.Gender==0"><i class="fa fa-mars text-blue"></i></small>
+                        <small ng-hide="user.Gender==0"><i class="fa fa-venus text-blue"></i></small>
+                    </a>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                     ایمیل :
+                </div>
+                <div class="col-xs-9 text-muted">
+                    {{user.Email | pNumber}}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    شماره موبایل  :
+                </div>
+                <div class="col-xs-9">
+                    {{user.PhoneNumber | pNumber}}
+                </div>
+            </div>
+            <div ng-if="user.Tel" class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    شماره ثابت  :
+                </div>
+                <div class="col-xs-9">
+                    {{user.Tel | pNumber}}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    تاریخ عضویت :
+                </div>
+                <div class="col-xs-9">
+                    {{user.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                     آخرین زمان آنلاین:
+                </div>
+                <div class="col-xs-9">
+                    {{user.LastActiveTime | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}
+                </div>
+            </div>
+            <div ng-if="user.Description" class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                      درباره من:
+                </div>
+                <div class="col-xs-9">
+                    {{user.Description | pNumber}}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <small class="col-xs-2 no-padding" ng-hide="user.QuestionCount==0" ><i class="fa fa-question text-green"  title="سوال های کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>     {{user.QuestionCount | pNumber}}</small>
+                <small class="col-xs-2 no-padding" ng-hide="user.FollowersCount==0" ><i class="fa fa-group text-blue" title="دنبال کننده های کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>     {{user.FollowersCount | pNumber}}</small>
+                <small class="col-xs-2 no-padding" ng-hide="user.FollowingCount==0" ><i class="fa fa-group text-blue" title="دنبال شده های کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>     {{user.FollowingCount | pNumber}}</small>
+                <small class="col-xs-2 no-padding" ng-hide="user.AnswerCount==0"><i class="fa fa-exclamation text-red" title="جواب های کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>      {{user.AnswerCount | pNumber}}</small>
+                <small class="col-xs-2 no-padding" ng-hide="user.score==0"><i class="fa fa-star text-yellow" title="امتیاز کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>      {{user.score | pNumber}}</small>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info btn-flat pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
 
 
 
