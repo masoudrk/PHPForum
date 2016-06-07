@@ -47,7 +47,7 @@ SELECT cd.IntervalDay as date,
   and Date(forum_answer.CreationDate) < cd.IntervalDay) 
   as IAnswerCount
 from calendar_day as cd
-where cd.ID BETWEEN ".($cid - 20)." and ".($cid+1));
+where cd.ID BETWEEN ".($cid - 30)." and ".($cid+1));
 
     $resp= [];
     $cqData = [];

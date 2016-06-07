@@ -30,14 +30,14 @@
 
                     <p ng-show="isOnline" class="text-muted text-center">آنلاین <i
                             class="fa fa-circle text-green"></i></p>
-                    <ul class="list-group list-group-unbordered">
+                    <ul class="list-group list-group-unbordered" style="margin-bottom: 10px">
                         <li class="list-group-item">
                             <a class="">{{profile.score|pNumber}}</a> <b class="pull-right">امتیاز</b>
                         </li>
                         <li class="list-group-item">
                             <a class="">{{profile.QuestionsCount|pNumber}}</a> <b class="pull-right">سوالات پرسیده</b>
                         </li>
-                        <li class="list-group-item">
+                        <li class="list-group-item" style="border-bottom: none">
                             <a class="">{{profile.AnswerCount|pNumber}}</a> <b class="pull-right">جواب ها</b>
                         </li>
                     </ul>
@@ -75,7 +75,7 @@
             <!---->
         <!--</div>-->
         <div class="col-md-9 col-sm-6 col-xs-12">
-            <div class="box box-primary">
+            <div class="box box-warning">
                 <div class="box-header with-border">
                     <h3 class="box-title vazir-font">نمودار فعالیت {{profile.FullName}}</h3>
                 </div><!-- /.box-header -->

@@ -419,25 +419,25 @@
                     </ul>
                 </li>
 
-                <li id="SQuestion" class="treeview">
-                    <a class="link">
-                        <i class="fa fa-graduation-cap"></i> <span>سنجش</span>
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li id
-                            ="SRating">
-                            <a ui-sref1="rating">
-                                <i class="fa fa-circle-o"></i>نظر سنجی
-                            </a>
-                        </li>
-                        <li id="SQuiz">
-                            <a ui-sref1="quiz">
-                                <i class="fa fa-circle-o"></i>آزمون
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+<!--                <li id="SQuestion" class="treeview">-->
+<!--                    <a class="link">-->
+<!--                        <i class="fa fa-graduation-cap"></i> <span>سنجش</span>-->
+<!--                        <i class="fa fa-angle-left pull-right"></i>-->
+<!--                    </a>-->
+<!--                    <ul class="treeview-menu">-->
+<!--                        <li id-->
+<!--                            ="SRating">-->
+<!--                            <a ui-sref1="rating">-->
+<!--                                <i class="fa fa-circle-o"></i>نظر سنجی-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li id="SQuiz">-->
+<!--                            <a ui-sref1="quiz">-->
+<!--                                <i class="fa fa-circle-o"></i>آزمون-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </li>-->
                 <li id="SMessage">
                     <a ui-sref="messages">
                         <i class="fa fa-envelope"></i><span>  پیام های من </span>
@@ -480,19 +480,16 @@
                                 <i class="fa fa-circle-o"></i>راهنمای سایت
                             </a>
                         </li>
-<!--                        <li id="SLinks">-->
-<!--                            <a>-->
-<!--                                <i class="fa fa-circle-o"></i>-->
-<!--                                لینک های مفید-->
-<!--                                <i class="fa fa-angle-right pull-right"></i>-->
-<!--                            </a>-->
-<!--                            <ul class="treeview-menu" style="display: none;">-->
-<!--                                <li><a><i class="fa fa-circle-o"></i> سطح دوم</a></li>-->
-<!--                                <li><a><i class="fa fa-circle-o"></i> سطح دوم</a></li>-->
-<!--                                <li><a><i class="fa fa-circle-o"></i> سطح دوم</a></li>-->
-<!---->
-<!--                            </ul>-->
-<!--                        </li>-->
+                        <li id="SLinks">
+                            <a>
+                                <i class="fa fa-circle-o"></i>
+                                لینک های مفید
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu" style="display: none;">
+                                <li><a><i class="fa fa-circle-o"></i> پورتال راه آهن</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <li class="treeview">
