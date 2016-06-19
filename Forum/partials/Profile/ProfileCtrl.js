@@ -1,5 +1,94 @@
 
-angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, $stateParams, $state, $location, $timeout, Extention,Upload) {
+angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, $stateParams, $state, $uibModal,$timeout, Extention,Upload) {
+
+    $scope.onChangeAvatar = function ($files, $file) {
+        if($files.length == 0)
+            return;
+
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'cropModal.html',
+            controller: function ($scope , $uibModalInstance , file) {
+                $scope.croppedImage = {};
+
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss();
+                };
+
+                if(file != null){
+
+                    var reader = new FileReader();
+                    reader.onload = function (evt) {
+                        $scope.$apply(function($scope){
+                            $scope.myImage = evt.target.result;
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+
+
+                $scope.changeAvatar = function () {
+                    Extention.setBusy(true);
+
+                    var dataURItoBlob = function(dataURI) {
+                        var binary = atob(dataURI.split(',')[1]);
+                        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+                        var array = [];
+                        for(var i = 0; i < binary.length; i++) {
+                            array.push(binary.charCodeAt(i));
+                        }
+                        return new Blob([new Uint8Array(array)], {type: mimeString});
+                    };
+
+                    var file = dataURItoBlob($scope.croppedImage);
+                    file.name = 'cropfile.png';
+                    file.upload = Upload.upload({
+                        url: serviceBaseURL + 'updateAvatar',
+                        data: {
+                            file: file
+                        }
+                    });
+
+                    $scope.uploading = true;
+                    Extention.popInfo('لطفا تا پایان تغییر تصویر صبر کنید.');
+
+                    file.upload.then(function (response) {
+                        $timeout(function () {
+                            Extention.popSuccess('تصویر با موفقیت تغییر کرد!');
+                            //$scope.myWatcher =$scope.addWatcherForFileChanges();
+                            Extention.setBusy(false);
+                            session.Image = response.data.Image;
+                            $rootScope.user.Image = response.data.Image;
+                            $state.go('profile', {}, {reload: true});
+                            $uibModalInstance.dismiss();
+                        });
+                    }, function (response) {
+                        if (response.status > 0) {
+                            Extention.popError('مشکل در تغییر تصویر پروفایل');
+                        }else{
+                            Extention.popSuccess('تصویر با موفقیت تغییر کرد!');
+                        }
+                        //$scope.myWatcher =$scope.addWatcherForFileChanges();
+                        Extention.setBusy(false);
+                        $state.go('profile', {}, {reload: true});
+
+                    }, function (evt) {
+                        // Math.min is to fix IE which reports 200% sometimes
+                        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+
+                    });
+                }
+
+            },
+            size: 'md',
+            resolve: {
+                file: function () {
+                    return $file;
+                }
+            }
+        });
+    }
+
 
     $scope.timelinePagingController = {};
 
@@ -187,56 +276,6 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
         });
     }
 
-    $scope.addWatcherForFileChanges = function () {
-
-        return $scope.$watch('avatarFile.name', function () {
-            if (!$scope.uploading && $scope.avatarFile) {
-                $scope.changeAvatar();
-            }
-        }, true);
-    }
-    $scope.myWatcher = $scope.addWatcherForFileChanges();
-
-    $scope.changeAvatar = function () {
-        $scope.myWatcher();
-        Extention.setBusy(true);
-
-        var file = $scope.avatarFile;
-        file.upload = Upload.upload({
-            url: serviceBaseURL + 'updateAvatar',
-            data: {
-                file: file
-            }
-        });
-
-        $scope.uploading = true;
-        Extention.popInfo('لطفا تا پایان تغییر تصویر صبر کنید.');
-
-        file.upload.then(function (response) {
-            $timeout(function () {
-                Extention.popSuccess('تصویر با موفقیت تغییر کرد!');
-                //$scope.myWatcher =$scope.addWatcherForFileChanges();
-                Extention.setBusy(false);
-                session.Image = response.data.Image;
-                $rootScope.user.Image = response.data.Image;
-                $state.go('profile', {}, {reload: true});
-            });
-        }, function (response) {
-            if (response.status > 0) {
-                Extention.popError('مشکل در تغییر تصویر پروفایل');
-            }else{
-                Extention.popSuccess('تصویر با موفقیت تغییر کرد!');
-            }
-            //$scope.myWatcher =$scope.addWatcherForFileChanges();
-            Extention.setBusy(false);
-            $state.go('profile', {}, {reload: true});
-
-        }, function (evt) {
-            // Math.min is to fix IE which reports 200% sometimes
-            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-
-        });
-    }
 
     $scope.passwordChanged = function () {
         if(!$scope.curUser.Password && !$scope.curUser.VerifyPassword)

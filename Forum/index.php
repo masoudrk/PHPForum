@@ -711,6 +711,7 @@
 </div><!-- ./wrapper -->
 
     <?php  generateRequiredCMSJavaFiles(); ?>
+
     <script src="angular/forum-app.js"></script>
     <script src="partials/MainCtrl.js"></script>
     <script src="../app/directives/auto-pagination.js"></script>

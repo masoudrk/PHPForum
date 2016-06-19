@@ -43,6 +43,7 @@ function generateRequiredCMSJavaFiles(){
     <script src="../js/angular-animate.min.js" ></script>
     <script src="../js/angular-ui-router.js"></script>
 
+    <script src="../js/ng-img-crop.js"></script>
     <script src="../js/ng-fx/ng-fx.min.js"></script>
 <!--    <script src="../js/angular-notification-icons.min.js"></script>-->
     <script src="../js/ng-file-upload-shim.min.js"></script>
@@ -69,6 +70,7 @@ function generateRequiredCMSJavaFiles(){
 
 function generateRequiredCMSCssFiles(){
     ?>
+    <link rel="stylesheet" href="../css/ng-img-crop.min.css" type="text/css">
     <link rel="stylesheet" href="../css/anim-in-out.css">
     <link rel="stylesheet" href="../css/toaster.css">
     <link rel="stylesheet" href="../cms/css/treasure-overlay-spinner.min.css">
