@@ -69,14 +69,18 @@
                         <table class="table table-hover table-striped" ng-show="Messages.length !=0">
                             <tbody>
                             <tr>
+                                <th></th>
                                 <th>گیرنده</th>
                                 <th>عنوان پیام</th>
                                 <th>متن پیام</th>
                                 <th>تاریخ</th>
                                 <th>نوع پیام</th>
-                                <th style="width:75px"></th>
+                                <th style="width: 75px"></th>
                             </tr>
                             <tr ng-repeat="mes in Messages">
+                                <td>
+                                    <input class="pull-right" id='check-1' type="checkbox" ng-checked="mes.checked" />
+                                </td>
                                 <td>{{mes.FullName | pNumber}}</td>
                                 <td class="persian-rtl">{{mes.MessageTitle | pNumber | subString:15}}</td>
                                 <td class="persian-rtl">{{mes.Message | pNumber | subString:20}}</td>
