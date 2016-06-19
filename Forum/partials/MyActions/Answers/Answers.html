@@ -38,7 +38,7 @@
                             ui-sref="question({id:q.QuestionID})">
                             <td  style="width: 50px;">
                                 <img class="img-circle" ng-src="{{q.QuestionerImage}}"
-                                     style="width:40px;">
+                                     style="width:40px;" err-src="../images/Avatar.jpg">
                             </td>
                             <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
 

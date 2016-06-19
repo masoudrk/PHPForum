@@ -59,7 +59,7 @@ angular.module(appName).controller('MainForumCtrl',
         "marginBottom": -80,
         "marginTop": -80,
         "theme": "light",
-        "autoMargins": false,
+        "autoMargins": true,
         "dataProvider": $scope.chartData,
         colors:["#00BBCC", "#e74c3c"],
         labelFunction:function (graphDataItem){

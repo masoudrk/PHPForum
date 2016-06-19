@@ -237,7 +237,7 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
             return;
         }
 
-        if($scope.curUser.Password.length < 5 )
+        if($scope.curUser.Password && $scope.curUser.Password.length < 5 )
         {
             Extention.popError(persianJs('رمز جدید بایستی حداقل 5 کاراکتر باشد!').englishNumber().toString() );
             return;

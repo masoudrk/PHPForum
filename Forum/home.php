@@ -27,7 +27,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <title ng-bind="($title || 'Loading ...')">Loading ...</title>
+    <title>انجمن</title>
 
     <link rel="icon" href="../images/title.png" />
     <link rel="icon" href="../{{titleIcon}}" />

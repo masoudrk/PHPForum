@@ -70,7 +70,7 @@
                                     event -->
                                         <a>
                                             <div class="pull-right link" ui-sref="messages({id:item.ID})">
-                                                <img src="../images/Avatar.jpg" ng-src="{{item.Image}}"
+                                                <img err-src="../images/Avatar.jpg" ng-src="{{item.Image}}"
                                                      class="img-circle"
                                                      alt="User Image"
                                                      style="border: solid 2px #f1c40f">
@@ -148,7 +148,7 @@
                                     event -->
                                         <a>
                                             <div class="pull-right link" ui-sref="question({id:item.QuestionID})">
-                                                <img src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
+                                                <img err-src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
                                                      class="img-circle"
                                                      alt="User Image"
                                                      style="border: solid 2px #1abc9c;margin-top: ">
@@ -228,7 +228,7 @@
                                     <li ng-repeat="ou in socketData.OnlineUsers"><!-- start message -->
                                         <a ui-sref="UserProfile({id:ou.ID})">
                                             <div class="pull-right">
-                                                <img src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
+                                                <img err-src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
                                                      class="img-circle"
                                                      alt="User Image"
                                                      style="border: solid 2px #3498db">
@@ -250,13 +250,14 @@
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a class="dropdown-toggle link" data-toggle="dropdown">
-                            <img ng-src="{{user.Image}}" class="user-image" alt="User Image">
+                            <img ng-src="{{user.Image}}" class="user-image" alt="User Image" err-src="../images/Avatar.jpg">
                             <span class="hidden-xs" ng-bind="user.FullName"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img ng-src="{{user.Image}}" class="img-circle link" alt="User Image" ui-sref="profile">
+                                <img err-src="../images/Avatar.jpg" ng-src="{{user.Image}}"
+                                     class="img-circle link" alt="User Image" ui-sref="profile">
                                 <p>
                                     <span ng-bind="user.FullName |pNumber"> </span> - کاربر
                                     <small class="vazir-font"> عضویت در سال
@@ -304,7 +305,8 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <a ui-sref="profile" class="pull-right image">
-                    <img  ng-src="{{user.Image}}" class="img-circle" alt="User Image">
+                    <img  ng-src="{{user.Image}}" class="img-circle" alt="User Image"
+                          err-src="../images/Avatar.jpg">
                 </a>
                 <div class="pull-left info">
                     <p><a ui-sref="profile" ng-bind="user.FullName"></a></p>
@@ -449,13 +451,13 @@
                 </li>
                 <li id="SFollowers">
                     <a ui-sref="my_following">
-                        <i class="fa fa-microphone"></i><span> دنبال شده ها </span>
+                        <i class="fa fa-microphone"></i><span> مدیریت دنبال شده ها </span>
                     </a>
                 </li>
                 <li id="SProfile">
                     <a ui-sref="profile">
                         <i class="fa fa-user"></i><span>  پروفایل من </span>
-                        <small class="label pull-right bg-green">جدید</small>
+<!--                        <small class="label pull-right bg-green">جدید</small>-->
                     </a>
                 </li>
                 <li ng-if="user.IsAdmin=='1'" >
