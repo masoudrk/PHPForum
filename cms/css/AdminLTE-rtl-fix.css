@@ -423,3 +423,65 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .ui-select-search{
     width:100% !important;
 }
+.ADMdtp-container .masterInput > .removeIcon {
+    right: 2.3em;
+    top: 1px;
+}
+
+
+.lastBullet {
+    -webkit-animation: am-pulsating 1s ease-out infinite;
+    animation: am-pulsating 1s ease-out infinite;
+    stroke: black;
+    fill: gray;
+    r: 1.5px;
+}
+
+@-webkit-keyframes am-pulsating {
+    0% {
+        stroke-opacity: 1;
+        stroke-width: 0px;
+    }
+    100% {
+        stroke-opacity: 0;
+        stroke-width: 30px;
+    }
+}
+@keyframes am-pulsating {
+    0% {
+        stroke-opacity: 1;
+        stroke-width: 0px;
+    }
+    100% {
+        stroke-opacity: 0;
+        stroke-width: 30px;
+    }
+}
+
+.amcharts-graph-g1 .amcharts-graph-stroke {
+    stroke-dasharray: 500%;
+    -webkit-animation: css-effect 2s ease-out forwards;
+    animation: css-effect 2s ease-out forwards;
+}
+.amcharts-graph-g2 .amcharts-graph-stroke {
+    stroke-dasharray: 500%;
+    -webkit-animation: css-effect 2s ease-out forwards;
+    animation: css-effect 2s ease-out forwards;
+}
+
+@-webkit-keyframes css-effect {
+    0% {
+        stroke-dashoffset: 500%;
+    }
+    100% {
+        stroke-dashoffset: 0%;
+    }
+}
+@keyframes css-effect {
+    0% {
+        stroke-dashoffset: 500%;
+    }
+    100% {
+        stroke-dashoffset: 0%;
+    }
+}

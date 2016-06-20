@@ -25,6 +25,7 @@ $app->post('/getNewQuestionsGraphData', function() use ($app)  {
 
     $resQ = null;
 
+    $curDate = date('Y-m-d');
     $where = '';
     if(isset($r->toDate) && isset($r->fromDate)){
         $where = "cd.IntervalDay BETWEEN '".$r->fromDate."' and '".$r->toDate."'";
@@ -40,7 +41,6 @@ $app->post('/getNewQuestionsGraphData', function() use ($app)  {
         $where = "cd.ID BETWEEN ".($cid - 30)." and ".($cid);
     }else{
 
-        $curDate = date('Y-m-d');
         $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
         $cid  = $resCQ->fetch_assoc()['ID'];
         $where = "cd.ID BETWEEN ".($cid - 30)." and ".($cid);
@@ -63,7 +63,8 @@ SELECT cd.IntervalDay as date,
   left join forum_main_subject on forum_main_subject.SubjectID=forum_subject.ParentSubjectID
   where forum_answer.AdminAccepted=1 and forum_main_subject.SubjectID='$r->MainSubjectID'
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
-  as AnswerCount
+  as AnswerCount,
+   IF(cd.IntervalDay = '$curDate','lastBullet' , '') as className
 from calendar_day as cd
 where $where");
     }else{
@@ -76,14 +77,16 @@ SELECT cd.IntervalDay as date,
   (select count(*) from forum_answer
   where forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
-  as AnswerCount
+  as AnswerCount,
+   IF(cd.IntervalDay = '$curDate','lastBullet' , '') as className
 from calendar_day as cd
 where $where");
     }
 
     $cqData = [];
-    while($r = $resQ->fetch_assoc())
+    while($r = $resQ->fetch_assoc()){
         $cqData[] = $r;
+    }
 
     echoResponse(200, $cqData);
 });
@@ -109,7 +112,8 @@ SELECT cd.IntervalDay as date,
   (select count(*) from forum_answer
   where forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
-  as AnswerCount
+  as AnswerCount,
+   IF(cd.IntervalDay = '$curDate','lastBullet' , '') as className
 from calendar_day as cd
 where cd.ID BETWEEN ".($cid - 30)." and ".($cid));
 
@@ -129,7 +133,8 @@ SELECT cd.IntervalDay as date,
   (select count(*) from forum_answer
   where forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) < cd.IntervalDay) 
-  as IAnswerCount
+  as IAnswerCount,
+   IF(cd.IntervalDay = '$curDate','lastBullet' , '') as className
 from calendar_day as cd
 where cd.ID BETWEEN ".($cid - 30)." and ".($cid));
 
