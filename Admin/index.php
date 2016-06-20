@@ -531,7 +531,6 @@
                         <a href="../Forum/#/Profile/Info">
                             <i class="fa fa-male"></i>
                             <span>پروفایل من </span>
-                            <small class="label pull-right bg-green">جدید</small>
                         </a>
                     </li>
                     <li class="treeview">

@@ -94,16 +94,16 @@
                     </ui-select>
                 </div>
             </div>
-            <div class="form-group col-xs-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.telephone.$valid && signUpForm.telephone.$touched]">
+            <!--<div class="form-group col-xs-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.telephone.$valid && signUpForm.telephone.$touched]">
                 <div class="col-xs-12">
                     <input type="tel" dir="rtl" class="form-control" ng-model="user.PhoneNumber" name="telephone" placeholder="شماره موبایل" required ng-minlength="6">
                 </div>
-            </div>
-            <!--<div class="form-group col-sm-6" ng-class="{false: '', true: 'has-error'}[!signUpForm.phone.$valid && signUpForm.phone.$touched]">
-                <div class="col-xs-12">
-                    <input type="tel" ng-model="user.PhoneNumber" dir="rtl" class="form-control" name="phone" placeholder="تلفن همراه" ng-required="true" ng-minlength="11">
-                </div>
             </div>-->
+            <div class="form-group col-sm-12" ng-class="{false: '', true: 'has-error'}[!signUpForm.phone.$valid && signUpForm.phone.$touched]">
+                <div class="col-xs-12">
+                    <input type="tel" ng-model="user.Tel" dir="rtl" class="form-control" name="phone" placeholder="شماره تلفن سازمانی" ng-required="true" ng-minlength="6">
+                </div>
+            </div>
             <div class="form-group col-xs-12">
                 <div class="col-xs-12 text-right">
                     <label style="color: white" class="control-label"><a ng-click="openRoleModal()">قوانین </a> سایت را قبول دارم</label>

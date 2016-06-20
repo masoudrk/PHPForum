@@ -449,7 +449,7 @@
                 </li>
                 <li id="SFollowers">
                     <a ui-sref="my_following">
-                        <i class="fa fa-microphone"></i><span> دنبال شده ها </span>
+                        <i class="fa fa-microphone"></i><span>مدیریت دنبال شده ها </span>
                     </a>
                 </li>
                 <li id="SProfile">
