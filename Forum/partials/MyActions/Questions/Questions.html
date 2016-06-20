@@ -34,7 +34,9 @@
                             <th style="width: 100px"></th>
                         </tr>
                         <tr ng-repeat="q in question.all"
-                            class="fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-20">
+                            class="fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-20"
+                            ng-class="(q.AdminAccepted == 1)?'link':''"
+                            ng-click="getQuestion(q)">
                             <td >{{q.Title| subString :50|pNumber}}</td>
                             <td >{{q.SubjectTitle| subString :50|pNumber}}</td>
                             <td>

@@ -3,15 +3,20 @@ var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
-    'ngFileUpload','anim-in-out','am-charts' ]);
+    'ngFileUpload','anim-in-out','am-charts' ,'ADM-dateTimePicker']);
 
 app.config([
-    '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
-function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
+    '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider','ADMdtpProvider',
+function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMdtp) {
     // Add nested user links to the "foo" menu.
     $ocLazyLoadProvider.config({
         debug: debugMode,
         events: true
+    });
+    ADMdtp.setOptions({
+        calType: 'jalali',
+        format: 'YYYY/MM/DD hh:mm',
+       // default: 'today'
     });
 
     $stateProvider

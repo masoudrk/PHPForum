@@ -13,5 +13,10 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $element, 
            }
         });
     };
+
+    $scope.getQuestion = function (q) {
+        if(q.AdminAccepted == 1)
+            $state.go('question',{id:q.ID});
+    }
 	activeElement('#SQuestion','#SQuestions');
 }); 

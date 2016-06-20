@@ -946,7 +946,7 @@ a:hover {
   transform: translate(0, 0);
 }
 /* line 612, ../scss/ADM-dateTimePicker.scss */
-.ADMdtp-container .ADMdtp-calendar-container .dtpNewBox.active .content, .ADMdtp-container .ADMdtp-calendar-container .active.monthPickerContainer .content, .ADMdtp-container .ADMdtp-calendar-container .active.timePickerContainer .content {
+.ADMdtp-container .ADMdtp-calendar-container .dtpNewBox.active .content-w, .ADMdtp-container .ADMdtp-calendar-container .active.monthPickerContainer .content-w, .ADMdtp-container .ADMdtp-calendar-container .active.timePickerContainer .content-w {
   opacity: 1;
 }
 /* line 617, ../scss/ADM-dateTimePicker.scss */
@@ -969,7 +969,7 @@ a:hover {
   right: -1em;
 }
 /* line 634, ../scss/ADM-dateTimePicker.scss */
-.ADMdtp-container .ADMdtp-calendar-container .dtpNewBox .content, .ADMdtp-container .ADMdtp-calendar-container .monthPickerContainer .content, .ADMdtp-container .ADMdtp-calendar-container .timePickerContainer .content {
+.ADMdtp-container .ADMdtp-calendar-container .dtpNewBox .content-w, .ADMdtp-container .ADMdtp-calendar-container .monthPickerContainer .content-w, .ADMdtp-container .ADMdtp-calendar-container .timePickerContainer .content-w {
   position: relative;
   display: block;
   width: 100%;

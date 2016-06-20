@@ -1,5 +1,6 @@
-angular.module(appName).controller('DashboardCtrl', function ($scope, $element, $rootScope, Extention, $state, $timeout) {
+angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConvertor, $rootScope, Extention, $state, $timeout) {
 
+    $scope.newQuestionsDigram = {};
 
     $scope.incrementChartOptions =[{
         id:"g1",
@@ -135,8 +136,44 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, $element, 
         }
     }];
 
+    var convertDateToISO = function (inputFullDate) {
+        if (inputFullDate.calType == "jalali") {
+            var t = ADMdtpConvertor.toGregorian(inputFullDate.year, inputFullDate.month, inputFullDate.day);
+
+            return t.year + '-' + format(t.month) + '-' + format(t.day) + ' ' +
+                format(inputFullDate.hour) + ':' + format(inputFullDate.minute);
+        } else {
+            return inputFullDate.year + '-' + format(inputFullDate.month) + '-' + format(inputFullDate.day) + ' ' +
+                format(inputFullDate.hour) + ':' + format(inputFullDate.minute);
+        }
+    }
+    var format = function (input) {
+        return ((input < 10) ? '0' + input : input);
+    }
+
+    $scope.updateNewQuestionDiagram = function () {
+        $timeout(function () {
+            var data = {};
+
+            if(angular.isDefined($scope.newQuestionsDigram.MainSubject))
+                data.MainSubjectID = $scope.newQuestionsDigram.MainSubject.ID;
+
+            if(angular.isDefined($scope.newQuestionsDigram.to) && $scope.newQuestionsDigram.to != "")
+                data.toDate = convertDateToISO($scope.newQuestionsDigram.toFull);
+
+            if(angular.isDefined($scope.newQuestionsDigram.from) && $scope.newQuestionsDigram.from != "")
+                data.fromDate = convertDateToISO($scope.newQuestionsDigram.fromFull);
+
+            Extention.post('getNewQuestionsGraphData',data).then(function (res) {
+                $scope.dashboardData.ChartData = res;
+            });
+
+        });
+    }
+
 
     Extention.post('getDashboardData').then(function (res) {
+        res.MainSubjects.push({ID : -1 , Title : 'همه انجمن ها'});
         $scope.dashboardData = res;
     });
 
