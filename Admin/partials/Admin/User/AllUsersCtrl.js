@@ -4,7 +4,12 @@ angular.module(appName).controller('AllUsersCtrl', function ($scope, $rootScope,
     $scope.pagingParams = { userType: null };
 	$scope.pagingController = {};
 	$scope.user = {};
+    $scope.Position = {};
     $scope.dropDwonTitle = 'نمایش اعضا';
+	$scope.genderDropDwonTitle = 'جنسیت افراد';
+	Extention.postAsync('getAllPositions', {}).then(function (msg) {
+	    $scope.allPositions = msg;
+	});
 
     $scope.openUserModal = function (user) {
          $uibModal.open({
@@ -66,5 +71,31 @@ angular.module(appName).controller('AllUsersCtrl', function ($scope, $rootScope,
 	    }
 	    $scope.search();
 	}
+
+	$scope.changeGenderFilter = function (type) {
+	    $scope.pagingParams.genderType = type;
+	    switch (type) {
+	        case null:
+	            $scope.genderDropDwonTitle = 'جنسیت افراد';
+	            break;
+            case 1:
+                $scope.genderDropDwonTitle = 'اعضای زن';
+                break;
+            case 0:
+                $scope.genderDropDwonTitle = 'اعضای مرد';
+                break;
+	        default:
+	            $scope.genderDropDwonTitle = 'جنسیت افراد';
+                break;
+	    }
+	    $scope.search();
+	}
+
+	$scope.changePosition = function () {
+	    
+	    $scope.pagingParams.OrganizationID = ($scope.Position.selected) ? $scope.Position.selected.ID : null;
+	    $scope.search();
+	}
+	
 	activeElement('#SUsers');
 });

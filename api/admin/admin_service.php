@@ -674,6 +674,15 @@ $app->post('/getAllUsers', function() use ($app)  {
     if(isset($data->userType)){
         $where .=" AND (user.UserAccepted ='$data->userType')";
 	}
+
+    if(isset($data->OrganizationID)){
+        $where .=" AND (user.OrganizationID ='$data->OrganizationID')";
+	}
+
+    if(isset($data->genderType)){
+        $where .=" AND (user.Gender ='$data->genderType')";
+	}
+
 	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
 		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
 		$where .= " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
@@ -704,6 +713,14 @@ $app->post('/getAllAdminTypes', function() use ($app)  {
     echoSuccess($res);
 });
 
+$app->post('/getAllPositions', function() use ($app)  {
+
+    $resq = $app->db->makeQuery("SELECT * FROM `organ_position` WHERE 1");
+    $res=[];
+    while($r = $resq->fetch_assoc())
+        $res[] = $r;
+    echoResponse(200, $res);
+});
 
 $app->post('/updateAdmin', function() use ($app)  {
 
