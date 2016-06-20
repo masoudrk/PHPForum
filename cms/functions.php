@@ -46,6 +46,7 @@ function generateRequiredCMSJavaFiles(){
     <script src="../js/ng-img-crop.js"></script>
     <script src="../js/ng-fx/ng-fx.min.js"></script>
 <!--    <script src="../js/angular-notification-icons.min.js"></script>-->
+    <script src="../js/ADM-dateTimePicker.min.js"></script>
     <script src="../js/ng-file-upload-shim.min.js"></script>
     <script src="../js/anim-in-out.js"></script>
     <script src="../js/ng-file-upload.min.js"></script>
@@ -70,6 +71,7 @@ function generateRequiredCMSJavaFiles(){
 
 function generateRequiredCMSCssFiles(){
     ?>
+    <link rel="stylesheet" href="../css/ADM-dateTimePicker.css" type="text/css">
     <link rel="stylesheet" href="../css/ng-img-crop.min.css" type="text/css">
     <link rel="stylesheet" href="../css/anim-in-out.css">
     <link rel="stylesheet" href="../css/toaster.css">

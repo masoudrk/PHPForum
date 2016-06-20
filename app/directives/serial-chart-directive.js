@@ -23,6 +23,12 @@ angular.module('am-charts', []).directive('serialChart', function () {
 
                 $timeout(function () {
 
+                    if(angular.isDefined($scope.chart)){
+                        $scope.chart.dataProvider = $scope.chartData;
+                        $scope.chart.validateData();
+                        return;
+                    }
+
                     var opt= {
 
                         type: "serial",
@@ -75,8 +81,8 @@ angular.module('am-charts', []).directive('serialChart', function () {
                         opt.chartScrollbar= {};
                     }
 
-                    AmCharts.makeChart($scope.chartId, opt);
-
+                    $scope.chart = AmCharts.makeChart($scope.chartId, opt);
+                    $scope.chartMaked = true;
 
                 });
             });

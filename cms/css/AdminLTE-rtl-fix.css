@@ -419,3 +419,7 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .timeline > li {
     margin-left: 0px;
 }
+
+.ui-select-search{
+    width:100% !important;
+}

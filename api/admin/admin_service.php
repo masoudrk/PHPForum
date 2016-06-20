@@ -18,7 +18,79 @@ echoResponse(200, $res);
 });
 
 
+$app->post('/getNewQuestionsGraphData', function() use ($app)  {
+
+    $r = json_decode($app->request->getBody());
+    $session = $app->session;
+
+    $resQ = null;
+
+    $where = '';
+    if(isset($r->toDate) && isset($r->fromDate)){
+        $where = "cd.IntervalDay BETWEEN '".$r->fromDate."' and '".$r->toDate."'";
+    }else if(isset($r->fromDate)){
+        $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay=Date('$r->fromDate')");
+        $cid  = $resCQ->fetch_assoc()['ID'];
+
+        $where = "cd.ID BETWEEN ".($cid)." and ".($cid+30);
+    }else if(isset($r->toDate)){
+        $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay=Date('$r->toDate')");
+        $cid  = $resCQ->fetch_assoc()['ID'];
+
+        $where = "cd.ID BETWEEN ".($cid - 30)." and ".($cid);
+    }else{
+
+        $curDate = date('Y-m-d');
+        $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+        $cid  = $resCQ->fetch_assoc()['ID'];
+        $where = "cd.ID BETWEEN ".($cid - 30)." and ".($cid);
+    }
+    //echoSuccess($where);
+
+    if(isset($r->MainSubjectID) && $r->MainSubjectID != -1){
+
+        $resQ = $app->db->makeQuery("
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+  left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  left join forum_main_subject on forum_main_subject.SubjectID=forum_subject.ParentSubjectID
+  where forum_question.AdminAccepted=1 and forum_main_subject.SubjectID='$r->MainSubjectID'
+  and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+  left join forum_question on forum_answer.QuestionID=forum_question.ID
+  left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  left join forum_main_subject on forum_main_subject.SubjectID=forum_subject.ParentSubjectID
+  where forum_answer.AdminAccepted=1 and forum_main_subject.SubjectID='$r->MainSubjectID'
+  and Date(forum_answer.CreationDate) = cd.IntervalDay) 
+  as AnswerCount
+from calendar_day as cd
+where $where");
+    }else{
+        $resQ = $app->db->makeQuery("
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+  where forum_question.AdminAccepted=1 
+  and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+  where forum_answer.AdminAccepted=1
+  and Date(forum_answer.CreationDate) = cd.IntervalDay) 
+  as AnswerCount
+from calendar_day as cd
+where $where");
+    }
+
+    $cqData = [];
+    while($r = $resQ->fetch_assoc())
+        $cqData[] = $r;
+
+    echoResponse(200, $cqData);
+});
+
 $app->post('/getDashboardData', function() use ($app)  {
+
+    require_once "../db/forum_subject.php";
 
     $r = json_decode($app->request->getBody());
     $session = $app->session;
@@ -37,7 +109,19 @@ SELECT cd.IntervalDay as date,
   (select count(*) from forum_answer
   where forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
-  as AnswerCount,
+  as AnswerCount
+from calendar_day as cd
+where cd.ID BETWEEN ".($cid - 30)." and ".($cid));
+
+    $resp= [];
+    $cqData = [];
+    while($r = $resQ->fetch_assoc())
+        $cqData[] = $r;
+    $resp['ChartData'] = $cqData;
+
+    $resQ = $app->db->makeQuery("
+
+SELECT cd.IntervalDay as date,
   (select count(*) from forum_question
   where forum_question.AdminAccepted=1 
   and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
@@ -47,13 +131,12 @@ SELECT cd.IntervalDay as date,
   and Date(forum_answer.CreationDate) < cd.IntervalDay) 
   as IAnswerCount
 from calendar_day as cd
-where cd.ID BETWEEN ".($cid - 30)." and ".($cid+1));
+where cd.ID BETWEEN ".($cid - 30)." and ".($cid));
 
-    $resp= [];
-    $cqData = [];
+    $cqDataInc = [];
     while($r = $resQ->fetch_assoc())
-        $cqData[] = $r;
-    $resp['ChartData'] = $cqData;
+        $cqDataInc[] = $r;
+    $resp['ChartDataInc'] = $cqDataInc;
 
     $resQ = $app->db->makeQuery("
 select forum_main_subject.ID , forum_main_subject.Title , forum_main_subject.SubjectName,
@@ -72,6 +155,8 @@ GROUP BY forum_main_subject.ID");
         $cqDataRadar[] = $r;
     $resp['RadarChartData'] = $cqDataRadar;
 
+
+    $resp['MainSubjects'] = getAllMainSubjects($app->db);
 
     echoResponse(200, $resp);
 });
