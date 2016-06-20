@@ -934,23 +934,27 @@ $app->post('/getForumBestAnswers', function() use ($app)  {
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
 
         $query = "SELECT q.* from (SELECT u.score,u.FullName,fq.`ID`,
-forum_answer.AnswerText, forum_answer.`CreationDate`,
+fq.QuestionText, fq.`CreationDate`, fq.BestAnswerID,
 `FullPath` as Image ,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=fq.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate
  ,
-  (SELECT sum(answer_rate.RateValue) FROM answer_rate 
+(SELECT count(*) FROM question_view where QuestionID = fq.ID and fq.AdminAccepted=1) as 
+'ViewCount' ,
+(SELECT sum(answer_rate.RateValue) FROM answer_rate 
  Left join forum_answer on forum_answer.ID = answer_rate.AnswerID
  Left join forum_question on forum_question.ID = forum_answer.QuestionID
- where forum_question.ID=fq.ID) as 'AScore'
- 
- FROM forum_answer
- LEFT JOIN forum_question as fq on fq.ID = forum_answer.QuestionID 
- LEFT JOIN user as u on u.ID=forum_answer.AuthorID 
+ where forum_question.ID=fq.ID) as 'AScore',
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=fq.ID and forum_answer.AdminAccepted=1)
+   as 'AnswersCount' 
+ FROM forum_question as fq
+ inner JOIN forum_answer on fq.BestAnswerID = forum_answer.ID 
+ LEFT JOIN user as u on u.ID=fq.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=fq.SubjectID 
- WHERE fq.AdminAccepted='1' AND  forum_answer.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' ) as q 
+ WHERE fq.AdminAccepted='1' AND  forum_answer.AdminAccepted='1' 
+ AND forum_subject.ParentSubjectID='$subjectID' ) as q 
  order by q.AScore desc limit $offset , $data->pageSize";
 
         $pageResQ = $app->db->makeQuery($query);
@@ -975,7 +979,7 @@ forum_answer.AnswerText, forum_answer.`CreationDate`,
     else if(isset($data->SubjectID)){
 
         $query = "SELECT q.* from (SELECT u.score,u.FullName,fq.`ID`,
-forum_answer.AnswerText, forum_answer.`CreationDate`,
+fq.QuestionText, fq.`CreationDate`,
 `FullPath` as Image ,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=fq.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
@@ -985,9 +989,13 @@ forum_answer.AnswerText, forum_answer.`CreationDate`,
  Left join forum_answer on forum_answer.ID = answer_rate.AnswerID
  Left join forum_question on forum_question.ID = forum_answer.QuestionID
  where forum_question.ID=fq.ID) as 'AScore'
- 
- FROM forum_answer
- LEFT JOIN forum_question as fq on fq.ID = forum_answer.QuestionID 
+ ,
+(SELECT count(*) FROM question_view where QuestionID = fq.ID and fq.AdminAccepted=1) as 
+'ViewCount' ,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=fq.ID and forum_answer.AdminAccepted=1)
+   as 'AnswersCount' 
+ FROM forum_question as fq
+ LEFT JOIN forum_answer  on fq.BestAnswerID = forum_answer.ID 
  LEFT JOIN user as u on u.ID=forum_answer.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=fq.SubjectID 

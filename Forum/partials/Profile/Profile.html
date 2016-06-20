@@ -21,6 +21,7 @@
                       result-image="croppedImage"
                       area-type="circle"
                       area-min-size="100"
+                      area-max-size="101"
                       result-image-format="image/png"
                       result-image-size="250"
                       result-image-quality="1"
@@ -83,8 +84,8 @@
                                         {{item.EventDateTime | jalaliDate : 'jYYYY/jMM/jDD' | pNumber}}
                                     </span>
                                     <h3 class="timeline-header persian-rtl">
-                                        <img  class="img-circle" ng-src="{{item.FullPath}}" src="../images/Avatar.jpg"
-                                              style="width:27px">
+                                        <img  class="img-circle" ng-src="{{item.FullPath}}"
+                                              style="width:27px" err-src="../images/Avatar.jpg">
                                         <a ui-sref="UserProfile({id:'{{item.EventCauseID}}'})">{{item.FullName}}</a>
                                         <span style="font-size: 12px">{{item.EventTypeFA}}</span>
                                     </h3>
@@ -112,7 +113,7 @@
                                     <div class="timeline-body row"
                                          style="height: 100px;" >
                                         <div class="col-xs-12 text-center">
-                                            <img  class="img-circle" ng-src="{{user.Image}}" src="../images/Avatar.jpg"
+                                            <img  class="img-circle" ng-src="{{user.Image}}" err-src="../images/Avatar.jpg"
                                                   style="width:50px;border: solid 3px #f1c40f;margin-bottom: 8px">
                                         </div>
                                         <div class="col-xs-12">
@@ -330,6 +331,7 @@
             <div class="box box-primary">
                 <div class="box-body box-profile">
                     <img class="profile-user-img img-responsive img-circle" ng-src="{{user.Image}}"
+                         err-src="../images/Avatar.jpg"
                          alt="User profile picture">
                     <h3 class="profile-username text-center">{{::curUser.FullName}}</h3>
                     <p class="text-muted text-center">{{curUser.Educations[0].Name}}</p>
@@ -355,19 +357,20 @@
                 </div><!-- /.box-header -->
                 <div class="box-body" style="direction: rtl;">
                     <strong><i class="fa fa-book margin-r-5"></i>  تحصیلات</strong>
-                    <p class="text-muted">
-                     {{curUser.Educations[0].Name}}
-                    </p>
-
+                    <ul class="nav nav-pills red" style="padding-right: 0px;font-size: 11px;">
+                        <li ng-repeat="s in curUser.Educations" class="active">
+                            <a style="border-top: none;" class="label-{{randomColor(s.ID)}}">{{s.Name}}</a>
+                        </li>
+                    </ul>
                     <hr>
 
 
                     <strong><i class="fa fa-pencil margin-r-5"></i> مهارت ها</strong>
-                    <p style="font-family:'Vazir','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px">
-                        <span ng-repeat="s in curUser.Skills" class="label label-{{randomColor(s.ID)}}">{{s
-                            .Skill}}</span>
-                    </p>
-
+                    <ul class="nav nav-pills red" style="padding-right: 0px;font-size: 11px;">
+                        <li ng-repeat="s in curUser.Skills" class="active">
+                            <a style="border-top: none;" class="label-{{randomColor(s.ID)}}">{{s.Skill}}</a>
+                        </li>
+                    </ul>
                     <hr>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> درباره من</strong>

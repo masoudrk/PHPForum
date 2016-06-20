@@ -62,7 +62,7 @@
                                 <tbody>
                                 <tr ng-repeat="q in question.all"  repeat-end="onLastRepeatEnd()"
                                     class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50">
-                                    <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
+                                    <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                               style="width:40px"
                                               ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                                 (q.Rate > 2.5)?activity.medium : activity.low}"
@@ -115,7 +115,7 @@
                                 <tbody>
                                 <tr class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
                                     ng-repeat="q in question.allBest">
-                                    <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
+                                    <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                               style="width:40px"
                                               ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                                 (q.Rate > 2.5)?activity.medium : activity.low}"
@@ -171,7 +171,7 @@
                                 <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
                                      ng-repeat="q in question.allAnswered">
                                     <td  style="width: 50px;">
-                                        <img class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
+                                        <img class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                              style="width:40px;"
                                              ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                    (q.Rate > 2.5)?activity.medium:activity.low}"
@@ -226,7 +226,7 @@
                                 <tbody>
                                 <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
                                      ng-repeat="q in question.allFollowing">
-                                    <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
+                                    <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                               style="width:40px"
                                               ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                                 (q.Rate > 2.5)?activity.medium : activity.low}"
@@ -288,7 +288,7 @@
                         <tr class="link fx-bounce-up fx-dur-600 fx-ease-none fx-stagger-80"
                             ng-repeat="q in question.bestAnswered">
                             <td  style="width: 50px;">
-                                <img class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
+                                <img class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                      style="width:40px;"
                                      ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                    (q.Rate > 2.5)?activity.medium:activity.low}"
@@ -302,11 +302,15 @@
                                 <span class="badge bg-yellow">{{q.score | pNumber}}</span>
                             </td>
                             <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
-                                {{q.AnswerText | subString :30|pNumber}}
+                                {{q.QuestionText | subString :30|pNumber}}
                             </td>
 
+                            <td ui-sref="question({id:q.ID})">
+                                {{q.ViewCount | pNumber}}
+                                <i class="fa fa-eye palette-peter-river"></i>
+                            </td>
                             <td class="text-center" ui-sref="question({id:q.ID})" >
-                                {{(q.AScore)?q.AScore :' بدون ' |pNumber}} امتیاز
+                                {{(q.AnswersCount)?q.AnswersCount :' بدون ' |pNumber}} جواب
                             </td>
                             <td ui-sref="question({id:q.ID})">
                                 <span class="persian-rtl text-muted" style="font-size: 12px;">
@@ -362,7 +366,7 @@
             <!--</div>-->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title vazir-font">نمودار تعدد {{forumData.Subject.Title}}</h3>
+                    <h3 class="box-title vazir-font">نمودار تعداد {{forumData.Subject.Title}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <div class="col-xs-12 text-center">
@@ -380,7 +384,8 @@
                     <serial-chart chart-id="chart2"
                                   chart-data="forumData.ChartData"
                                   chart-graphs="dailyChartOptions"
-                                  chart-height="220"></serial-chart>
+                                  chart-height="220"
+                                  enable-scroll-bar="true"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
 
