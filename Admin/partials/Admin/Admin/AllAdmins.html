@@ -96,6 +96,17 @@
                                 </ui-select>
                             </div>
                         </div>
+                        <div class="form-group row" ng-show="adminType.selected.Permission == 'Administrator'">
+                            <label class="col-xs-12 control-labe"> مدیر بخش</label>
+                            <div class="col-xs-12">
+                                <ui-select ng-model="forumType.selected" theme="bootstrap" sortable="true" close-on-select="true">
+                                    <ui-select-match placeholder="مدیر بخش">{{forumType.selected.Title}}</ui-select-match>
+                                    <ui-select-choices repeat="type in forumTypes">
+                                        <div compile="type.Title | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
                         <div class="form-gro p row" style="margin-top: 5px">
                             <div class="col-xs-12">
                                 <button class="btn btn-success pull-left" type="submit" ng-click="updateAdmin()">

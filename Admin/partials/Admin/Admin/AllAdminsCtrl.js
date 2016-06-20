@@ -5,8 +5,10 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
     $scope.pagingParams = {};
 	$scope.pagingController = {};
 	$scope.user = {};
-	$scope.adminType = { selected : {} }
+    $scope.adminType = { selected: {} };
+    $scope.forumType = { selected: {} };
 	$scope.adminTypes = [];
+    $scope.forumTypes = [];
     $scope.Person = {};
     $scope.selectedAdmin = {};
 
@@ -16,12 +18,22 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
 	    }
 	});
 
+	Extention.post('getAllForumTypes', {}).then(function (res) {
+	    if (res && res.Status == 'success') {
+	        $scope.forumTypes = res.Data;
+	    }
+	});
+
 	$scope.search = function () {
 		$scope.pagingController.update();
 	}
 
 	$scope.updateAdmin = function() {
 	    if ($scope.adminType.selected && $scope.Person.selected) {
+	        if ($scope.adminType.selected.Permission == 'Administrator')
+	            $scope.selectedAdmin["ForumID"] = ($scope.forumType.selected) ? $scope.forumType.selected.ID : null;
+	        else
+	            $scope.selectedAdmin["ForumID"] = null;
 	        $scope.selectedAdmin["PermissionID"] = $scope.adminType.selected.ID;
 	        $scope.selectedAdmin["UserID"] = $scope.Person.selected.ID;
 	        console.log($scope.selectedAdmin);
@@ -57,6 +69,15 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
                 break;
 	        }
 	    }
+	    $scope.forumType.selected = null;
+        if (admin.ForumID != null) {
+            for (var i = 0; i < $scope.forumTypes.length; i++) {
+                if ($scope.forumTypes[i].ID == admin.ForumID) {
+                    $scope.forumType.selected = $scope.forumTypes[i];
+                    break;
+                }
+            }
+        }
 	    $scope.Person.selected = { ID: admin.UserID, FullName: admin.FullName };
 	    $scope.action = 'ویرایش';
 	}

@@ -15,29 +15,57 @@
         <div class="col-xs-12">
             <div class="box box-danger">
                 <div class="box-header">
-                    <h3 class="box-title vazir-font">اعضا</h3>
-                    <div class="box-tools">
-                        <div class="input-group col-xs-9 col-md-4">
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
-                                    {{dropDwonTitle}}
-                                    <span class="fa fa-caret-down"></span>
-                                </button>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی اعضا</a></li>
-                                    <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">اعضای تایید شده</a></li>
-                                    <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">اعضا در انتظار تایید</a></li>
-                                    <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">اعضای تایید نشده</a></li>
-                                </ul>
-                            </div>
-                            <input type="text" name="table_search" ng-model="pagingParams.searchValue"
-                                   ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
-                                   placeholder="جستجو ...">
-                            <div class="input-group-btn">
-                                <button class="btn btn-sm btn-default left-radius-btn"><i class="fa fa-search"></i></button>
-                            </div>
+                    <h3 class="box-title vazir-font">فیلتر کردن اعضا</h3>
+                    
+                </div><!-- /.box-header -->
+                <div class="box-body" dir="rtl">
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-success btn-sm btn-block dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
+                            {{dropDwonTitle}}
+                            <span class="fa fa-caret-down"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی اعضا</a></li>
+                            <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">اعضای تایید شده</a></li>
+                            <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">اعضا در انتظار تایید</a></li>
+                            <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">اعضای تایید نشده</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-warning btn-sm btn-block dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
+                            {{genderDropDwonTitle}}
+                            <span class="fa fa-caret-down"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a ng-click="changeGenderFilter(null)" class="link persian-rtl text-right">همه ی اعضا</a></li>
+                            <li><a ng-click="changeGenderFilter(0)" class="link persian-rtl text-right">اعضای مرد </a></li>
+                            <li><a ng-click="changeGenderFilter(1)" class="link persian-rtl text-right">اعضای زن</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4">
+                        <div >
+                            <ui-select ng-model="Position.selected" on-select="changePosition()" theme="bootstrap" sortable="true" close-on-select="true" required>
+                                <ui-select-match allow-clear placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
+                                <ui-select-choices repeat="edu in allPositions">
+                                    <div compile="edu.OrganizationName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
                         </div>
                     </div>
+                    
+                    <div class="col-xs-4 pull-right">
+                        <input type="text" name="table_search" ng-model="pagingParams.searchValue"
+                               ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm"
+                               placeholder="جستجو ...">
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+        <div class="col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">اعضا</h3>
+                    <h3 class="box-title vazir-font pull-left">تعداد {{allTotal | pNumber}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
@@ -46,7 +74,7 @@
                             <th>شماره</th>
                             <th>نام کامل</th>
                             <th>تاریخ عضویت</th>
-                            <th>تلفن همراه</th>
+                            <th>تلفن سازمانی</th>
                             <th>وضعیت</th>
                             <th>ایمیل</th>
                             <th>وضعیت ایمیل</th>
@@ -56,7 +84,7 @@
                             <td>{{u.ID| pNumber}}</td>
                             <td>{{u.FullName| pNumber}}</td>
                             <td>{{u.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
-                            <td>{{u.PhoneNumber| pNumber}}</td>
+                            <td>{{u.Tel| pNumber}}</td>
                             <td ng-switch="u.UserAccepted">
                                 <span class="label label-success" ng-switch-when="1">تایید شده</span>
                                 <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
@@ -88,6 +116,7 @@
                                  ul-class="pagination pagination-sm no-margin"
                                  action-name="getAllUsers"
                                  data-params="pagingParams"
+                                 total-items="allTotal"
                                  ng-control="pagingController"
                                  items="user.all">
                     </auto-paging>
