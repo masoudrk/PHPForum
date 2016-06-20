@@ -26,6 +26,13 @@ angular.module('am-charts', []).directive('serialChart', function () {
                     if(angular.isDefined($scope.chart)){
                         $scope.chart.dataProvider = $scope.chartData;
                         $scope.chart.validateData();
+
+                        // $scope.chart.animateData($scope.chartData, {
+                        //     duration: 1000,
+                        //     complete: function () {
+                        //
+                        //     }
+                        // });
                         return;
                     }
 
@@ -36,6 +43,7 @@ angular.module('am-charts', []).directive('serialChart', function () {
 
                         categoryField: "date",
 
+                        addClassNames: true,
                         categoryAxis: {
                             parseDates: true,
                             minPeriod: "DD",

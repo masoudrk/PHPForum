@@ -71,6 +71,7 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
         bulletSize : 7,
         useLineColorForBulletBorder : true,
         lineThickness : 2,
+        classNameField:"classNameQ",
         balloon:{
             drop:false
         },
@@ -97,6 +98,7 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
             bulletSize : 7,
             useLineColorForBulletBorder : true,
             lineThickness : 2,
+            classNameField:"classNameA",
             balloon:{
                 drop:false
             },
