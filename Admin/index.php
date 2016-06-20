@@ -523,7 +523,7 @@
                     </li>
                     <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SContact">
                         <a ui-sref="message({id:session.UserID})">
-                            <i class="fa fa-user"></i>
+                            <i class="fa fa-envelope"></i>
                             <span>ارسال پیام</span>
                         </a>
                     </li>

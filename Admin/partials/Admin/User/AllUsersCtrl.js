@@ -4,9 +4,9 @@ angular.module(appName).controller('AllUsersCtrl', function ($scope, $rootScope,
     $scope.pagingParams = { userType: null };
 	$scope.pagingController = {};
 	$scope.user = {};
-    $scope.Position = {};
     $scope.dropDwonTitle = 'نمایش اعضا';
-	$scope.genderDropDwonTitle = 'جنسیت افراد';
+    $scope.genderDropDwonTitle = 'جنسیت افراد';
+    $scope.Position = {};
 	Extention.postAsync('getAllPositions', {}).then(function (msg) {
 	    $scope.allPositions = msg;
 	});

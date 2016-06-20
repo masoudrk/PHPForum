@@ -5,6 +5,11 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	$scope.pagingController = {};
     $scope.dropDwonTitle = 'نمایش جواب ها';
 
+    $scope.Position = {};
+    Extention.postAsync('getAllPositions', {}).then(function (msg) {
+        $scope.allPositions = msg;
+    });
+
 	$scope.search = function () {
 		$scope.pagingController.update();
 	}
@@ -81,6 +86,10 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	    }, function () {
 	        $scope.pagingController.update();
 	    });
+	}
+	$scope.changePosition = function () {
+	    $scope.pagingParams.OrganizationID = ($scope.Position.selected) ? $scope.Position.selected.ID : null;
+	    $scope.search();
 	}
 
 	activeElement('#SAnswers', '#S' + $stateParams.id);
