@@ -78,7 +78,7 @@
                             <th>وضعیت</th>
                             <th>ایمیل</th>
                             <th>وضعیت ایمیل</th>
-                            <th style="width: 125px;"></th>
+                            <th style="width: 150px;"></th>
                         </tr>
                         <tr ng-repeat="u in user.all">
                             <td>{{u.ID| pNumber}}</td>
@@ -104,6 +104,7 @@
                                        ng-click="changeUserState(u.ID ,-1)" title="رد کردن کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-blue link hvr-grow"
                                        ng-if="u.UserAccepted==-1 || u.UserAccepted==0" ng-click="changeUserState(u.ID ,1)" title="تایید کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <a ng-if="u.UserAccepted==1" class="link" ng-href="../Forum/#/UserProfile/{{u.ID}}"><i class="fa fa-angle-double-left text-maroon link hvr-pulse" title="پروفایل شخص" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
                         </tr>

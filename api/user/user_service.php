@@ -1183,12 +1183,12 @@ $app->post('/getProfile', function() use ($app)  {
     $session = $app->session;
 
     if(!$r->TargetUserID)
-        echoResponse(201, 'bad request');
+        echoError('bad request');
 
     $resQ =$app->db->makeQuery("select count(*) as val from user where ID = '$r->TargetUserID' and UserAccepted = 1");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
-        {echoResponse(200, null);return;}
+        {echoError('not found');}
 
     $resQ = $app->db->makeQuery("select u.FullName , u.Email ,u.PhoneNumber, u.Tel , u.SignupDate ,u.Gender, u.Description ,u.score, f.FullPath , o.OrganizationName,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
@@ -1257,7 +1257,7 @@ where cd.ID BETWEEN ".($cid - 20)." and ".($cid+1));
     $resp['ChartData'] = $cqData;
 
 
-    echoResponse(200, $resp);
+    echoSuccess($resp);
 });
 
 $app->post('/getQuestionByID', function() use ($app)  {
@@ -1266,13 +1266,13 @@ $app->post('/getQuestionByID', function() use ($app)  {
 
 
     if(!isset($r->UserID) || !isset($r->QuestionID))
-        {echoResponse(201, 'bad request');return;}
+        {echoError('bad request');}
 
 
     $resQ =$app->db->makeQuery("select count(*) as val from forum_question where ID = '$r->QuestionID' and AdminAccepted = 1");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
-        {echoResponse(200, null);return;}
+        {echoError('not fount');}
 
     $resQ =$app->db->makeQuery("select count(*) as val from question_view where UserID = '$r->UserID' and QuestionID = '$r->QuestionID'");
     $sql =$resQ->fetch_assoc();
@@ -1357,7 +1357,7 @@ where att.AnswerID='$aID'");
     }
     $resp['Answers'] = $Answers;
 
-    echoResponse(200, $resp);
+    echoSuccess( $resp);
 });
 
 $app->post('/followMainSubject', function() use ($app)  {

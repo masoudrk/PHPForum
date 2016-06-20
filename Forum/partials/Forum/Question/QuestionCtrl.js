@@ -6,14 +6,18 @@
 
     ($scope.getQuestionByID = function () {
         Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
-            $scope.question = res;
-            $scope.checkNowOnline();
+            if (res.Status == 'success') {
+                $scope.question = res.Data;
+                $scope.checkNowOnline();
             
-            $rootScope.breadcrumbs = [];
-            $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php' ,icon : 'fa-home' });
-            $rootScope.breadcrumbs.push({title : res.MainSubject , url : $state.href('main_forum', {id:res.SubjectName}) });
-            $rootScope.breadcrumbs.push({title : res.Subject , url : $state.href('forum', {id:res.SubjectID}) });
-            $rootScope.breadcrumbs.push({title : Extention.subString(res.Title,22)});
+                $rootScope.breadcrumbs = [];
+                $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php' ,icon : 'fa-home' });
+                $rootScope.breadcrumbs.push({ title: res.Data.MainSubject, url: $state.href('main_forum', { id: res.Data.SubjectName }) });
+                $rootScope.breadcrumbs.push({ title: res.Data.Subject, url: $state.href('forum', { id: res.Data.SubjectID }) });
+                $rootScope.breadcrumbs.push({ title: Extention.subString(res.Data.Title, 22) });
+            } else {
+                $scope.question = null;
+            }
         });
     })();
 
@@ -70,7 +74,7 @@
     });
 
     $scope.checkNowOnline = function () {
-        if(!$scope.question.UserID)
+        if(!$scope.question && !$scope.question.UserID)
             return;
         var ous =  $scope.socketData.OnlineUsers;
         for (var i = 0 ; i < ous.length ; i++){
