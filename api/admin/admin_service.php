@@ -528,6 +528,9 @@ $app->post('/getAllAnswers', function() use ($app)  {
     if(isset($data->answerType)){
         $where .=" AND (fa.AdminAccepted ='$data->answerType')";
 	}
+    if(isset($data->OrganizationID)){
+        $where .=" AND (u.OrganizationID ='$data->OrganizationID')";
+	}
 	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
 		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
 		$where .= " AND ( fa.AnswerText LIKE '%".$s."%' OR u.FullName LIKE '%".$s."%' OR u.Email LIKE '%".$s."%')";
@@ -555,6 +558,10 @@ $app->post('/getAllQuestions', function() use ($app)  {
 	$hasWhere = FALSE;
     if(isset($data->questionType)){
         $where .=" AND (fq.AdminAccepted ='$data->questionType')";
+	}
+
+    if(isset($data->OrganizationID)){
+        $where .=" AND (u.OrganizationID ='$data->OrganizationID')";
 	}
 	if(isset($data->searchValue) && strlen($data->searchValue) > 0){
 		$s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
