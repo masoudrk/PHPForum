@@ -78,15 +78,30 @@ SELECT cd.IntervalDay as date,
   where forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
   as AnswerCount,
-   IF(cd.IntervalDay = '$curDate','lastBullet' , '') as className
+   IF(cd.IntervalDay = '$curDate','pulseBullet red-pulse' , '') as className
 from calendar_day as cd
 where $where");
     }
 
+    $maxA = $maxQ = -1;
+    $maxAIndex = $maxQIndex = -1;
+    $i = 0;
+    $resp= [];
     $cqData = [];
     while($r = $resQ->fetch_assoc()){
+        if($r['AnswerCount'] >= $maxA){
+            $maxAIndex = $i;
+            $maxA = $r['AnswerCount'];
+        }
+        if($r['QuestionCount'] >= $maxQ){
+            $maxQIndex = $i;
+            $maxQ = $r['QuestionCount'];
+        }
         $cqData[] = $r;
+        $i++;
     }
+    $cqData[$maxQIndex]['classNameQ'] = 'pulseBullet red-pulse';
+    $cqData[$maxAIndex]['classNameA'] = 'pulseBullet blue-pulse';
 
     echoResponse(200, $cqData);
 });
@@ -113,14 +128,29 @@ SELECT cd.IntervalDay as date,
   where forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
   as AnswerCount,
-   IF(cd.IntervalDay = '$curDate','lastBullet' , '') as className
+   IF(cd.IntervalDay = '$curDate','pulseBullet red-pulse' , '') as classNameQ
 from calendar_day as cd
 where cd.ID BETWEEN ".($cid - 30)." and ".($cid));
 
+    $maxA = $maxQ = -1;
+    $maxAIndex = $maxQIndex = -1;
+    $i = 0;
     $resp= [];
     $cqData = [];
-    while($r = $resQ->fetch_assoc())
+    while($r = $resQ->fetch_assoc()){
+        if($r['AnswerCount'] >= $maxA){
+            $maxAIndex = $i;
+            $maxA = $r['AnswerCount'];
+        }
+        if($r['QuestionCount'] >= $maxQ){
+            $maxQIndex = $i;
+            $maxQ = $r['QuestionCount'];
+        }
         $cqData[] = $r;
+        $i++;
+    }
+    $cqData[$maxQIndex]['classNameQ'] = 'pulseBullet red-pulse';
+    $cqData[$maxAIndex]['classNameA'] = 'pulseBullet blue-pulse';
     $resp['ChartData'] = $cqData;
 
     $resQ = $app->db->makeQuery("
@@ -134,13 +164,15 @@ SELECT cd.IntervalDay as date,
   where forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) < cd.IntervalDay) 
   as IAnswerCount,
-   IF(cd.IntervalDay = '$curDate','lastBullet' , '') as className
+   IF(cd.IntervalDay = '$curDate','pulseBullet' , '') as className
 from calendar_day as cd
 where cd.ID BETWEEN ".($cid - 30)." and ".($cid));
 
     $cqDataInc = [];
-    while($r = $resQ->fetch_assoc())
+    while($r = $resQ->fetch_assoc()){
         $cqDataInc[] = $r;
+    }
+
     $resp['ChartDataInc'] = $cqDataInc;
 
     $resQ = $app->db->makeQuery("

@@ -429,11 +429,19 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 }
 
 
-.lastBullet {
+.pulseBullet {
     -webkit-animation: am-pulsating 1s ease-out infinite;
     animation: am-pulsating 1s ease-out infinite;
-    stroke: black;
-    fill: gray;
+}
+
+.red-pulse {
+    stroke: rgb(0, 187, 204);
+    fill: rgb(0, 187, 204);
+    r: 1.5px;
+}
+.blue-pulse {
+    stroke: rgb(231, 76, 60);
+    fill: rgb(231, 76, 60);
     r: 1.5px;
 }
 
@@ -458,30 +466,30 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     }
 }
 
-.amcharts-graph-g1 .amcharts-graph-stroke {
-    stroke-dasharray: 500%;
-    -webkit-animation: css-effect 2s ease-out forwards;
-    animation: css-effect 2s ease-out forwards;
-}
-.amcharts-graph-g2 .amcharts-graph-stroke {
-    stroke-dasharray: 500%;
-    -webkit-animation: css-effect 2s ease-out forwards;
-    animation: css-effect 2s ease-out forwards;
-}
+/*.amcharts-graph-g1 .amcharts-graph-stroke {*/
+    /*stroke-dasharray: 500%;*/
+    /*-webkit-animation: css-effect 1s ease-out forwards;*/
+    /*animation: css-effect 1s ease-out forwards;*/
+/*}*/
+/*.amcharts-graph-g2 .amcharts-graph-stroke {*/
+    /*stroke-dasharray: 500%;*/
+    /*-webkit-animation: css-effect 1s ease-out forwards;*/
+    /*animation: css-effect 1s ease-out forwards;*/
+/*}*/
 
-@-webkit-keyframes css-effect {
-    0% {
-        stroke-dashoffset: 500%;
-    }
-    100% {
-        stroke-dashoffset: 0%;
-    }
-}
-@keyframes css-effect {
-    0% {
-        stroke-dashoffset: 500%;
-    }
-    100% {
-        stroke-dashoffset: 0%;
-    }
-}
+/*@-webkit-keyframes css-effect {*/
+    /*0% {*/
+        /*stroke-dashoffset: 500%;*/
+    /*}*/
+    /*100% {*/
+        /*stroke-dashoffset: 0%;*/
+    /*}*/
+/*}*/
+/*@keyframes css-effect {*/
+    /*0% {*/
+        /*stroke-dashoffset: 500%;*/
+    /*}*/
+    /*100% {*/
+        /*stroke-dashoffset: 0%;*/
+    /*}*/
+/*}*/
