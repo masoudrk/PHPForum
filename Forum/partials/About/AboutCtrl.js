@@ -16,5 +16,5 @@ angular.module(appName).controller('AboutCtrl', function ($scope, $rootScope, $s
         $scope.data = res;
     });
 
-    activeElement('#About');
+    activeElement('#SOthers', '#SAbout');
 });
