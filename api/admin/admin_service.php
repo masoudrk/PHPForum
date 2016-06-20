@@ -702,6 +702,17 @@ LEFT JOIN file_storage on file_storage.ID = user.AvatarID ".$where." ORDER BY us
 	echoResponse(200, $pageRes);
 });
 
+$app->post('/getAllForumTypes', function() use ($app)  {
+
+
+
+    $pageRes = $app->db->makeQuery("SELECT * FROM `forum_main_subject`");
+    $res=[];
+    while($r = $pageRes->fetch_assoc())
+        $res[] = $r;
+    echoSuccess($res);
+});
+
 $app->post('/getAllAdminTypes', function() use ($app)  {
 
     
@@ -748,11 +759,11 @@ LIMIT 1");
 
     $sql =$resQ->fetch_assoc();
     if($sql["val"] == 0){
-        $resQ = $app->db->insertToTable('admin',"`UserID`, `PermissionID`","'$data->UserID','$data->PermissionID'");
+        $resQ = $app->db->insertToTable('admin',"`UserID`, `PermissionID`,`ForumID`","'$data->UserID','$data->PermissionID','$data->ForumID'");
     }else
     {
         if($data->UserID != $sess->UserID)
-            $resQ = $app->db->updateRecord('admin',"`PermissionID`= '$data->PermissionID'","UserID = '$data->UserID'");
+            $resQ = $app->db->updateRecord('admin',"`PermissionID`= '$data->PermissionID', ForumID = '$data->ForumID'","UserID = '$data->UserID'");
         else
             echoError('you cannot change your own permission level');
     }
@@ -768,7 +779,7 @@ $app->post('/getAllAdmins', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $pr = new Pagination($data);
 
-    $pageRes = $pr->getPage($app->db,"SELECT u.ID as UserID , u.FullName, u.SignupDate , u.Email , ap.ID as PID , ap.Permission , ap.PermissionLevel ,a.ID FROM `admin` as a INNER JOIN user as u on u.ID = a.`UserID` INNER JOIN admin_permission as ap on ap.ID = a.`PermissionID`");
+    $pageRes = $pr->getPage($app->db,"SELECT u.ID as UserID , u.FullName, u.SignupDate , u.Email , ap.ID as PID , ap.Permission , ap.PermissionLevel ,a.ID , a.ForumID FROM `admin` as a INNER JOIN user as u on u.ID = a.`UserID` INNER JOIN admin_permission as ap on ap.ID = a.`PermissionID`");
 
     echoResponse(200, $pageRes);
 });
