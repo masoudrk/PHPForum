@@ -17,37 +17,85 @@ $res['OnlineUsers'] = $arr;
 echoResponse(200, $res);
 });
 
-
 $app->post('/getNewQuestionsGraphData', function() use ($app)  {
 
     $r = json_decode($app->request->getBody());
-    $session = $app->session;
+    //$session = $app->session;
 
     $resQ = null;
 
     $curDate = date('Y-m-d');
-    $where = '';
+    $dateWhere = '';
     if(isset($r->toDate) && isset($r->fromDate)){
-        $where = "cd.IntervalDay BETWEEN '".$r->fromDate."' and '".$r->toDate."'";
+        $dateWhere = "cd.IntervalDay BETWEEN '".$r->fromDate."' and '".$r->toDate."'";
     }else if(isset($r->fromDate)){
         $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay=Date('$r->fromDate')");
         $cid  = $resCQ->fetch_assoc()['ID'];
 
-        $where = "cd.ID BETWEEN ".($cid)." and ".($cid+30);
+        $dateWhere = "cd.ID BETWEEN ".($cid)." and ".($cid+30);
     }else if(isset($r->toDate)){
         $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay=Date('$r->toDate')");
         $cid  = $resCQ->fetch_assoc()['ID'];
 
-        $where = "cd.ID BETWEEN ".($cid - 30)." and ".($cid);
+        $dateWhere = "cd.ID BETWEEN ".($cid - 30)." and ".($cid);
     }else{
 
         $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
         $cid  = $resCQ->fetch_assoc()['ID'];
-        $where = "cd.ID BETWEEN ".($cid - 30)." and ".($cid);
+        $dateWhere = "cd.ID BETWEEN ".($cid - 30)." and ".($cid);
     }
     //echoSuccess($where);
 
-    if(isset($r->MainSubjectID) && $r->MainSubjectID != -1){
+    $filterMainSubject = isset($r->MainSubjectID) && $r->MainSubjectID != -1;
+    $filterOrgan = isset($r->OrganizationID) && $r->OrganizationID != -1;
+
+    if($filterMainSubject && $filterOrgan){
+
+        $resQ = $app->db->makeQuery("
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+  left join user on forum_question.AuthorID=user.ID
+  left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  left join forum_main_subject on forum_main_subject.SubjectID=forum_subject.ParentSubjectID
+  where forum_question.AdminAccepted=1 and forum_main_subject.SubjectID='$r->MainSubjectID'
+  and user.OrganizationID = '$r->OrganizationID'
+  and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+  left join forum_question on forum_answer.QuestionID=forum_question.ID
+  left join user on forum_question.AuthorID=user.ID
+  left join forum_subject on forum_subject.ID=forum_question.SubjectID
+  left join forum_main_subject on forum_main_subject.SubjectID=forum_subject.ParentSubjectID
+  where forum_answer.AdminAccepted=1 and forum_main_subject.SubjectID='$r->MainSubjectID'
+  and user.OrganizationID = '$r->OrganizationID'
+  and Date(forum_answer.CreationDate) = cd.IntervalDay) 
+  as AnswerCount,
+   IF(cd.IntervalDay = '$curDate','pulseBullet red-pulse' , '') as className
+from calendar_day as cd
+where $dateWhere");
+    }
+    else if($filterOrgan){
+
+        $resQ = $app->db->makeQuery("
+SELECT cd.IntervalDay as date,
+  (select count(*) from forum_question
+  left join user on forum_question.AuthorID=user.ID
+  where forum_question.AdminAccepted=1
+  and user.OrganizationID = '$r->OrganizationID'
+  and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
+  ,
+  (select count(*) from forum_answer
+  left join forum_question on forum_answer.QuestionID=forum_question.ID
+  left join user on forum_question.AuthorID=user.ID
+  where forum_answer.AdminAccepted=1
+  and user.OrganizationID = '$r->OrganizationID'
+  and Date(forum_answer.CreationDate) = cd.IntervalDay) 
+  as AnswerCount,
+   IF(cd.IntervalDay = '$curDate','pulseBullet red-pulse' , '') as className
+from calendar_day as cd
+where $dateWhere");
+    }
+    else if($filterMainSubject){
 
         $resQ = $app->db->makeQuery("
 SELECT cd.IntervalDay as date,
@@ -64,10 +112,11 @@ SELECT cd.IntervalDay as date,
   where forum_answer.AdminAccepted=1 and forum_main_subject.SubjectID='$r->MainSubjectID'
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
   as AnswerCount,
-   IF(cd.IntervalDay = '$curDate','lastBullet' , '') as className
+   IF(cd.IntervalDay = '$curDate','pulseBullet red-pulse' , '') as className
 from calendar_day as cd
-where $where");
-    }else{
+where $dateWhere");
+    }
+    else{
         $resQ = $app->db->makeQuery("
 SELECT cd.IntervalDay as date,
   (select count(*) from forum_question
@@ -80,7 +129,7 @@ SELECT cd.IntervalDay as date,
   as AnswerCount,
    IF(cd.IntervalDay = '$curDate','pulseBullet red-pulse' , '') as className
 from calendar_day as cd
-where $where");
+where $dateWhere");
     }
 
     $maxA = $maxQ = -1;
@@ -109,6 +158,7 @@ where $where");
 $app->post('/getDashboardData', function() use ($app)  {
 
     require_once "../db/forum_subject.php";
+    require_once "../db/organ_position.php";
 
     $r = json_decode($app->request->getBody());
     $session = $app->session;
@@ -194,6 +244,7 @@ GROUP BY forum_main_subject.ID");
 
 
     $resp['MainSubjects'] = getAllMainSubjects($app->db);
+    $resp['Organs'] = getAllPositions($app->db);
 
     echoResponse(200, $resp);
 });

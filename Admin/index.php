@@ -565,17 +565,7 @@
             <!--        <div ng-show="globalSearchActive" ng-include src="'partials/GlobalSearch.html'" id="searchContent" ></div>-->
             <!-- /.content-wrapper -->
         </div>
-
-        <footer class="main-footer persian-rtl">
-            <div class="pull-left hidden-xs">
-                <b>نسخه</b>
-                1.0.0
-            </div>
-            <strong class="persian-rtl"></strong>
-            کلیه حقوق مادی و معنوی این سایت متعلق به اداره کل ارتباطات و علائم الکتریکی راه آهن جمهوری اسلامی ایران می باشد.
-          Copyright &copy;
-        2014-2015 <!--<a class="persian-rtl">طراحی شده توسط MagicCube.ir</a>-->.
-        </footer>
+        <?php generateFooter(); ?>
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
