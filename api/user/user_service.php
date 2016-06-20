@@ -541,7 +541,8 @@ from admin_permission
 left join admin on admin.PermissionID=admin_permission.ID
 inner join user on user.ID =admin.UserID
 left join file_storage on file_storage.ID=user.AvatarID
-where admin_permission.Permission='$data->MainSubjectName'");
+LEFT JOIN forum_main_subject on forum_main_subject.ID = admin.ForumID
+where admin_permission.Permission='$data->MainSubjectName' or forum_main_subject.SubjectName = '$data->MainSubjectName'");
 
     $admins = [];
     while($r = $resQ->fetch_assoc())

@@ -489,7 +489,8 @@
                                 <i class="fa fa-angle-right pull-right"></i>
                             </a>
                             <ul class="treeview-menu" style="display: none;">
-                                <li><a><i class="fa fa-circle-o"></i> پورتال راه آهن</a></li>
+                                    <li>
+                                        <a href="http://www.rai.ir/index.aspx?lang=1&sub=0&tempname=rai" target="_blank"><i class="fa fa-circle-o"></i> پورتال راه آهن</a></li>
                             </ul>
                         </li>
                     </ul>
