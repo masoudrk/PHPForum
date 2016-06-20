@@ -24,7 +24,7 @@
                         <tbody>
                         <tr class="link fx-zoom-normal fx-dur-600 fx-ease-circ fx-stagger-30"
                             ng-repeat="q in searchResult" ui-sref="question({id:q.ID})">
-                            <td><img  class="img-circle" ng-src="{{q.Image}}" src="../images/Avatar.jpg"
+                            <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                       style="width:40px"
                                       ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                                 (q.Rate > 2.5)?activity.medium : activity.low}"
@@ -74,7 +74,7 @@
                 </div>
                 <div class="widget-user-image">
                     <img class="img-circle link" ng-src="{{u.Image}}" ui-sref="UserProfile({id:u.ID})"
-                         alt="User Avatar"
+                         alt="User Avatar" err-src="../images/Avatar.jpg"
                          ng-style="{'border-color': (u.Rate > 5) ? activity.high :
                                                                 (u.Rate > 2.5)?activity.medium : activity.low}">
                 </div>

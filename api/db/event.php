@@ -29,6 +29,7 @@ limit $limit");
 
 function getUserTotalNotifications($db, $uid){
     return $db->makeQuery("select count(*) as Total from event
+inner join forum_question on forum_question.ID = event.EvenLinkID
 where event.EventUserID='$uid' and event.EventSeen='0'")->fetch_assoc()['Total'];
 }
 ?>

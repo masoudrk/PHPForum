@@ -804,8 +804,7 @@ ORDER BY res.CreationDate DESC
 
 $app->post('/getForumBestQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
-
-
+    
     $sess = $app->session;
     $pr = new Pagination($data);
 

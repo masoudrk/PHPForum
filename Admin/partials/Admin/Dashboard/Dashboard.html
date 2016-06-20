@@ -19,14 +19,29 @@
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
 
-                    <div class="col-xs-12 no-padding">
+                    <div class="col-xs-12 no-padding pull-left">
+                        <div class="form-group row" >
+                            <div class="col-xs-12">
+                                <ui-select ng-model="newQuestionsDigram.Organization"
+                                           theme="bootstrap"
+                                           title="همه ناحیه ها..."
+                                           on-select="updateNewQuestionDiagram()">
+                                    <ui-select-match placeholder="همه ناحیه ها...">{{$select.selected.OrganizationName}}</ui-select-match>
+                                    <ui-select-choices repeat="t in dashboardData.Organs track by $index">
+                                        <div ng-bind="t.OrganizationName" class="text-right"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 no-padding pull-right">
                         <div class="form-group row" >
                             <div class="col-xs-12">
                                 <ui-select ng-model="newQuestionsDigram.MainSubject"
                                            theme="bootstrap"
-                                           title="همه انجمن ها ..."
+                                           title="همه انجمن ها..."
                                            on-select="updateNewQuestionDiagram()">
-                                    <ui-select-match placeholder="همه انجمن ها ...">{{$select.selected.Title}}</ui-select-match>
+                                    <ui-select-match placeholder="همه انجمن ها...">{{$select.selected.Title}}</ui-select-match>
                                     <ui-select-choices repeat="t in dashboardData.MainSubjects track by $index">
                                         <div ng-bind="t.Title" class="text-right"></div>
                                     </ui-select-choices>
@@ -35,7 +50,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 no-padding">
-                        <div class="col-md-5 col-xs-12 form-group no-padding">
+                        <div class="col-md-5 col-xs-12 no-padding">
 
                             <adm-dtp ng-model='newQuestionsDigram.to'
                                      options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true}'
@@ -49,7 +64,7 @@
                         <div class="hidden-md hidden-lg col-xs-12 text-center form-group" style="">
                             <i class="fa fa-angle-down fa-2x text-muted"></i>
                         </div>
-                        <div class="col-md-5 col-xs-12 form-group no-padding">
+                        <div class="col-md-5 col-xs-12 no-padding">
 
                             <adm-dtp ng-model='newQuestionsDigram.from'
                                      options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true}'
@@ -58,6 +73,12 @@
                                      on-datechange="updateNewQuestionDiagram()"></adm-dtp>
                         </div>
                     </div>
+                    <serial-chart
+                            chart-id="chart2"
+                            chart-data="dashboardData.ChartData"
+                            chart-graphs="dailyChartOptions"
+                            enable-scroll-bar="true"
+                            chart-height="290"></serial-chart>
                     <div class="col-xs-12 text-center">
                         <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">
                             <li style="padding-left: 20px">
@@ -70,12 +91,6 @@
                             </li>
                         </ul>
                     </div>
-                    <serial-chart
-                            chart-id="chart2"
-                            chart-data="dashboardData.ChartData"
-                            chart-graphs="dailyChartOptions"
-                            enable-scroll-bar="true"
-                            chart-height="290"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div>
@@ -88,6 +103,13 @@
                     </h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
+                    <radar-chart
+                            chart-id="chart3"
+                            chart-data="dashboardData.RadarChartData"
+                            chart-graphs="radarChartGraphs"
+                            chart-height="422"
+                            class="english-ltr">
+                    </radar-chart>
                     <div class="col-xs-12 text-center">
                         <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">
                             <li style="padding-left: 20px">
@@ -100,13 +122,6 @@
                             </li>
                         </ul>
                     </div>
-                    <radar-chart
-                            chart-id="chart3"
-                            chart-data="dashboardData.RadarChartData"
-                            chart-graphs="radarChartGraphs"
-                            chart-height="388"
-                            class="english-ltr">
-                    </radar-chart>
                 </div>
             </div>
         </div>
@@ -120,6 +135,12 @@
                     </h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
+                    <serial-chart
+                            chart-id="chart1"
+                            chart-data="dashboardData.ChartDataInc"
+                            chart-graphs="incrementChartOptions"
+                            enable-scroll-bar="true"
+                            chart-height="300"></serial-chart>
                     <div class="col-xs-12 text-center">
                         <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">
                             <li style="padding-left: 20px">
@@ -132,12 +153,6 @@
                             </li>
                         </ul>
                     </div>
-                    <serial-chart
-                            chart-id="chart1"
-                            chart-data="dashboardData.ChartDataInc"
-                            chart-graphs="incrementChartOptions"
-                            enable-scroll-bar="true"
-                            chart-height="300"></serial-chart>
                 </div>
             </div>
         </div>

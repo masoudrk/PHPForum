@@ -533,22 +533,7 @@
         <!-- /.content-wrapper -->
     </div>
 
-    <footer class="main-footer persian-rtl" style="">
-        <div class="pull-left hidden-xs">
-            <b>نسخه</b> {{websiteInfo.Version| pNumber}}
-        </div>
-            <strong class="persian-rtl"></strong>
-            <span ng-bind="websiteInfo.CopyrightText | pNumber"></span>
-
-            <span class="text-muted">
-
-              Copyright &copy;
-                <span ng-bind="nowDate() | jalaliDateSimple : 'YYYY' "></span>
-            -
-            <span ng-bind="websiteInfo.CopyrightStartDate | jalaliDateSimple : 'YYYY' "></span>
-            </span>
-
-    </footer>
+    <?php generateFooter(); ?>
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark" id="side-bar-fixer">

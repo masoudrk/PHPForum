@@ -1,6 +1,7 @@
 angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConvertor, $rootScope, Extention, $state, $timeout) {
 
     $scope.newQuestionsDigram = {};
+    $scope.provinceDigram = {};
 
     $scope.incrementChartOptions =[{
         id:"g1",
@@ -160,6 +161,9 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
             if(angular.isDefined($scope.newQuestionsDigram.MainSubject))
                 data.MainSubjectID = $scope.newQuestionsDigram.MainSubject.ID;
 
+            if(angular.isDefined($scope.newQuestionsDigram.Organization))
+                data.OrganizationID = $scope.newQuestionsDigram.Organization.ID;
+
             if(angular.isDefined($scope.newQuestionsDigram.to) && $scope.newQuestionsDigram.to != "")
                 data.toDate = convertDateToISO($scope.newQuestionsDigram.toFull);
 
@@ -173,9 +177,9 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
         });
     }
 
-
     Extention.post('getDashboardData').then(function (res) {
-        res.MainSubjects.push({ID : -1 , Title : 'همه انجمن ها'});
+        res.MainSubjects.splice(0, 0, {ID : -1 , Title : 'همه انجمن ها'});
+        res.Organs.splice(0, 0, {ID : -1 , OrganizationName : 'همه ناحیه ها'});
         $scope.dashboardData = res;
     });
 

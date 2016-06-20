@@ -9,6 +9,10 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     //         $scope.checkNowOnline();
     // });
 
+    Extention.post("getSiteInfo").then(function (res) {
+        $rootScope.websiteInfo = res;
+    });
+
     $scope.checkNowOnline = function () {
         return
         var ous = $scope.socketData.OnlineUsers;
