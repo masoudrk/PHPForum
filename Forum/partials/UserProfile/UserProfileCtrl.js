@@ -2,15 +2,18 @@
 angular.module(appName).controller('UserProfileCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $stateParams, Extention) {
 
     $scope.isOnline = false;
-    $scope.profile = null;
+    $scope.profile = {};
     $scope.userID = $stateParams.id;
 
-    Extention.post("getProfile", { TargetUserID:$scope.userID  }).then(function (res) {
-        $scope.profile = res;
-
-        $rootScope.breadcrumbs = [];
-        $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php' ,icon : 'fa-home' });
-        $rootScope.breadcrumbs.push({title : ' پروفایل ' +'\''+ res.FullName +'\'' });
+    Extention.post("getProfile", { TargetUserID: $scope.userID }).then(function (res) {
+        if (res.Status == 'success') {
+            $scope.profile = res.Data;
+            $rootScope.breadcrumbs = [];
+            $rootScope.breadcrumbs.push({ title: 'خانه', url: 'home.php', icon: 'fa-home' });
+            $rootScope.breadcrumbs.push({ title: ' پروفایل ' + '\'' + res.Data.FullName + '\'' });
+        } else {
+            $scope.profile = null;
+        }
     });
 
     $rootScope.$on("socketDataChanged", function(){

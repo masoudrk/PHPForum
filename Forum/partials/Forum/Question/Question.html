@@ -91,7 +91,7 @@
                     آنلاین <i class="fa fa-circle text-green"></i> </h5>
             </div>
             <div class="widget-user-image" style="cursor: pointer">
-                <img class="img-circle" ui-sref="UserProfile({id:question.UserID})" src="{{question.FullPath}}" alt="User Avatar">
+                <img class="img-circle" ui-sref="UserProfile({id:question.UserID})" err-src="../images/Avatar.jpg" ng-src="{{question.FullPath}}" alt="User Avatar">
             </div>
             <div class="box-footer">
                 <div class="row">
@@ -127,8 +127,8 @@
                         <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o text-yellow" aria-hidden="true"></i>   {{question.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <div class="persian-rtl box-body text-right">
-                        {{question.QuestionText | pNumber}}
+                    <div  class="persian-rtl box-body text-right" style="text-align:justify">
+                        <span compile="question.QuestionText | pNumber"></span>
                     </div><!-- /.box-body -->
 
                     <div style="padding: 5px;" class="persian-rtl">
@@ -191,11 +191,10 @@
                     <div class="box-body box-profile">
                         <div class="col-sm-3 col-xs-12">
                             <img class="profile-user-img img-responsive img-circle link" alt="User profile picture"
-                                 ui-sref="UserProfile({id:answer.AuthorID})" src="../images/Avatar.jpg"
+                                 ui-sref="UserProfile({id:answer.AuthorID})" err-src="../images/Avatar.jpg" src="../images/Avatar.jpg"
                                  ng-src="{{answer.FullPath}}">
                             <!--<a href="#/" style="cursor: pointer; color: black">
                                 <h3 class="text-center profile-username">نادیا معصومی</h3></a>-->
-                            <p class="text-muted text-center">{{answer.Description | pNumber}}</p>
                             <p class="text-muted text-center">{{answer.Email | pNumber}}</p>
                             <ul class="list-group list-group-unbordered hidden-xs" style="margin-bottom: 0px;">
                                 <li class="list-group-item">
@@ -219,7 +218,7 @@
                                 </h3>
                                 <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o text-yellow" aria-hidden="true"></i>   {{answer.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
                             </div>
-                            <p style="min-height: 184px;padding: 10px;">{{answer.AnswerText}}</p>
+                            <p style="min-height: 184px;padding: 10px;text-align:justify" compile="answer.AnswerText | pNumber"></p>
                             <div>
                                 <ul class="nav nav-pills" style="padding-right: 0px;">
                                     <li ng-repeat="at in answer.Attachments" class="active fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50">
@@ -263,7 +262,7 @@
                     </div>
                     <div class="box-body box-profile">
                         <div class="col-sm-3 col-xs-12 pull-right">
-                            <img class="profile-user-img img-responsive img-circle" alt="User profile picture" src="{{user.Image}}">
+                            <img class="profile-user-img img-responsive img-circle" alt="User profile picture" err-src="../images/Avatar.jpg" src="{{user.Image}}">
                             <a style="cursor: pointer; color: black">
                                 <h3 class="text-center profile-username">{{user.FullName | pNumber}}</h3>
                             </a>
@@ -272,7 +271,7 @@
                         <div class="col-sm-9 col-xs-12">
                             <div class="col-xs-12">
                                 <div class="form-group">
-                                    <textarea dir="rtl" ng-model="answerText" class="form-control" rows="9"
+                                    <textarea dir="rtl" ng-model="answerTextIn" class="form-control" rows="9"
                                               id="comment">
                                     </textarea>
                                 </div>

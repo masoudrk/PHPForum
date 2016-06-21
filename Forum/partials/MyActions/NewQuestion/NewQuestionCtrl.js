@@ -46,10 +46,13 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			$scope.errForum.title = true;
 			hasError = true;
 		}
-		if(!$scope.question.QuestionText){
+		if(!$scope.QuestionTextIN){
 			$scope.errForum.text = true;
 			hasError = true;
 		}
+		$scope.question.QuestionText = $scope.QuestionTextIN.replace(/\r\n|\r|\n/g, "<br />");
+		console.log(angular.toJson($scope.question));
+
 		if(!$scope.question.MainSubject){
 			$scope.errForum.mainSubject = true;
 			hasError = true;

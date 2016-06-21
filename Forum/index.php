@@ -107,7 +107,7 @@
                                                 </p>
                                                 <p class="link" style="padding-right: 5px" ui-sref="messages({id:item.ID})">
                                                     <span class="palette-concrete">متن پیام :</span>
-                                                    {{item.Message | subString :100|pNumber}}</p>
+                                                        <span compile="item.Message | subString :100|pNumber"></span></p>
                                             </p>
                                         </a>
                                     </li><!-- end event -->

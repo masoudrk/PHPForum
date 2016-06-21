@@ -102,7 +102,7 @@
                                                     </p>
                                                     <p style="padding-right: 5px">
                                                         <span class="palette-concrete">متن پیام :</span>
-                                                        {{item.Message | subString :100|pNumber}}
+                                                        <span compile="item.Message | subString :100|pNumber"></span>
                                                     </p>
                                             </a>
                                         </li>
@@ -197,7 +197,8 @@
                                             <!-- start message -->
                                             <a ui-sref="UserProfile({id:ou.ID})">
                                                 <div class="pull-right">
-                                                    <img src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
+                                                    <img ng-src="{{ou.Image}}"
+                                                          err-src="../images/Avatar.jpg"
                                                         class="img-circle"
                                                         alt="User Image"
                                                         style="border: solid 2px #3498db" />

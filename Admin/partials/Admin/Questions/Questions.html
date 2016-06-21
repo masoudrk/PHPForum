@@ -160,8 +160,8 @@
             <h4 class="text-danger ">متن سوال</h4>
         </div>
         <hr />
-        <div ng-hide="editMode">
-            {{QuestionText}}
+        <div ng-hide="editMode" compile="QuestionText | pNumber">
+            
         </div>
         <div style="margin-top:25px" ng-show="editMode">
             <textarea rows="6" class="col-xs-12" ng-model="QuestionText"></textarea>
@@ -195,7 +195,7 @@
                     <tr class="link" ng-repeat="item in questions" ng-click="Link(item)">
                         <td>{{item.FullName| pNumber}}</td>
                         <td>{{item.Title| pNumber}}</td>
-                        <td>{{item.QuestionText| pNumber}}</td>
+                        <td compile="item.QuestionText | pNumber"></td>
                         <td>{{item.SubjectName | pNumber | subString:20}}</td>
                     </tr>
                 </tbody>
