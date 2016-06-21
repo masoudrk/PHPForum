@@ -42,7 +42,7 @@
                             </td>
                             <td ui-sref="question({id:q.ID})" style="vertical-align: middle;">{{q.FullName | subString :20|pNumber}}</td>
 
-                            <td class="max-col-width-100">{{q.AnswerText| subString :50|pNumber}}</td>
+                            <td class="max-col-width-100" compile="q.AnswerText| subString :50|pNumber"></td>
                             <td >{{q.SubjectTitle| subString :50 |pNumber}}</td>
                             <td>
                                 <span class="persian-rtl text-muted">{{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}</span>

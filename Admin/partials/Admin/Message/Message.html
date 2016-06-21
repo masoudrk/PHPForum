@@ -83,7 +83,7 @@
                                 </td>
                                 <td>{{mes.FullName | pNumber}}</td>
                                 <td class="persian-rtl">{{mes.MessageTitle | pNumber | subString:15}}</td>
-                                <td class="persian-rtl">{{mes.Message | pNumber | subString:20}}</td>
+                                <td class="persian-rtl" compile="mes.Message | pNumber | subString:20"></td>
                                 <td>{{mes.MessageDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
                                 <td ng-switch="mes.MessageType">
                                     <span class="label label-success" ng-switch-when="1">ایمیل</span>
@@ -143,7 +143,7 @@
                         <input class="form-control" ng-model="Message.MessageTitle" placeholder="عنوان">
                     </div>
                     <div class="form-group">
-                        <textarea rows="10" ng-model="Message.Message" class="persian-rtl col-xs-12">
+                        <textarea rows="10" ng-model="Message.MessageIn" class="persian-rtl col-xs-12">
                         </textarea>
                     </div>
                 </div>
@@ -187,11 +187,11 @@
         </div>
         <label style="font-size:15px;margin-top:25px" class="text-danger">عنوان پیام</label>
         <hr />
-        {{message.MessageTitle}}
+        {{message.MessageTitle | pNumber}}
         <br />
         <label style="font-size:15px;margin-top:25px" class="text-danger ">متن پیام</label>
         <hr />
-        {{message.Message}}
+        <span compile="message.Message | pNumber"></span>
     </div>
     <div class="modal-footer vazir-font">
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>

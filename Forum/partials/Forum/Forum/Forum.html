@@ -301,8 +301,7 @@
                                 {{q.FullName | subString :20| pNumber}}
                                 <span class="badge bg-yellow">{{q.score | pNumber}}</span>
                             </td>
-                            <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
-                                {{q.QuestionText | subString :30|pNumber}}
+                            <td compile="q.QuestionText | subString :30| pNumber" ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
                             </td>
 
                             <td ui-sref="question({id:q.ID})">

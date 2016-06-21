@@ -20,12 +20,13 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
             });
     }
     $scope.sentMessage = function (messageType) {
-        if ($scope.user.selectedUser.length == 0 || !$scope.Message.Message || !$scope.Message.MessageTitle) return;
+        if ($scope.user.selectedUser.length == 0 || !$scope.Message.MessageIn || !$scope.Message.MessageTitle) return;
         if (messageType == 1) {
             $scope.Message.MessageType = 1;
         } else {
             $scope.Message.MessageType = 0;
         }
+        $scope.Message.Message = $scope.Message.MessageIn.replace(/\r\n|\r|\n/g, "<br />");
         Extention.post('sendMessage', { Message: $scope.Message, Users: $scope.user.selectedUser }).then(function (res) {
             if (res && res.Status == 'success') {
                 $scope.user.selectedUser = [];
