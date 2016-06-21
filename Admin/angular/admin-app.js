@@ -1,4 +1,6 @@
 ﻿var appName = 'adminApp';
+var uploadURL = '../api/upload/';
+var serviceBaseURL = '../api/admin/';
 var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
@@ -118,12 +120,24 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMdtp) {
                 }
             }
         }).state("skill", {
-            url: "/skill",
-            templateUrl: "partials/Admin/Skill/Skill.html",
-            controller: 'SkillCtrl',
+        url: "/skill",
+        templateUrl: "partials/Admin/Skill/Skill.html",
+        controller: 'SkillCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load(['partials/Admin/Skill/Skill.js']);
+            }],
+            $title: function () {
+                return 'مدیریت مهارت ها';
+            }
+        }
+        }).state("upload_library", {
+            url: "/UploadLibrary",
+            templateUrl: "partials/Admin/UploadLibrary/UploadLibrary.html",
+            controller: 'UploadLibraryCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Skill/Skill.js']);
+                    return $ocLazyLoad.load(['partials/Admin/UploadLibrary/UploadLibraryCtrl.js']);
                 }],
                 $title: function () {
                     return 'مدیریت مهارت ها';
@@ -205,12 +219,10 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         $rootScope.session = session;
 
-        var serviceBase = '../api/admin/';
-
         $rootScope.spinner = {};
         var obj = {};
         obj.workers = 0;
-        obj.serviceBase = serviceBase;
+        obj.serviceBase = serviceBaseURL;
         obj.debugMode = debugMode;
 
         obj.noImageClass = 'fa fa-2x fa-user';
@@ -257,7 +269,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.get = function (q) {
             obj.setBusy(true);
-            return $http.get(serviceBase + q).then(function (results) {
+            return $http.get(obj.serviceBase + q).then(function (results) {
                 obj.setBusy(false);
                 return results.data;
             }, function (err) {
@@ -279,7 +291,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.post = function (q, object) {
             obj.setBusy(true);
-            return $http.post(serviceBase + q, object).then(function (results) {
+            return $http.post(obj.serviceBase + q, object).then(function (results) {
 
                 if(obj.debugMode ){
                     console.log(results.data);
@@ -313,7 +325,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         };
 
         obj.postAsync = function (q, object) {
-            return $http.post(serviceBase + q, object).then(function (results) {
+            return $http.post(obj.serviceBase + q, object).then(function (results) {
 
                 if(obj.debugMode && results.status != 200){
                     obj.popModal(results);
@@ -515,6 +527,26 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention, Onli
         $rootScope.globalSearchActive = false;
     });
 
+});
+
+app.filter('fileSizeFilter', function() {
+    return function(bytes, precision) {
+        if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
+        if (typeof precision === 'undefined') precision = 1;
+        var units = ['بایت', 'کیلوبایت', 'مگابایت', 'گیگابایت', 'ترابایت', 'پتابایت'],
+            number = Math.floor(Math.log(bytes) / Math.log(1024));
+        return persianJs((bytes / Math.pow(1024, Math.floor(number))).toFixed(precision)).englishNumber().toString() +
+            ' '+units[number] ;
+    }
+});
+app.filter('fileSizeFilterEnglish', function() {
+    return function(bytes, precision) {
+        if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
+        if (typeof precision === 'undefined') precision = 1;
+        var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PT'],
+            number = Math.floor(Math.log(bytes) / Math.log(1024));
+        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' '+units[number] ;
+    }
 });
 
 app.filter('jalaliDate', function () {

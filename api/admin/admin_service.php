@@ -17,6 +17,23 @@ $res['OnlineUsers'] = $arr;
 echoResponse(200, $res);
 });
 
+$app->post('/getUploadLibraryData', function() use ($app)  {
+    require_once '../db/forum_subject.php';
+    $resp = [];
+    $resp['ForumMainSubjects'] = getAllMainSubjectsWithChilds($app->db);
+
+    echoResponse(200, $resp);
+});
+
+//$app->post('/saveLibraryFile', function() use ($app)  {
+//
+//    $filename = $_FILES['file']['name'];
+//    $meta = $_POST;
+//    move_uploaded_file( $_FILES['file']['tmp_name'] , '../files/'.$filename );
+//
+//    echoResponse(200, null);
+//});
+
 $app->post('/getNewQuestionsGraphData', function() use ($app)  {
 
     $r = json_decode($app->request->getBody());
@@ -135,7 +152,7 @@ where $dateWhere");
     $maxA = $maxQ = -1;
     $maxAIndex = $maxQIndex = -1;
     $i = 0;
-    $resp= [];
+
     $cqData = [];
     while($r = $resQ->fetch_assoc()){
         if($r['AnswerCount'] >= $maxA){

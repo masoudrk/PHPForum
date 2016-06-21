@@ -30,6 +30,8 @@ $app->post('/globalSearch', function() use ($app)  {
     $sRes['Total'] = 0;
     $sRes['SearchType'] = $searchType;
     $p = new Pagination();
+
+    // question
     if($searchType == 0){
 
         $searchQuery = '';
@@ -46,6 +48,8 @@ $app->post('/globalSearch', function() use ($app)  {
         $res = $p->getPage($app->db,"SELECT forum_question.* , u.score, u.FullName , file_storage.FullPath as Image,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
+   as 'AnswersCount' ,
  ($rateSelection) as Rate
 FROM `forum_question` 
     LEFT JOIN user as u on u.ID=forum_question.AuthorID
@@ -55,6 +59,8 @@ WHERE forum_question.AdminAccepted=1 $searchQuery");
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);
         return;
+
+    // user
     }else if($searchType == 1){
 
         $searchQuery = '';
@@ -934,7 +940,7 @@ $app->post('/getForumBestAnswers', function() use ($app)  {
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
 
         $query = "SELECT q.* from (SELECT u.score,u.FullName,fq.`ID`,
-fq.QuestionText, fq.`CreationDate`, fq.BestAnswerID,
+fq.Title, fq.`CreationDate`, fq.BestAnswerID,
 `FullPath` as Image ,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=fq.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
@@ -979,7 +985,7 @@ fq.QuestionText, fq.`CreationDate`, fq.BestAnswerID,
     else if(isset($data->SubjectID)){
 
         $query = "SELECT q.* from (SELECT u.score,u.FullName,fq.`ID`,
-fq.QuestionText, fq.`CreationDate`,
+fq.Title, fq.`CreationDate`,
 `FullPath` as Image ,
  (SELECT question_view.ID from question_view 
         where question_view.QuestionID=fq.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
@@ -996,7 +1002,7 @@ fq.QuestionText, fq.`CreationDate`,
    as 'AnswersCount' 
  FROM forum_question as fq
  LEFT JOIN forum_answer  on fq.BestAnswerID = forum_answer.ID 
- LEFT JOIN user as u on u.ID=forum_answer.AuthorID 
+ LEFT JOIN user as u on u.ID=fq.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=fq.SubjectID 
  WHERE fq.AdminAccepted='1' AND  forum_answer.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID' ) as q 

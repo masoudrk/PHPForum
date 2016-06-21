@@ -13,13 +13,21 @@
 
             <div class="box box-warning">
                 <div class="box-header">
-                    <h3 class="box-title vazir-font">نتایج جستجو</h3>
+                    <h3 class="box-title vazir-font persian-rtl">
+                        <span>نتایج جستجو</span>
+                        <span class="text-muted">
+                            <span> ( </span>
+                            <span ng-bind="fullSearchData.Total | pNumber"></span>
+                            <span> نتیجه ) </span>
+                        </span>
+                    </h3>
                     <i class="fa fa-filter text-muted"></i>
                     <div class="box-tools">
                         <button class="btn btn-sm btn-success" ng-click="backFromSearch()">بازگشت</button>
                     </div>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
+                    {{activity}}
                     <table class="table border-bottom-table table-hover" >
                         <tbody>
                         <tr class="link fx-zoom-normal fx-dur-600 fx-ease-circ fx-stagger-30"

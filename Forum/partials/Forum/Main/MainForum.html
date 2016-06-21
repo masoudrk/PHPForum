@@ -26,7 +26,7 @@
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tbody>
-                        <tr ng-repeat="sc in forumData.SubjectChilds"
+                        <tr ng-repeat="sc in forumData.SubjectChilds track by sc.ID"
                             class="link fx-zoom-right fx-dur-600 fx-ease-none fx-stagger-50">
                             <td style="vertical-align: middle;" ui-sref="forum({id:sc.ID})">{{sc.Title}}</td>
                             <td style="vertical-align: middle;width: 100px" class="text-center text-muted">
@@ -101,7 +101,7 @@
                         <div class="table-responsive no-padding">
                             <table class="table border-bottom-table table-hover" ng-show="question.all.length > 0">
                                 <tbody>
-                                <tr ng-repeat="q in question.all"  repeat-end="onLastRepeatEnd()"
+                                <tr ng-repeat="q in question.all track by q.ID"  repeat-end="onLastRepeatEnd()"
                                     class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50">
                                     <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                               style="width:40px"
@@ -155,7 +155,8 @@
                                    ng-show="question.allBest.length > 0">
                                 <tbody>
                                 <tr class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
-                                    ng-repeat="q in question.allBest">
+                                    ng-repeat="q in question.allBest track by q.ID">
+
                                     <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                               style="width:40px"
                                               ng-style="{'border': (q.Rate > 5) ? activity.high :
@@ -210,7 +211,7 @@
                             <table class="table border-bottom-table table-hover" ng-show="question.allAnswered.length > 0">
                                 <tbody>
                                 <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
-                                     ng-repeat="q in question.allAnswered">
+                                     ng-repeat="q in question.allAnswered track by q.ID">
                                     <td  style="width: 50px;">
                                         <img class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                              style="width:40px;"
@@ -266,7 +267,7 @@
                                    ng-show="question.allFollowing.length > 0">
                                 <tbody>
                                 <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
-                                     ng-repeat="q in question.allFollowing">
+                                     ng-repeat="q in question.allFollowing track by q.ID">
                                     <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                               style="width:40px"
                                               ng-style="{'border': (q.Rate > 5) ? activity.high :
@@ -327,7 +328,7 @@
                            ng-show="question.bestAnswered.length > 0">
                         <tbody>
                         <tr class="link fx-bounce-up fx-dur-600 fx-ease-none fx-stagger-80"
-                            ng-repeat="q in question.bestAnswered">
+                            ng-repeat="q in question.bestAnswered track by q.ID">
                             <td  style="width: 50px;">
                                 <img class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                      style="width:40px;"
@@ -342,7 +343,7 @@
                                 <span class="badge bg-yellow"> {{q.score | pNumber}} </span>
                             </td>
                             <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
-                                {{q.QuestionText | subString :30|pNumber}}
+                                {{q.Title | subString :30|pNumber}}
                             </td>
 
                             <td ui-sref="question({id:q.ID})">
@@ -387,7 +388,7 @@
                     <!--</div>&lt;!&ndash; /.box-body &ndash;&gt;-->
                 <!--</div>&lt;!&ndash; /.box &ndash;&gt;-->
             <div class="box box-widget widget-user-2 fx-zoom-left fx-dur-400 fx-ease-none fx-stagger-50"
-                 ng-repeat="admin in forumData.Admins">
+                 ng-repeat="admin in forumData.Admins  track by admin.UserID">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
                 <div class="widget-user-header" ng-class="getRandomColorClass(admin.UserID)">
                     <div class="widget-user-image">
