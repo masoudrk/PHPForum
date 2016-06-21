@@ -563,6 +563,35 @@ LIMIT 1");
 		echoError("Cannot update record.");
 });
 
+$app->post('/deleteFile', function() use ($app)  {
+
+
+	$data = json_decode($app->request->getBody());
+
+    if(!isset($data->ID) || !isset($data->FileID) || !isset($data->AbsolutePath))
+        echoError('bad request');
+	$sess = new Session();
+    $resQ = $app->db->makeQuery("select a.ID from user as u
+    INNER JOIN admin as a on a.UserID = u.ID
+    INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+    WHERE a.UserID = '$sess->UserID'
+    LIMIT 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $app->db->deleteFromTable('library',"ID='$data->ID'");
+	if($res)
+    {
+        $res = $app->db->deleteFromTable('file_storage',"ID='$data->FileID'");
+        unlink('../../'.$data->AbsolutePath);
+        echoSuccess();
+    }
+	else
+		echoError("Cannot update record.");
+});
+
 $app->post('/changeAnswerAccepted', function() use ($app)  {
 
 	
@@ -614,6 +643,38 @@ LIMIT 1");
 	}
 
 	echoError("User state is not set!");
+});
+
+
+$app->post('/getAllFiles', function() use ($app)  {
+
+	$data = json_decode($app->request->getBody());
+	$pr = new Pagination($data);
+	//$sess = new Session();
+
+    //$where = "WHERE fms.SubjectName = '$data->SubjectName'";
+	
+    //if(isset($data->answerType)){
+    //    $where .=" AND (fa.AdminAccepted ='$data->answerType')";
+    //}
+    //if(isset($data->OrganizationID)){
+    //    $where .=" AND (u.OrganizationID ='$data->OrganizationID')";
+    //}
+    //if(isset($data->searchValue) && strlen($data->searchValue) > 0){
+    //    $s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
+    //    $where .= " AND ( fa.AnswerText LIKE '%".$s."%' OR u.FullName LIKE '%".$s."%' OR u.Email LIKE '%".$s."%')";
+    //    $hasWhere = TRUE;
+    //}
+
+	$pageRes = $pr->getPage($app->db,"SELECT f.ID as ID ,f.ID as FileID , fs.FullPath as UserPic, f.Filename , u.FullName
+, f.FullPath , f.UploadDate ,f.FileSize ,f.Description,ft.TypeName , ft.GeneralType, l.* , f.AbsolutePath
+FROM `library` as l inner JOIN file_storage as f on f.ID = l.FileID and f.FileSize > 0
+INNER JOIN user as u on u.ID = f.UserID
+left JOIN file_type as ft on ft.ID = f.FileTypeID
+LEFT JOIN file_storage as fs on fs.ID = u.AvatarID
+ORDER BY l.ID desc");
+
+	echoResponse(200, $pageRes);
 });
 
 $app->post('/getAllAnswers', function() use ($app)  {

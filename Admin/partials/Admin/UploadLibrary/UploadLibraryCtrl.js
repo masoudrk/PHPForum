@@ -113,5 +113,5 @@ angular.module(appName).controller('UploadLibraryCtrl', function ($scope, $rootS
 		return i > -1;
 	}
 
-	activeElement('#SUploadLibrary');
+	activeElement('#SLibrary', '#SUpload');
 });

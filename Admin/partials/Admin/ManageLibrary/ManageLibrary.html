@@ -1,0 +1,143 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small> اعضا</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active"> جواب ها</li>
+    </ol>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+        <!--<div class="col-xs-12">
+            <div class="box box-warning">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">فیلتر کردن جوابها</h3>
+
+                </div>
+                <div class="box-body" dir="rtl">
+                    <div class="col-sm-2">
+
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
+                            {{dropDwonTitle}}
+                            <span class="fa fa-caret-down"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی جواب ها</a></li>
+                            <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">جواب های تایید شده</a></li>
+                            <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">جواب های در انتظار تایید</a></li>
+                            <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">جواب ها تایید نشده</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <div>
+                            <ui-select ng-model="Position.selected" on-select="changePosition()" theme="bootstrap" sortable="true" close-on-select="true" required>
+                                <ui-select-match allow-clear placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
+                                <ui-select-choices repeat="edu in allPositions">
+                                    <div compile="edu.OrganizationName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 pull-right">
+                        <input type="text" name="table_search" ng-model="pagingParams.searchValue"
+                               ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
+                               placeholder="جستجو ...">
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">فایل ها</h3>
+                    <h3 class="box-title vazir-font pull-left">تعداد {{allTotal | pNumber}}</h3>
+
+                    <!--<div class="box-tools">
+                        <div class="input-group col-xs-9 col-md-4">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
+                                    {{dropDwonTitle}}
+                                    <span class="fa fa-caret-down"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی جواب ها</a></li>
+                                    <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">جواب های تایید شده</a></li>
+                                    <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">جواب های در انتظار تایید</a></li>
+                                    <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">جواب ها تایید نشده</a></li>
+                                </ul>
+                            </div>
+                            <input type="text" name="table_search" ng-model="pagingParams.searchValue"
+                                   ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
+                                   placeholder="جستجو ...">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default left-radius-btn"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>-->
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>عکس</th>
+                            <th>آپلود شده توسط</th>
+                            <th>توضیحات</th>
+                            <th>تاریخ آپلود</th>
+                            <th>نوع فایل</th>
+                            <th>پسوند فایل</th>
+                            <th>حجم</th>
+                            <th style="width: 150px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in files">
+                            <td>
+                                <img ng-src="{{u.UserPic || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
+                            </td>
+                            <td>{{u.FullName| pNumber}}</td>
+                            <td>{{u.Title | pNumber | subString:30}}</td>
+                            <td>{{u.UploadDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                            <td>
+                                {{u.GeneralType}}
+                            </td>
+                            <td>{{u.TypeName}}</td>
+                            <td>
+                                {{u.FileSize | fileSizeFilter }}
+                            </td>
+                            <td>
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این فایل را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeFile(u)" title="حذف فایل" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <a class="link" href="{{u.FullPath}}" target="_blank"><i class="fa fa-download text-green link hvr-pulse" title="دانلود فایل" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllFiles"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 total-items="allTotal"
+                                 items="files">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+
+
+
+
+

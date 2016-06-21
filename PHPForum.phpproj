@@ -89,6 +89,7 @@
     <Folder Include="Admin\dist\js\pages\" />
     <Folder Include="Admin\partials\" />
     <Folder Include="Admin\partials\Admin\" />
+    <Folder Include="Admin\partials\Admin\ManageLibrary\" />
     <Folder Include="Admin\partials\Admin\Dashboard\" />
     <Folder Include="Admin\partials\Admin\Elements\" />
     <Folder Include="Admin\partials\Admin\Answers\" />
@@ -98,6 +99,7 @@
     <Folder Include="Admin\partials\Admin\Skill\" />
     <Folder Include="Admin\partials\Admin\Tag\" />
     <Folder Include="Admin\partials\Admin\Questions\" />
+    <Folder Include="Admin\partials\Admin\UploadLibrary\" />
     <Folder Include="Admin\partials\Admin\User\" />
     <Folder Include="Admin\plugins\" />
     <Folder Include="Admin\plugins\fastclick\" />
@@ -131,6 +133,7 @@
     <Folder Include="cms\js\slimScroll\" />
     <Folder Include="content\" />
     <Folder Include="content\avatars\" />
+    <Folder Include="content\library\" />
     <Folder Include="css\" />
     <Folder Include="css\material\" />
     <Folder Include="fonts\" />
@@ -358,6 +361,8 @@
     <Content Include="Admin\partials\Admin\AdminCtrl.js" />
     <Content Include="Admin\partials\Admin\Admin\AllAdmins.html" />
     <Content Include="Admin\partials\Admin\Admin\AllAdminsCtrl.js" />
+    <Content Include="Admin\partials\Admin\ManageLibrary\ManageLibrary.html" />
+    <Content Include="Admin\partials\Admin\ManageLibrary\ManageLibraryCtrl.js" />
     <Content Include="Admin\partials\Admin\Dashboard\Dashboard.html" />
     <Content Include="Admin\partials\Admin\Dashboard\DashboardCtrl.js" />
     <Content Include="Admin\partials\Admin\Education\Education.html" />
@@ -370,6 +375,8 @@
     <Content Include="Admin\partials\Admin\Elements\Tables.html" />
     <Content Include="Admin\partials\Admin\Elements\_Elements.html" />
     <Content Include="Admin\partials\Admin\Elements\_ElementsCtrl.js" />
+    <Content Include="Admin\partials\Admin\UploadLibrary\UploadLibrary.html" />
+    <Content Include="Admin\partials\Admin\UploadLibrary\UploadLibraryCtrl.js" />
     <Content Include="Admin\partials\MainCtrl.js" />
     <Content Include="Admin\partials\Admin\Message\Message.html" />
     <Content Include="Admin\partials\Admin\Message\Message.js" />
@@ -484,7 +491,7 @@
     <Content Include="cms\js\slimScroll\jquery.slimscroll.min.js" />
     <Content Include="cms\js\treasure-overlay-spinner.js" />
     <Content Include="cms\js\treasure-overlay-spinner.min.js" />
-    <Content Include="content\avatars\HnYKIWjraSpRJHbCht.jpg" />
+    <Content Include="content\avatars\XZfSwArfuGlIdiLhhy.jpg" />
     <Content Include="css\ADM-dateTimePicker.css" />
     <Content Include="css\ADM-dateTimePicker.min.css" />
     <Content Include="css\angular-notification-icons.css" />

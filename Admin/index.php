@@ -476,6 +476,27 @@
                             </li>
                         </ul>
                     </li>
+                   <li id="SLibrary" ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
+                        <a class="link">
+                            <i class="fa fa-book"></i>
+                            <span>کتاب خانه</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="SUpload">
+                                <a ui-sref="upload_library">
+                                    <i class="fa fa-circle-o"></i>
+                                      آپلود فایل
+                                </a>
+                            </li>
+                            <li id="SFilaeManage">
+                                <a ui-sref="manage_library">
+                                    <i class="fa fa-circle-o"></i>
+                                    مدیریت فایل ها
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li>
                         <a>
                             <i class="fa fa-group"></i>

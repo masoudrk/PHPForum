@@ -140,7 +140,19 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMdtp) {
                     return $ocLazyLoad.load(['partials/Admin/UploadLibrary/UploadLibraryCtrl.js']);
                 }],
                 $title: function () {
-                    return 'مدیریت مهارت ها';
+                    return 'آپلود فایل';
+                }
+            }
+        }).state("manage_library", {
+            url: "/ManageLibrary",
+            templateUrl: "partials/Admin/ManageLibrary/ManageLibrary.html",
+            controller: 'ManageLibraryCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/ManageLibrary/ManageLibraryCtrl.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت فایل ها';
                 }
             }
         });
