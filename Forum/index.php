@@ -460,6 +460,13 @@
 <!--                        <small class="label pull-right bg-green">جدید</small>-->
                     </a>
                 </li>
+                    <li id="SLibrary">
+                        <a ui-sref="library">
+                            <i class="fa fa-book"></i>
+                            <span>کتاب خانه</span>
+                            <!--                        <small class="label pull-right bg-green">جدید</small>-->
+                        </a>
+                    </li>
                 <li ng-if="user.IsAdmin=='1'" >
                     <a href="../Admin/#/">
                         <i class="fa fa-briefcase"></i><span> پنل ادمین </span>

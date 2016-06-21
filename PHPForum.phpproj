@@ -148,6 +148,7 @@
     <Folder Include="Forum\partials\Forum\Main\" />
     <Folder Include="Forum\partials\Forum\Question\" />
     <Folder Include="Forum\partials\Forum\_Home\" />
+    <Folder Include="Forum\partials\Library\" />
     <Folder Include="Forum\partials\Help\" />
     <Folder Include="Forum\partials\Message\" />
     <Folder Include="Forum\partials\MyActions\" />
@@ -564,6 +565,8 @@
     <Content Include="Forum\partials\Forum\_Home\Home.html" />
     <Content Include="Forum\partials\Forum\_Home\HomeCtrl.js" />
     <Content Include="Forum\partials\GlobalSearch.html" />
+    <Content Include="Forum\partials\Library\Library.html" />
+    <Content Include="Forum\partials\Library\LibraryCtrl.js" />
     <Content Include="Forum\partials\Help\Help.html" />
     <Content Include="Forum\partials\Help\HelpCtrl.js" />
     <Content Include="Forum\partials\MainCtrl.js" />

@@ -204,6 +204,20 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'نظرسنجی';
                 }
             }
+        }).state("library", {
+            url: "/Library",
+            templateUrl: "partials/Library/Library.html",
+            controller: 'LibraryCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Library/LibraryCtrl.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'کتاب خانه';
+                }
+            }
         })
         .state("quiz", {
             url: "/Quiz/:id",
