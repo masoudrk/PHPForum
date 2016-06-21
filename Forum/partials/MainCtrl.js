@@ -12,7 +12,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         var ous =  $scope.socketData.OnlineUsers;
         for (var i = 0 ; i < ous.length ; i++){
             for (var j = 0 ;j < $rootScope.searchResult.length; j++){
-                if($scope.searchResult[j].UserID == ous[i].ID ){
+                if($scope.searchResult[j]. UserID == ous[i].ID ){
                     $scope.searchResult[j].isOnline = true;
                 }else{
                     $scope.searchResult[j].isOnline = false;
@@ -20,10 +20,11 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
             }
         }
     }
-    $scope.activity = {
-        low : '#e74c3c',
-        medium : '#f1c40f',
-        high : '#2ecc71'
+
+    $rootScope.activity = {
+        low : 'solid 2px #e74c3c',
+        medium : 'solid 2px #f1c40f',
+        high : 'solid 2px #2ecc71'
     };
     
     $scope.bgColorArray= ["bg-aqua-active","bg-purple-active","bg-red-active","bg-navy-active","bg-orange-active",

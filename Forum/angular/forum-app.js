@@ -1,5 +1,6 @@
 ﻿var appName = 'forumApp';
 var serviceBaseURL = '../api/user/';
+var uploadURL = '../api/upload/';
 var debugMode = true;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
