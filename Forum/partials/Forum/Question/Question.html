@@ -47,6 +47,21 @@
     </div>
 </script>
 
+<script type="text/ng-template" id="inlineImageView.html">
+    <div class="modal-header vazir-font text-right">
+        <h3 class="modal-title text-danger">نمایش تصویر</h3>
+    </div>
+    <div class="modal-body vazir-font text-center">
+        <img ng-src="{{'../' + link}}" class="img-responsive">
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+        <button class="btn btn-success pull-right" ng-click="downloadAttachment()">
+            دانلود فایل
+        </button>
+    </div>
+</script>
+
 <div class="row" ng-show="question!=null">
     <div class="col-xs-12">
         <div class="col-md-8">
@@ -128,7 +143,7 @@
                     </div><!-- /.box-header -->
                     <!-- form start -->
                     <div  class="persian-rtl box-body text-right" style="text-align:justify">
-                        <span compile="question.QuestionText | pNumber"></span>
+                        <span compile="question.QuestionText | pNumber" class="textAngular-span"></span>
                     </div><!-- /.box-body -->
 
                     <div style="padding: 5px;" class="persian-rtl">

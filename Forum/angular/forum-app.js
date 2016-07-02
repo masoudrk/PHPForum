@@ -9,9 +9,9 @@ var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.ro
     'textAngular']);
 
 app.config([
-    '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
-function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
-    // Add nested user links to the "foo" menu.
+    '$provide','$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
+function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
+
     $ocLazyLoadProvider.config({
         debug: debugMode,
         events: true
@@ -266,10 +266,100 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         });
+
         $urlRouterProvider.otherwise(function ($injector, $location) {
             var $state = $injector.get('$state');
             $state.go('main_forum',{id:'Transition'});
         });
+
+
+        $provide.decorator('taOptions', ['taRegisterTool', '$uibModal' , '$delegate',
+            function(taRegisterTool,$uibModal, taOptions) {
+
+                // Create our own insertImage button
+                taRegisterTool('customInsertImage', {
+                    iconclass: "fa fa-picture-o",
+                    action: function($deferred) {
+                        var textAngular = this;
+                        var savedSelection = rangy.saveSelection();
+                        var modalInstance = $uibModal.open({
+                            // Put a link to your template here or whatever
+                            templateUrl: '../js/text-angular/CustomSelectImageModal.tmpl.html',
+                            size: 'md',
+                            controller: ['$uibModalInstance', '$scope', 'Upload',
+                                function($uibModalInstance, $scope , Upload) {
+                                    $scope.activeTab = 0;
+                                    $scope.img = {
+                                        url: ''
+                                    };
+                                    $scope.submit = function() {
+                                        $uibModalInstance.close($scope.img.url);
+                                    };
+                                    $scope.cancel = function() {
+                                        $uibModalInstance.close();
+                                    };
+
+                                    $scope.getTab= function (tabId) {
+                                        $scope.activeTab = tabId;
+                                    }
+
+                                    $scope.addImageLink= function (link) {
+                                        $uibModalInstance.close(link);
+                                    }
+
+                                    $scope.filesChanged = function (files, file) {
+
+                                        file.uploader = Upload.upload({
+                                            url: uploadURL + 'upload_question_attachment.php',
+                                            data: { file : file }
+                                        });
+
+                                        file.uploader.then(function (resp) {
+
+                                            $uibModalInstance.close(resp.data);
+                                            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                                        }, function (resp) {
+                                            console.log('Error status: ' + resp.status);
+                                        }, function (evt) {
+                                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                            evt.config.data.file.percent = progressPercentage;
+                                            // evt.config.data.file.loaded = $scope.sizeFilter(evt.loaded);
+                                            //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                                        });
+                                    }
+                                    
+                                    $scope.stopUploadImage = function (file) {
+                                        file.uploader.abort();
+                                    }
+                                }
+                            ]
+                        });
+
+                        modalInstance.result.then(function(imgUrl) {
+                            rangy.restoreSelection(savedSelection);
+
+                            var embed = '<a href="'+imgUrl+'" target="_blank"><img class="img-responsive link" '
+                                + ' src="'+imgUrl+'"  /></a>';
+                            // insert
+                            textAngular.$editor().wrapSelection('insertHtml', embed);
+
+                            //textAngular.$editor().wrapSelection('insertImage', imgUrl);
+                            $deferred.resolve();
+                        });
+                        return false;
+                    },
+                //     // activeState: function(commonElement) {
+                //     // return angular.element(taSelection.getSelectionElement()).attr('ng-click');
+                // }
+            });
+
+                // Now add the button to the default toolbar definition
+                // Note: It'll be the last button
+                //taOptions.toolbar[3].push('customInsertImage');
+                return taOptions;
+            }]
+        );
+
 }
 ]);
 
@@ -314,7 +404,6 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention, Onli
             $rootScope.globalSearchActive = false;
 
     });
-
 
 });
 

@@ -11,6 +11,8 @@
         <li class="active">سوال جدید</li>
     </ol>
 </section>
+
+
 <div class="row">
     <div class="col-xs-12">
         <div class="col-xs-12 col-md-4">
@@ -120,27 +122,32 @@
                             </div>
                             <label for="title" class="col-md-2 col-xs-12 control-label">خلاصه سوال</label>
                         </div>
-                        <div class="form-horizontal form-group col-xs-12" ng-class="errForum.text? 'has-error':''">
-                            <div class="col-xs-10">
-                                <textarea rows="15" id="body" class="form-control" ng-model="QuestionTextIN"
-                                          placeholder="سوال کامل ... " ng-change="fieldChanged('text',QuestionTextIN)"
-                                          ng-model-options="{debounce:100}"></textarea>
-                            </div>
-                            <label for="body" class="col-xs-2 control-label">سوال کامل</label>
-                        </div>
+                        <!--<div class="form-horizontal form-group col-xs-12" ng-class="errForum.text? 'has-error':''">-->
+                            <!--<div class="col-xs-10">-->
+                                <!--<textarea rows="15" id="body" class="form-control" ng-model="QuestionTextIN"-->
+                                          <!--placeholder="سوال کامل ... " ng-change="fieldChanged('text',QuestionTextIN)"-->
+                                          <!--ng-model-options="{debounce:100}"></textarea>-->
+                            <!--</div>-->
+                            <!--<label for="body" class="col-xs-2 control-label">سوال کامل</label>-->
+                        <!--</div>-->
 
                         <div class="form-horizontal form-group col-xs-12" ng-class="errForum.text? 'has-error':''">
                             <label for="body" class="col-xs-12 control-label">سوال کامل</label>
-                            <div class="col-xs-10">
-                                <div text-angular ta-toolbar="taOptions" ng-model="htmlVariable"></div>
+                            <div class="col-xs-12" style="margin-top: 10px">
+                                <div text-angular id="body" ta-toolbar="taOptions"
+                                     ng-model="QuestionTextIN"
+                                     placeholder="متن کامل سوال ... " ng-change="fieldChanged('text',QuestionTextIN)"
+                                     ng-model-options="{debounce:100}" class="textAngular-span"></div>
                             </div>
                         </div>
 
                         <div class="form-group " style="margin-top: 5px">
                             <div class="col-xs-12">
-                                <button class="btn btn-success pull-left" type="submit" ng-click="saveQuestion()" >
-                                    {{form.submitButton}}
-                                </button>
+                                <div class="col-xs-12">
+                                    <button class="btn btn-success pull-left" type="submit" ng-click="saveQuestion()" >
+                                        {{form.submitButton}}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

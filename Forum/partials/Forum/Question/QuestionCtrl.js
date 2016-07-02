@@ -37,6 +37,35 @@
         });
     }
 
+
+    $scope.getInlineImageView = function (link) {
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'inlineImageView.html',
+            controller: function ($scope, $uibModalInstance,link) {
+
+                $scope.link = link;
+                $scope.downloadAttachment = function () {
+                    var absUrl = $location.absUrl();
+                    var i = absUrl.indexOf('#');
+                    var siteName = absUrl.substr(0,i);
+
+                    window.open(link,'_blank');
+                };
+
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+            },
+            size: 'lg',
+            resolve: {
+                link: function () {
+                    return link;
+                }
+            }
+        });
+    }
+
     $scope.openAttachments = function (att) {
         $uibModal.open({
             animation: true,
