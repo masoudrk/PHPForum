@@ -217,7 +217,7 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     }
                 ],
                 $title: function () {
-                    return 'کتاب خانه';
+                    return 'کتابخانه';
                 }
             }
         })

@@ -463,7 +463,7 @@
                     <li id="SLibrary">
                         <a ui-sref="library">
                             <i class="fa fa-book"></i>
-                            <span>کتاب خانه</span>
+                            <span>کتابخانه</span>
                             <!--                        <small class="label pull-right bg-green">جدید</small>-->
                         </a>
                     </li>
@@ -490,10 +490,10 @@
                             </a>
                         </li>
                         <li id="SLinks">
-                            <a>
+                            <a class="link">
                                 <i class="fa fa-circle-o"></i>
                                 لینک های مفید
-                                <i class="fa fa-angle-right pull-right"></i>
+                                <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu" style="display: none;">
                                     <li>
