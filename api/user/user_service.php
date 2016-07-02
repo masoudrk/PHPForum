@@ -428,6 +428,26 @@ $app->post('/saveQuestion', function() use ($app)  {
     echoResponse(200, $res);
 });
 
+$app->post('/getLibraryFiles', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+
+    $res = [];
+    $pr = new Pagination($data);
+    $res = $pr->getPage($app->db,"SELECT file_storage.*  , library.ID as LibraryID , library.Title ,
+forum_main_subject.Title as MainSubjectTitle , forum_subject.Title as SubjectTitle , file_type.GeneralType,
+fs_user.FullPath as UserAvatar,user.FullName
+FROM library 
+inner join file_storage on file_storage.ID=library.FileID and file_storage.FileSize > 0
+left join file_type on file_type.ID=file_storage.FileTypeID
+left join forum_main_subject on forum_main_subject.ID=library.MainSubjectID
+left join forum_subject on forum_subject.ID=library.SubjectID
+inner join user on user.ID=file_storage.UserID
+left join file_storage as fs_user on user.AvatarID=fs_user.ID
+order by file_storage.UploadDate desc");
+
+    echoResponse(200, $res);
+});
+
 $app->post('/getQuestionMetaEdit', function() use ($app)  {
     //userRequire();
     require_once '../db/tag.php';

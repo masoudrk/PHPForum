@@ -111,8 +111,8 @@
                     <i class="fa fa-plus fa-2x text-muted"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
-                    <div class="form-horizontal row">
-                        <div class="form-group col-xs-12" ng-class="errForum.title? 'has-error':''">
+                    <div class="row">
+                        <div class="form-horizontal form-group col-xs-12" ng-class="errForum.title? 'has-error':''">
                             <div class="col-md-10 col-xs-12">
                                 <input id="title" class="form-control" ng-model="question.Title"
                                        placeholder="خلاصه سوال ... " ng-change="fieldChanged('title',question.Title)"
@@ -120,7 +120,7 @@
                             </div>
                             <label for="title" class="col-md-2 col-xs-12 control-label">خلاصه سوال</label>
                         </div>
-                        <div class="form-group col-xs-12" ng-class="errForum.text? 'has-error':''">
+                        <div class="form-horizontal form-group col-xs-12" ng-class="errForum.text? 'has-error':''">
                             <div class="col-xs-10">
                                 <textarea rows="15" id="body" class="form-control" ng-model="QuestionTextIN"
                                           placeholder="سوال کامل ... " ng-change="fieldChanged('text',QuestionTextIN)"
@@ -128,7 +128,15 @@
                             </div>
                             <label for="body" class="col-xs-2 control-label">سوال کامل</label>
                         </div>
-                        <div class="form-gro p " style="margin-top: 5px">
+
+                        <div class="form-horizontal form-group col-xs-12" ng-class="errForum.text? 'has-error':''">
+                            <label for="body" class="col-xs-12 control-label">سوال کامل</label>
+                            <div class="col-xs-10">
+                                <div text-angular ta-toolbar="taOptions" ng-model="htmlVariable"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group " style="margin-top: 5px">
                             <div class="col-xs-12">
                                 <button class="btn btn-success pull-left" type="submit" ng-click="saveQuestion()" >
                                     {{form.submitButton}}

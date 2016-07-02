@@ -76,7 +76,10 @@ angular.module(appName).controller('UploadLibraryCtrl', function ($scope, $rootS
 
 		file.uploader = Upload.upload({
 			url: uploadURL + 'upload_library.php',
-			data: {file: file , Description : file.description , SubjectID : subjectID, MainSubjectID :mainSubjectID }
+			data: {file: file , Description : file.Description ,
+				SubjectID : subjectID, MainSubjectID :mainSubjectID,
+				Title : file.Title
+			}
 		});
 
 		file.uploader.then(function (resp) {

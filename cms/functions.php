@@ -41,6 +41,7 @@ function generateRequiredCMSJavaFiles(){
     <script src="../js/angular.js"></script>
     <script src="../js/angular-route.min.js"></script>
     <script src="../js/angular-animate.min.js" ></script>
+    <script src="../js/angular-sanitize.min.js" ></script>
     <script src="../js/angular-ui-router.js"></script>
 
     <script src="../js/ng-img-crop.js"></script>
@@ -57,6 +58,10 @@ function generateRequiredCMSJavaFiles(){
     <script src="../js/ui-bootstrap-tpls-1.2.5.min.js" type="text/javascript"></script>
     <script src="../cms/js/select/select.min.js" type="text/javascript"></script>
 
+    <script src='../js/text-angular/textAngular-rangy.min.js'></script>
+    <script src='../js/text-angular/textAngular-sanitize.min.js'></script>
+    <script src='../js/text-angular/textAngular.min.js'></script>
+
     <script type="text/javascript" src="../js/moment.js"></script>
     <script type="text/javascript" src="../js/moment-jalaali.js"></script>
     <script type="text/javascript" src="../js/angular-confirm.min.js"></script>
@@ -71,6 +76,7 @@ function generateRequiredCMSJavaFiles(){
 
 function generateRequiredCMSCssFiles(){
     ?>
+    <link rel='stylesheet' href='../css/textAngular.css'>
     <link rel="stylesheet" href="../css/ADM-dateTimePicker.css" type="text/css">
     <link rel="stylesheet" href="../css/ng-img-crop.min.css" type="text/css">
     <link rel="stylesheet" href="../css/anim-in-out.css">

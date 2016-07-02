@@ -1,5 +1,6 @@
 
-angular.module(appName).controller('LibraryCtrl', function ($scope, $rootScope, $stateParams, $state, $location, $timeout, Extention, Upload) {
+angular.module(appName).controller('LibraryCtrl', function ($scope, $rootScope, $stateParams, $state, $location,
+                                                            $timeout, Extention, Upload, clipboard) {
 
     $scope.files = [];
 
@@ -20,5 +21,22 @@ angular.module(appName).controller('LibraryCtrl', function ($scope, $rootScope, 
                 return 'box-success';
         }
     }
+
+    $scope.downloadFile = function (file) {
+        var absUrl = $location.absUrl();
+        var i = absUrl.indexOf('#');
+        var siteName = absUrl.substr(0,i);
+
+        window.open(siteName + file.FullPath,'_blank');
+    };
+
+    $scope.copyFileLink = function (file) {
+        var absUrl = $location.absUrl();
+        var i = absUrl.indexOf('#');
+        var siteName = absUrl.substr(0,i);
+        clipboard.copyText(siteName +'../'+ file.AbsolutePath);
+
+        Extention.popInfo('لینک فایل کپی شد.');
+    };
     activeElement('#SLibrary');
 });

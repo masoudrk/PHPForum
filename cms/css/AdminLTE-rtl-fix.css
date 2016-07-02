@@ -500,3 +500,7 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .btn-default-fix-white{
     background-color: #fff;
 }
+
+.ta-toolbar .btn-group {
+    margin-bottom: 5px;
+}
