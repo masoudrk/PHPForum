@@ -12,30 +12,85 @@
 </section>
 <section class="row">
     <div class="col-xs-12">
-        <div class="col-sm-4 fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50" ng-repeat="file in files track by file.ID">
+        <div class="col-xs-12 col-sm-6 col-md-4 fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
+             ng-repeat="file in files track by file.LibraryID">
             <div class="box" ng-class="getBoxColor(file.ID)">
+                <div class="box-header with-border">
+                    <div class="user-block ">
+                        <img class="img-circle" err-src="../images/Avatar.jpg" ng-src="{{file.UserAvatar}}"
+                             alt="user image">
+                        <span
+                                class="username"><a ui-sref="UserProfile({id:file.UserID})"
+                                                    ng-bind="file.FullName"></a></span>
+                        <span class="description persian-rtl">
+                            {{file.UploadDate | jalaliDate :'jYYYY/jMM/jDD'| pNumber}}
+                        </span>
+                    </div>
+                </div>
                 <div class="box-body box-profile">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <div class="col-xs-12" ng-switch="file.GeneralType">
+                                <i class="fa fa-image fa-5x" ng-switch-when="Image"></i>
+                                <i class="fa fa-video-camera fa-5x" ng-switch-when="Video"></i>
+                                <i class="fa fa-file-pdf-o fa-5x" ng-switch-when="Document"></i>
+                                <i class="fa fa-windows fa-5x" ng-switch-when="WindowsExecutable"></i>
+                                <i class="fa fa-music fa-5x" ng-switch-when="Voice"></i>
+                                <i class="fa fa-android fa-5x" ng-switch-when="AndroidApp"></i>
+                                <i class="fa fa-file-excel-o fa-5x" ng-switch-when="Excel"></i>
+                                <i class="fa fa-file-word-o fa-5x" ng-switch-when="Word"></i>
+                                <i class="fa fa-file fa-5x" ng-switch-when="Unknown"></i>
+                            </div>
+                            <div class="col-xs-12 english-font" ng-bind="file.Filename"
+                                 style="font-size: 17px;padding:3px">
+                            </div>
+                            <div class="col-xs-12 persian-rtl text-muted" ng-bind="file.FileSize| fileSizeFilter"
+                                 style="padding:3px">
+                            </div>
+
+                            <div class="col-xs-12 persian-rtl text-muted"
+                                 style="padding:3px">
+                                {{file.Description || 'بدون توضیحات' | subString : 30}}
+                            </div>
+                        </div>
+                    </div>
                 </div><!-- /.box-body -->
-                <div class="box-footer">
+                <div class="box-footer hidden-xs hidden-sm">
+                    <button class="btn btn-primary btn-sm pull-right" ng-click="downloadFile(file)">دانلود
+                        فایل <i class="fa fa-download"></i></button>
+
+                    <button class="btn btn-success btn-sm pull-right"
+                            style="margin-right: 3px"
+                            ng-click="copyFileLink(file)">لینک فایل <i class="fa fa-link"></i></button>
+                    <a class="btn btn-danger btn-sm pull-left"
+                       ui-sref="library({id:file.LibraryID})" >مشخصات فایل</a>
+                </div>
+                <div class="box-footer hidden-md hidden-lg">
+                    <button class="btn btn-primary pull-right col-xs-12"
+                            style="margin-bottom: 5px"
+                            ng-click="downloadFile(file)">دانلود
+                        فایل <i class="fa fa-download"></i></button>
+
+                    <button class="btn btn-success pull-right col-xs-12"
+                            style="margin-bottom: 5px"
+                            ng-click="copyFileLink(file)">لینک فایل <i class="fa fa-link"></i></button>
+                    <a class="btn btn-danger pull-left col-xs-12"
+                       style="margin-bottom: 5px"
+                       ui-sref="library({id:file.LibraryID})"
+                    >مشخصات فایل</a>
                 </div>
             </div>
         </div>
         <div class="row" ng-show="files.length > 0">
-            <div class="col-xs-12">
-                <div class="col-sm-4">
-                    <div class="box">
-                        <div class="box-body box-profile">
-                            <auto-paging page="1"
-                                         page-size="9"
-                                         ul-class="pagination pagination-sm no-margin"
-                                         action-name="getLibraryFiles"
-                                         data-params="pagingParams"
-                                         items="files"
-                                         total-items="filesTotal">
-                            </auto-paging>
-                        </div><!-- /.box-body -->
-                    </div>
-                </div>
+            <div class="col-xs-12 text-center">
+                <auto-paging page="1"
+                             page-size="9"
+                             ul-class="pagination pagination-sm no-margin"
+                             action-name="getLibraryFiles"
+                             data-params="pagingParams"
+                             items="files"
+                             total-items="filesTotal">
+                </auto-paging>
             </div>
         </div>
     </div>

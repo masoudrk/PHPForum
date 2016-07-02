@@ -85,7 +85,7 @@ $app->post('/savePerson', function() use ($app) {
 
     //if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', "::1")))
     {
-        mail($r->Email, $subject, $message, $headers);
+       $resm = mail($r->Email, $subject, $message, $headers);
     }
 
 
@@ -138,7 +138,7 @@ $app->post('/forgetPassword', function() use ($app)  {
 ';
     $headers  = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-    $headers .=  'From: sepantarai@sepantarai.com' . "\r\n" .
+    $headers .=  'From: offical@sepantarai.com' . "\r\n" .
         'Reply-To: '.$data->Email."\r\n" .
         'X-Mailer: Sepantarai.com';
 

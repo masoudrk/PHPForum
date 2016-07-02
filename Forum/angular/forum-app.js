@@ -5,7 +5,8 @@ var debugMode = true;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
-    'ngFileUpload','anim-in-out','am-charts','ng-fx','ngImgCrop','ADM-dateTimePicker']);
+    'ngFileUpload','anim-in-out','am-charts','ng-fx','ngImgCrop','ADM-dateTimePicker','ngSanitize',
+    'textAngular']);
 
 app.config([
     '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
@@ -212,7 +213,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Library/LibraryCtrl.js']);
+                        return $ocLazyLoad.load(['partials/Library/LibraryCtrl.js','../js/angular-clipboard.js']);
                     }
                 ],
                 $title: function () {
@@ -619,6 +620,25 @@ app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
         return obj;
     }]);
 
+app.filter('fileSizeFilter', function() {
+    return function(bytes, precision) {
+        if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
+        if (typeof precision === 'undefined') precision = 1;
+        var units = ['بایت', 'کیلوبایت', 'مگابایت', 'گیگابایت', 'ترابایت', 'پتابایت'],
+            number = Math.floor(Math.log(bytes) / Math.log(1024));
+        return persianJs((bytes / Math.pow(1024, Math.floor(number))).toFixed(precision)).englishNumber().toString() +
+            ' '+units[number] ;
+    }
+});
+app.filter('fileSizeFilterEnglish', function() {
+    return function(bytes, precision) {
+        if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
+        if (typeof precision === 'undefined') precision = 1;
+        var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PT'],
+            number = Math.floor(Math.log(bytes) / Math.log(1024));
+        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' '+units[number] ;
+    }
+});
 app.filter('propsFilter', function() {
     return function(items, props) {
         var out = [];

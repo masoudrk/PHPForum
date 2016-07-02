@@ -92,10 +92,15 @@
                                     </div>
 
                                     <div style="margin-top: 15px;">
+                                        <input class="form-control" placeholder="موضوع ..."
+                                                  ng-disabled="f.uploadState == 0 || f.uploadState == 1"
+                                                  ng-model="f.Title"></input>
+                                    </div>
+                                    <div style="margin-top: 15px;">
                                         <textarea class="form-control" rows="3" placeholder="توضیحات ..."
                                                   style=" resize: none;"
                                                   ng-disabled="f.uploadState == 0 || f.uploadState == 1"
-                                                  ng-model="f.description"></textarea>
+                                                  ng-model="f.Description"></textarea>
                                     </div>
 
                                     <!--data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left"-->
