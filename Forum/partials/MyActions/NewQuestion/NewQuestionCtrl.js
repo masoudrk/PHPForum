@@ -50,7 +50,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			$scope.errForum.text = true;
 			hasError = true;
 		}
-		$scope.question.QuestionText = $scope.QuestionTextIN.replace(/\r\n|\r|\n/g, "<br />");
+		$scope.question.QuestionText = $scope.QuestionTextIN;//.replace(/\r\n|\r|\n/g, "<br />");
 		console.log(angular.toJson($scope.question));
 
 		if(!$scope.question.MainSubject){
@@ -90,6 +90,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
     $scope.emptyForm = function () {
         $scope.question = {};
         $scope.myFiles= [] ;
+		$scope.QuestionTextIN = undefined;
     }
 
 	$scope.fieldChanged = function (name , value) {
@@ -118,13 +119,5 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
         var index = $scope.myFiles.indexOf(file);
         $scope.myFiles.splice(index,1);
     }
-
-	$scope.taOptions = [
-		['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
-		['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
-		['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent'],
-		['html', 'insertImage','insertLink', 'insertVideo', 'wordcount', 'charcount']
-	];
-
 	activeElement('#SQuestion','#SQuestionNew');
 });
