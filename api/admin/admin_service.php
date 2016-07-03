@@ -1135,6 +1135,8 @@ $app->post('/getAllMessages', function() use ($app)  {
 	$sess = new Session();
     if(!isset($data->UserID) || isset($data->UserID) != $sess->UserID )
         echoError('invalid UserID');
+    if($data->UserID != $sess->UserID )
+        echoError('invalid UserID');
 	$where = "WHERE au.ID = '$data->UserID'";
 	$hasWhere = FALSE;
     if(isset($data->MessageType)){
@@ -1198,6 +1200,30 @@ LIMIT 1");
         echoError('You don\'t have permision to do this action');
 
 	$res = $app->db->deleteFromTable('message',"ID='$data->MessageID'");
+	if($res){
+		echoSuccess();
+    }
+	else
+		echoError("Cannot update record.");
+});
+
+$app->post('/deleteMessages', function() use ($app)  {
+
+
+	$data = json_decode($app->request->getBody());
+    if(!isset($data->MessagesID))
+        echoError('bad request');
+	$sess = new Session();
+                    $resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID'
+LIMIT 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $app->db->deleteFromTable('message',"ID in $data->MessagesID");
 	if($res){
 		echoSuccess();
     }

@@ -27,12 +27,11 @@
                     </div>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    {{activity}}
                     <table class="table border-bottom-table table-hover" >
                         <tbody>
                         <tr class="link fx-zoom-normal fx-dur-600 fx-ease-circ fx-stagger-30"
                             ng-repeat="q in searchResult" ui-sref="question({id:q.ID})">
-                            <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
+                            <td><img class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
                                       style="width:40px"
                                       ng-style="{'border': (q.Rate > 5) ? activity.high :
                                                                 (q.Rate > 2.5)?activity.medium : activity.low}"

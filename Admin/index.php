@@ -57,8 +57,9 @@
                         <!-- Messages: style can be found in dropdown.less-->
                         <li class="dropdown messages-menu">
                             <a class="dropdown-toggle link" data-toggle="dropdown">
-                                <i class="fa fa-envelope-o"></i>
-                                <span class="label label-success" ng-bind="UserMessages.NewMessages | pNumber"></span>
+                                <i class="fa fa-envelope-o"
+                                    ng-class="(messages && messages.Total != '0' )?'faa-horizontal animated':''"></i>
+                                <span class="label label-warning" ng-bind="messages.Total || '0'| pNumber"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header">
@@ -69,12 +70,13 @@
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
-                                        <li ng-repeat="item in messages.All" ng-hide="notificationsUpdating">
+                                        <li ng-repeat="item in messages.All" ng-hide="notificationsUpdating"
+                                            class="fx-bounce-normal fx-dur-50 fx-ease-none fx-stagger-50">
                                             <!-- start
                                     event -->
-                                            <a ui-sref="messages({id:item.ID})">
-                                                <div class="pull-right">
-                                                    <img src="../images/Avatar.jpg" ng-src="{{item.Image}}"
+                                            <a>
+                                                <div class="pull-right link" ui-sref="messages({id:item.ID})">
+                                                    <img err-src="../images/Avatar.jpg" ng-src="{{item.Image}}"
                                                         class="img-circle"
                                                         alt="User Image"
                                                         style="border: solid 2px #f1c40f" />
@@ -82,43 +84,67 @@
                                                         <i class="fa fa-envelope  palette-sun-flower" style="font-size: 19px;"></i>
                                                     </div>
                                                 </div>
-                                                <h4 class="vazir-font">
-                                                    <span style="color:#3c8dbc;">{{item.FullName}}</span>
-                                                    <small class="persian-rtl">
+                                                <h4>
+                                                    <span class="link" ui-sref="messages({id:item.ID})"
+                                                        style="color:#3c8dbc;">
+                                                        {{item.FullName}}
+                                                    </span>
+                                                    <small class="persian-rtl" style="margin-top: 2px;margin-left: 20px;">
                                                         <i class="fa fa-clock-o"></i>
                                                         {{item.MessageDate | fromNow |pNumber}}
                                                     </small>
+                                                    <small class="persian-rtl">
+                                                        <i class="fa fa-times link palette-alizarin faa-pulse animated-hover"
+                                                            style="font-size: 16px;"
+                                                            ng-click="markAsReadMessage($event, item)"></i>
+                                                    </small>
                                                 </h4>
-                                                <h5 class="text-right" style="margin-top: 0px;margin-bottom: 5px;">
+                                                <h5 class="text-right link" ui-sref="messages({id:item.ID})"
+                                                    style="margin-top: 0px;margin-bottom: 5px;">
                                                     {{item.EventUser|pNumber}}
                                                 </h5>
-                                                <p class="text-right text-info"
+                                                <p class="text-right text-info "
                                                     style="margin-top: 5px;">
-                                                    <p style="font-size: 14px">
+                                                    <p class="link" style="font-size: 14px" ui-sref="messages({id:item.ID})">
                                                         <span class="palette-concrete">
                                                             موضوع :
                                                         </span>
                                                         {{item.MessageTitle | subString :30|pNumber}}
                                                     </p>
-                                                    <p style="padding-right: 5px">
+                                                    <p class="link" style="padding-right: 5px" ui-sref="messages({id:item.ID})">
                                                         <span class="palette-concrete">متن پیام :</span>
                                                         <span compile="item.Message | subString :100|pNumber"></span>
                                                     </p>
+                                                </p>
                                             </a>
                                         </li>
                                         <!-- end event -->
                                     </ul>
                                 </li>
                                 <li class="footer">
-                                    <a class="link" href="../Forum/#/Messages/">نمایش همه</a>
+                                    <a class="link faa-parent animated-hover" ng-click="updateMessages($event)"
+                                        ng-class="(messagesUpdating)? 'text-muted unlink':''"
+                                        style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;">
+                                        بروزرسانی
+                                        <i
+                                            class="fa fa-refresh faa-spin animated-hover"
+                                            ng-class="(messagesUpdating)? 'fa-spin ':''"></i>
+                                    </a>
+                                    <a class="link faa-parent animated-hover" ui-sref="messages">
+                                        نمایش همه پیام ها
+                                        <i class="fa fa-paper-plane-o faa-burst animated-hover"></i>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
+
                         <!-- Notifications: style can be found in dropdown.less -->
                         <li class="dropdown messages-menu">
                             <a class="dropdown-toggle link" data-toggle="dropdown">
-                                <i class="fa fa-bell-o"></i>
-                                <span class="label label-success" ng-bind="notifications.Total | pNumber"></span>
+                                <i class="fa fa-bell-o"
+                                    ng-class="(notifications && notifications.Total != '0' )?'faa-shake animated':''"></i>
+                                <span class="label label-success"
+                                    ng-bind="notifications.Total | pNumber"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header">
@@ -131,40 +157,45 @@
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
                                         <li ng-repeat="item in notifications.All"
-                                            class="fx-bounce-normal fx-dur-50 fx-ease-none fx-stagger-50"
+                                            class="fx-bounce-normal fx-dur-50 fx-ease-none fx-stagger-150"
                                             ng-hide="notificationsUpdating">
                                             <!-- start
                                     event -->
-                                            <a ui-sref="question({id:item.EventID})">
-                                                <div class="pull-right">
-                                                    <img src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
+                                            <a>
+                                                <div class="pull-right link" ui-sref="question({id:item.QuestionID})">
+                                                    <img err-src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
                                                         class="img-circle"
                                                         alt="User Image"
-                                                        style="border: solid 2px #1abc9c" />
+                                                        style="border: solid 2px #1abc9c;margin-top: " />
                                                     <div class="text-center" style="margin: -12px -15px auto 10px;">
                                                         <i class="fa fa-bell palette-sun-flower" style="font-size: 19px;"></i>
                                                     </div>
                                                 </div>
-                                                <h4 class="vazir-font">
-                                                    {{item.FullName}}
-                                                    <small class="persian-rtl">
+                                                <h4>
+                                                    <span class="link" ui-sref="question({id:item.QuestionID})">
+                                                        {{item.FullName}}
+                                                    </span>
+                                                    <small class="persian-rtl" style="margin-top: 2px;margin-left: 20px;">
                                                         <i class="fa fa-clock-o"></i>
                                                         {{item.EventDate | fromNow |pNumber}}
                                                     </small>
+                                                    <small class="persian-rtl">
+                                                        <i class="fa fa-times link palette-alizarin faa-pulse animated-hover"
+                                                            style="font-size: 16px;"
+                                                            ng-click="markAsReadNotification($event, item)"></i>
+                                                    </small>
                                                 </h4>
-                                                <p class="text-right persian-rtl"
+                                                <p class="text-right persian-rtl link"
+                                                    ui-sref="question({id:item.QuestionID})"
                                                     style="margin-top: 8px;margin-bottom:5px;">
                                                     <span class="palette-turquoise"
                                                         ng-bind="item.EventTypeFA"></span>
                                                 </p>
-                                                <p class="text-right text-info" ui-sref="question({id:item.EventID})"
-                                                    style="margin-top: 5px;">
-                                                    <span style="">
+                                                <p class="text-right text-info link"
+                                                    ui-sref="question({id:item.QuestionID})"
+                                                    style="margin-top: 5px;" ng-if="item.HasQuestion">
+                                                    <span class="persian-rtl">
                                                         سرتیتر سوال : {{item.Title | subString :100|pNumber}}
-                                                    </span>
-                                                    <span class="pull-left" dir="ltr" ng-show="item.EventScore">
-                                                        <i class="fa fa-thumbs-o-up"></i>
-                                                        {{item.EventScore|pNumber}}
                                                     </span>
                                                 </p>
                                             </a>
@@ -173,17 +204,34 @@
                                     </ul>
                                 </li>
                                 <li class="footer">
-                                    <a class="link" ng-click="updateNotifications($event)"
-                                        style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;">
-                                        بروزرسانی
+                                    <a class="link col-xs-6 faa-parent animated-hover"
+                                        ui-sref="profile({action:'Timeline'})"
+                                        style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;
+                                   ">
+                                        تایم لاین
+                                        <i class="fa fa-clock-o faa-spin"></i>
                                     </a>
-                                    <a class="link" ng-click="markLastNotifications($event)">علامت زدن اعلان های نمایشی</a>
+                                    <a class="link col-xs-6 faa-parent animated-hover" ng-click="updateNotifications($event)"
+                                        style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;"
+                                        ng-class="(notificationsUpdating)? 'text-muted unlink':''">
+                                        بروزرسانی
+                                        <i class="fa fa-refresh faa-spin"
+                                            ng-class="(notificationsUpdating)? 'fa-spin ':''"></i>
+                                    </a>
+
+                                    <a class="link faa-parent animated-hover" ng-click="markLastNotifications($event)">
+                                        علامت زدن اعلان های نمایشی
+                                        <i class="fa fa-check faa-flash animated-hover"></i>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
+
+                        <!-- Messages: style can be found in dropdown.less-->
                         <li class="dropdown messages-menu">
-                            <a class="dropdown-toggle link" data-toggle="dropdown" aria-expanded="true">
-                                <i class="fa fa-headphones"></i>
+                            <a class="dropdown-toggle  faa-parent animated-hover link"
+                                data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-headphones faa-flash animated-hover"></i>
                                 <span class="label palette-bg-alizarin" ng-show="socketData.OnlineUsers.length"
                                     ng-bind="socketData.OnlineUsers.length | pNumber"></span>
                             </a>
@@ -197,8 +245,7 @@
                                             <!-- start message -->
                                             <a ui-sref="UserProfile({id:ou.ID})">
                                                 <div class="pull-right">
-                                                    <img ng-src="{{ou.Image}}"
-                                                          err-src="../images/Avatar.jpg"
+                                                    <img err-src="../images/Avatar.jpg" ng-src="{{ou.Image}}"
                                                         class="img-circle"
                                                         alt="User Image"
                                                         style="border: solid 2px #3498db" />
@@ -241,28 +288,10 @@
                                         </small>
                                     </p>
                                 </li>
-                                <!-- Menu Body -->
-                                <li class="user-body">
-                                    <div class="col-xs-5 text-center no-padding">
-                                        <a  >
-                                            <small class="vazir-font">دنبال کنندگان</small>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-3 text-center no-padding">
-                                        <a  >
-                                            <small class="vazir-font">فروش ها</small>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-4 text-center no-padding">
-                                        <a  >
-                                            <small class="vazir-font">دوستان</small>
-                                        </a>
-                                    </div>
-                                </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a   class="btn btn-default btn-flat">پروفایل</a>
+                                        <a  href="../Forum/#/Profile/Info" class="btn btn-default btn-flat">پروفایل</a>
                                     </div>
                                     <div class="pull-right">
                                         <a ng-click="logout()" class="btn btn-default btn-flat">خروج</a>

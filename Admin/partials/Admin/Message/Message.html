@@ -5,7 +5,7 @@
         مدیریت
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li><a href="#/dashboard"><i class="fa fa-dashboard"></i> خانه</a></li>
         <li class="active">پیام</li>
     </ol>
 </section>
@@ -68,18 +68,19 @@
                     <div class="table-responsive mailbox-messages">
                         <table class="table table-hover table-striped" ng-show="Messages.length !=0">
                             <tbody>
-                            <tr>
-                                <th></th>
+                            <tr ng-init="all.checked = false">
+                                <th><input class="pull-right" type="checkbox" ng-change="checkAll()" ng-model="all.checked" /></th>
                                 <th>گیرنده</th>
                                 <th>عنوان پیام</th>
                                 <th>متن پیام</th>
                                 <th>تاریخ</th>
                                 <th>نوع پیام</th>
-                                <th style="width: 75px"></th>
+                                <th style="width: 75px"><i confirm="آیا مطمئن هستید که میخواهید پیامهای انتخاب شده را حذف کنید؟"
+   class="fa fa-trash fa-2x text-yellow link hvr-grow" ng-click="deleteMessages()" title="حذف پیامهای انتخابی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></th>
                             </tr>
                             <tr ng-repeat="mes in Messages">
                                 <td>
-                                    <input class="pull-right" id='check-1' type="checkbox" ng-checked="mes.checked" />
+                                    <input class="pull-right" id='check-1' type="checkbox" ng-model="mes.checked" />
                                 </td>
                                 <td>{{mes.FullName | pNumber}}</td>
                                 <td class="persian-rtl">{{mes.MessageTitle | pNumber | subString:15}}</td>

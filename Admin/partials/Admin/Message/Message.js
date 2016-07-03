@@ -2,13 +2,25 @@
 angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $stateParams, $uibModal, Extention) {
 
     $scope.showInbux = true;
-    $scope.pagingParams = { UserID: $stateParams.id, MessageType: null, searchValue :''};
+    if ($stateParams.id == $rootScope.session.UserID)
+        $scope.pagingParams = { UserID: $stateParams.id, MessageType: null, searchValue: '' };
+
     $scope.dropDwonTitle = 'نمایش پیام ها';
     $scope.user = {};
     $scope.pagingController = {};
     $scope.user.selectedUser = [];
     $scope.users = [];
     $scope.Message = {};
+    $scope.Messages = [];
+    $scope.all = {};
+    $scope.checkAll = function() {
+        if ($scope.all.checked) {
+            for (var i = 0; i < $scope.Messages.length; i++) {
+                $scope.Messages[i].checked = true;
+            }
+        }
+    }
+
     $scope.getPersons = function (filter) {
         console.log(filter);
         Extention.postAsync('getUsersByName', { filter: filter }).then(function (res) {
@@ -49,6 +61,31 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
             }
         });
     }
+    $scope.deleteMessages = function () {
+        var first = true;
+        var query ='';
+        for (var i = 0; i < $scope.Messages.length; i++) {
+            if (first && $scope.Messages[i].checked) {
+                first = false;
+                query = '(' + $scope.Messages[i].ID;
+            } else if (!first && $scope.Messages[i].checked) {
+                query += ',' + $scope.Messages[i].ID;
+            }
+        }
+        if (!first)
+            query += ')';
+        if (!query)return;
+        Extention.post('deleteMessages', { MessagesID: query }).then(function (res) {
+            if (res && res.Status == 'success') {
+                Extention.popSuccess("پیام با موفقیت حذف شد!");
+                $scope.pagingController.update();
+            } else {
+                console.log(res);
+                Extention.popError("مشکل در حذف پیام ، لطفا دوباره امتحان کنید.");
+            }
+        });
+    }
+    
 
     $scope.changeTypeFilter = function (type) {
         $scope.pagingParams.MessageType = type;
