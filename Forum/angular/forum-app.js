@@ -288,29 +288,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     action: function(){
                         return this.$editor().wrapSelection("formatBlock", '<P style="direction:ltr">');
                     }
-                    // activeState: function(commonElement){
-                    //     /* istanbul ignore next: */
-                    //     if (commonElement && commonElement.nodeName === '#document') return false;
-                    //     var result = false;
-                    //     if(commonElement) result = commonElement.css('direction') === 'ltr';
-                    //     result = result || this.$editor().queryCommandState('dirLtr');
-                    //     return result;
-                    // }
                 });
                 taRegisterTool('dirRtl', {
                     iconclass: "fa fa-dedent",
                     action: function(){
                         return this.$editor().wrapSelection("formatBlock", '<P style="direction:rtl">');
                     }
-                    // activeState: function(commonElement){
-                    //     /* istanbul ignore next: */
-                    //     if (commonElement && commonElement.nodeName === '#document') return false;
-                    //     var result = false;
-                    //     if(commonElement) result = commonElement.css('direction') === 'rtl' ||
-                    //         !commonElement.css('direction');
-                    //     result = result || this.$editor().queryCommandState('dirRtl');
-                    //     return result;
-                    // }
                 });
 
                 // Create our own insertImage button

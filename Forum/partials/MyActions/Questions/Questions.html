@@ -49,12 +49,13 @@
                                 <span class="label label-success" ng-switch-when="1" >تایید شده</span>
                             </td>
                             <td >
-                                <!--<div class="table-action-icons">
-                                    <i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"
-                                       class="fa fa-trash text-red link hvr-grow-rotate" ng-click="removeQuestion(q.ID)"></i>
-                                    <i class="fa fa-pencil text-success link hvr-grow-rotate"
-                                       ui-sref="new_question({id:'{{q.ID}}' })" ></i>
-                                </div>-->
+                                <div class="table-action-icons">
+                                    <!--<i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"-->
+                                       <!--class="fa fa-trash text-red link hvr-grow-rotate" ng-click="removeQuestion(q.ID)"></i>-->
+                                    <a class="fa fa-pencil palette-green-sea link hvr-grow-rotate"
+                                       ui-sref="new_question({id:'{{q.ID}}' })"
+                                       ng-if="q.AdminAccepted == 0"></a>
+                                </div>
                             </td>
                         </tr>
                         </tbody>

@@ -517,7 +517,6 @@ h5 ,h4 ,h3 ,h2 ,h1 {
     margin: 0 auto;
     border-radius: 5px;
 }
-
-/*.textAngular-span p img{*/
-    /*max-height: 200px;*/
-/*}*/
+.my-large-area .ta-editor{
+    max-height: 600px;
+}

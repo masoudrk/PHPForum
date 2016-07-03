@@ -78,7 +78,7 @@
                     <i class="fa fa-paperclip fa-2x text-muted"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
-                    <div ng-repeat="f in myFiles">
+                    <div ng-repeat="f in myFiles" ng-if="!question.ID">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <img ngf-thumbnail="f||'../images/Avatar.jpg'" style="width:50px;height: 50px;"
@@ -90,15 +90,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-gro p row" style="margin-top: 5px">
-                        <div class="col-xs-12">
-                            <span class="btn btn-primary btn-file pull-left ">
-            انتخاب فایل (ها)  <input type="file" id="inputFile" ngf-select name="file"
-                                accept="image/*" ngf-max-size="50MB"
-                                ngf-model-invalid="errorFile" ngf-multiple="true" ngf-keep="'distinct'"
-                                ng-model="myFiles"
-                                ngf-change="filesChanged($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)">
-                            </span>
+                    <div ng-repeat="f in question.Attachments" ng-if="question.ID">
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="cursor: not-allowed;">
+                                <img ngf-thumbnail="f||'../images/Avatar.jpg'" style="width:50px;height: 50px;"
+                                     class="img-circle pull-left" >
+                                <span style="padding-left: 5px;word-wrap: break-word;line-height: 50px;" class="text-left pull-left" >
+                                    {{f.Filename}}
+                                </span>
+
+                            </div>
                         </div>
                     </div>
                 </div><!-- /.box-body -->
@@ -135,6 +136,7 @@
                             <label for="body" class="col-xs-12 control-label">سوال کامل</label>
                             <div class="col-xs-12" style="margin-top: 10px">
                                 <div text-angular id="body"
+                                     class="my-large-area"
                                      ng-model="QuestionTextIN"
                                      placeholder="متن کامل سوال ... " ng-change="fieldChanged('text',QuestionTextIN)"
                                      ng-model-options="{debounce:100}" class="textAngular-span"></div>

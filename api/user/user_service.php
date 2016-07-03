@@ -362,6 +362,49 @@ $app->post('/getAllMyAnswers', function() use ($app)  {
     echoResponse(200, $res);
 });
 
+$app->post('/editQuestion', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+
+    $qID = $data->ID;
+
+    $resQ = $app->db->makeQuery("Select forum_question.AdminAccepted from forum_question 
+where ID='$qID' and AuthorID='$sess->UserID'");
+    $count = mysqli_num_rows($resQ);
+    if($count > 0 ){
+        $resA = $resQ->fetch_assoc();
+        if($resA['AdminAccepted'] != 0){
+            $res = [];
+            $res['Status'] ='CanNotEdit';
+            $res['QuestionID'] = $qID;
+            echoResponse(200, $res);
+        }
+    }else{
+        $res = [];
+        $res['Status'] ='Deleted';
+        $res['QuestionID'] = $qID;
+        echoResponse(200, $res);
+    }
+
+    $app->db->updateRecord('forum_question',"SubjectID='".$data->Subject->ID."',QuestionText='$data->QuestionText',
+        Title='$data->Title'", "ID='$qID' and AuthorID='$sess->UserID'");
+    $d = $app->db->deleteFromTable('tag_question','QuestionID='.$qID);
+
+    if(isset($data->Tags)){
+
+        foreach($data->Tags as $tag){
+            $cq = $app->db->insertToTable('tag_question',"TagID,QuestionID","'$tag->ID','$qID'");
+        }
+    }
+
+    $res = [];
+    $res['Status'] ='success';
+    $res['QuestionID'] = $qID;
+
+    echoResponse(200, $res);
+});
+
 $app->post('/saveQuestion', function() use ($app)  {
 
     $data = json_decode($_POST['formData']);
@@ -373,8 +416,7 @@ $app->post('/saveQuestion', function() use ($app)  {
     if(isset($data->ID)){
         $qID = $data->ID;
         $app->db->updateRecord('forum_question',"SubjectID='".$data->Subject->ID."',QuestionText='$data->QuestionText',
-        Title='$data->Title'",
-            "ID='$qID'");
+        Title='$data->Title'", "ID='$qID'");
         $d = $app->db->deleteFromTable('tag_question','QuestionID='.$qID);
     }else{
         $qID = $app->db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID,CreationDate',
@@ -452,6 +494,7 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
     //userRequire();
     require_once '../db/tag.php';
     require_once '../db/forum_subject.php';
+    require_once '../db/question_attachment.php';
     $data = json_decode($app->request->getBody());
 
 
@@ -464,7 +507,7 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
         $res['Question']['Subject'] = getQuestionSubject($app->db , $data->QuestionID);
         $res['Question']['MainSubject'] = getSubjectParent($app->db , $res['Question']['Subject']['ID']);
         $res['Question']['Tags'] = getQuestionTags($app->db , $data->QuestionID);
-
+        $res['Question']['Attachments'] = getQuestionAttachments($app->db , $data->QuestionID);
     }
 
     $res['AllTags'] = getAllTags($app->db);
