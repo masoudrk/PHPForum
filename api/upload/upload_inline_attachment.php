@@ -37,8 +37,15 @@ $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvata
     true);
 
 
-$db->insertToTable('question_attachment','IsInline,FileID',
-    "'1','$fid'");
+if($meta['Type'] == 'new_question'){
+
+    $db->insertToTable('question_attachment','IsInline,FileID',
+        "'1','$fid'");
+}else if($meta['Type'] == 'question'){
+
+    $db->insertToTable('answer_attachment','IsInline,FileID',
+        "'1','$fid'");
+}
 
 echo '../'.$destination;
 ?>

@@ -119,13 +119,5 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
         var index = $scope.myFiles.indexOf(file);
         $scope.myFiles.splice(index,1);
     }
-
-	$scope.taOptions = [
-		['h1', 'h4', 'h6', 'p', 'pre', 'quote'],
-		['html', 'customInsertImage','insertLink', 'wordcount', 'charcount'],
-		['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
-		['justifyLeft', 'justifyCenter', 'justifyRight'],
-	];
-
 	activeElement('#SQuestion','#SQuestionNew');
 });

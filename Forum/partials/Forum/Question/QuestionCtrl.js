@@ -122,7 +122,7 @@
         }
 
         Extention.setBusy(true);
-        var data = {data : angular.toJson({ QuestionID: $stateParams.id, AnswerText: $scope.answerTextIn.replace(/\r\n|\r|\n/g, "<br />") }) };
+        var data = {data : angular.toJson({ QuestionID: $stateParams.id, AnswerText: $scope.answerTextIn }) };
 
         var u = Upload.upload({
             url: serviceBaseURL + 'saveAnswer',

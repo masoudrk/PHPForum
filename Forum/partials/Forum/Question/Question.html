@@ -272,25 +272,32 @@
 
             <div class="col-md-8 col-xs-12 pull-right" id="test">
                 <div class="box box-danger">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">پاسخ خود را وارد کنید</h3>
+                    <div class="box-header with-border" style="padding: 5px;">
+                        <h3 class="box-title">پاسخ خود را وارد کنید</h3>&nbsp;&nbsp;
+                        <img class="img-circle" ng-src="{{user.Image}}" style="width:40px"
+                             err-src="../images/Avatar.jpg" src="../images/Avatar.jpg">
                     </div>
                     <div class="box-body box-profile">
-                        <div class="col-sm-3 col-xs-12 pull-right">
-                            <img class="profile-user-img img-responsive img-circle" alt="User profile picture" err-src="../images/Avatar.jpg" src="{{user.Image}}">
-                            <a style="cursor: pointer; color: black">
-                                <h3 class="text-center profile-username">{{user.FullName | pNumber}}</h3>
-                            </a>
-                            <p class="text-muted text-center">{{user.Email | pNumber}}</p>
-                        </div>
-                        <div class="col-sm-9 col-xs-12">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <textarea dir="rtl" ng-model="answerTextIn" class="form-control" rows="9"
-                                              id="comment">
-                                    </textarea>
+
+                        <div class="row">
+
+                            <div class="form-group col-xs-12 " ng-class="errForum.text? 'has-error':''">
+                                <div class="persian-rtl">
+                                    <div text-angular id="body"
+                                         ng-model="answerTextIn"
+                                         placeholder="متن کامل پاسخ ... " ></div>
                                 </div>
-                                <button ng-click="saveAnswer()" class="btn btn-primary pull-right col-sm-4 col-xs-12"><b>ثبت</b></button>
+                            </div>
+                            <!--<div class="col-sm-3 col-xs-12 pull-right">-->
+                            <!--<img class="profile-user-img img-responsive img-circle" alt="User profile picture" err-src="../images/Avatar.jpg" src="{{user.Image}}">-->
+                            <!--<a style="cursor: pointer; color: black">-->
+                            <!--<h3 class="text-center profile-username">{{user.FullName | pNumber}}</h3>-->
+                            <!--</a>-->
+                            <!--<p class="text-muted text-center">{{user.Email | pNumber}}</p>-->
+                            <!--</div>-->
+                            <div class="col-xs-12">
+                                <button ng-click="saveAnswer()" class="btn btn-primary pull-left col-sm-4 col-xs-12"><b>
+                                    ثبت</b></button>
                             </div>
                         </div>
                     </div>

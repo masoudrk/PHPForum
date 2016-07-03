@@ -272,9 +272,46 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             $state.go('main_forum',{id:'Transition'});
         });
 
-
         $provide.decorator('taOptions', ['taRegisterTool', '$uibModal' , '$delegate',
             function(taRegisterTool,$uibModal, taOptions) {
+
+                taOptions.toolbar = [
+                    ['h1', 'h4', 'h6', 'p', 'pre', 'quote'],
+                    ['html', 'customInsertImage','insertLink', 'wordcount', 'charcount'],
+                    ['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
+                    ['justifyLeft', 'justifyCenter', 'justifyRight'],
+                    ['dirLtr','dirRtl']
+                ];
+
+                taRegisterTool('dirLtr', {
+                    iconclass: "fa fa-indent",
+                    action: function(){
+                        return this.$editor().wrapSelection("formatBlock", '<P style="direction:ltr">');
+                    }
+                    // activeState: function(commonElement){
+                    //     /* istanbul ignore next: */
+                    //     if (commonElement && commonElement.nodeName === '#document') return false;
+                    //     var result = false;
+                    //     if(commonElement) result = commonElement.css('direction') === 'ltr';
+                    //     result = result || this.$editor().queryCommandState('dirLtr');
+                    //     return result;
+                    // }
+                });
+                taRegisterTool('dirRtl', {
+                    iconclass: "fa fa-dedent",
+                    action: function(){
+                        return this.$editor().wrapSelection("formatBlock", '<P style="direction:rtl">');
+                    }
+                    // activeState: function(commonElement){
+                    //     /* istanbul ignore next: */
+                    //     if (commonElement && commonElement.nodeName === '#document') return false;
+                    //     var result = false;
+                    //     if(commonElement) result = commonElement.css('direction') === 'rtl' ||
+                    //         !commonElement.css('direction');
+                    //     result = result || this.$editor().queryCommandState('dirRtl');
+                    //     return result;
+                    // }
+                });
 
                 // Create our own insertImage button
                 taRegisterTool('customInsertImage', {
@@ -286,8 +323,8 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                             // Put a link to your template here or whatever
                             templateUrl: '../js/text-angular/CustomSelectImageModal.tmpl.html',
                             size: 'md',
-                            controller: ['$uibModalInstance', '$scope', 'Upload',
-                                function($uibModalInstance, $scope , Upload) {
+                            controller: ['$uibModalInstance', '$scope', 'Upload', '$state',
+                                function($uibModalInstance, $scope , Upload , state) {
                                     $scope.activeTab = 0;
                                     $scope.img = {
                                         url: ''
@@ -308,10 +345,14 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                                     }
 
                                     $scope.filesChanged = function (files, file) {
+                                        var url = uploadURL;
+                                        url += 'upload_inline_attachment.php';
+                                        var data = {file : file};
+                                        data.Type = state.current.name;
 
                                         file.uploader = Upload.upload({
-                                            url: uploadURL + 'upload_question_attachment.php',
-                                            data: { file : file }
+                                            url:  url ,
+                                            data: data
                                         });
 
                                         file.uploader.then(function (resp) {
@@ -336,9 +377,13 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                         });
 
                         modalInstance.result.then(function(imgUrl) {
+                            if(!imgUrl)
+                                return;
+
                             rangy.restoreSelection(savedSelection);
 
-                            var embed = '<a href="'+imgUrl+'" target="_blank"><img class="img-responsive link" '
+                            var embed = '<a href="'+imgUrl+'" target="_blank">' +
+                                '<img class="img-responsive link attachment-inline-img" '
                                 + ' src="'+imgUrl+'"  /></a>';
                             // insert
                             textAngular.$editor().wrapSelection('insertHtml', embed);
