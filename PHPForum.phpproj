@@ -146,6 +146,7 @@
     <Folder Include="Forum\partials\Evaluation\" />
     <Folder Include="Forum\partials\Evaluation\Quiz\" />
     <Folder Include="Forum\partials\Evaluation\Rating\" />
+    <Folder Include="Forum\partials\File\" />
     <Folder Include="Forum\partials\Forum\" />
     <Folder Include="Forum\partials\Forum\Forum\" />
     <Folder Include="Forum\partials\Forum\Main\" />
@@ -563,6 +564,8 @@
     <Content Include="Forum\partials\Evaluation\Quiz\QuizCtrl.js" />
     <Content Include="Forum\partials\Evaluation\Rating\Rating.html" />
     <Content Include="Forum\partials\Evaluation\Rating\RatingCtrl.js" />
+    <Content Include="Forum\partials\File\File.html" />
+    <Content Include="Forum\partials\File\FileCtrl.js" />
     <Content Include="Forum\partials\Forum\Forum\Forum.html" />
     <Content Include="Forum\partials\Forum\Forum\ForumCtrl.js" />
     <Content Include="Forum\partials\Forum\Main\MainForum.html" />

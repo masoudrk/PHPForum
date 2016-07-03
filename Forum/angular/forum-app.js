@@ -251,6 +251,21 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
+        .state("file", {
+            url: "/File/:id",
+            templateUrl: "partials/File/File.html",
+            controller: 'FileCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/File/FileCtrl.js', '../js/angular-clipboard.js']);
+                    }
+                ],
+                $title: function () {
+                    return 'مشخصات فایل';
+                }
+            }
+        })
         .state("help", {
             url: "/Help",
             templateUrl: "partials/Help/Help.html",

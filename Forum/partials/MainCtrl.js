@@ -92,7 +92,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
                 $scope.searchIconClass = 'fa-male';
                 break;
             case 2:
-                $scope.searchIconClass = 'fa-bullhorn';
+                $scope.searchIconClass = 'fa-tag';
                 break;
         }
         $scope.search();

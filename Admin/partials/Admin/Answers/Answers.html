@@ -5,7 +5,8 @@
         مدیریت
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#/"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li><a href="#/dashboard"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li><a href="#/answers/Transition">مدیریت جواب ها</a></li>
         <li class="active"> جواب ها</li>
     </ol>
 </section>
@@ -59,28 +60,6 @@
                     <h3 class="box-title vazir-font">اعضا</h3>
                     <h3 class="box-title vazir-font pull-left">تعداد {{allTotal | pNumber}}</h3>
 
-                    <!--<div class="box-tools">
-                        <div class="input-group col-xs-9 col-md-4">
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
-                                    {{dropDwonTitle}}
-                                    <span class="fa fa-caret-down"></span>
-                                </button>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی جواب ها</a></li>
-                                    <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">جواب های تایید شده</a></li>
-                                    <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">جواب های در انتظار تایید</a></li>
-                                    <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">جواب ها تایید نشده</a></li>
-                                </ul>
-                            </div>
-                            <input type="text" name="table_search" ng-model="pagingParams.searchValue"
-                                   ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
-                                   placeholder="جستجو ...">
-                            <div class="input-group-btn">
-                                <button class="btn btn-sm btn-default left-radius-btn"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div>
-                    </div>-->
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">

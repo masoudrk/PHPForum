@@ -345,8 +345,8 @@
                             </li>
                             <li ng-class="{'active':pagingParams.searchType==2}">
                                 <a ng-click="searchTypeChanges(2)" class="link">
-                                    <i class="fa fa-bullhorn"></i>
-                                    جستجو کامل
+                                        <i class="fa fa-tag"></i>
+                                    جستجو با تگ
                                 </a>
                             </li>
                         </ul>

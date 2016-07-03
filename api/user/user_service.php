@@ -86,6 +86,34 @@ WHERE u.UserAccepted=1 ".$searchQuery);
         $res['SearchType'] = $searchType;
         echoResponse(200, $res);
         return;
+    }else if($searchType == 2){
+            $searchQuery = '';
+        $searchArr = explode(" ",$searchValue);
+        foreach ($searchArr as $s){
+            $searchQuery .= " AND ( t.Text LIKE N'%$s%' )";
+        }
+
+        $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() -
+ INTERVAL 7 DAY))+
+ (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() -
+ INTERVAL 7 DAY))";
+        $res = $p->getPage($app->db,"SELECT forum_question.* , u.score, u.FullName , file_storage.FullPath as Image,
+ (SELECT question_view.ID from question_view
+        where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
+ (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
+   as 'AnswersCount' ,
+ ($rateSelection) as Rate
+FROM `forum_question`
+    LEFT JOIN user as u on u.ID=forum_question.AuthorID
+    LEFT JOIN file_storage on u.AvatarID=file_storage.ID
+    INNER JOIN tag_question as tq on tq.QuestionID = forum_question.ID
+    INNER JOIN tag as t on t.ID = tq.TagID
+WHERE forum_question.AdminAccepted=1 $searchQuery GROUP by forum_question.ID");
+
+        $res['SearchType'] = 0;
+        echoResponse(200, $res);
+        return;
     }
 
     echoResponse(200, $sRes);
@@ -468,6 +496,25 @@ $app->post('/saveQuestion', function() use ($app)  {
     $res['QuestionID'] = $qID;
 
     echoResponse(200, $res);
+});
+
+$app->post('/getFileByID', function() use ($app)  {
+$data = json_decode($app->request->getBody());
+
+if(!isset($data->FileID))
+    echoError('bad request');
+$res = $app->db->makeQuery("SELECT file_storage.*  , library.ID as LibraryID , library.Title ,
+forum_main_subject.Title as MainSubjectTitle , forum_subject.Title as SubjectTitle , file_type.GeneralType,
+fs_user.FullPath as UserAvatar,user.FullName
+FROM library
+inner join file_storage on file_storage.ID=library.FileID and file_storage.FileSize > 0
+left join file_type on file_type.ID=file_storage.FileTypeID
+left join forum_main_subject on forum_main_subject.ID=library.MainSubjectID
+left join forum_subject on forum_subject.ID=library.SubjectID
+inner join user on user.ID=file_storage.UserID
+left join file_storage as fs_user on user.AvatarID=fs_user.ID where library.ID = '$data->FileID' limit 1");
+
+    echoSuccess($res->fetch_assoc());
 });
 
 $app->post('/getLibraryFiles', function() use ($app)  {
