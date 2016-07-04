@@ -150,11 +150,11 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
             return persianJs( item.values.value.toString() ).englishNumber().toString();
         },
         "balloonFunction": function(item) {
-            return "<b style=\"font-size: 13px\">" +
+            return "<b style=\"font-size: 15px\">" +
                 persianJs( item.category ).englishNumber().toString()
-                + "</b><br><span style='font-size=12px;direction: rtl'> سوال "+
-                persianJs( item.values.value.toString() ).englishNumber().toString()+
-                "</span>" ;
+                + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
+                persianJs( item.values.value.toString() ).englishNumber().toString()
+                + "</span><span style='font-size=15px'>" + 'سوال' + "</span>" ;
         }
     }, {
         "fillAlphas": 0.8,
@@ -167,11 +167,11 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
             return persianJs( (-item.values.value).toString() ).englishNumber().toString();
         },
         "balloonFunction": function(item) {
-            return "<b style=\"font-size: 13px\">" +
+            return "<b style=\"font-size: 15px;\">" +
                 persianJs( item.category ).englishNumber().toString()
-                + "</b><br><span style='font-size=12px'>"+
-                persianJs( (-item.values.value).toString() ).englishNumber().toString()+'</span><span>'+' جواب '+
-                "</span>" ;
+                + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
+                persianJs( (-item.values.value).toString() ).englishNumber().toString()
+                + "</span><span style='font-size=15px'>" + 'جواب' + "</span>" ; ;
         }
     }, {
         "fillAlphas": 1,
@@ -184,11 +184,13 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
             return persianJs( (-item.values.value).toString() ).englishNumber().toString();
         },
         "balloonFunction": function(item) {
-            return "<b style=\"font-size: 13px\">" +
+            var s ="<b style=\"font-size: 15px\">" +
                 persianJs( item.category ).englishNumber().toString()
-                + "</b><br><span style='font-size=12px'>"+
-                persianJs( (-item.values.value).toString() ).englishNumber().toString()+
-                " جواب تایید نشده </span>" ;
+                + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
+                persianJs( (-item.values.value).toString() ).englishNumber().toString()
+                + "</span><span style='font-size=15px'>" + 'جواب تایید نشده' + "</span>" ;
+
+            return s;
         }
     }, {
         "fillAlphas": 1,
@@ -201,11 +203,11 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
             return persianJs( item.values.value.toString() ).englishNumber().toString();
         },
         "balloonFunction": function(item) {
-            return "<b style=\"font-size: 13px\">" +
+            return "<b style=\"font-size: 15px\">" +
                 persianJs( item.category ).englishNumber().toString()
-                + "</b><br><span style='font-size=12px'>"+
-                persianJs( item.values.value.toString() ).englishNumber().toString()+
-                " سوال تایید نشده </span>" ;
+                + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
+                persianJs( item.values.value.toString() ).englishNumber().toString()
+                + "</span><span style='font-size=15px'>" + 'سوال تایید نشده' + "</span>" ;
         }
     }];
 

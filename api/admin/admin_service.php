@@ -260,7 +260,9 @@ GROUP BY forum_main_subject.ID");
 
 
     $resQ = $app->db->makeQuery("
-select organ_position.ID ,organ_position.OrganizationName,
+select organ_position.ID , organ_position.OrganizationName,
+    sum((select count(*) from user
+  where organ_position.ID=user.OrganizationID and user.UserAccepted =1) ),
   sum((select count(*) from forum_question
   where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =1) ) as QTotal,
   sum((select count(*) from forum_question

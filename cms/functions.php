@@ -32,6 +32,7 @@ function generateRequiredCMSJavaFiles(){
     <script src="../cms/js/demo.js"></script>
 
     <script src="../js/am-charts/amcharts.js" type="text/javascript"></script>
+    <script src="../js/am-charts/themes/dark.js" type="text/javascript"></script>
     <script src="../js/am-charts/serial.js" type="text/javascript"></script>
     <script src="../js/am-charts/pie.js" type="text/javascript"></script>
     <script src="../js/am-charts/radar.js" type="text/javascript"></script>

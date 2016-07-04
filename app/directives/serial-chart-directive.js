@@ -134,7 +134,7 @@ angular.module('am-charts').directive('stackBarChart', function () {
                     $scope.chart = AmCharts.makeChart($scope.chartId,
                         {
                         "type": "serial",
-                        "theme": "light",
+                        "theme": "dark",
                         "rotate": true,
                         "marginBottom": 20,
                         "colors": [
@@ -150,7 +150,12 @@ angular.module('am-charts').directive('stackBarChart', function () {
                         "categoryAxis": {
                             "gridPosition": "start" ,
                             "gridAlpha": 0.2 ,
-                            "axisAlpha": 0
+                            "axisAlpha": 0,
+                            "labelFunction": function(value) {
+                                if(value)
+                                    return persianJs(value).englishNumber().toString();
+                                return '';
+                            }
                         },
                         "valueAxes": [{
                             "gridAlpha": 0,
