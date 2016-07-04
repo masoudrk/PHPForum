@@ -312,7 +312,28 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
 	else
 		echoError("Cannot delete record.");
 });
+$app->post('/insertMessage', function() use ($app)  {
 
+
+	$data = json_decode($app->request->getBody());
+    if(!isset($data->MessageType) || !isset($data->MessageName))
+        echoError('bad request');
+	$sess = new Session();
+
+    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+        $res = $app->db->insertToTable('common_message','Message,MessageTitle',
+                   "'$data->MessageName','$data->MessageType'");
+	if($res)
+		echoSuccess();
+	else
+		echoError("Cannot update record.");
+});
 $app->post('/insertSkill', function() use ($app)  {
 
 	
@@ -973,9 +994,16 @@ $app->post('/getAllForumTypes', function() use ($app)  {
     echoSuccess($res);
 });
 
-$app->post('/getAllAdminTypes', function() use ($app)  {
+$app->post('/getAllMessages', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $pr = new Pagination($data);
+    $pageRes = $pr->getPage($app->db,"SELECT * FROM common_message");
 
-    
+    echoResponse(200,$pageRes);
+});
+
+
+$app->post('/getAllAdminTypes', function() use ($app)  {
 
     $pageRes = $app->db->makeQuery("SELECT * FROM `admin_permission`");
     $res=[];
@@ -1043,6 +1071,27 @@ $app->post('/getAllAdmins', function() use ($app)  {
 
     echoResponse(200, $pageRes);
 });
+$app->post('/deleteMessage', function() use ($app)  {
+
+
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+
+    $resQ = $app->db->makeQuery("select Count(*) as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
+
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        echoError('You don\'t have permision to do this action');
+
+	$res = $app->db->deleteFromTable('common_message',"ID='$data->MessageID'");
+	if($res)
+		echoSuccess();
+	else
+		echoError("Cannot update record.");
+});
 
 $app->post('/deleteAdmin', function() use ($app)  {
 
@@ -1051,7 +1100,7 @@ $app->post('/deleteAdmin', function() use ($app)  {
 
 	$sess = new Session();
 	if($sess->UserID == $data->AdminID)
-		echoError('You cannot delete your account in this action.');
+		echoError('You cannot delete your account.');
 
     $resQ = $app->db->makeQuery("select Count(*) as val from user as u INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID

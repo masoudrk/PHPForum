@@ -956,8 +956,8 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
  LEFT JOIN user as u on u.ID=forum_question.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
- WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' ) as q 
- order by q.QScoreInterval desc limit $offset , $data->pageSize";
+ WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' ) as q
+ order by q.ViewCount desc limit $offset , $data->pageSize";
 
         $pageResQ = $app->db->makeQuery($query);
         $items = [];
@@ -1001,8 +1001,8 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
  LEFT JOIN user as u on u.ID=forum_question.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
- WHERE forum_question.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID)' ) as q 
- order by q.QScoreInterval desc limit $offset , $data->pageSize";
+ WHERE forum_question.AdminAccepted='1' AND forum_subject.ID='$data->SubjectID)' ) as q
+ order by q.ViewCount desc limit $offset , $data->pageSize";
 
         $pageResQ = $app->db->makeQuery($query);
         $items = [];

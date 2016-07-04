@@ -503,6 +503,12 @@
                                     مدیریت مهارت ها
                                 </a>
                             </li>
+                            <li id="SCommonMessages">
+                                <a ui-sref="common_messages">
+                                    <i class="fa fa-circle-o"></i>
+                                      پیام های رایج
+                                </a>
+                            </li>
                         </ul>
                     </li>
                    <li id="SLibrary" class="treeview">
