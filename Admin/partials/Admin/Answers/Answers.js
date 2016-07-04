@@ -56,6 +56,43 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	    $scope.search();
 	}
 
+	$scope.openDiscardModal = function (answerID, authorID) {
+	    Extention.post('getCommonMessages', { filter: 'رد جواب' }).then(function (res) {
+	        if (res && res.Status == 'success') {
+	            var modalInstance = $uibModal.open({
+	                animation: true,
+	                templateUrl: 'DiscardAnswerModal.html',
+	                controller: function ($scope, $uibModalInstance) {
+	                    $scope.common = res.Data;
+	                    $scope.answerID = answerID;
+	                    $scope.authorID = authorID;
+	                    $scope.cancel = function () {
+	                        $uibModalInstance.dismiss('cancel');
+	                    };
+
+	                    $scope.send = function (message) {
+	                        Extention.post('changeAnswerAccepted', { State: -1, AnswerID: $scope.answerID, AdminPermissionLevel: session.AdminPermissionLevel, UserID: $scope.authorID, Message: message }).then(function (res) {
+	                            if (res && res.Status == 'success') {
+	                                Extention.popSuccess("وضعیت جواب با موفقیت تغییر کرد!");
+	                                $uibModalInstance.dismiss('cancel');
+	                            } else {
+	                                Extention.popError("مشکل در تغییر وضعیت جواب ، لطفا دوباره تلاش کنید.");
+	                            }
+	                        });
+	                    };
+	                },
+	                size: 'md'
+	            });
+	            modalInstance.result.then(function () {
+	            }, function () {
+	                $scope.pagingController.update();
+	            });
+	        } else {
+	            return;
+	        }
+
+	    });
+	}
 
 	$scope.openRoleModal = function (answer) {
 	    var modalInstance = $uibModal.open({

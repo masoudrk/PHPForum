@@ -630,9 +630,11 @@ LIMIT 1");
                         	$app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"].",9,now(),$data->UserID,$data->QuestionID");
                         }
                 }
-
-                //else if($data->State == -1)
-                //    $app->db->updateRecord('user',"score=(score-2)" , "ID = '$data->UserID'");
+                else if($data->State == -1 && isset($data->Message))
+                {
+                    $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                        "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','0'");
+                }
         echoSuccess();
             }
 			else
