@@ -221,7 +221,6 @@ where cd.ID BETWEEN ".($cid - 30)." and ".($cid));
     $resp['ChartData'] = $cqData;
 
     $resQ = $app->db->makeQuery("
-
 SELECT cd.IntervalDay as date,
   (select count(*) from forum_question
   where forum_question.AdminAccepted=1 
@@ -259,6 +258,36 @@ GROUP BY forum_main_subject.ID");
         $cqDataRadar[] = $r;
     $resp['RadarChartData'] = $cqDataRadar;
 
+
+    $resQ = $app->db->makeQuery("
+select organ_position.ID ,organ_position.OrganizationName,
+  sum((select count(*) from forum_question
+  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =1) ) as QTotal,
+  sum((select count(*) from forum_question
+  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =0) ) as QTotalNA,
+  sum((select count(*) from forum_answer
+    inner join forum_question on forum_question.ID=forum_answer.QuestionID
+  where forum_question.AuthorID=u.ID and forum_answer.AdminAccepted =1
+        and forum_question.AdminAccepted =1) ) as ATotal,
+  sum((select count(*) from forum_answer
+    inner join forum_question on forum_question.ID=forum_answer.QuestionID
+  where forum_question.AuthorID=u.ID and forum_answer.AdminAccepted =0
+        and forum_question.AdminAccepted =1) ) as ATotalNA
+from organ_position
+  LEFT JOIN user as u on u.OrganizationID=organ_position.ID
+GROUP BY organ_position.ID
+ORDER by organ_position.ID asc");
+
+    $cqDataStack = [];
+    while($r = $resQ->fetch_assoc()){
+        $r['ATotal'] = -$r['ATotal'];
+        $r['ATotalNA'] = -$r['ATotalNA'];
+//
+        $r['ATotal'] += $r['ATotalNA'];
+        $r['QTotal'] += $r['QTotalNA'];
+        $cqDataStack[] = $r;
+    }
+    $resp['StackChartData'] = $cqDataStack;
 
     $resp['MainSubjects'] = getAllMainSubjects($app->db);
     $resp['Organs'] = getAllPositions($app->db);
