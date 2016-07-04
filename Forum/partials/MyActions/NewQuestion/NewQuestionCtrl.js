@@ -19,6 +19,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			$scope.allTags = res.AllTags;
 			$scope.allSubjects = res.AllSubjects;
 			$scope.question = res.Question;
+			$scope.QuestionTextIN = res.Question.QuestionText;
 			$timeout(function () {
 				var ms = $scope.question.MainSubject;
 				for(var i = 0; i<res.AllSubjects.length ; i++){
@@ -29,6 +30,9 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 				}
 				$scope.allChildSubjects = $scope.question.MainSubject.Childs ;
 			})
+		});
+		$timeout(function () {
+			$rootScope.$title = 'ویرایش سوال';
 		});
 	}else{
 		$scope.form.header = 'ایجاد سوال جدید';
@@ -51,7 +55,6 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			hasError = true;
 		}
 		$scope.question.QuestionText = $scope.QuestionTextIN;//.replace(/\r\n|\r|\n/g, "<br />");
-		console.log(angular.toJson($scope.question));
 
 		if(!$scope.question.MainSubject){
 			$scope.errForum.mainSubject = true;
@@ -66,25 +69,46 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			return;
 		}
 
-        Extention.setBusy(true);
+		if(!$scope.question.ID){
 
-        var u = Upload.upload({
-            url: serviceBaseURL + 'saveQuestion',
-            method: 'POST',
-            file: $scope.myFiles,
-            data: {formData : angular.toJson($scope.question) }
-        });
+			Extention.setBusy(true);
 
-        u.then(function(resp) {
-            // file is uploaded successfully
-            Extention.setBusy(false);
-            Extention.popSuccess('سوال شما با موفقیت ارسال شد!');
-            $scope.emptyForm();
-        }, function(resp) {
-            // handle error
-            Extention.setBusy(false);
-            Extention.popError('مشکل در ثبت سوال سوال ، لطفا دوباره تلاش کنید!');
-        });
+			var u = Upload.upload({
+				url: serviceBaseURL + 'saveQuestion',
+				method: 'POST',
+				file: $scope.myFiles,
+				data: {formData : angular.toJson($scope.question) }
+			});
+
+			u.then(function(resp) {
+				// file is uploaded successfully
+				Extention.setBusy(false);
+				Extention.popSuccess('سوال شما با موفقیت ارسال شد!');
+				$scope.emptyForm();
+			}, function(resp) {
+				// handle error
+				Extention.setBusy(false);
+				Extention.popError('مشکل در ثبت سوال سوال ، لطفا دوباره تلاش کنید!');
+			});
+		}else{
+			Extention.post('editQuestion',$scope.question).then(function (res) {
+				if(res){
+					if(res.Status == 'success'){
+						Extention.popSuccess('سوال با موفقیت تغییر کرد.');
+					}else if(res.Status == 'CanNotEdit'){
+						Extention.popError('<b>'+'خطا در تغییر محتوای سوال!' +'<b><br>' +
+							' تغییرات فقط تا زمانی که سوال در انتظار تایید است مقدور میباشد. '
+							,12000);
+					}else if(res.Status == 'Deleted'){
+						Extention.popError('خطا ، این سوال وجود ندارد.',12000);
+					}else {
+						Extention.popError('خطا در ارتباط با سرور ، لطفا دوباره تلاش کنید.');
+					}
+				}else{
+					Extention.popError('خطا در ارتباط با سرور ، لطفا دوباره تلاش کنید.');
+				}
+			});
+		}
 	}
 
     $scope.emptyForm = function () {

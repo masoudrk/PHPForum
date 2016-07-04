@@ -134,7 +134,7 @@
         u.then(function(resp) {
             // file is uploaded successfully
             Extention.setBusy(false);
-            $scope.answerText = '';
+            $scope.answerTextIn = '';
             $scope.myFiles = [];
             $scope.getQuestionByID();
             Extention.popInfo('پاسخ شما ثبت شد . در صورت تایید نمایش داده خواهد شد');
