@@ -102,3 +102,87 @@ angular.module('am-charts', []).directive('serialChart', function () {
 
     };
 });
+
+
+angular.module('am-charts').directive('stackBarChart', function () {
+    return {
+        restrict: 'ECA',
+        scope:{
+            chartData : '=',
+            chartHeight : '@',
+            chartGraphs : '=',
+            enableScrollBar : '=',
+            chartId : '@',
+            delay : '@'
+        },
+        template: '<div id="{{chartId}}" style="width: 100%; height: {{chartHeight}}px;"></div>',
+        controller : function ($scope,$timeout) {
+
+            $scope.$watch('chartData',function (oval , nval) {
+
+                if(!$scope.chartData)
+                    return;
+
+                $timeout(function () {
+
+                    if(angular.isDefined($scope.chart)){
+                        $scope.chart.dataProvider = $scope.chartData;
+                        $scope.chart.validateData();
+                        return;
+                    }
+
+                    $scope.chart = AmCharts.makeChart($scope.chartId,
+                        {
+                        "type": "serial",
+                        "theme": "dark",
+                        "rotate": true,
+                        "marginBottom": 20,
+                        "colors": [
+                            "#FF6600",
+                            "#B0DE09",
+                            "#D6F661",
+                            "#FFA364",
+                        ],
+                        "dataProvider": $scope.chartData,
+                        "startDuration": 1,
+                        "graphs": $scope.chartGraphs,
+                        "categoryField": "OrganizationName",
+                        "categoryAxis": {
+                            "gridPosition": "start" ,
+                            "gridAlpha": 0.2 ,
+                            "axisAlpha": 0,
+                            "labelFunction": function(value) {
+                                if(value)
+                                    return persianJs(value).englishNumber().toString();
+                                return '';
+                            }
+                        },
+                        "valueAxes": [{
+                            "gridAlpha": 0,
+                            "position": "top" ,
+                            "ignoreAxisWidth": true,
+                            "labelFunction": function(value) {
+                                return persianJs(Math.abs(value).toString()).englishNumber().toString() ;
+                            }
+                        }],
+                        "balloon": {
+                            "fixedPosition": true
+                        },
+                        "chartCursor": {
+                            "valueBalloonsEnabled": false,
+                            "cursorAlpha": 0.1,
+                            "fullWidth": true
+                        },
+                    });
+                    $scope.chartMaked = true;
+
+                });
+            });
+
+        },
+        // link : function ($scope) {
+        //
+        // }
+
+    };
+});

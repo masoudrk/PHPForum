@@ -10,6 +10,8 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 	$scope.errForum.text =false;
 	$scope.form = {};
 
+	$scope.att = {};
+
 	if($stateParams.id){
 		$scope.question.ID = $stateParams.id;
 		$scope.form.header = 'ویرایش سوال';
@@ -43,7 +45,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			$scope.allSubjects = res.AllSubjects;
 		});
 	}
-
+	
 	$scope.saveQuestion= function () {
 		var hasError = false;
 		if(!$scope.question.Title){
@@ -76,7 +78,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			var u = Upload.upload({
 				url: serviceBaseURL + 'saveQuestion',
 				method: 'POST',
-				file: $scope.myFiles,
+				file: $scope.att.myFiles,
 				data: {formData : angular.toJson($scope.question) }
 			});
 
@@ -113,7 +115,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 
     $scope.emptyForm = function () {
         $scope.question = {};
-        $scope.myFiles= [] ;
+        $scope.att.myFiles= [] ;
 		$scope.QuestionTextIN = undefined;
     }
 
@@ -135,13 +137,14 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 	}
     
 
-	// $scope.filesChanged = function(files, file, newFiles, duplicateFiles, invalidFiles ,event) {
-     //
-	// }
+	$scope.filesChanged = function(files, file, newFiles, duplicateFiles, invalidFiles ,event) {
+     	var tttt = $scope.att.myFiles;
+		debugger
+	}
 
     $scope.removeFile = function (file) {
-        var index = $scope.myFiles.indexOf(file);
-        $scope.myFiles.splice(index,1);
+        var index = $scope.att.myFiles.indexOf(file);
+        $scope.att.myFiles.splice(index,1);
     }
 	activeElement('#SQuestion','#SQuestionNew');
 });

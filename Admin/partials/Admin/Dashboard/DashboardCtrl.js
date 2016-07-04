@@ -139,6 +139,78 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
         }
     }];
 
+    $scope.stackChartOptions = [{
+        "fillAlphas": 0.8,
+        "lineAlpha": 0.2,
+        "type": "column",
+        "valueField": "QTotal",
+        "labelText": "[[value]]",
+        "clustered": false,
+        "labelFunction": function(item) {
+            return persianJs( item.values.value.toString() ).englishNumber().toString();
+        },
+        "balloonFunction": function(item) {
+            return "<b style=\"font-size: 15px\">" +
+                persianJs( item.category ).englishNumber().toString()
+                + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
+                persianJs( item.values.value.toString() ).englishNumber().toString()
+                + "</span><span style='font-size=15px'>" + 'سوال' + "</span>" ;
+        }
+    }, {
+        "fillAlphas": 0.8,
+        "lineAlpha": 0.2,
+        "type": "column",
+        "valueField": "ATotal",
+        "labelText": "[[value]]",
+        "clustered": false,
+        "labelFunction": function(item) {
+            return persianJs( (-item.values.value).toString() ).englishNumber().toString();
+        },
+        "balloonFunction": function(item) {
+            return "<b style=\"font-size: 15px;\">" +
+                persianJs( item.category ).englishNumber().toString()
+                + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
+                persianJs( (-item.values.value).toString() ).englishNumber().toString()
+                + "</span><span style='font-size=15px'>" + 'جواب' + "</span>" ; ;
+        }
+    }, {
+        "fillAlphas": 1,
+        "lineAlpha": 0.0,
+        "type": "column",
+        "valueField": "ATotalNA",
+        "labelText": "[[value]]",
+        "clustered": false,
+        "labelFunction": function(item) {
+            return persianJs( (-item.values.value).toString() ).englishNumber().toString();
+        },
+        "balloonFunction": function(item) {
+            var s ="<b style=\"font-size: 15px\">" +
+                persianJs( item.category ).englishNumber().toString()
+                + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
+                persianJs( (-item.values.value).toString() ).englishNumber().toString()
+                + "</span><span style='font-size=15px'>" + 'جواب تایید نشده' + "</span>" ;
+
+            return s;
+        }
+    }, {
+        "fillAlphas": 1,
+        "lineAlpha": 0.0,
+        "type": "column",
+        "valueField": "QTotalNA",
+        "labelText": "[[value]]",
+        "clustered": false,
+        "labelFunction": function(item) {
+            return persianJs( item.values.value.toString() ).englishNumber().toString();
+        },
+        "balloonFunction": function(item) {
+            return "<b style=\"font-size: 15px\">" +
+                persianJs( item.category ).englishNumber().toString()
+                + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
+                persianJs( item.values.value.toString() ).englishNumber().toString()
+                + "</span><span style='font-size=15px'>" + 'سوال تایید نشده' + "</span>" ;
+        }
+    }];
+
     var convertDateToISO = function (inputFullDate) {
         if (inputFullDate.calType == "jalali") {
             var t = ADMdtpConvertor.toGregorian(inputFullDate.year, inputFullDate.month, inputFullDate.day);

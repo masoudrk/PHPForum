@@ -78,7 +78,7 @@
                     <i class="fa fa-paperclip fa-2x text-muted"></i>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
-                    <div ng-repeat="f in myFiles" ng-if="!question.ID">
+                    <div ng-repeat="f in att.myFiles" ng-if="!question.ID">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <img ngf-thumbnail="f||'../images/Avatar.jpg'" style="width:50px;height: 50px;"
@@ -90,6 +90,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div ng-repeat="f in question.Attachments" ng-if="question.ID">
                         <div class="panel panel-default">
                             <div class="panel-body" style="cursor: not-allowed;">
@@ -100,6 +101,17 @@
                                 </span>
 
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-gro p row" style="margin-top: 5px" ng-if="!question.ID">
+                        <div class="col-xs-12">
+                            <span class="btn btn-primary btn-file pull-left ">
+            انتخاب فایل (ها)  <input type="file" id="inputFile" ngf-select name="file"
+                                     ngf-max-size="50MB"
+                                     ngf-model-invalid="errorFile" ngf-multiple="true" ngf-keep="'distinct'"
+                                     ng-model="att.myFiles"
+                                     ngf-change="filesChanged($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)">
+                            </span>
                         </div>
                     </div>
                 </div><!-- /.box-body -->
@@ -123,14 +135,6 @@
                             </div>
                             <label for="title" class="col-md-2 col-xs-12 control-label">خلاصه سوال</label>
                         </div>
-                        <!--<div class="form-horizontal form-group col-xs-12" ng-class="errForum.text? 'has-error':''">-->
-                            <!--<div class="col-xs-10">-->
-                                <!--<textarea rows="15" id="body" class="form-control" ng-model="QuestionTextIN"-->
-                                          <!--placeholder="سوال کامل ... " ng-change="fieldChanged('text',QuestionTextIN)"-->
-                                          <!--ng-model-options="{debounce:100}"></textarea>-->
-                            <!--</div>-->
-                            <!--<label for="body" class="col-xs-2 control-label">سوال کامل</label>-->
-                        <!--</div>-->
 
                         <div class="form-horizontal form-group col-xs-12" ng-class="errForum.text? 'has-error':''">
                             <label for="body" class="col-xs-12 control-label">سوال کامل</label>
@@ -139,7 +143,7 @@
                                      class="my-large-area"
                                      ng-model="QuestionTextIN"
                                      placeholder="متن کامل سوال ... " ng-change="fieldChanged('text',QuestionTextIN)"
-                                     ng-model-options="{debounce:100}" class="textAngular-span"></div>
+                                     ng-model-options="{debounce:100}"></div>
                             </div>
                         </div>
 
