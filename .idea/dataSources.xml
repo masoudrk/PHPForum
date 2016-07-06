@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1968816350">
+  <component name="DataSourceManagerImpl" format="xml" hash="2479810546">
     <data-source source="LOCAL" name="MySQL - phpforumdb@localhost" uuid="5a4f0975-0ccb-4a42-a5ba-26dc6e6c1a46">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>

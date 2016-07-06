@@ -520,3 +520,10 @@ h5 ,h4 ,h3 ,h2 ,h1 {
 .my-large-area .ta-editor{
     max-height: 600px;
 }
+
+.export-main > a {
+    text-align: left !important;
+}
+.amcharts-export-menu li > a {
+    text-align: right;
+}

@@ -72,4 +72,13 @@ forum_question.ID='$qID'");
     return $resQ->fetch_assoc();
 }
 
+function getAdminPostSubject($db ,$apID){
+
+    $resQ = $db->makeQuery("select forum_subject.* from admin_post 
+left join forum_subject on forum_subject.ID=admin_post.SubjectID
+where admin_post.ID='$apID'");
+
+    return $resQ->fetch_assoc();
+}
+
 ?>

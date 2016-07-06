@@ -45,6 +45,10 @@ if($meta['Type'] == 'new_question'){
 
     $db->insertToTable('answer_attachment','IsInline,FileID',
         "'1','$fid'");
+}else if($meta['Type'] == 'new_admin_post'){
+
+    $db->insertToTable('admin_post_attachment','IsInline,FileID',
+        "'1','$fid'");
 }
 
 echo '../'.$destination;

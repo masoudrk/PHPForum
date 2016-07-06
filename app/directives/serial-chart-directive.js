@@ -82,7 +82,10 @@ angular.module('am-charts', []).directive('serialChart', function () {
                             categoryBalloonEnabled : false
                         },
                         mouseWheelZoomEnabled: true,
-
+                        "export": {
+                            "enabled": true,
+                            
+                        }
                     };
 
                     if ($scope.enableScrollBar){
@@ -95,11 +98,7 @@ angular.module('am-charts', []).directive('serialChart', function () {
                 });
             });
 
-        },
-        // link : function ($scope) {
-        //
-        // }
-
+        }
     };
 });
 
@@ -172,7 +171,7 @@ angular.module('am-charts').directive('stackBarChart', function () {
                             "valueBalloonsEnabled": false,
                             "cursorAlpha": 0.1,
                             "fullWidth": true
-                        },
+                        }
                     });
                     $scope.chartMaked = true;
 

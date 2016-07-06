@@ -36,6 +36,8 @@ function generateRequiredCMSJavaFiles(){
     <script src="../js/am-charts/serial.js" type="text/javascript"></script>
     <script src="../js/am-charts/pie.js" type="text/javascript"></script>
     <script src="../js/am-charts/radar.js" type="text/javascript"></script>
+    
+    <script src="../js/am-charts/plugins/export/export.min.js" type="text/javascript"></script>
 
     <script src="../js/persian.min.js"></script>
 
@@ -77,6 +79,7 @@ function generateRequiredCMSJavaFiles(){
 
 function generateRequiredCMSCssFiles(){
     ?>
+    <link href="../js/am-charts/plugins/export/export.css" rel="stylesheet" type="text/css">
     <link rel='stylesheet' href='../css/textAngular.css'>
     <link rel="stylesheet" href="../css/ADM-dateTimePicker.css" type="text/css">
     <link rel="stylesheet" href="../css/ng-img-crop.min.css" type="text/css">
