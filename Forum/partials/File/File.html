@@ -1,0 +1,109 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>انجمن</small>
+        کتابخانه سایت
+    </h1>
+
+    <ol class="breadcrumb">
+        <li><a href="home.php"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">کتابخانه سایت</li>
+    </ol>
+</section>
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-12">
+            <div class="box" ng-class="getBoxColor(file.ID)">
+                <div class="box-header with-border">
+                    <div class="user-block ">
+                        <img class="img-circle" err-src="../images/Avatar.jpg" ng-src="{{file.UserAvatar}}"
+                             alt="user image">
+                        <span class="username">
+                            <a ui-sref="UserProfile({id:file.UserID})"
+                               ng-bind="file.FullName"></a>
+                        </span>
+                        <span class="description persian-rtl">
+                            <i class="fa fa-clock-o text-yellow" aria-hidden="true"></i>
+                            {{file.UploadDate | jalaliDate :'jYYYY/jMM/jDD'| pNumber}}
+                        </span>
+                    </div>
+                </div>
+                <div class="box-body box-profile">
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            <div class="col-xs-12 col-sm-4 pull-right" ng-switch="file.GeneralType">
+                                <i class="fa fa-image fa-5x" ng-switch-when="Image"></i>
+                                <i class="fa fa-video-camera fa-5x" ng-switch-when="Video"></i>
+                                <i class="fa fa-file-pdf-o fa-5x" ng-switch-when="Document"></i>
+                                <i class="fa fa-windows fa-5x" ng-switch-when="WindowsExecutable"></i>
+                                <i class="fa fa-music fa-5x" ng-switch-when="Voice"></i>
+                                <i class="fa fa-android fa-5x" ng-switch-when="AndroidApp"></i>
+                                <i class="fa fa-file-excel-o fa-5x" ng-switch-when="Excel"></i>
+                                <i class="fa fa-file-word-o fa-5x" ng-switch-when="Word"></i>
+                                <i class="fa fa-file fa-5x" ng-switch-when="Unknown"></i>
+
+                                <div class="col-xs-12 english-font" ng-bind="file.Filename"
+                                     style="font-size: 17px;padding:3px">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 persian-rtl text-muted pull-left"
+                                 style="padding:3px">
+                                <span style="font-size:18px"><i class="fa fa-check-circle-o text-green" aria-hidden="true"></i> توضیخات</span><br />
+                                {{file.Description || 'بدون توضیحات'}}
+
+                                <div class="col-xs-12 no-padding">
+                                    <div class="col-xs-4 persian-rtl text-muted"
+                                         style="padding:3px">
+                                        <span ng-show="file.SubjectTitle" style="font-size:18px"><i class="fa fa-comment-o text-aqua" aria-hidden="true"></i> زیرشاخه</span><br />
+                                        {{file.SubjectTitle | pNumber}}
+                                    </div>
+                                    <div class="col-xs-4 persian-rtl text-muted"
+                                         style="padding:3px">
+                                        <span style="font-size:18px" ng-show="file.MainSubjectTitle"><i class="fa fa-comments-o text-blue" aria-hidden="true"></i> شاخه اصلی</span><br />
+                                        {{file.MainSubjectTitle | pNumber}}
+                                    </div>
+                                    <div class="col-xs-4 persian-rtl text-muted"
+                                         style="padding:3px">
+                                        <span style="font-size:18px"><i class="fa fa-database text-yellow" aria-hidden="true"></i> حجم فایل</span><br />
+                                        {{file.FileSize | fileSizeFilter}}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+                <div class="box-footer hidden-xs hidden-sm">
+                    <button class="btn btn-primary btn-sm pull-right" ng-click="downloadFile(file)">
+                        دانلود
+                        فایل <i class="fa fa-download"></i>
+                    </button>
+
+                    <button class="btn btn-success btn-sm pull-right"
+                            style="margin-right: 3px"
+                            ng-click="copyFileLink(file)">
+                        لینک فایل <i class="fa fa-link"></i>
+                    </button>
+                </div>
+                <div class="box-footer hidden-md hidden-lg">
+                    <button class="btn btn-primary pull-right col-xs-12"
+                            style="margin-bottom: 5px"
+                            ng-click="downloadFile(file)">
+                        دانلود
+                        فایل <i class="fa fa-download"></i>
+                    </button>
+
+                    <button class="btn btn-success pull-right col-xs-12"
+                            style="margin-bottom: 5px"
+                            ng-click="copyFileLink(file)">
+                        لینک فایل <i class="fa fa-link"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+

@@ -96,6 +96,7 @@
     <Folder Include="Admin\partials\Admin\Education\" />
     <Folder Include="Admin\partials\Admin\Admin\" />
     <Folder Include="Admin\partials\Admin\Message\" />
+    <Folder Include="Admin\partials\Admin\CommonMessage\" />
     <Folder Include="Admin\partials\Admin\Skill\" />
     <Folder Include="Admin\partials\Admin\Tag\" />
     <Folder Include="Admin\partials\Admin\Questions\" />
@@ -376,6 +377,8 @@
     <Content Include="Admin\partials\Admin\Elements\Tables.html" />
     <Content Include="Admin\partials\Admin\Elements\_Elements.html" />
     <Content Include="Admin\partials\Admin\Elements\_ElementsCtrl.js" />
+    <Content Include="Admin\partials\Admin\CommonMessage\CommonMessage.html" />
+    <Content Include="Admin\partials\Admin\CommonMessage\CommonMessage.js" />
     <Content Include="Admin\partials\Admin\UploadLibrary\UploadLibrary.html" />
     <Content Include="Admin\partials\Admin\UploadLibrary\UploadLibraryCtrl.js" />
     <Content Include="Admin\partials\MainCtrl.js" />

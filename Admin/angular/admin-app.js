@@ -144,6 +144,18 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                     return 'آپلود فایل';
                 }
             }
+        }).state("common_messages", {
+            url: "/CommonMessage",
+            templateUrl: "partials/Admin/CommonMessage/CommonMessage.html",
+            controller: 'CommonMessageCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/CommonMessage/CommonMessage.js']);
+                }],
+                $title: function () {
+                    return 'پیام های رایج';
+                }
+            }
         }).state("manage_library", {
             url: "/ManageLibrary",
             templateUrl: "partials/Admin/ManageLibrary/ManageLibrary.html",
