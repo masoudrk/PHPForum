@@ -16,9 +16,11 @@ angular.module(appName).controller('MainForumCtrl',
     $scope.pagingControllerAnswered = {};
     $scope.pagingControllerFollowingQuestions = {};
     $scope.pcAdminPost = {};
+    $scope.pcAdminPosts = {};
+    $scope.pagingControllerBestAnswered = {};
 
 
-    $scope.getTab = function (id) {
+        $scope.getTab = function (id) {
         switch (id){
             case 0:
                 $scope.pagingControllerLastQuestions.update();
@@ -39,8 +41,21 @@ angular.module(appName).controller('MainForumCtrl',
         $scope.activeTab = id;
     }
 
+    $scope.getDownTab = function (id) {
+        switch (id) {
+            case 0:
+                $scope.pcAdminPosts.update();
+                break;
+            case 1:
+                $scope.pagingControllerBestAnswered.update();
+                break;
+        }
+        $scope.activeDownTab = id;
+    }
+
     $timeout(function () {
         $scope.getTab(0);
+        $scope.getDownTab(0);
     });
 
     $scope.bgColorArray= ["bg-aqua-active","bg-orange","bg-purple-active","bg-navy-active","bg-orange-active",

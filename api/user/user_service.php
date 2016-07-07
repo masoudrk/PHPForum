@@ -2034,7 +2034,7 @@ left join forum_main_subject on forum_main_subject.SubjectID=admin_permission.Ma
     echoResponse(200, $resp);
 });
 
-$app->post('/getLastAdminPosts', function() use ($app)  {
+$app->post('/getLastExSubject', function() use ($app)  {
     $data = json_decode($app->request->getBody());
 
     $sess = $app->session;
@@ -2046,13 +2046,14 @@ $app->post('/getLastAdminPosts', function() use ($app)  {
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
 
-        $query = "SELECT u.score,u.FullName,admin_post.`ID` , 
+        $query = "SELECT u.score,u.FullName,admin_post.`ID` ,
 admin_post.`Title`, `AuthorID`, `CreationDate`, `FullPath` as Image,forum_subject.Title as SubjectTitle
- FROM admin_post 
- LEFT JOIN user as u on u.ID=admin_post.AuthorID 
- LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
- LEFT JOIN forum_subject on forum_subject.ID=admin_post.SubjectID 
- WHERE forum_subject.ParentSubjectID='$subjectID'";
+ FROM admin_post
+ INNER JOIN post_type as pt on pt.ID = admin_post.PostTypeID
+ LEFT JOIN user as u on u.ID=admin_post.AuthorID
+ LEFT JOIN file_storage on file_storage.ID=u.AvatarID
+ LEFT JOIN forum_subject on forum_subject.ID=admin_post.SubjectID
+ WHERE forum_subject.ParentSubjectID='$subjectID' and  pt.PostTypeEN ='ExecutiveSolutions'";
 
         echoResponse(200, $pr->getPage($app->db,$query));
     }
@@ -2060,11 +2061,12 @@ admin_post.`Title`, `AuthorID`, `CreationDate`, `FullPath` as Image,forum_subjec
 
         $query = "SELECT u.score,u.FullName,admin_post.`ID` , 
 admin_post.`Title`, `AuthorID`, `CreationDate`, `FullPath` as Image
- FROM admin_post 
+ FROM admin_post
+INNER JOIN post_type as pt on pt.ID = admin_post.PostTypeID
  LEFT JOIN user as u on u.ID=admin_post.AuthorID 
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
- LEFT JOIN forum_subject on forum_subject.ID=admin_post.SubjectID 
- WHERE forum_subject.ID='$data->SubjectID'";
+ LEFT JOIN forum_subject on forum_subject.ID=admin_post.SubjectID
+ WHERE forum_subject.ID='$data->SubjectID' and  pt.PostTypeEN ='ExecutiveSolutions'";
 
         echoResponse(200, $pr->getPage($app->db,$query));
     }
@@ -2072,5 +2074,44 @@ admin_post.`Title`, `AuthorID`, `CreationDate`, `FullPath` as Image
     echoError('Subject ID is not found.');
 
 });
+$app->post('/getLastAdminPosts', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
 
+    $sess = $app->session;
+    $pr = new Pagination($data);
+
+    if(isset($data->MainSubjectName)){
+        $resQ = $app->db->makeQuery("SELECT forum_main_subject.SubjectID FROM forum_main_subject WHERE
+                                forum_main_subject.SubjectName='$data->MainSubjectName' ");
+
+        $subjectID= $resQ->fetch_assoc()['SubjectID'];
+
+        $query = "SELECT u.score,u.FullName,admin_post.`ID` ,
+admin_post.`Title`, `AuthorID`, `CreationDate`, `FullPath` as Image,forum_subject.Title as SubjectTitle
+ FROM admin_post
+ INNER JOIN post_type as pt on pt.ID = admin_post.PostTypeID
+ LEFT JOIN user as u on u.ID=admin_post.AuthorID
+ LEFT JOIN file_storage on file_storage.ID=u.AvatarID
+ LEFT JOIN forum_subject on forum_subject.ID=admin_post.SubjectID
+ WHERE forum_subject.ParentSubjectID='$subjectID' and  pt.PostTypeEN ='AdminPosts'";
+
+        echoResponse(200, $pr->getPage($app->db,$query));
+    }
+    else if(isset($data->SubjectID)){
+
+        $query = "SELECT u.score,u.FullName,admin_post.`ID` ,
+admin_post.`Title`, `AuthorID`, `CreationDate`, `FullPath` as Image
+ FROM admin_post
+INNER JOIN post_type as pt on pt.ID = admin_post.PostTypeID
+ LEFT JOIN user as u on u.ID=admin_post.AuthorID
+ LEFT JOIN file_storage on file_storage.ID=u.AvatarID
+ LEFT JOIN forum_subject on forum_subject.ID=admin_post.SubjectID
+ WHERE forum_subject.ID='$data->SubjectID' and  pt.PostTypeEN ='AdminPosts'";
+
+        echoResponse(200, $pr->getPage($app->db,$query));
+    }
+
+    echoError('Subject ID is not found.');
+
+});
 ?>

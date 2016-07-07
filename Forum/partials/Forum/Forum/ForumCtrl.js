@@ -32,6 +32,8 @@ angular.module(appName).controller('ForumCtrl',
     $scope.pagingControllerAnswered = {};
     $scope.pagingControllerFollowingQuestions = {};
     $scope.pcAdminPost = {};
+    $scope.pcAdminPosts = {};
+    $scope.pagingControllerBestAnswered = {};
 
     $scope.getTab = function (id) {
         switch (id){
@@ -54,8 +56,21 @@ angular.module(appName).controller('ForumCtrl',
         $scope.activeTab = id;
     }
 
+    $scope.getDownTab = function (id) {
+        switch (id) {
+            case 0:
+                $scope.pcAdminPosts.update();
+                break;
+            case 1:
+                $scope.pagingControllerBestAnswered.update();
+                break;
+        }
+        $scope.activeDownTab = id;
+    }
+
     $timeout(function () {
         $scope.getTab(0);
+        $scope.getDownTab(0);
     });
 
     $scope.incrementChartOptions = [
