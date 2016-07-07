@@ -1375,6 +1375,46 @@ where cd.ID BETWEEN ".($cid - 20)." and ".($cid+1));
     echoSuccess($resp);
 });
 
+$app->post('/getAdminPostID', function() use ($app)  {
+
+    $r = json_decode($app->request->getBody());
+
+
+    if(!isset($r->AdminPostID))
+        {echoError('bad request');}
+
+
+    $resQ =$app->db->makeQuery("select count(*) as val from admin_post where ID = '$r->AdminPostID'");
+    $sql =$resQ->fetch_assoc();
+    if($sql['val'] == 0)
+        {echoError('not fount');}
+
+    $resQ = $app->db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainSubject , ms.SubjectName , o.OrganizationName ,
+(SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
+(SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount
+from admin_post as q
+inner join user as u on u.ID = q.AuthorID
+inner join file_storage as f on f.ID = u.AvatarID
+inner join forum_subject as s on q.SubjectID = s.ID
+inner join forum_main_subject as ms on ms.ID = s.ParentSubjectID
+inner join organ_position as o on u.OrganizationID = o.ID
+where q.ID = '$r->AdminPostID' and f.IsAvatar = 1 ");
+
+    $resp = $resQ->fetch_assoc();
+    $resQ = $app->db->makeQuery("select fs.*,ft.GeneralType from admin_post_attachment as qt
+inner join file_storage as fs on fs.ID = qt.FileID
+left join file_type as ft on ft.ID=fs.FileTypeID
+where qt.AdminPostID='$r->AdminPostID'");
+
+    $aAtt = [];
+    while($item = $resQ->fetch_assoc())
+        $aAtt[] = $item;
+    $resp['Attachments'] = $aAtt;
+
+    echoSuccess( $resp);
+});
+
+
 $app->post('/getQuestionByID', function() use ($app)  {
 
     $r = json_decode($app->request->getBody());

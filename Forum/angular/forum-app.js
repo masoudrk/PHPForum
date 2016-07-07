@@ -282,6 +282,20 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'راهنمای سایت';
                 }
             }
+        }).state("admin_post", {
+            url: "/AdminPost/:id",
+            templateUrl: "partials/Forum/AdminPost/AdminPost.html" + rand,
+            controller: 'AdminPostCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load(['partials/Forum/AdminPost/AdminPostCtrl.js' + rand]);
+                    }
+                ],
+                $title: function () {
+                    return 'مطلب ادمین';
+                }
+            }
         });
 
         $urlRouterProvider.otherwise(function ($injector, $location) {

@@ -1,0 +1,157 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>خانه</small>
+        انجمن
+    </h1>
+    <ol ng-include src="'partials/breadcrumb.html'" class="breadcrumb"></ol>
+</section>
+
+<section class="text-center col-xs-12" ng-show="adminPost==null">
+    <h1 style="font-size: 90px;">404<small><small> not found</small></small></h1>
+</section>
+
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header vazir-font text-right">
+        <h3 class="modal-title text-danger">نمایش فایل ضمیمه</h3>
+    </div>
+    <div class="modal-body vazir-font text-center" ng-switch="attachment.GeneralType">
+        <div ng-switch-when="Image">
+            <img ng-src="{{'../' + attachment.AbsolutePath}}" class="img-responsive">
+        </div>
+        <div class="row" ng-switch-default>
+            <div class="col-xs-12 text-center">
+                <span class="fa fa-file fa-5x"></span>
+            </div>
+            <p class="col-xs-12 text-center">
+                <br>
+                <h4 class=" persian-rtl">
+                    <span> نام فایل :</span>
+                    <span class="text-danger english-font"> {{attachment.Filename}} </span><br><br>
+                    <span> حجم :</span>
+                    <span class="text-danger"> {{attachment.FileSize| pNumber}} کیلوبایت</span><br><br>
+                    <span> تاریخ آپلود :</span>
+                    <span class="text-danger">
+                        {{attachment.UploadDate  | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}
+                    </span>
+                    <br>
+                </h4>
+            </p>
+        </div>
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+        <button class="btn btn-success pull-right" ng-click="downloadAttachment()">
+            دانلود فایل
+        </button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="inlineImageView.html">
+    <div class="modal-header vazir-font text-right">
+        <h3 class="modal-title text-danger">نمایش تصویر</h3>
+    </div>
+    <div class="modal-body vazir-font text-center">
+        <img ng-src="{{'../' + link}}" class="img-responsive">
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+        <button class="btn btn-success pull-right" ng-click="downloadAttachment()">
+            دانلود فایل
+        </button>
+    </div>
+</script>
+
+<div class="row" ng-show="adminPost!=null">
+    <div class="col-xs-12">
+        <div class="col-md-8">
+            <div class="box box-solid" style="min-height:218px">
+                <div class="box-header with-border vazir-font">
+                    <h3 class="box-title">عنوان مطلب</h3>
+                    <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o text-yellow" aria-hidden="true"></i>   {{adminPost.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="col-xs-12">
+                        <p class="persian-rtl text-right" style="font-size: 25px;">
+                            {{adminPost.Title | pNumber}}
+                        </p>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    <div class="col-md-4">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header" ng-class="getBGColor(adminPost.UserID)">
+                <a ui-sref="UserProfile({id:adminPost.UserID})" style="cursor: pointer; color: white">
+                    <h3 class="widget-user-username">{{adminPost.FullName | pNumber}}</h3><br>
+
+                </a>
+                <h5 class="widget-user-desc" ng-show="isOnline">
+                    آنلاین <i class="fa fa-circle text-green"></i> </h5>
+            </div>
+            <div class="widget-user-image" style="cursor: pointer">
+                <img class="img-circle" ui-sref="UserProfile({id:adminPost.UserID})" err-src="../images/Avatar.jpg" ng-src="{{adminPost.FullPath}}" alt="User Avatar">
+            </div>
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-xs-4 border-left">
+                        <div class="description-block">
+                            <h5 class="description-header">{{adminPost.score | pNumber}}</h5>
+                            <span class="description-text">امتیاز</span>
+                        </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-xs-4 border-left">
+                        <div class="description-block">
+                            <h5 class="description-header">{{adminPost.QuestionsCount | pNumber}}</h5>
+                            <span class="description-text">سوالات پرسیده</span>
+                        </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                    <div class="col-xs-4">
+                        <div class="description-block">
+                            <h5 class="description-header">{{adminPost.AnswerCount | pNumber}}</h5>
+                            <span class="description-text">جواب ها</span>
+                        </div><!-- /.description-block -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div>
+        </div><!-- /.widget-user -->
+    </div>
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            مطلب <i class="fa fa-adminPost text-blue" aria-hidden="true"></i>
+                        </h3>
+                        <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o text-yellow" aria-hidden="true"></i>   {{adminPost.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
+                    </div><!-- /.box-header -->
+                    <!-- form start -->
+                    <div  class="persian-rtl box-body text-right" style="text-align:justify">
+                        <span compile="adminPost.PostText | pNumber" class="textAngular-span"></span>
+                    </div><!-- /.box-body -->
+
+                    <div style="padding: 5px;" class="persian-rtl">
+                        <ul class="nav nav-pills" style="padding-right: 0px;">
+                            <li ng-repeat="at in adminPost.Attachments" class="active fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50">
+                                <a class="english-font link" ng-click="openAttachments(at)" ng-if="at.GeneralType=='Image'">
+                                    {{at.Filename}}
+                                    <img
+                                            ng-src="{{'../' + at.AbsolutePath}}"
+                                            style="width:30px;height: 30px;"
+                                            class="img-circle" >
+                                </a>
+                                <a class="english-font link" ng-click="openAttachments(at)" ng-if="at.GeneralType!='Image'">
+                                    <div>
+                                        <span style="">{{at.Filename}}</span>
+                                        <i style="height: 30px" class="fa fa-file fa-2x"></i>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
