@@ -31,6 +31,7 @@ angular.module(appName).controller('ForumCtrl',
     $scope.pagingControllerBestQuestions = {};
     $scope.pagingControllerAnswered = {};
     $scope.pagingControllerFollowingQuestions = {};
+    $scope.pcAdminPost = {};
 
     $scope.getTab = function (id) {
         switch (id){
@@ -45,6 +46,9 @@ angular.module(appName).controller('ForumCtrl',
                 break;
             case 3:
                 $scope.pagingControllerFollowingQuestions.update();
+                break;
+            case 4:
+                $scope.pcAdminPost.update();
                 break;
         }
         $scope.activeTab = id;

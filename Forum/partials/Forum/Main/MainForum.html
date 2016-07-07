@@ -85,15 +85,25 @@
                         </a>
                     </li>
                     <li class="link">
-                        <a ng-click="getTab(3)" data-toggle="tab" aria-expanded="false">
+                        <a ng-click="getTab(4)" data-toggle="tab" aria-expanded="false">
                             <span class="badge bg-green"
-                                  ng-show="activeTab == 3"
-                                  ng-bind="question.allFollowingTotal || '0' | pNumber"
+                                  ng-show="activeTab == 4"
+                                  ng-bind="adminPost.allTotal || '0' | pNumber"
                                   style="margin-right: 8px;margin-top: -3px;">
                             </span>
-                            دنبال شده ها
+                            راه کارهای اجرایی
                         </a>
                     </li>
+                    <!--<li class="link">-->
+                        <!--<a ng-click="getTab(3)" data-toggle="tab" aria-expanded="false">-->
+                            <!--<span class="badge bg-green"-->
+                                  <!--ng-show="activeTab == 3"-->
+                                  <!--ng-bind="question.allFollowingTotal || '0' | pNumber"-->
+                                  <!--style="margin-right: 8px;margin-top: -3px;">-->
+                            <!--</span>-->
+                            <!--دنبال شده ها-->
+                        <!--</a>-->
+                    <!--</li>-->
                 </ul>
                 <div class="tab-content" style="padding: 0">
                     <!-- Last questions -->
@@ -259,37 +269,50 @@
                             </auto-paging>
                         </div>
                     </div><!-- /.tab-pane -->
-                    <!-- Following questions -->
-                    <div class="tab-pane" ng-class="(activeTab == 3)?'active':''" >
+                    <!-- Admin post questions -->
+                    <div class="tab-pane" ng-class="(activeTab == 4)?'active':''" >
                         <div class="table-responsive no-padding">
                             <table class="table border-bottom-table table-hover"
-                                   ng-show="question.allFollowing.length > 0">
+                                   ng-show="adminPost.all.length > 0">
                                 <tbody>
                                 <tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
-                                     ng-repeat="q in question.allFollowing">
-                                    <td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
-                                              style="width:40px"
-                                              ng-style="{'border': (q.Rate > 5) ? activity.high :
-                                                                (q.Rate > 2.5)?activity.medium : activity.low}"
+                                     ng-repeat="q in adminPost.all" ui-sref="admin_post({id:q.ID})">
+
+                                    <td style="width: 40px">
+                                        <img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
+                                              style="width:40px ; border:solid 2px #ddd"
                                               title="{{q.score | number:1 | pNumber | concat : ' امتیاز '}}"
                                               data-toggle="tooltip" data-placement="top"
                                               tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
                                               tooltip-append-to-body="true"></td>
-                                    <td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}} <span class="badge bg-yellow">{{q.score | pNumber}}</span></td>
-                                    <td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">
-                                        {{q.Title | subString :30|pNumber}}
+                                    <td>
+                                        <a >
+                                            <span>
+                                                {{q.FullName | subString :20|pNumber}}
+                                                <span class="badge bg-yellow">{{q.score | pNumber}}</span>
+                                            </span>
+                                        </a>
                                     </td>
-
-                                    <td ui-sref="question({id:q.ID})">
-                                        {{q.ViewCount | pNumber}}
-                                        <i class="fa fa-eye palette-peter-river"></i>
+                                    <td>
+                                        <a ui-sref="admin_post({id:q.ID})">
+                                            <span class="persian-rtl" style="font-size: 12px;">
+                                                {{q.SubjectTitle|subString:20 | pNumber}}
+                                            </span>
+                                        </a>
                                     </td>
-                                    <td class="text-center" ui-sref="question({id:q.ID})" >{{q.AnswersCount || '0'|pNumber}} جواب
+                                    <td>
+                                        <a ui-sref="admin_post({id:q.ID})">
+                                            <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                                {{q.Title | pNumber}}
+                                            </span>
+                                        </a>
                                     </td>
-                                    <td ui-sref="question({id:q.ID})" >
-                                <span class="persian-rtl text-muted" style="font-size: 12px;">
-                                    {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
-                                </span>
+                                    <td>
+                                        <a ui-sref="admin_post({id:q.ID})">
+                                            <span class="persian-rtl text-muted" style="font-size: 12px;">
+                                                {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -297,23 +320,78 @@
                         </div>
                         <div class="clearfix text-center" style="padding-bottom: 5px;">
                             <h4 class="text-center text-muted"
-                                ng-show="question.allFollowing.length == 0">
-                                بدون سوال
+                                ng-show="adminPost.all.length == 0">
+                                بدون مطلب
                             </h4>
                             <auto-paging page="1"
                                          page-size="20"
                                          ul-class="pagination pagination-sm no-margin"
-                                         action-name="getLastFollowingQuestions"
+                                         action-name="getLastAdminPosts"
                                          data-params="pagingParams"
-                                         ng-control="pagingControllerFollowingQuestions"
+                                         ng-control="pcAdminPost"
                                          scroll-to-begin="false"
                                          only-get-result-when-update="true"
-                                         items="question.allFollowing"
-                                         total-items="question.allFollowingTotal"
-                                         ng-show="question.allFollowing.length != 0">
+                                         items="adminPost.all"
+                                         total-items="adminPost.allTotal"
+                                         ng-show="adminPost.all.length != 0">
                             </auto-paging>
                         </div>
                     </div><!-- /.tab-pane -->
+                    <!-- Following questions -->
+                    <!--<div class="tab-pane" ng-class="(activeTab == 3)?'active':''" >-->
+                        <!--<div class="table-responsive no-padding">-->
+                            <!--<table class="table border-bottom-table table-hover"-->
+                                   <!--ng-show="question.allFollowing.length > 0">-->
+                                <!--<tbody>-->
+                                <!--<tr  class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"-->
+                                     <!--ng-repeat="q in question.allFollowing">-->
+                                    <!--<td><img  class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"-->
+                                              <!--style="width:40px"-->
+                                              <!--ng-style="{'border': (q.Rate > 5) ? activity.high :-->
+                                                                <!--(q.Rate > 2.5)?activity.medium : activity.low}"-->
+                                              <!--title="{{q.score | number:1 | pNumber | concat : ' امتیاز '}}"-->
+                                              <!--data-toggle="tooltip" data-placement="top"-->
+                                              <!--tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"-->
+                                              <!--tooltip-append-to-body="true"></td>-->
+                                    <!--<td ui-sref="question({id:q.ID})" >{{q.FullName | subString :20|pNumber}} <span class="badge bg-yellow">{{q.score | pNumber}}</span></td>-->
+                                    <!--<td ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}">-->
+                                        <!--{{q.Title | subString :30|pNumber}}-->
+                                    <!--</td>-->
+
+                                    <!--<td ui-sref="question({id:q.ID})">-->
+                                        <!--{{q.ViewCount | pNumber}}-->
+                                        <!--<i class="fa fa-eye palette-peter-river"></i>-->
+                                    <!--</td>-->
+                                    <!--<td class="text-center" ui-sref="question({id:q.ID})" >{{q.AnswersCount || '0'|pNumber}} جواب-->
+                                    <!--</td>-->
+                                    <!--<td ui-sref="question({id:q.ID})" >-->
+                                <!--<span class="persian-rtl text-muted" style="font-size: 12px;">-->
+                                    <!--{{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD' |pNumber}}-->
+                                <!--</span>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</table>-->
+                        <!--</div>-->
+                        <!--<div class="clearfix text-center" style="padding-bottom: 5px;">-->
+                            <!--<h4 class="text-center text-muted"-->
+                                <!--ng-show="question.allFollowing.length == 0">-->
+                                <!--بدون سوال-->
+                            <!--</h4>-->
+                            <!--<auto-paging page="1"-->
+                                         <!--page-size="20"-->
+                                         <!--ul-class="pagination pagination-sm no-margin"-->
+                                         <!--action-name="getLastFollowingQuestions"-->
+                                         <!--data-params="pagingParams"-->
+                                         <!--ng-control="pagingControllerFollowingQuestions"-->
+                                         <!--scroll-to-begin="false"-->
+                                         <!--only-get-result-when-update="true"-->
+                                         <!--items="question.allFollowing"-->
+                                         <!--total-items="question.allFollowingTotal"-->
+                                         <!--ng-show="question.allFollowing.length != 0">-->
+                            <!--</auto-paging>-->
+                        <!--</div>-->
+                    <!--</div>&lt;!&ndash; /.tab-pane &ndash;&gt;-->
                 </div><!-- /.tab-content -->
             </div>
 

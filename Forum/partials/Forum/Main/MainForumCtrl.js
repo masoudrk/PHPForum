@@ -15,6 +15,7 @@ angular.module(appName).controller('MainForumCtrl',
     $scope.pagingControllerBestQuestions = {};
     $scope.pagingControllerAnswered = {};
     $scope.pagingControllerFollowingQuestions = {};
+    $scope.pcAdminPost = {};
 
 
     $scope.getTab = function (id) {
@@ -30,6 +31,9 @@ angular.module(appName).controller('MainForumCtrl',
                 break;
             case 3:
                 $scope.pagingControllerFollowingQuestions.update();
+                break;
+            case 4:
+                $scope.pcAdminPost.update();
                 break;
         }
         $scope.activeTab = id;
@@ -187,6 +191,7 @@ angular.module(appName).controller('MainForumCtrl',
 
     $scope.pagingParams = { MainSubjectName : $stateParams.id };
     $scope.question = {};
+    $scope.adminPost = {};
 
 	Extention.post('getMainForumData',{MainSubjectName: $stateParams.id})
 		.then(function (res) {
