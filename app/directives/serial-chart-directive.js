@@ -10,6 +10,7 @@ angular.module('am-charts', []).directive('serialChart', function () {
             chartHeight : '@',
             chartGraphs : '=',
             enableScrollBar : '=',
+            enableExport : '=',
             chartId : '@',
             delay : '@'
         },
@@ -27,12 +28,6 @@ angular.module('am-charts', []).directive('serialChart', function () {
                         $scope.chart.dataProvider = $scope.chartData;
                         $scope.chart.validateData();
 
-                        // $scope.chart.animateData($scope.chartData, {
-                        //     duration: 1000,
-                        //     complete: function () {
-                        //
-                        //     }
-                        // });
                         return;
                     }
 
@@ -82,7 +77,9 @@ angular.module('am-charts', []).directive('serialChart', function () {
                             categoryBalloonEnabled : false
                         },
                         mouseWheelZoomEnabled: true,
-
+                        "export": {
+                            "enabled": $scope.enableExport ? true : false
+                        }
                     };
 
                     if ($scope.enableScrollBar){
@@ -95,11 +92,7 @@ angular.module('am-charts', []).directive('serialChart', function () {
                 });
             });
 
-        },
-        // link : function ($scope) {
-        //
-        // }
-
+        }
     };
 });
 
@@ -172,7 +165,7 @@ angular.module('am-charts').directive('stackBarChart', function () {
                             "valueBalloonsEnabled": false,
                             "cursorAlpha": 0.1,
                             "fullWidth": true
-                        },
+                        }
                     });
                     $scope.chartMaked = true;
 

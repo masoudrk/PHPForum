@@ -280,10 +280,10 @@
                             <div class="form-group">
                                 <div class="col-sm-9">
                                     <ui-select multiple ng-model="curUser.Educations" theme="bootstrap" ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
-                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Name}}</ui-select-match>
+                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Name|pNumber}}</ui-select-match>
                                         <ui-select-choices
                                                 repeat="edu in curUser.AllEducations | propsFilter: {Name: $select.search}">
-                                            <div compile="edu.Name | highlight: $select.search"></div>
+                                            <div compile="edu.Name | highlight: $select.search|pNumber"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -293,10 +293,10 @@
                                 <div class="col-sm-9">
                                     <ui-select multiple id="" ng-model="curUser.Skills" theme="bootstrap"
                                                ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
-                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Skill}}</ui-select-match>
+                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Skill|pNumber}}</ui-select-match>
                                         <ui-select-choices
                                                 repeat="edu in curUser.AllSkills | propsFilter: {Skill: $select.search}">
-                                            <div compile="edu.Skill | highlight: $select.search"></div>
+                                            <div compile="edu.Skill | highlight: $select.search |pNumber"></div>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
@@ -333,7 +333,7 @@
                          err-src="../images/Avatar.jpg"
                          alt="User profile picture">
                     <h3 class="profile-username text-center">{{::curUser.FullName}}</h3>
-                    <p class="text-muted text-center">{{curUser.Educations[0].Name}}</p>
+                    <p class="text-muted text-center">{{curUser.Educations[0].Name | pNumber}}</p>
 
                     <ul class="list-group list-group-unbordered" style="margin-bottom: -8px">
                         <li class="list-group-item">
@@ -358,7 +358,7 @@
                     <strong><i class="fa fa-book margin-r-5"></i>  تحصیلات</strong>
                     <ul class="nav nav-pills red" style="padding-right: 0px;font-size: 11px;">
                         <li ng-repeat="s in curUser.Educations" class="active">
-                            <a style="border-top: none;" class="label-{{randomColor(s.ID)}}">{{s.Name}}</a>
+                            <a style="border-top: none;" class="label-{{randomColor(s.ID)}}">{{s.Name | pNumber}}</a>
                         </li>
                     </ul>
                     <hr>
@@ -367,13 +367,13 @@
                     <strong><i class="fa fa-pencil margin-r-5"></i> مهارت ها</strong>
                     <ul class="nav nav-pills red" style="padding-right: 0px;font-size: 11px;">
                         <li ng-repeat="s in curUser.Skills" class="active">
-                            <a style="border-top: none;" class="label-{{randomColor(s.ID)}}">{{s.Skill}}</a>
+                            <a style="border-top: none;" class="label-{{randomColor(s.ID)}}">{{s.Skill | pNumber}}</a>
                         </li>
                     </ul>
                     <hr>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> درباره من</strong>
-                    <p class="text-muted">{{curUser.Description}}</p>
+                    <p class="text-muted">{{::curUser.Description | pNumber}}</p>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div>

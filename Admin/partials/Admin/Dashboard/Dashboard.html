@@ -73,12 +73,17 @@
                                      on-datechange="updateNewQuestionDiagram()"></adm-dtp>
                         </div>
                     </div>
-                    <serial-chart
-                            chart-id="chart2"
-                            chart-data="dashboardData.ChartData"
-                            chart-graphs="dailyChartOptions"
-                            enable-scroll-bar="true"
-                            chart-height="290"></serial-chart>
+                    <div class="row">
+                        <div class="col-xs-12 english-ltr">
+                            <serial-chart
+                                    chart-id="chart2"
+                                    chart-data="dashboardData.ChartData"
+                                    chart-graphs="dailyChartOptions"
+                                    enable-scroll-bar="true"
+                                    enable-export="true"
+                                    chart-height="290"></serial-chart>
+                        </div>
+                    </div>
                     <div class="col-xs-12 text-center">
                         <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">
                             <li style="padding-left: 20px">
@@ -134,12 +139,13 @@
                         <span>روز گذشته </span>
                     </h3>
                 </div><!-- /.box-header -->
-                <div class="box-body persian-rtl">
+                <div class="box-body english-ltr">
                     <serial-chart
                             chart-id="chart1"
                             chart-data="dashboardData.ChartDataInc"
                             chart-graphs="incrementChartOptions"
                             enable-scroll-bar="true"
+                            enable-export="true"
                             chart-height="300"></serial-chart>
                     <div class="col-xs-12 text-center">
                         <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">

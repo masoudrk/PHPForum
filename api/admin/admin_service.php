@@ -262,7 +262,7 @@ GROUP BY forum_main_subject.ID");
     $resQ = $app->db->makeQuery("
 select organ_position.ID , organ_position.OrganizationName,
     sum((select count(*) from user
-  where organ_position.ID=user.OrganizationID and user.UserAccepted =1) ),
+  where organ_position.ID=user.OrganizationID and user.UserAccepted =1) ) as UserTotal,
   sum((select count(*) from forum_question
   where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =1) ) as QTotal,
   sum((select count(*) from forum_question
@@ -1440,5 +1440,96 @@ LIMIT 1");
             $resQ = $app->db->makeQuery("SELECT COUNT(*) as UserCount FROM user as u WHERE u.UserAccepted = 0");
     $resp["User"] = $resQ->fetch_assoc();
     echoSuccess($resp);
+});
+
+$app->post('/getAdminPostMetaEdit', function() use ($app)  {
+    //userRequire();
+    require_once '../db/post_type.php';
+    require_once '../db/forum_subject.php';
+    require_once '../db/admin_post_attachment.php';
+    $data = json_decode($app->request->getBody());
+
+
+    $res = [];
+
+    if(isset($data)) {
+        $resQ = $app->db->makeQuery("select * from admin_post where admin_post.ID='$data->AdminPostID'");
+        $res['AdminPost'] = $resQ->fetch_assoc();
+
+        $res['AdminPost']['PostType'] = getAdminPostType($app->db , $data->AdminPostID);
+        $res['AdminPost']['Subject'] = getAdminPostSubject($app->db , $data->AdminPostID);
+        $res['AdminPost']['MainSubject'] = getSubjectParent($app->db , $res['AdminPost']['Subject']['ID']);
+        $res['AdminPost']['Attachments'] = getAdminPostAttachments($app->db , $data->AdminPostID);
+    }
+ 
+    $res['AllPostTypes'] = getAllPostTypes($app->db);
+    $res['AllSubjects'] = getAllMainSubjectsWithChilds($app->db);
+
+    echoResponse(200, $res);
+});
+
+
+$app->post('/saveAdminPost', function() use ($app)  {
+
+    $data = json_decode($_POST['formData']);
+
+    $sess = $app->session;
+    $qID = $app->db->insertToTable('admin_post','PostText,Title,SubjectID,AuthorID,CreationDate,PostTypeID',
+        "'$data->AdminPostText','$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW(),'".
+        $data->PostType->ID."'",true);
+
+    if (isset($_FILES['file'])) {
+        $file_ary = reArrayFiles($_FILES['file']);
+
+        if (!file_exists('../../content/admin_upload/')) {
+            mkdir('../../content/admin_upload/', 0777, true);
+        }
+
+        foreach ($file_ary as $file) {
+            $filename = $file['name'];
+            $rand = generateRandomString(18);
+            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+            $destination ='content/admin_upload/'.$rand.'.'.$ext;
+            $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
+            if($uploadSuccess){
+                $fileTypeQ = $app->db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+
+                $fileTypeID = -1;
+                if(mysqli_num_rows($fileTypeQ) > 0)
+                    $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
+
+                $fileSize = $file['size'] / 1024;
+                $fid = $app->db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
+                FileSize,UploadDate',
+                    "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID','$fileSize',NOW()",
+                    true);
+
+                $app->db->insertToTable('admin_post_attachment','AdminPostID,FileID',
+                    "'$qID','$fid'");
+            }
+        }
+    }
+
+    $res = [];
+    $res['Status'] ='success';
+    $res['AdminPostID'] = $qID;
+
+    echoResponse(200, $res);
+});
+
+
+$app->post('/editAdminPost', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+
+    $app->db->updateRecord('admin_post',"SubjectID='".$data->Subject->ID."',PostText='$data->PostText',
+        Title='$data->Title',PostTypeID='".$data->PostType->ID."'", "ID='$data->ID' and AuthorID='$sess->UserID'");
+
+    $res = [];
+    $res['Status'] ='success';
+
+    echoResponse(200, $res);
 });
 ?>

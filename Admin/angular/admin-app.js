@@ -5,11 +5,12 @@ var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
-    'ngFileUpload','anim-in-out','am-charts' ,'ADM-dateTimePicker']);
+    'ngFileUpload','anim-in-out','am-charts' ,'ADM-dateTimePicker','ngSanitize',
+    'textAngular']);
 
 app.config([
-    '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider','ADMdtpProvider',
-function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMdtp) {
+    '$provide', '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider','ADMdtpProvider',
+function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMdtp) {
     // Add nested user links to the "foo" menu.
     $ocLazyLoadProvider.config({
         debug: debugMode,
@@ -167,7 +168,138 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMdtp) {
                     return 'مدیریت فایل ها';
                 }
             }
+        })
+        .state("new_admin_post", {
+            url: "/NewAdminPost/:id",
+            templateUrl: "partials/Admin/NewAdminPost/NewAdminPost.html",
+            controller: 'NewAdminPostCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/NewAdminPost/NewAdminPostCtrl.js']);
+                }],
+                $title: function () {
+                    return 'مطلب ادمین جدید';
+                }
+            }
         });
+
+
+    $provide.decorator('taOptions', ['taRegisterTool', '$uibModal' , '$delegate',
+        function(taRegisterTool,$uibModal, taOptions) {
+
+            taOptions.toolbar = [
+                ['h1', 'h4', 'h6', 'p', 'pre', 'quote'],
+                ['html', 'customInsertImage','insertLink', 'wordcount', 'charcount'],
+                ['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
+                ['justifyLeft', 'justifyCenter', 'justifyRight'],
+                ['dirLtr','dirRtl']
+            ];
+
+            taRegisterTool('dirLtr', {
+                iconclass: "fa fa-indent",
+                action: function(){
+                    return this.$editor().wrapSelection("formatBlock", '<P style="direction:ltr">');
+                }
+            });
+            taRegisterTool('dirRtl', {
+                iconclass: "fa fa-dedent",
+                action: function(){
+                    return this.$editor().wrapSelection("formatBlock", '<P style="direction:rtl">');
+                }
+            });
+
+            // Create our own insertImage button
+            taRegisterTool('customInsertImage', {
+                iconclass: "fa fa-picture-o",
+                action: function($deferred) {
+                    var textAngular = this;
+                    var savedSelection = rangy.saveSelection();
+                    var modalInstance = $uibModal.open({
+                        // Put a link to your template here or whatever
+                        templateUrl: '../js/text-angular/CustomSelectImageModal.tmpl.html',
+                        size: 'md',
+                        controller: ['$uibModalInstance', '$scope', 'Upload', '$state',
+                            function($uibModalInstance, $scope , Upload , state) {
+                                $scope.activeTab = 0;
+                                $scope.img = {
+                                    url: ''
+                                };
+                                $scope.submit = function() {
+                                    $uibModalInstance.close($scope.img.url);
+                                };
+                                $scope.cancel = function() {
+                                    $uibModalInstance.close();
+                                };
+
+                                $scope.getTab= function (tabId) {
+                                    $scope.activeTab = tabId;
+                                }
+
+                                $scope.addImageLink= function (link) {
+                                    $uibModalInstance.close(link);
+                                }
+
+                                $scope.filesChanged = function (files, file) {
+                                    var url = uploadURL;
+                                    url += 'upload_inline_attachment.php';
+                                    var data = {file : file};
+                                    data.Type = state.current.name;
+
+                                    file.uploader = Upload.upload({
+                                        url:  url ,
+                                        data: data
+                                    });
+
+                                    file.uploader.then(function (resp) {
+
+                                        $uibModalInstance.close(resp.data);
+                                        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                                    }, function (resp) {
+                                        console.log('Error status: ' + resp.status);
+                                    }, function (evt) {
+                                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                        evt.config.data.file.percent = progressPercentage;
+                                        // evt.config.data.file.loaded = $scope.sizeFilter(evt.loaded);
+                                        //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                                    });
+                                }
+
+                                $scope.stopUploadImage = function (file) {
+                                    file.uploader.abort();
+                                }
+                            }
+                        ]
+                    });
+
+                    modalInstance.result.then(function(imgUrl) {
+                        if(!imgUrl)
+                            return;
+
+                        rangy.restoreSelection(savedSelection);
+
+                        var embed = '<a href="'+imgUrl+'" target="_blank">' +
+                            '<img class="img-responsive link attachment-inline-img" '
+                            + ' src="'+imgUrl+'"  /></a>';
+                        // insert
+                        textAngular.$editor().wrapSelection('insertHtml', embed);
+
+                        //textAngular.$editor().wrapSelection('insertImage', imgUrl);
+                        $deferred.resolve();
+                    });
+                    return false;
+                },
+                //     // activeState: function(commonElement) {
+                //     // return angular.element(taSelection.getSelectionElement()).attr('ng-click');
+                // }
+            });
+
+            // Now add the button to the default toolbar definition
+            // Note: It'll be the last button
+            //taOptions.toolbar[3].push('customInsertImage');
+            return taOptions;
+        }]
+    );
+
     $urlRouterProvider.otherwise(function ($injector, $location) {
         var $state = $injector.get('$state');
         //$state.go('home.home');

@@ -543,8 +543,7 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
     require_once '../db/forum_subject.php';
     require_once '../db/question_attachment.php';
     $data = json_decode($app->request->getBody());
-
-
+    
     $res = [];
 
     if(isset($data)) {

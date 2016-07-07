@@ -40,7 +40,10 @@ angular.module('am-charts').directive('radarChart', function () {
                             axisTitleOffset: 20,
                         }],
 
-                        graphs: $scope.chartGraphs
+                        graphs: $scope.chartGraphs,
+                        export : {
+                            enabled : true
+                        }
                     });
 
                 });
