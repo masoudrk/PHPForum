@@ -30,7 +30,8 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 			if(res && res.Status=='success'){
 			    Extention.popSuccess("سوال با موفقیت حذف شد!");
 				$scope.pagingController.update();
-			}else{
+			} else {
+			    console.log(res);
 			    Extention.popError("مشکل در حذف سوال ، لطفا دوباره امتحان کنید.");
 			}
 		});

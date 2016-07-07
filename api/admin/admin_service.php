@@ -604,6 +604,8 @@ LIMIT 1");
     if(!$sql)
         echoError('You don\'t have permision to do this action');
 
+    $res = $app->db->deleteFromTable('answer_attachment',"AnswerID='$data->AnswerID'");
+    $res = $app->db->deleteFromTable('answer_rate',"AnswerID='$data->AnswerID'");
 	$res = $app->db->deleteFromTable('forum_answer',"ID='$data->AnswerID'");
 	if($res)
     {
@@ -762,6 +764,23 @@ LEFT JOIN file_storage as fis on fis.ID = u.AvatarID ".$where." ORDER BY fa.ID d
 	echoResponse(200, $pageRes);
 });
 
+$app->post('/getAllPosts', function() use ($app)  {
+
+	$data = json_decode($app->request->getBody());
+	$pr = new Pagination($data);
+
+	$pageRes = $pr->getPage($app->db,"SELECT fq.* ,fms.Title as MainSubjectName ,fs.Title as SubjectName ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID,pt.PostType
+FROM admin_post as fq
+INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
+INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
+INNER join user as u on u.ID = fq.AuthorID
+INNER JOIN post_type as pt on pt.ID = fq.PostTypeID
+LEFT JOIN file_storage as fis on fis.ID = u.AvatarID
+ORDER BY fq.ID desc");
+
+echoResponse(200, $pageRes);
+});
+
 $app->post('/getAllQuestions', function() use ($app)  {
 
 	
@@ -795,6 +814,27 @@ LEFT JOIN link_question as lq on lq.LinkedQuestionID = fq.ID ".$where." GROUP BY
 	echoResponse(200, $pageRes);
 });
 
+$app->post('/deletePost', function() use ($app)  {
+
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+    $resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID'
+LIMIT 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $res = $app->db->deleteFromTable('admin_post_attachment',"AdminPostID='$data->PostID'");
+    $res = $app->db->deleteFromTable('admin_post',"ID='$data->PostID'");
+	if($res){
+		echoSuccess();
+    }
+	else
+		echoError("Cannot update record.");
+});
 
 $app->post('/deleteQuestion', function() use ($app)  {
 
@@ -802,7 +842,7 @@ $app->post('/deleteQuestion', function() use ($app)  {
 	$data = json_decode($app->request->getBody());
 
 	$sess = new Session();
-                    $resQ = $app->db->makeQuery("select a.ID from user as u
+    $resQ = $app->db->makeQuery("select a.ID from user as u
 INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
 WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$data->AdminPermissionLevel')
@@ -811,8 +851,21 @@ LIMIT 1");
     if(!$sql)
         echoError('You don\'t have permision to do this action');
 
+    $pageRes = $app->db->makeQuery("SELECT pf.ID FROM forum_answer as pf WHERE pf.QuestionID = '$data->QuestionID'");
+        $Answers=[];
+    while($r = $pageRes->fetch_assoc())
+        $Answers[] = $r;
     $res = $app->db->deleteFromTable('link_question',"TargetQuestionID='$data->QuestionID' or LinkedQuestionID = '$data->QuestionID'");
+    $res = $app->db->deleteFromTable('question_attachment',"QuestionID='$data->QuestionID'");
+    $res = $app->db->deleteFromTable('question_follow',"QuestionID='$data->QuestionID'");
+    $res = $app->db->deleteFromTable('question_rate',"QuestionID='$data->QuestionID'");
+    $res = $app->db->deleteFromTable('question_view',"QuestionID='$data->QuestionID'");
     $res = $app->db->deleteFromTable('forum_question',"ID='$data->QuestionID'");
+    foreach ($Answers as $value) {
+        $res = $app->db->deleteFromTable('answer_attachment',"AnswerID='".$value["ID"]."'");
+        $res = $app->db->deleteFromTable('answer_rate',"AnswerID='".$value["ID"]."'");
+        $res = $app->db->deleteFromTable('forum_answer',"ID='".$value["ID"]."'");
+    }
 	if($res){
         $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                 "'$sess->UserID','$data->UserID',NOW(),'".'حذف سوال'."','".'سوال شما حذف شد'."','0'");

@@ -97,6 +97,7 @@
     <Folder Include="Admin\partials\Admin\Admin\" />
     <Folder Include="Admin\partials\Admin\Message\" />
     <Folder Include="Admin\partials\Admin\CommonMessage\" />
+    <Folder Include="Admin\partials\Admin\AdminPost\" />
     <Folder Include="Admin\partials\Admin\Skill\" />
     <Folder Include="Admin\partials\Admin\Tag\" />
     <Folder Include="Admin\partials\Admin\Questions\" />
@@ -362,6 +363,8 @@
     <Content Include="Admin\dist\js\pages\dashboard.js" />
     <Content Include="Admin\dist\js\pages\dashboard2.js" />
     <Content Include="Admin\partials\Admin\AdminCtrl.js" />
+    <Content Include="Admin\partials\Admin\AdminPost\AdminPost.html" />
+    <Content Include="Admin\partials\Admin\AdminPost\AdminPost.js" />
     <Content Include="Admin\partials\Admin\Admin\AllAdmins.html" />
     <Content Include="Admin\partials\Admin\Admin\AllAdminsCtrl.js" />
     <Content Include="Admin\partials\Admin\ManageLibrary\ManageLibrary.html" />

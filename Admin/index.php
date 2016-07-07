@@ -355,6 +355,12 @@
                             <span>مدیران</span>
                         </a>
                     </li>
+                    <li class="treeview" id="SAdminPost">
+                        <a ui-sref="admin_post">
+                            <i class="fa fa-star"></i>
+                            <span>مطالب ادمین</span>
+                        </a>
+                    </li>
                     <li id="SQuestions">
                         <a>
                             <i class="fa fa-question-circle"></i>

@@ -181,6 +181,18 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                     return 'مطلب ادمین جدید';
                 }
             }
+        }).state("admin_post", {
+            url: "/AdminPost",
+            templateUrl: "partials/Admin/AdminPost/AdminPost.html",
+            controller: 'AdminPostCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['partials/Admin/AdminPost/AdminPost.js']);
+                }],
+                $title: function () {
+                    return 'مطلب ادمین';
+                }
+            }
         });
 
 
