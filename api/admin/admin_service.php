@@ -1528,7 +1528,7 @@ $app->post('/saveAdminPost', function() use ($app)  {
 
     $sess = $app->session;
     $qID = $app->db->insertToTable('admin_post','PostText,Title,SubjectID,AuthorID,CreationDate,PostTypeID',
-        "'$data->AdminPostText','$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW(),'".
+        "'$data->PostText','$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW(),'".
         $data->PostType->ID."'",true);
 
     if (isset($_FILES['file'])) {

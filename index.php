@@ -3,6 +3,7 @@
 <head>
     <?php
         require_once 'session_generator.php';
+
         generateSessionAsJavascriptVariable();
     ?>
     <meta charset="utf-8">

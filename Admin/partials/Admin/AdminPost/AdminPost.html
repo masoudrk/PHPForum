@@ -42,9 +42,9 @@
                                     <span class="label" ng-class="getTagColor(u.PostTypeID)">{{u.PostType}}</span>
                                 </td>
                                 <td>
-                                    <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+                                    <div class="table-action-icons" >
                                         <i confirm="آیا مطمئن هستید که میخواهید این مطلب را حذف کنید؟"
-                                           class="fa fa-trash text-red link hvr-grow" ng-click="removePost(u.ID )" title="حذف سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                           class="fa fa-trash text-red link hvr-grow" ng-click="removePost(u.ID )" title="حذف مطلب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                         <a class="link" ng-href="#/NewAdminPost/{{u.ID}}"><i class="fa fa-pencil text-green link hvr-grow" title="ویرایش مطلب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                         <a class="link" ng-href="../Forum/#/AdminPost/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک مطلب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                     </div>

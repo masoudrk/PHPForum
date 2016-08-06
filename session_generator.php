@@ -36,7 +36,6 @@ function generateSessionAsJavascriptVariable()
              $adminScript.
             "</script>";
     }else{
-
         if(isset($_COOKIE['UserID'])){
 
             $_SESSION['SSN'] = $_COOKIE['SSN'];

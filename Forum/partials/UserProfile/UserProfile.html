@@ -1,4 +1,4 @@
-﻿<!-- Content Header (Page header) -->
+<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
         <small>کاربران</small>
@@ -77,7 +77,7 @@
         <div class="col-md-9 col-sm-6 col-xs-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title vazir-font">نمودار فعالیت {{profile.FullName}}</h3>
+                    <h3 class="box-title vazir-font">نمودار تجمعی فعالیت {{profile.FullName}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <div class="col-xs-12 text-center">
@@ -96,12 +96,13 @@
                             chart-id="chart1"
                             chart-data="profile.ChartData"
                             chart-graphs="incrementChartOptions"
-                            chart-height="300"></serial-chart>
+                            chart-height="300"
+                            style="direction: ltr"></serial-chart>
                 </div>
             </div>
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title vazir-font">نمودار فعالیت {{profile.FullName}}</h3>
+                    <h3 class="box-title vazir-font">نمودار فعالیت روزانه {{profile.FullName}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <div class="col-xs-12 text-center">
@@ -120,7 +121,8 @@
                             chart-id="chart2"
                             chart-data="profile.ChartData"
                             chart-graphs="dailyChartOptions"
-                            chart-height="300"></serial-chart>
+                            chart-height="300"
+                            style="direction: ltr"></serial-chart>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <div class="box box-danger">
