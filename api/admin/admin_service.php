@@ -1221,7 +1221,7 @@ $app->post('/sendMessage', function() use ($app)  {
     $sess = new Session();
         $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
-where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+where u.ID = '$sess->UserID' limit 1");
 
     $sql =$resQ->fetch_assoc();
     if(!$sql)

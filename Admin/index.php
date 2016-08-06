@@ -545,38 +545,38 @@
                             <i class="fa fa-angle-right pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="SSTransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
+                            <li id="SSTransition" >
                                 <a href="../Forum/home.php">
                                     <i class="fa fa-circle-o"></i>
                                     خانه
                                 </a>
                             </li>
-                            <li id="SSTransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
+                            <li id="SSTransition" >
                                 <a href="../Forum/#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
                                 </a>
                             </li>
-                            <li id="SSTransportManagement" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement'">
+                            <li id="SSTransportManagement" >
                                 <a href="../Forum/#/MainForum/TransportManagement">
                                     <i class="fa
                         fa-circle-o"></i>
                                     <span style="font-size:13px">نظارت بر سیستم های انتقال</span>
                                 </a>
                             </li>
-                            <li id="SSDataSwitch" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch'">
+                            <li id="SSDataSwitch">
                                 <a href="../Forum/#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
                                 </a>
                             </li>
-                            <li id="SSRadio" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio'">
+                            <li id="SSRadio" >
                                 <a href="../Forum/#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
                                 </a>
                             </li>
-                            <li id="SSCommonTopics" class="active" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics'">
+                            <li id="SSCommonTopics" class="active">
                                 <a href="../Forum/#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
@@ -584,7 +584,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SContact">
+                    <li class="treeview" id="SContact">
                         <a ui-sref="message({id:session.UserID})">
                             <i class="fa fa-envelope"></i>
                             <span>ارسال پیام</span>
