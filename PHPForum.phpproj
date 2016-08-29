@@ -444,6 +444,9 @@
     <Content Include="app\authCtrl.js" />
     <Content Include="app\directives\auto-pagination.js" />
     <Content Include="api\public\.htaccess" />
+    <Content Include="app\directives\pie-chart-directive.js" />
+    <Content Include="app\directives\radar-chart-directive.js" />
+    <Content Include="app\directives\serial-chart-directive.js" />
     <Content Include="cms\css\angular-chart.css" />
     <Content Include="cms\css\angular-chart.min.css" />
     <Content Include="cms\css\nv.d3.css" />

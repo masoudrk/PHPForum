@@ -259,21 +259,20 @@ GROUP BY forum_main_subject.ID");
     $resp['RadarChartData'] = $cqDataRadar;
 
 
-    $resQ = $app->db->makeQuery("
-select organ_position.ID , organ_position.OrganizationName,
-    sum((select count(*) from user
-  where organ_position.ID=user.OrganizationID and user.UserAccepted =1) ) as UserTotal,
+    $resQ = $app->db->makeQuery("select organ_position.ID , organ_position.OrganizationName,
+    (select count(*) from user
+  where organ_position.ID=user.OrganizationID and user.UserAccepted =1) as UserTotal,
   sum((select count(*) from forum_question
   where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =1) ) as QTotal,
   sum((select count(*) from forum_question
   where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =0) ) as QTotalNA,
   sum((select count(*) from forum_answer
     inner join forum_question on forum_question.ID=forum_answer.QuestionID
-  where forum_question.AuthorID=u.ID and forum_answer.AdminAccepted =1
+  where forum_answer.AuthorID=u.ID and forum_answer.AdminAccepted =1
         and forum_question.AdminAccepted =1) ) as ATotal,
   sum((select count(*) from forum_answer
     inner join forum_question on forum_question.ID=forum_answer.QuestionID
-  where forum_question.AuthorID=u.ID and forum_answer.AdminAccepted =0
+  where forum_answer.AuthorID=u.ID and forum_answer.AdminAccepted =0
         and forum_question.AdminAccepted =1) ) as ATotalNA
 from organ_position
   LEFT JOIN user as u on u.OrganizationID=organ_position.ID
@@ -418,7 +417,6 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
 	else
 		echoError("Cannot update record.");
 });
-
 
 $app->post('/getAllEducations', function() use ($app)  {
 
@@ -924,7 +922,6 @@ LIMIT 1");
 		echoError("Cannot update record.");
 });
 
-
 $app->post('/linkQuestion', function() use ($app)  {
 
 
@@ -1085,7 +1082,6 @@ $app->post('/getAllMessages', function() use ($app)  {
 
     echoResponse(200,$pageRes);
 });
-
 
 $app->post('/getAllAdminTypes', function() use ($app)  {
 
@@ -1521,7 +1517,6 @@ $app->post('/getAdminPostMetaEdit', function() use ($app)  {
     echoResponse(200, $res);
 });
 
-
 $app->post('/saveAdminPost', function() use ($app)  {
 
     $data = json_decode($_POST['formData']);
@@ -1570,7 +1565,6 @@ $app->post('/saveAdminPost', function() use ($app)  {
 
     echoResponse(200, $res);
 });
-
 
 $app->post('/editAdminPost', function() use ($app)  {
 
