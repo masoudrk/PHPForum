@@ -1413,7 +1413,6 @@ where qt.AdminPostID='$r->AdminPostID'");
     echoSuccess( $resp);
 });
 
-
 $app->post('/getQuestionByID', function() use ($app)  {
 
     $r = json_decode($app->request->getBody());

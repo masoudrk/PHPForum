@@ -431,9 +431,9 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention) {
         //    $templateCache.remove(next.views.viewContent.templateUrl);
         //}
 
-        Extention.post('getSiteTitleIcon').then(function (res) {
-            $rootScope.titleIcon = res.SiteTitleIcon;
-        });
+        //Extention.post('getSiteTitleIcon').then(function (res) {
+        //    $rootScope.titleIcon = res.SiteTitleIcon;
+        //});
         //
         // Extention.post('session').then(function (results) {
         //     if (results.Valid) {

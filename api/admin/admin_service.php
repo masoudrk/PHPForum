@@ -666,7 +666,7 @@ LIMIT 1");
 			$res = $app->db->updateRecord('forum_answer',"AdminAccepted='$data->State'","ID='$data->AnswerID'");
 			if($res){
                 if($data->State == 1){
-                    $app->db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
+                    $app->db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
                     $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                     "'$sess->UserID','$data->UserID',NOW(),'".'تایید پیام'."','".'پیام شما تایید شد'."','0'");
                     if($data->UserID != $sess->UserID)
@@ -980,7 +980,7 @@ LIMIT 1");
             {
                 if($data->State == 1)
                 {
-                    $app->db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
+                    $app->db->updateRecord('user',"score=(score+3)" , "ID = '$data->UserID'");
                     $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                 "'$sess->UserID','$data->UserID',NOW(),'".'تایید سوال'."','".'سوال شما تایید شد'."','0'");
                     if($data->UserID != $sess->UserID)

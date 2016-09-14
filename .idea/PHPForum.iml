@@ -7,29 +7,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="PHP">
-        <CLASSES>
-          <root url="file://C:/Program Files (x86)/IIS Express/PHP/v5.6" />
-          <root url="file://$MODULE_DIR$/../../../php" />
-        </CLASSES>
-        <SOURCES>
-          <root url="file://C:/Program Files (x86)/IIS Express/PHP/v5.6" />
-          <root url="file://$MODULE_DIR$/../../../php" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="PHARS">
-        <CLASSES>
-          <root url="phar://$MODULE_DIR$/../../../php/pharcommand.phar/" />
-          <root url="phar://C:/Program Files (x86)/IIS Express/PHP/v5.6/pharcommand.phar/" />
-        </CLASSES>
-        <SOURCES>
-          <root url="phar://$MODULE_DIR$/../../../php/pharcommand.phar/" />
-          <root url="phar://C:/Program Files (x86)/IIS Express/PHP/v5.6/pharcommand.phar/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>

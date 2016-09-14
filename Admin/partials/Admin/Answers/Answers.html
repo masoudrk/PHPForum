@@ -90,7 +90,7 @@
                                 <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
                                     <i confirm="آیا مطمئن هستید که میخواهید این جواب را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeAnswer(u.ID ,u.AuthorID )" title="حذف جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1" style="color: #e67e22;"
+                                    <i class="fa fa-times link hvr-grow" ng-if="u.AdminAccepted==1 || u.AdminAccepted==0" style="color: #e67e22;"
                                        ng-click="openDiscardModal(u.ID , u.AuthorID)" title="رد کردن جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
                                        ng-if="u.AdminAccepted==-1 || u.AdminAccepted==0" ng-click="changeAnswerState(u ,1)" title="تایید جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
