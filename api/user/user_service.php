@@ -1650,7 +1650,7 @@ $app->post('/rateQuestion', function() use ($app)  {
     {
         if($data->RateValue == 1)
         {
-            $app->db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
+            //$app->db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
             if($data->AuthorID != $data->UserID)
                 $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,2,now(),$data->UserID,$data->QuestionID");
         }
@@ -1683,7 +1683,7 @@ $app->post('/rateAnswer', function() use ($app)  {
     {
         if($data->RateValue == 1)
         {
-            $app->db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
+            //$app->db->updateRecord('user',"score=($data->RateValue+score)" , "ID = '$data->TargetUserID'");
             if($data->AuthorID != $data->UserID)
                 $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->AuthorID,1,now(),$data->UserID,$data->QuestionID");
         }
