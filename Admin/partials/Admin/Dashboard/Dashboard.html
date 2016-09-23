@@ -9,7 +9,9 @@
         <li class="active">داشبورد</li>
     </ol>
 </section>
+    <!--<div class="row" ng-init="caclulateScores()">-->
 <div class="row">
+
     <div class="col-xs-12">
 
         <div class="col-sm-6 col-xs-12">
@@ -20,7 +22,7 @@
                 <div class="box-body persian-rtl">
 
                     <div class="col-xs-12 no-padding pull-left">
-                        <div class="form-group row" >
+                        <div class="form-group row">
                             <div class="col-xs-12">
                                 <ui-select ng-model="newQuestionsDigram.Organization"
                                            theme="bootstrap"
@@ -35,7 +37,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 no-padding pull-right">
-                        <div class="form-group row" >
+                        <div class="form-group row">
                             <div class="col-xs-12">
                                 <ui-select ng-model="newQuestionsDigram.MainSubject"
                                            theme="bootstrap"
@@ -76,16 +78,16 @@
                     <div class="row">
                         <div class="col-xs-12 english-ltr">
                             <serial-chart
-                                    chart-id="chart2"
-                                    chart-data="dashboardData.ChartData"
-                                    chart-graphs="dailyChartOptions"
-                                    enable-scroll-bar="true"
-                                    enable-export="true"
-                                    chart-height="290"></serial-chart>
+                                chart-id="chart2"
+                                chart-data="dashboardData.ChartData"
+                                chart-graphs="dailyChartOptions"
+                                enable-scroll-bar="true"
+                                enable-export="true"
+                                chart-height="290"></serial-chart>
                         </div>
                     </div>
                     <div class="col-xs-12 text-center">
-                        <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">
+                        <ul class="nav nav-pills" style="padding-right: 0px; display: inline-block;">
                             <li style="padding-left: 20px">
                                 <i class="fa fa-circle text-red"></i>
                                 <span>جواب های جدید</span>
@@ -109,14 +111,14 @@
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <radar-chart
-                            chart-id="chart3"
-                            chart-data="dashboardData.RadarChartData"
-                            chart-graphs="radarChartGraphs"
-                            chart-height="422"
-                            class="english-ltr">
+                        chart-id="chart3"
+                        chart-data="dashboardData.RadarChartData"
+                        chart-graphs="radarChartGraphs"
+                        chart-height="422"
+                        class="english-ltr">
                     </radar-chart>
                     <div class="col-xs-12 text-center">
-                        <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">
+                        <ul class="nav nav-pills" style="padding-right: 0px; display: inline-block;">
                             <li style="padding-left: 20px">
                                 <i class="fa fa-circle text-red"></i>
                                 <span>جواب ها</span>
@@ -141,14 +143,14 @@
                 </div><!-- /.box-header -->
                 <div class="box-body english-ltr">
                     <serial-chart
-                            chart-id="chart1"
-                            chart-data="dashboardData.ChartDataInc"
-                            chart-graphs="incrementChartOptions"
-                            enable-scroll-bar="true"
-                            enable-export="true"
-                            chart-height="300"></serial-chart>
+                        chart-id="chart1"
+                        chart-data="dashboardData.ChartDataInc"
+                        chart-graphs="incrementChartOptions"
+                        enable-scroll-bar="true"
+                        enable-export="true"
+                        chart-height="300"></serial-chart>
                     <div class="col-xs-12 text-center">
-                        <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">
+                        <ul class="nav nav-pills" style="padding-right: 0px; display: inline-block;">
                             <li style="padding-left: 20px">
                                 <i class="fa fa-circle text-red"></i>
                                 <span>جواب ها</span>
@@ -163,23 +165,23 @@
             </div>
         </div>
         <div class="col-xs-12">
-            <div class="box box-warning" style="background: #3f3f4f;color:#ffffff;">
+            <div class="box box-warning" style="background: #3f3f4f; color: #ffffff;">
                 <div class="box-header  ">
                     <h3 class="box-title vazir-font">
-                        <span style="color:#eee;"> نمودار فعالیت نواحی </span>
+                        <span style="color: #eee;"> نمودار فعالیت نواحی </span>
                     </h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <stack-bar-chart
-                            chart-id="chart267"
-                            chart-data="dashboardData.StackChartData"
-                            chart-graphs="stackChartOptions"
-                            enable-scroll-bar="true"
-                            chart-height="{{dashboardData.StackChartData.length * 30}}">
+                        chart-id="chart267"
+                        chart-data="dashboardData.StackChartData"
+                        chart-graphs="stackChartOptions"
+                        enable-scroll-bar="true"
+                        chart-height="{{dashboardData.StackChartData.length * 30}}">
                     </stack-bar-chart>
                     <div class="col-xs-12 text-center">
-                        <ul class="nav nav-pills" style="padding-right: 0px;display: inline-block;">
-                            <li style="padding-left: 20px" >
+                        <ul class="nav nav-pills" style="padding-right: 0px; display: inline-block;">
+                            <li style="padding-left: 20px">
                                 <i class="fa fa-circle" style="color: #FF6600;"></i>
                                 <span>سوال ها</span>
                             </li>

@@ -666,7 +666,7 @@ LIMIT 1");
 			$res = $app->db->updateRecord('forum_answer',"AdminAccepted='$data->State'","ID='$data->AnswerID'");
 			if($res){
                 if($data->State == 1){
-                    $app->db->updateRecord('user',"score=(score+5)" , "ID = '$data->UserID'");
+                    $app->db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
                     $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                     "'$sess->UserID','$data->UserID',NOW(),'".'تایید پیام'."','".'پیام شما تایید شد'."','0'");
                     if($data->UserID != $sess->UserID)
@@ -980,7 +980,7 @@ LIMIT 1");
             {
                 if($data->State == 1)
                 {
-                    $app->db->updateRecord('user',"score=(score+3)" , "ID = '$data->UserID'");
+                    $app->db->updateRecord('user',"score=(score+1)" , "ID = '$data->UserID'");
                     $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
                 "'$sess->UserID','$data->UserID',NOW(),'".'تایید سوال'."','".'سوال شما تایید شد'."','0'");
                     if($data->UserID != $sess->UserID)
@@ -1578,5 +1578,36 @@ $app->post('/editAdminPost', function() use ($app)  {
     $res['Status'] ='success';
 
     echoResponse(200, $res);
+});
+
+$app->post('/calculateUsersScore', function() use ($app)  {
+
+	$data = json_decode($app->request->getBody());
+
+	$sess = new Session();
+                    $resQ = $app->db->makeQuery("select a.ID from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID' and a.UserID = 32
+LIMIT 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+    $resQ = $app->db->makeQuery("SELECT  u.ID,u.FullName , u.Email , u.ID FROM user as u");
+    $res=[];
+    while($r = $resQ->fetch_assoc())
+        $res[] = $r;
+
+
+    foreach ($res as $user)
+    {
+        $resQ = $app->db->makeQuery("SELECT ((SELECT count(*) as val1 FROM link_question as lq INNER JOIN forum_question q on lq.LinkedQuestionID = q.ID WHERE q.AuthorID = ".$user["ID"]." and q.AdminAccepted = 1)+
+((SELECT count(*) as val2 FROM forum_answer as f WHERE f.AuthorID = ".$user["ID"]." and f.AdminAccepted = 1) * 2)+
+(SELECT count(*) as val3 FROM forum_question as q1 WHERE q1.AuthorID = ".$user["ID"]." and q1.AdminAccepted = 1)) as val");
+            $resQ = $resQ->fetch_assoc();
+            $res = $app->db->updateRecord('user',"score = ".$resQ['val'],"ID=".$user["ID"]);
+    }
+    echoSuccess("done");
 });
 ?>
