@@ -1,11 +1,19 @@
 angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention) {
 
     $scope.UserMessages = [];
-
+    $scope.awardQuestion = null;
     // $rootScope.$on("socketDataChanged", function(){
     //     if($rootScope.globalSearchActive && $scope.pagingParams.searchType==1)
     //         $scope.checkNowOnline();
     // });
+
+    Extention.post("getAwardQuestion").then(function (res) {
+        if (res.Status == 'success') {
+            $scope.awardQuestion = res.Data;
+        } else {
+            $scope.awardQuestion = null;
+        }
+    });
 
     $scope.checkNowOnline = function () {
         return

@@ -17,6 +17,130 @@ $res['OnlineUsers'] = $arr;
 echoResponse(200, $res);
 });
 
+
+$app->post('/getAllAwardedQuestions', function() use ($app)  {
+
+
+    $data = json_decode($app->request->getBody());
+    $pr = new Pagination($data);
+    $sess = new Session();
+
+    $pageRes = $pr->getPage($app->db,"SELECT fq.* ,aq.IsFinished,fs.Title as SubjectName ,u.FullName , lq.TargetQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID
+FROM forum_question as fq
+INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
+INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
+INNER join user as u on u.ID = fq.AuthorID
+INNER JOIN avarded_question aq on aq.ForumQuestionID = fq.ID
+LEFT JOIN file_storage as fis on fis.ID = u.AvatarID
+LEFT JOIN link_question as lq on lq.LinkedQuestionID = fq.ID GROUP BY fq.ID ORDER BY fq.ID desc");
+
+    echoResponse(200, $pageRes);
+});
+$app->post('/saveAwardQuestion', function() use ($app)  {
+    //TODO CHANGE THIS FUNCTION
+    $data = json_decode($_POST['formData']);
+
+    $sess = new Session();
+
+    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+    $qID = -1;
+    if(isset($data->ID)){
+        $qID = $data->ID;
+        $app->db->updateRecord('forum_question',"SubjectID='".$data->Subject->ID."',QuestionText='$data->QuestionText',
+        Title='$data->Title'", "ID='$qID'");
+        $d = $app->db->deleteFromTable('tag_question','QuestionID='.$qID);
+    }else{
+        $qID = $app->db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID,CreationDate,AdminAccepted',
+            "'$data->QuestionText','$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW(),1",true);
+        $app->db->insertToTable('avarded_question','ForumQuestionID',$qID);
+
+        if (isset($_FILES['file'])) {
+            $file_ary = reArrayFiles($_FILES['file']);
+
+            if (!file_exists('../content/user_upload/')) {
+                mkdir('../content/user_upload/', 0777, true);
+            }
+
+            foreach ($file_ary as $file) {
+                $filename = $file['name'];
+                $rand = generateRandomString(18);
+                $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+                $destination ='content/user_upload/'.$rand.'.'.$ext;
+                $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../'.$destination );
+                if($uploadSuccess){
+                    $fileTypeQ = $app->db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+
+                    $fileTypeID = -1;
+                    if(mysqli_num_rows($fileTypeQ) > 0)
+                        $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
+
+                    $fileSize = $file['size'] / 1024;
+                    $fid = $app->db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
+                FileSize,UploadDate',
+                        "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID','$fileSize',NOW()",
+                        true);
+
+                    $app->db->insertToTable('question_attachment','QuestionID,FileID',
+                        "'$qID','$fid'");
+                }
+            }
+        }
+    }
+
+    if(isset($data->Tags)){
+
+        foreach($data->Tags as $tag){
+            $cq = $app->db->insertToTable('tag_question',"TagID,QuestionID","'$tag->ID','$qID'");
+        }
+    }
+
+    $resQ = $app->db->makeQuery("SELECT user.* FROM user ");
+    $users = [];
+    while($r = $resQ->fetch_assoc())
+        $users[] = $r;
+    foreach ($users as $user){
+        $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',$user['ID'].",12,now(),$sess->UserID,$qID");
+    }
+    $res = [];
+    $res['Status'] ='success';
+    $res['QuestionID'] = $qID;
+
+    echoResponse(200, $res);
+});
+
+$app->post('/getQuestionMetaEdit', function() use ($app)  {
+    //userRequire();
+    require_once '../db/tag.php';
+    require_once '../db/forum_subject.php';
+    require_once '../db/question_attachment.php';
+    $data = json_decode($app->request->getBody());
+
+    $res = [];
+
+    if(isset($data)) {
+        $resQ = $app->db->makeQuery("select * from forum_question where forum_question.ID='$data->QuestionID'");
+        $res['Question'] = $resQ->fetch_assoc();
+
+        $res['Question']['Subject'] = getQuestionSubject($app->db , $data->QuestionID);
+        $res['Question']['MainSubject'] = getSubjectParent($app->db , $res['Question']['Subject']['ID']);
+        $res['Question']['Tags'] = getQuestionTags($app->db , $data->QuestionID);
+        $res['Question']['Attachments'] = getQuestionAttachments($app->db , $data->QuestionID);
+    }
+
+    $res['AllTags'] = getAllTags($app->db);
+    $res['AllSubjects'] = getAllMainSubjectsWithChilds($app->db);
+
+    echoResponse(200, $res);
+});
+
 $app->post('/getUploadLibraryData', function() use ($app)  {
     require_once '../db/forum_subject.php';
     $resp = [];

@@ -12,9 +12,17 @@ $app->post('/getSocketData', function() use ($app)  {
     while($r = $resQ->fetch_assoc()){
         $arr[] = $r;
     }
-
     $res['OnlineUsers'] = $arr;
     echoResponse(200, $res);
+});
+
+$app->post('/getAwardQuestion', function() use ($app)  {
+    $resQ = $app->db->makeQuery("select q.ID from forum_question q INNER JOIN avarded_question aq on aq.ForumQuestionID = q.ID WHERE aq.IsFinished =0 limit 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError(null);
+    else
+        echoSuccess($sql);
 });
 
 $app->post('/globalSearch', function() use ($app)  {

@@ -440,6 +440,12 @@
 <!--                        </li>-->
 <!--                    </ul>-->
 <!--                </li>-->
+
+                <li ng-show="awardQuestion">
+                    <a ui-sref="question({id:awardQuestion.ID})">
+                        <i class="fa fa-star faa-ring text-yellow animated"></i><span>سوال با جایزه</span>
+                    </a>
+                </li>
                 <li id="SMessage">
                     <a ui-sref="messages">
                         <i class="fa fa-envelope"></i><span>  پیام های من </span>

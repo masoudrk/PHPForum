@@ -97,18 +97,30 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                 }
             }
         }).state("questions", {
-            url: "/questions/:id",
-            templateUrl: "partials/Admin/Questions/Questions.html",
-            controller: 'QuestionsCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Questions/Questions.js', '../app/directives/auto-pagination.js']);
-                }],
-                $title: function () {
-                    return 'مدیریت سوال ها';
-                }
+        url: "/questions/:id",
+        templateUrl: "partials/Admin/Questions/Questions.html",
+        controller: 'QuestionsCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load(['partials/Admin/Questions/Questions.js', '../app/directives/auto-pagination.js']);
+            }],
+            $title: function () {
+                return 'مدیریت سوال ها';
             }
-        }).state("message", {
+        }
+    }).state("award_questions", {
+        url: "/AwardQuestions",
+        templateUrl: "partials/Admin/AwardQuestions/AwardQuestions.html",
+        controller: 'AwardQuestionsCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load(['partials/Admin/AwardQuestions/AwardQuestions.js', '../app/directives/auto-pagination.js']);
+            }],
+            $title: function () {
+                return 'مدیریت سوال های جایزه دار';
+            }
+        }
+    }).state("message", {
             url: "/message/:id",
             templateUrl: "partials/Admin/Message/Message.html",
             controller: 'MessageCtrl',
@@ -193,7 +205,19 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                     return 'مطلب ادمین';
                 }
             }
-        });
+        }).state("award_question", {
+        url: "/AwardQuestion/:id",
+        templateUrl: "partials/Admin/AwardQuestion/AwardQuestion.html",
+        controller: 'AwardQuestionCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load(['partials/Admin/AwardQuestion/AwardQuestion.js']);
+            }],
+            $title: function () {
+                return 'سوال جایزه دار';
+            }
+        }
+    });
 
 
     $provide.decorator('taOptions', ['taRegisterTool', '$uibModal' , '$delegate',

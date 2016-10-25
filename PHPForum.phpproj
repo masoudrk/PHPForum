@@ -423,14 +423,14 @@
     <Content Include="Admin\partials\Admin\Message\Message.js" />
     <Content Include="Admin\partials\Admin\Answers\Answers.html" />
     <Content Include="Admin\partials\Admin\Questions\Questions.html" />
-    <Content Include="Admin\partials\Admin\Questions\Questions.js" />
+    <Content Include="Admin\partials\Admin\Questions\AwardQuestions.js" />
     <Content Include="Admin\partials\Admin\Skill\Skill.html" />
     <Content Include="Admin\partials\Admin\Skill\Skill.js" />
     <Content Include="Admin\partials\Admin\Tag\Tag.html" />
     <Content Include="Admin\partials\Admin\Tag\TagCtrl.js" />
     <Content Include="Admin\partials\Admin\User\AllUsers.html" />
     <Content Include="Admin\partials\Admin\Answers\Answers.js" />
-    <Content Include="Admin\partials\Admin\User\AllUsersCtrl.js" />
+    <Content Include="Admin\partials\Admin\User\AwardQuestion.js" />
     <Content Include="Admin\plugins\fastclick\fastclick.js" />
     <Content Include="Admin\plugins\fastclick\fastclick.min.js" />
     <Content Include="Admin\plugins\jQueryUI\jquery-ui.js" />

@@ -357,9 +357,31 @@
                     </li>
                     <li class="treeview" id="SAdminPost">
                         <a ui-sref="admin_post">
-                            <i class="fa fa-star"></i>
+                            <i class="fa fa-magic"></i>
                             <span>مطالب ادمین</span>
                         </a>
+                    </li>
+                    <li id="SAwardQuestion"  ng-if="session.AdminPermissionLevel =='Base'">
+                        <a>
+                            <i class="fa fa-star"></i>
+                            <span>سوال های جایزه دار</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="SAllAwardQuestion" ng-if="session.AdminPermissionLevel =='Base'">
+                                <a ui-sref="award_questions">
+                                    <i class="fa fa-circle-o"></i>
+                                    سوال ها
+                                </a>
+                            </li>
+                            <li id="SAddAwardQuestion" ng-if="session.AdminPermissionLevel =='Base'">
+                                <a ui-sref="award_question">
+                                    <i class="fa
+                        fa-circle-o"></i>
+                                    <span>افزودن سوال جدید</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li id="SQuestions">
                         <a>
