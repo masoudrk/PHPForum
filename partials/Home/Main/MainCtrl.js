@@ -90,7 +90,7 @@
                     Extention.popError('اکانت شما هنوز  توسط ادمین تایید نشده است');
                 } else {
                     console.log(msg);
-                    Extention.popError('اطلاعات شما نا معتبر است.');
+                    Extention.popError('اطلاعات  نا معتبر است.');
                 }
             });
         }

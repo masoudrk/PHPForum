@@ -28,7 +28,7 @@ if(mysqli_num_rows($fileTypeQ) > 0)
     $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
 
 $destination ='content/library/'.$rand.'.'.$ext;
-$fileSize = $_FILES['file']['size'] / 1024;
+$fileSize = $_FILES['file']['size'];
 
 $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
                 FileSize,UploadDate'.((isset($meta['Description']))?',Description':''),
