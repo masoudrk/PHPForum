@@ -121,6 +121,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 
 	$scope.fieldChanged = function (name , value) {
 		$scope.errForum[name] = value == undefined || value == '';
+		$scope.QuestionTextIN = $scope.QuestionTextIN.replace(/¬/g, " ").replace(/&#173;/g, " ");
 	}
 
 	$scope.subjectChanged = function () {

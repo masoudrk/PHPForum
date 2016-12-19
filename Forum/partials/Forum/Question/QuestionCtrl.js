@@ -37,6 +37,10 @@
         });
     }
 
+    $scope.fieldChanged = function () {
+        $scope.answerTextIn = $scope.answerTextIn.replace(/¬/g, " ").replace(/&#173;/g, " ");
+    }
+
 
     $scope.getInlineImageView = function (link) {
         $uibModal.open({

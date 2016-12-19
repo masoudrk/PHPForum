@@ -128,6 +128,7 @@ angular.module(appName).controller('NewAdminPostCtrl', function ($scope, $rootSc
 
 	$scope.fieldChanged = function (name , value) {
 		$scope.errForum[name] = value == undefined || value == '';
+		$scope.adminPost.PostText = $scope.adminPost.PostText.replace(/¬/g, " ").replace(/&#173;/g, " ");
 	}
 
 	$scope.subjectChanged = function () {

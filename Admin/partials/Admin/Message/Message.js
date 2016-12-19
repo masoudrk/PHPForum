@@ -21,6 +21,10 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
         }
     }
 
+    $scope.clearMiniSpace = function () {
+        $scope.Message.MessageIn = $scope.Message.MessageIn.replace(/¬/g, " ").replace(/&#173;/g, " ");
+    }
+    
     $scope.getPersons = function (filter) {
         console.log(filter);
         Extention.postAsync('getUsersByName', { filter: filter }).then(function (res) {
