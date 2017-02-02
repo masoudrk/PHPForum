@@ -10,24 +10,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
+<!--    <link href="css/bootstrap.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="css/page-style.min.css">
     <link href="css/select.min.css" rel="stylesheet">
     <link href="css/full-page-styles.css" rel="stylesheet" />
     
-    <link href="css/hover-min.css" rel="stylesheet">
+<!--    <link href="css/hover-min.css" rel="stylesheet">-->
     <link href="css/imagehover.css" rel="stylesheet">
     <link href="css/treasure-overlay-spinner.css" rel="stylesheet">
 
-    <link href="css/ADM-dateTimePicker.min.css " rel="stylesheet">
-    <link href='css/textAngular.css' rel='stylesheet'>
+<!--    <link href="css/ADM-dateTimePicker.min.css " rel="stylesheet">-->
+<!--    <link href='css/textAngular.css' rel='stylesheet'>-->
 
-    <link href="css/font-awesome.min.css" rel="stylesheet">
+<!--    <link href="css/font-awesome.min.css" rel="stylesheet">-->
     <link href="css/toaster.css" rel="stylesheet">
     <link href="css/angular-tooltips.css" rel="stylesheet" type="text/css" />
     <link href="cms/css/select/select.min.css" rel="stylesheet">
     
-    <link href="css/site-styles.css" rel="stylesheet" />
+<!--    <link href="css/site-styles.css" rel="stylesheet" />-->
 
     <link href="css/jquery-fullPage.css" rel="stylesheet" />
 
@@ -94,9 +94,9 @@
 
 <script src="js/angular-pageslide-directive.js"></script>
 
-<script src="app/app.js"></script>
+<script src="app/ng-vendor.min.js"></script>
+<script src="app/templates.min.js"></script>
 <script src="js/angular-clipboard.js"></script>
-<script src="app/authCtrl.js"></script>
 <script src="app/directives/auto-pagination.js"></script>
 
 <script type="text/javascript" src="js/moment.js"></script>
