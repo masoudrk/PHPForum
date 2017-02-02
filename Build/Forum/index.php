@@ -25,7 +25,6 @@
     <title ng-bind="($title || 'Loading ...')">Loading ...</title>
 
     <link rel="icon" href="../images/title.png" />
-    <link rel="icon" href="{{titleIcon}}" />
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini vazir-font">
@@ -712,9 +711,8 @@
 </div><!-- ./wrapper -->
 
     <?php  generateRequiredCMSJavaFiles(); ?>
-
-    <script src="angular/forum-app.js"></script>
-    <script src="partials/MainCtrl.js"></script>
+    <script src="ng-vendor.min.js"></script>
+    <script src="templates.min.js"></script>
     <script src="../app/directives/auto-pagination.js"></script>
 
 </body>
