@@ -12,8 +12,6 @@ app.config([
     '$provide','$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
 function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
 
-    var rand = "?rn=" + Math.floor(Math.random() * 1000);
-
     $ocLazyLoadProvider.config({
         debug: debugMode,
         events: true
@@ -35,11 +33,11 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         // })
         .state("dashboard", {
             url: "/Dashboard",
-            templateUrl: "partials/Dashboard/Dashboard.html" + rand,
+            templateUrl: "angular.partial.Dashboard.html",
             controller: 'DashboardCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Dashboard/DashboardCtrl.js' + rand]);
+                    return $ocLazyLoad.load([ ]);
                 }],
                 $title: function () {
                     return 'داشبورد';
@@ -61,11 +59,11 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         // })
         .state("main_forum", {
             url: "/MainForum/:id",
-            templateUrl: "partials/Forum/Main/MainForum.html" + rand,
+            templateUrl: "angular.partial.MainForum.html",
             controller: 'MainForumCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/Main/MainForumCtrl.js' + rand]);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'انجمن';
@@ -74,11 +72,11 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("forum", {
             url: "/Forum/:id",
-            templateUrl: "partials/Forum/Forum/Forum.html" + rand,
+            templateUrl: "angular.partial.Forum.html",
             controller: 'ForumCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Forum/Forum/ForumCtrl.js' + rand]);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'انجمن';
@@ -87,11 +85,11 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("new_question", {
             url: "/NewQuestion/:id",
-            templateUrl: "partials/MyActions/NewQuestion/NewQuestion.html" + rand,
+            templateUrl: "angular.partial.NewQuestion.html",
             controller: 'NewQuestionCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/MyActions/NewQuestion/NewQuestionCtrl.js' + rand]);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'سوال جدید';
@@ -100,11 +98,11 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("questions", {
             url: "/MyQuestions",
-            templateUrl: "partials/MyActions/Questions/Questions.html" + rand,
+            templateUrl: "angular.partial.Questions.html",
             controller: 'QuestionsCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/MyActions/Questions/QuestionsCtrl.js' + rand]);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'سوالات شما';
@@ -113,11 +111,11 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("my_answers", {
             url: "/MyAnswers",
-            templateUrl: "partials/MyActions/Answers/Answers.html" + rand,
+            templateUrl: "angular.partial.Answers.html",
             controller: 'AnswersCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/MyActions/Answers/AnswersCtrl.js' + rand]);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'جواب های شما';
@@ -126,11 +124,11 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("my_following", {
             url: "/Follow/:action",
-            templateUrl: "partials/MyActions/Follow/Follow.html" + rand,
+            templateUrl: "angular.partial.Follow.html",
             controller: 'FollowCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/MyActions/Follow/FollowCtrl.js' + rand]);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'دنبال شده ها';
@@ -139,12 +137,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("question", {
             url: "/Question/:id",
-            templateUrl: "partials/Forum/Question/Question.html" + rand,
+            templateUrl: "angular.partial.Question.html",
             controller: 'QuestionCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Forum/Question/QuestionCtrl.js' + rand]);
+                        return $ocLazyLoad.load([]);
                     }
                 ],
                 $title: function () {
@@ -153,12 +151,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         }).state("UserProfile", {
             url: "/UserProfile/:id",
-            templateUrl: "partials/UserProfile/UserProfile.html" + rand,
+            templateUrl: "angular.partial.UserProfile.html",
             controller: 'UserProfileCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/UserProfile/UserProfileCtrl.js' + rand]);
+                        return $ocLazyLoad.load([]);
                     }
                 ],
                 $title: function () {
@@ -168,12 +166,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("messages", {
             url: "/Messages/:id",
-            templateUrl: "partials/Message/Message.html" + rand,
+            templateUrl: "angular.partial.Message.html",
             controller: 'MessageCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Message/MessageCtrl.js' + rand]);
+                        return $ocLazyLoad.load([]);
                     }
                 ],
                 $title: function () {
@@ -183,11 +181,11 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("profile", {
             url: "/Profile/:action",
-            templateUrl: "partials/Profile/Profile.html" + rand,
+            templateUrl: "angular.partial.Profile.html",
             controller: 'ProfileCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Profile/ProfileCtrl.js' + rand]);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'پروفایل من';
@@ -196,12 +194,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("rating", {
             url: "/Rating/:id",
-            templateUrl: "partials/Evaluation//Rating/Rating.html" + rand,
+            templateUrl: "angular.partial.Rating.html",
             controller: 'RatingCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Evaluation/Rating/RatingCtrl.js' + rand]);
+                        return $ocLazyLoad.load([]);
                     }
                 ],
                 $title: function () {
@@ -210,12 +208,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         }).state("library", {
             url: "/Library",
-            templateUrl: "partials/Library/Library.html" + rand,
+            templateUrl: "angular.partial.Library.html",
             controller: 'LibraryCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Library/LibraryCtrl.js' + rand,'../js/angular-clipboard.js' + rand]);
+                        return $ocLazyLoad.load(['../js/angular-clipboard.js']);
                     }
                 ],
                 $title: function () {
@@ -225,12 +223,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("quiz", {
             url: "/Quiz/:id",
-            templateUrl: "partials/Evaluation/Quiz/Quiz.html" + rand,
+            templateUrl: "angular.partial.Quiz.html",
             controller: 'QuizCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Evaluation/Quiz/QuizCtrl.js' + rand]);
+                        return $ocLazyLoad.load([]);
                     }
                 ],
                 $title: function () {
@@ -240,12 +238,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("about", {
             url: "/About",
-            templateUrl: "partials/About/About.html" + rand,
+            templateUrl: "angular.partial.About.html" ,
             controller: 'AboutCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/About/AboutCtrl.js' + rand]);
+                        return $ocLazyLoad.load([]);
                     }
                 ],
                 $title: function () {
@@ -255,12 +253,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("file", {
             url: "/File/:id",
-            templateUrl: "partials/File/File.html" + rand,
+            templateUrl: "angular.partial.File.html" ,
             controller: 'FileCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/File/FileCtrl.js' + rand, '../js/angular-clipboard.js' + rand]);
+                        return $ocLazyLoad.load(['../js/angular-clipboard.js']);
                     }
                 ],
                 $title: function () {
@@ -270,12 +268,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         })
         .state("help", {
             url: "/Help",
-            templateUrl: "partials/Help/Help.html" + rand,
+            templateUrl: "angular.partial.Help.html" ,
             controller: 'HelpCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Help/HelpCtrl.js' + rand]);
+                        return $ocLazyLoad.load([]);
                     }
                 ],
                 $title: function () {
@@ -284,12 +282,12 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }
         }).state("admin_post", {
             url: "/AdminPost/:id",
-            templateUrl: "partials/Forum/AdminPost/AdminPost.html" + rand,
+            templateUrl: "angular.partial.AdminPost.html" ,
             controller: 'AdminPostCtrl',
             resolve: {
                 deps: [
                     '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Forum/AdminPost/AdminPostCtrl.js' + rand]);
+                        return $ocLazyLoad.load([]);
                     }
                 ],
                 $title: function () {

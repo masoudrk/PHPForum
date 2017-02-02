@@ -1,0 +1,116 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small> اعضا</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/dashboard"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li><a href="#/questions/Transition">مدیریت سوال ها</a></li>
+        <li class="active"> سوال ها</li>
+    </ol>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">سوالات</h3>
+
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>عکس</th>
+                            <th> نام کامل نویسنده</th>
+                            <th>تاریخ ارسال</th>
+                            <th>زیر شاخه انجمن</th>
+                            <th>وضعیت سوال</th>
+                            <th>وضعیت جایزه</th>
+                            <th>ایمیل</th>
+                            <th style="width: 225px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in question.all">
+                            <td>
+                                <img ng-src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
+                            </td>
+                            <td>{{u.FullName| pNumber}}</td>
+                            <td>{{u.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                            <td>{{u.SubjectName | pNumber | subString:20}}</td>
+                            <td ng-switch="u.AdminAccepted">
+                                <span class="label label-success" ng-switch-when="1">تایید شده</span>
+                                <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
+                                <span class="label label-info" ng-switch-when="-2">لینک داده شده</span>
+                                <span class="label label-danger" ng-switch-when="-1">رد شده</span>
+                            </td>
+                            <td ng-switch="u.IsFinished">
+                                <span class="label label-success" ng-switch-when="1">تمام شده</span>
+                                <span class="label label-warning" ng-switch-when="0">در انتظار جواب</span>
+                            </td>
+                            <td>{{u.Email}}</td>
+                            <td>
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+
+                                    <i confirm="آیا مطمئن هستید که میخواهید این سوال را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeQuestion(u.ID , u.AuthorID)" title="حذف سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u)" title="متن و ویرایش سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <a ng-if="u.AdminAccepted==1" class="link" ng-href="../Forum/#/Question/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
+                                 </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllAwardedQuestions"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 items="question.all">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-body vazir-font text-right persian-rtl" ng-init="editMode = false">
+        <div>
+            <h4 class="text-danger">
+                تیتر سوال
+                <i class="fa fa-pencil text-blue link hvr-grow" title="" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editMode = !editMode" data-original-title="ویرایش سوال"></i>
+            </h4>
+        </div>
+        <hr />
+        <div ng-hide="editMode">
+            {{Title}}
+        </div>
+        <div style="margin-top:25px" ng-show="editMode">
+            <textarea rows="2" class="col-xs-12" ng-model="Title"></textarea>
+        </div>
+        <div style="margin-top:25px" >
+            <h4 class="text-danger ">متن سوال</h4>
+        </div>
+        <hr />
+        <div ng-hide="editMode" compile="QuestionText | pNumber">
+
+        </div>
+        <div style="margin-top:25px" ng-show="editMode">
+            <textarea rows="6" class="col-xs-12" ng-model="QuestionText"></textarea>
+        </div>
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+        <button  ng-show="editMode" class="btn btn-success pull-right" type="button" ng-click="editQuestion()">ویرایش</button>
+    </div>
+</script>
+
+
+
+
+

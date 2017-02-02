@@ -35,14 +35,13 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfP
             // Home persian states
             .state("home", {
                 url: "/",
-                templateUrl: "partials/Home/HomeRoot.html",
+                templateUrl: "angular.partial.HomeRoot.html",
                 controller: 'DefaultCtrl',
                 abstract: true,
                 resolve: {
                     deps: [
                         '$ocLazyLoad', function ($ocLazyLoad) {
                             return $ocLazyLoad.load([
-                                'partials/Home/DefaultCtrl.js',
                             ]);
                         }
                     ],
@@ -54,7 +53,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfP
                 url: "home",
                 views: {
                     "viewContent": {
-                        templateUrl: "partials/Home/Main/Main.html",
+                        templateUrl: "angular.partial.Main.html",
                         controller: 'MainCtrl'
                     }
                 },
@@ -62,80 +61,7 @@ function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfP
                     deps: [
                         '$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load([
-                            'partials/Home/Main/MainCtrl.js'
                         ]);
-                }
-                    ]
-                }
-            })
-            .state("home.about", {
-                url: "about",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/Home/About/About.html",
-                        controller: 'AboutCtrl'
-                    }
-                },
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                                'partials/Home/About/AboutCtrl.js'
-                            ]);
-                }
-                    ]
-                }
-            })
-            .state("home.contact_us", {
-                url: "contact_us",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/Home/ContactUs/ContactUs.html",
-                        controller: 'ContactUsCtrl'
-                    }
-                },
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                                'partials/Home/ContactUs/ContactUsCtrl.js'
-                            ]);
-                }
-                    ]
-                }
-            })
-            .state("home.post", {
-                url: "post/:id",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/Home/Post/Post.html",
-                        controller: 'PostSingleCtrl'
-                    }
-                },
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load(['partials/Home/Post/PostCtrl.js']);
-                }
-                    ]
-                }
-            })
-            .state("home.cat", {
-                url: "cat/:id",
-                views: {
-                    "viewContent": {
-                        templateUrl: "partials/Home/Category/Category.html",
-                        controller: 'CategoryCtrl'
-                    }
-                },
-                resolve: {
-                    deps: [
-                        '$ocLazyLoad', function($ocLazyLoad) {
-                        return $ocLazyLoad.load([
-                            'partials/Home/Category/CategoryCtrl.js',
-                            'app/directives/Post/post.js',
-                                'partials/Home/Category/CategoryService.js'
-                            ]);
                 }
                     ]
                 }

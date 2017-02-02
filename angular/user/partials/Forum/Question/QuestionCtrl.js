@@ -38,7 +38,7 @@
     }
 
     $scope.fieldChanged = function () {
-        $scope.answerTextIn = $scope.answerTextIn.replace(/¬/g, " ").replace(/&#173;/g, " ");
+        $scope.answerTextIn = $scope.answerTextIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ");
     }
 
 

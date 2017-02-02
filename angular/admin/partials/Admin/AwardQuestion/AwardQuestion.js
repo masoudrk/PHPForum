@@ -1,6 +1,6 @@
-angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootScope, $stateParams
-    , $state, $timeout, Extention,Upload) {
 
+angular.module(appName).controller('AwardQuestionCtrl', function ($scope, $rootScope, $stateParams
+	, $state, $timeout, Extention,Upload) {
 	$scope.question = {};
 	$scope.allTags = [];
 	$scope.allSubjects = [];
@@ -38,14 +38,14 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 		});
 	}else{
 		$scope.form.header = 'ایجاد سوال جدید';
-		$scope.form.submitButton = 'ارسال سوال به انجمن';
+		$scope.form.submitButton = 'ارسال سوال';
 
 		Extention.post('getQuestionMetaEdit').then(function (res) {
 			$scope.allTags = res.AllTags;
 			$scope.allSubjects = res.AllSubjects;
 		});
 	}
-	
+
 	$scope.saveQuestion= function () {
 		var hasError = false;
 		if(!$scope.question.Title){
@@ -76,7 +76,7 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 			Extention.setBusy(true);
 
 			var u = Upload.upload({
-				url: serviceBaseURL + 'saveQuestion',
+				url: serviceBaseURL + 'saveAwardQuestion',
 				method: 'POST',
 				file: $scope.att.myFiles,
 				data: {formData : angular.toJson($scope.question) }
@@ -113,15 +113,15 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 		}
 	}
 
-    $scope.emptyForm = function () {
-        $scope.question = {};
-        $scope.att.myFiles= [] ;
+	$scope.emptyForm = function () {
+		$scope.question = {};
+		$scope.att.myFiles= [] ;
 		$scope.QuestionTextIN = undefined;
-    }
+	}
 
 	$scope.fieldChanged = function (name , value) {
 		$scope.errForum[name] = value == undefined || value == '';
-		$scope.QuestionTextIN = $scope.QuestionTextIN.replace(/¬/g, " ").replace(/&#173;/g, " ");
+		$scope.QuestionTextIN = $scope.QuestionTextIN.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ");
 	}
 
 	$scope.subjectChanged = function () {
@@ -136,16 +136,17 @@ angular.module(appName).controller('NewQuestionCtrl', function ($scope, $rootSco
 	$scope.childSubjectChanged = function () {
 		$scope.errForum.subject = false;
 	}
-    
+
 
 	$scope.filesChanged = function(files, file, newFiles, duplicateFiles, invalidFiles ,event) {
-     	var tttt = $scope.att.myFiles;
+		var tttt = $scope.att.myFiles;
 		debugger
 	}
 
-    $scope.removeFile = function (file) {
-        var index = $scope.att.myFiles.indexOf(file);
-        $scope.att.myFiles.splice(index,1);
-    }
-	activeElement('#SQuestion','#SQuestionNew');
+	$scope.removeFile = function (file) {
+		var index = $scope.att.myFiles.indexOf(file);
+		$scope.att.myFiles.splice(index,1);
+	}
+	
+	activeElement('#SAwardQuestion', '#SAddAwardQuestion');
 });

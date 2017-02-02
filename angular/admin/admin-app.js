@@ -26,11 +26,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
         // Admin states
         .state("dashboard", {
             url: "/dashboard",
-            templateUrl: "partials/Admin/Dashboard/Dashboard.html",
+            templateUrl: "angular.partial.Dashboard.html",
             controller: 'DashboardCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Dashboard/DashboardCtrl.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'داشبورد';
@@ -38,11 +38,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("tag", {
             url: "/tag",
-            templateUrl: "partials/Admin/Tag/Tag.html",
+            templateUrl: "angular.partial.Tag.html",
             controller: 'TagCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Tag/TagCtrl.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'مدیریت تگ';
@@ -50,11 +50,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("education", {
             url: "/education",
-            templateUrl: "partials/Admin/Education/Education.html",
+            templateUrl: "angular.partial.Education.html",
             controller: 'EducationCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Education/EducationCtrl.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'مدیریت تحصیلات';
@@ -62,11 +62,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("all_users", {
             url: "/all_users",
-            templateUrl: "partials/Admin/User/AllUsers.html",
+            templateUrl: "angular.partial.AllUsers.html",
             controller: 'AllUsersCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/User/AllUsersCtrl.js', '../app/directives/auto-pagination.js']);
+                    return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
                 }],
                 $title: function () {
                     return 'مدیریت اعضا';
@@ -74,11 +74,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("all_admins", {
             url: "/all_admins",
-            templateUrl: "partials/Admin/Admin/AllAdmins.html",
+            templateUrl: "angular.partial.AllAdmins.html",
             controller: 'AllAdminsCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Admin/AllAdminsCtrl.js', '../app/directives/auto-pagination.js']);
+                    return $ocLazyLoad.load([ '../app/directives/auto-pagination.js']);
                 }],
                 $title: function () {
                     return 'مدیریت مدیران';
@@ -86,11 +86,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("answers", {
             url: "/answers/:id",
-            templateUrl: "partials/Admin/Answers/Answers.html",
+            templateUrl: "angular.partial.Answers.html",
             controller: 'AnswersCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Answers/Answers.js', '../app/directives/auto-pagination.js']);
+                    return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
                 }],
                 $title: function () {
                     return 'مدیریت جواب ها';
@@ -98,11 +98,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("questions", {
         url: "/questions/:id",
-        templateUrl: "partials/Admin/Questions/Questions.html",
+        templateUrl: "angular.partial.Questions.html",
         controller: 'QuestionsCtrl',
         resolve: {
             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load(['partials/Admin/Questions/Questions.js', '../app/directives/auto-pagination.js']);
+                return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
             }],
             $title: function () {
                 return 'مدیریت سوال ها';
@@ -110,11 +110,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
         }
     }).state("award_questions", {
         url: "/AwardQuestions",
-        templateUrl: "partials/Admin/AwardQuestions/AwardQuestions.html",
+        templateUrl: "angular.partial.AwardQuestions.html",
         controller: 'AwardQuestionsCtrl',
         resolve: {
             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load(['partials/Admin/AwardQuestions/AwardQuestions.js', '../app/directives/auto-pagination.js']);
+                return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
             }],
             $title: function () {
                 return 'مدیریت سوال های جایزه دار';
@@ -122,11 +122,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
         }
     }).state("message", {
             url: "/message/:id",
-            templateUrl: "partials/Admin/Message/Message.html",
+            templateUrl: "angular.partial.Message.html",
             controller: 'MessageCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/Message/Message.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'ارسال پیام';
@@ -134,11 +134,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("skill", {
         url: "/skill",
-        templateUrl: "partials/Admin/Skill/Skill.html",
+        templateUrl: "angular.partial.Skill.html",
         controller: 'SkillCtrl',
         resolve: {
             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load(['partials/Admin/Skill/Skill.js']);
+                return $ocLazyLoad.load([]);
             }],
             $title: function () {
                 return 'مدیریت مهارت ها';
@@ -146,11 +146,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
         }
         }).state("upload_library", {
             url: "/UploadLibrary",
-            templateUrl: "partials/Admin/UploadLibrary/UploadLibrary.html",
+            templateUrl: "angular.partial.UploadLibrary.html",
             controller: 'UploadLibraryCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/UploadLibrary/UploadLibraryCtrl.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'آپلود فایل';
@@ -158,11 +158,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("common_messages", {
             url: "/CommonMessage",
-            templateUrl: "partials/Admin/CommonMessage/CommonMessage.html",
+            templateUrl: "angular.partial.CommonMessage.html",
             controller: 'CommonMessageCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/CommonMessage/CommonMessage.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'پیام های رایج';
@@ -170,11 +170,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("manage_library", {
             url: "/ManageLibrary",
-            templateUrl: "partials/Admin/ManageLibrary/ManageLibrary.html",
+            templateUrl: "angular.partial.ManageLibrary.html",
             controller: 'ManageLibraryCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/ManageLibrary/ManageLibraryCtrl.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'مدیریت فایل ها';
@@ -183,11 +183,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
         })
         .state("new_admin_post", {
             url: "/NewAdminPost/:id",
-            templateUrl: "partials/Admin/NewAdminPost/NewAdminPost.html",
+            templateUrl: "angular.partial.NewAdminPost.html",
             controller: 'NewAdminPostCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/NewAdminPost/NewAdminPostCtrl.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'مطلب ادمین جدید';
@@ -195,11 +195,11 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("admin_post", {
             url: "/AdminPost",
-            templateUrl: "partials/Admin/AdminPost/AdminPost.html",
+            templateUrl: "angular.partial.AdminPost.html",
             controller: 'AdminPostCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load(['partials/Admin/AdminPost/AdminPost.js']);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
                     return 'مطلب ادمین';
@@ -207,17 +207,53 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }
         }).state("award_question", {
         url: "/AwardQuestion/:id",
-        templateUrl: "partials/Admin/AwardQuestion/AwardQuestion.html",
+        templateUrl: "angular.partial.AwardQuestion.html",
         controller: 'AwardQuestionCtrl',
         resolve: {
             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load(['partials/Admin/AwardQuestion/AwardQuestion.js']);
+                return $ocLazyLoad.load([]);
             }],
             $title: function () {
                 return 'سوال جایزه دار';
             }
         }
-    });
+    }).state("reporting", {
+        url: "/Reporting",
+        templateUrl: "angular.partial.Reporting.html",
+        controller: 'ReportingCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load([]);
+            }],
+            $title: function () {
+                return 'گزارش گیری';
+            }
+        }
+    }).state("organ_report", {
+        url: "/OrganReporting",
+        templateUrl: "angular.partial.OrganReporting.html",
+        controller: 'OrganReportingCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load([]);
+            }],
+            $title: function () {
+                return 'گزارش گیری';
+            }
+        }
+    })/*.state("new_popup", {
+        url: "/NewPopUp",
+        templateUrl: "angular.partial.NewPopUp.html",
+        controller: 'NewPopUpCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load([]);
+            }],
+            $title: function () {
+                return 'پاپ آپ جدید';
+            }
+        }
+    })*/;
 
 
     $provide.decorator('taOptions', ['taRegisterTool', '$uibModal' , '$delegate',
