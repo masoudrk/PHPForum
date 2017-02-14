@@ -692,7 +692,7 @@
             <treasure-overlay-spinner active='spinner.active' spinner-storke-width="3" spinner-size="60"></treasure-overlay-spinner>
             <!-- Content Wrapper. Contains page content -->
             <div ui-view ng-hide="globalSearchActive" id="mainContent" data-anim-speed="600"
-                class="anim-in-out anim-slide-below-fade" data-anim-sync="false" style="min-height: 600px;"></div>
+                class="anim-in-out anim-slide-below-fade" data-anim-sync="false" style="min-height: 750px;"></div>
             <!--        <div ng-show="globalSearchActive" ng-include src="'partials/GlobalSearch.html'" id="searchContent" ></div>-->
             <!-- /.content-wrapper -->
         </div>
