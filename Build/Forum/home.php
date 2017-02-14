@@ -110,7 +110,16 @@
 
     </div>
 </div><!-- ./wrapper -->
-
+<script type="text/ng-template" id="popUp.html">
+    <div class="modal-header vazir-font text-right">
+        <h3 class="modal-title text-danger" ng-bind="popup.Title"></h3>
+    </div>
+    <div class="modal-body vazir-font text-right" compile="popup.ModalText ">
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
 
 <!-- jQuery 2.1.4 -->
 <script src="../cms/js/jQuery/jQuery-2.1.4.min.js"></script>

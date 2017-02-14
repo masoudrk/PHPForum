@@ -13,8 +13,6 @@
 <section class="content">
     <div class="row">
         <div class="col-md-3">
-            <a ng-click="showInbux = !showInbux" class="btn btn-primary btn-block margin-bottom">{{(showInbux)? 'ارسال پیام' : 'لیست پیام ها'}}</a>
-
             <div class="box box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title">پوشه</h3>
@@ -27,7 +25,9 @@
                 </div>
                 <div class="box-body no-padding">
                     <ul class="nav nav-pills nav-stacked">
-                        <li class="col-xs-12 no-padding"><a><i class="fa fa-envelope-o pull-left"></i> پیام های ارسالی</a></li>
+                        <li class="col-xs-12 no-padding link" ng-click="showInbux = false;showSendMessage=true;showReciveMessage=false"><a><i class="fa fa-plus pull-left link" ></i>ارسال پیام</a></li>
+                        <li class="col-xs-12 no-padding link" ng-click="showInbux = true;showSendMessage=false;showReciveMessage=false"><a><i class="fa fa-paper-plane pull-left link" ></i> پیام های ارسالی</a></li>
+                        <li class="col-xs-12 no-padding link" ng-click="showInbux = false;showSendMessage=false;showReciveMessage=true"><a><i class="fa fa-envelope-o pull-left link"></i> پیام های دریافتی</a></li>
                     </ul>
                 </div>
                 <!-- /.box-body -->
@@ -112,16 +112,16 @@
                     <auto-paging page="1"
                                  page-size="20"
                                  ul-class="pagination pagination-sm no-margin"
-                                 action-name="getAllMessages"
+                                 action-name="getAllUserMessages"
                                  data-params="pagingParams"
-                                 ng-control="pagingController"
+                                 ng-control="messagesPagingController"
                                  items="Messages">
                     </auto-paging>
                 </div>
             </div>
             <!-- /. box -->
         </div>
-        <div class="col-md-9" ng-hide="showInbux">
+        <div class="col-md-9" ng-show="showSendMessage">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">ارسال پیام</h3>
@@ -161,10 +161,122 @@
             </div>
             <!-- /. box -->
         </div>
+        <div class="col-md-9" ng-show="showReciveMessage">
+            <div class="box box-warning">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">پیام های دریافتی</h3>
+                    <i class="fa fa-envelope palette-sun-flower"></i>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th colspan="2">از طرف</th>
+                            <th>موضوع پیام</th>
+                            <th> متن پیام</th>
+                            <th colspan="2"></th>
+                            <th>تاریخ</th>
+                        </tr>
+                        <tr ng-repeat="m in message.all"
+                            class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-20"
+                            ng-click="showMessage(m)">
+                            <td  style="width: 50px;">
+                                <img class="img-circle" ng-src="{{m.Image}}"
+                                     style="width:40px;" err-src="../images/Avatar.jpg">
+                            </td>
+                            <td style="vertical-align: middle;">
+                                {{m.FullName | subString :20|pNumber}}
+                            </td>
+                            <td ng-style="{color: (m.MessageViewed == '0')?'rgb(234, 189, 54)':'#666'}" >
+                                {{m.MessageTitle| subString :30|pNumber}}
+                            </td>
+                            <td compile="m.Message| subString :20|pNumber" class="text-muted" ng-style="{color: (m.MessageViewed == '0')?'rgb(234, 189, 54)':'#666'}">
+
+                            </td>
+                            <td class="text-center">
+                                <span class="label label-info" style="font-size: 10px" ng-if="m.MessageType == '1'">
+ارسالی به ایمیل
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="label label-success" style="font-size: 10px" ng-if="m.MessageViewed == '0'">
+دیده نشده
+                                </span>
+                                <span class="label label-default" style="font-size: 10px" ng-if="m.MessageViewed == '1'">
+دیده شده
+                                </span>
+                            </td>
+                            <td>
+                                <span class="persian-rtl text-muted">{{m.MessageDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllUserReciveMessages"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 on-load-finish="loadFinishPageData()"
+                                 items="message.all">
+                    </auto-paging>
+                </div>
+            </div>
+        </div>
         <!-- /.col -->
     </div>
 </section>
-<script type="text/ng-template" id="MessageModal.html">
+<script  id="MessageModal.html" type="text/ng-template">
+    <div class="modal-header">
+        <h3 class="modal-title text-right">نمایش پیام دریافتی</h3>
+    </div>
+    <div class="modal-body form">
+        <div class="row persian-rtl">
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    ارسال کننده :
+                </div>
+                <div class="col-xs-9">
+                    <a class="link palette-emerald" ng-click="getAdmin()">
+                        {{message.FullName | subString :20|pNumber}}
+                    </a>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    تاریخ دریافت :
+                </div>
+                <div class="col-xs-9 text-muted">
+                    {{message.MessageDate | jalaliDate :'jYYYY/jMM/jDD'| pNumber}}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    موضوع پیام :
+                </div>
+                <div class="col-xs-9">
+                    {{message.MessageTitle}}
+                </div>
+            </div>
+            <div class=" col-xs-12">
+                <div class="col-xs-3 control-label pull-right">
+                    پیام :
+                </div>
+                <div class="col-xs-9">
+                    <p compile="message.Message | pNumber"></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info btn-flat pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
+<script type="text/ng-template" id="Message1Modal.html">
     <div class="modal-header vazir-font text-right">
         <h3 class="modal-title text-info">متن پیام</h3>
     </div>

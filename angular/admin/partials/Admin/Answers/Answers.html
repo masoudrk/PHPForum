@@ -71,7 +71,7 @@
                             <th>خلاصه</th>
                             <th>وضعیت</th>
                             <th>ایمیل</th>
-                            <th style="width: 150px;"></th>
+                            <th style="width: 175px;"></th>
                         </tr>
                         <tr ng-repeat="u in answer.all">
                             <td>
@@ -120,17 +120,26 @@
 
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header vazir-font text-right" ng-init="editMode = false">
-        <h3 class="modal-title text-info">
-            <i class="fa fa-pencil text-blue link hvr-grow" title="" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editMode = !editMode" data-original-title="ویرایش جواب"></i>
+        <h3 class="modal-title text-info vazir-font">
+            <i class="fa fa-pencil text-green link hvr-grow" title="" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editMode = !editMode" data-original-title="ویرایش جواب"></i>
             متن جواب
         </h3>
     </div>
     <div class="modal-body vazir-font text-right persian-rtl">
+        <h4 class="text_blue text-info vazir-font">
+            سوال:
+        </h4>
+        <div compile="QuestionText | pNumber " ng-hide="editMode">
+
+        </div>
+        <h4 class="text_blue text-info vazir-font">
+            جواب:
+        </h4>
         <div compile="AnswerText | pNumber " ng-hide="editMode">
             
         </div>
         <div ng-show="editMode">
-            <textarea rows="6" class="col-xs-12" ng-model="AnswerText"></textarea>
+            <textarea rows="12" class="col-xs-12" ng-model="AnswerText"></textarea>
         </div>
     </div>
     <div class="modal-footer vazir-font">

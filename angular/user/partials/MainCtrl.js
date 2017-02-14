@@ -1,12 +1,32 @@
-angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention) {
+angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention,$cookies,$uibModal) {
 
     $scope.UserMessages = [];
     $scope.awardQuestion = null;
-    // $rootScope.$on("socketDataChanged", function(){
-    //     if($rootScope.globalSearchActive && $scope.pagingParams.searchType==1)
-    //         $scope.checkNowOnline();
-    // });
-
+    
+    Extention.postAsync('checkPopUp', {}).then(function (msg) {
+        if (msg.Status == 'success') {
+            var popUp = $cookies.get("popup");
+            if (popUp) {
+                return;
+            } else {
+                var expireDate = new Date();
+                expireDate.setDate(expireDate.getDate() + 1);
+                // Setting a cookie
+                $cookies.put('popup', 'true', {'expires': expireDate , 'path':'/' });
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: 'popUp.html',
+                    controller: function ($scope, $uibModalInstance) {
+                        $scope.popup = msg.Data;
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                    },
+                    size: 'md'
+                });
+            }
+        }
+    });
     Extention.post("getAwardQuestion").then(function (res) {
         if (res.Status == 'success') {
             $scope.awardQuestion = res.Data;

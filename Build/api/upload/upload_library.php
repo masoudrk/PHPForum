@@ -7,7 +7,7 @@ require_once '../passwordHash.php';
 require_once '../functions.php';
 
 $session = new Session();
-$db = new DbHandler($session ,true ,true);
+$db = new DbHandler($session ,true ,false);
 
 $filename = $_FILES['file']['name'];
 $meta = $_POST;
@@ -35,10 +35,17 @@ $fid = $db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvata
     "'$destination','../$destination','$filename','0','$session->UserID','$fileTypeID','$fileSize',NOW()".
     ((isset($meta['Description']))?",'".$meta['Description']."'":''),
     true);
-
 $cols = 'FileID';
 $values = "'$fid'";
+$resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$session->UserID' and ap.PermissionLevel = 'Base' limit 1");
+$sql =$resQ->fetch_assoc();
 
+if($sql){
+    $cols .= ',AdminAccepted';
+    $values .= ",1";
+}
 if(isset($meta['MainSubjectID'])){
     $cols .= ',MainSubjectID';
     $values .= ",'".$meta['MainSubjectID']."'";
@@ -54,6 +61,15 @@ if(isset($meta['Title'])){
     $values .= ",'".$meta['Title']."'";
 }
 
-$db->insertToTable('library' , $cols, $values);
+$libraryID = $db->insertToTable('library' , $cols, $values,true);
 
+if(isset($meta['Tags'])){
+    $items = "";
+    foreach ($meta['Tags'] as $tag) {
+        $items .="($libraryID , ".$tag["ID"]."),";
+    }
+    $items = substr($items , 0 , strlen($items)-1);
+    $resQ = $db->makeQuery("INSERT INTO `tag_library`(`LibraryID`, `TagID`) VALUES ".$items);
+    $sql =$resQ->fetch_assoc();
+}
 ?>

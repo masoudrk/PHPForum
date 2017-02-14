@@ -1,0 +1,79 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>پاپ آپ</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/dashboard"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">پاپ آپ</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"> پاپ آپ ها</h3>
+                    <button class="btn btn-sm btn-info pull-left" ui-sref="new_popup"><i class="fa fa-plus"></i> افزودن پاپ آپ</button>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <div class="table-responsive mailbox-messages">
+                        <table class="table table-hover table-striped" ng-show="popUps.length !=0">
+                            <tbody>
+                            <tr ng-init="all.checked = false">
+                                <th>موضوع</th>
+                                <th>متن پیام</th>
+                                <th>تاریخ افزودن</th>
+                                <th>تاریخ اتمام</th>
+                                <th>وضعیت</th>
+                                <th style="width: 75px"></th>
+                            </tr>
+                            <tr ng-repeat="mes in popUps">
+                                <td>{{mes.Title | pNumber}}</td>
+                                <td class="persian-rtl" compile="mes.ModalText | pNumber | subString:35"></td>
+                                <td>{{mes.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                                <td>{{mes.ExpireDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                                <td ng-switch="mes.PopUpState">
+                                    <span class="label label-success" ng-switch-when="true">فعال</span>
+                                    <span class="label label-primary" ng-switch-when="false">غیر فعال</span>
+                                </td>
+                                <td>
+                                    <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+                                        <i confirm="آیا مطمئن هستید که میخواهید این پاپ آپ را حذف کنید؟"
+                                           class="fa fa-trash text-red link hvr-grow" ng-click="deletePopUp(mes)" title="حذف پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                        <i class="fa fa-eye text-blue link hvr-grow" ng-click="openPopUpModal(mes)" title="متن پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div ng-hide="popUps.length !=0" class="text-center">
+                            <h4 class="text-muted">موردی یافت نشد</h4>
+                        </div>
+                        <!-- /.table -->
+                    </div>
+                    <!-- /.mail-box-messages -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllPopUps"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 items="popUps">
+                    </auto-paging>
+                </div>
+            </div>
+            <!-- /. box -->
+        </div>
+        <!-- /.col -->
+    </div>
+</section>
+
+

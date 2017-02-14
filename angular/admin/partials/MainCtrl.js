@@ -1,5 +1,29 @@
-angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention) {
+angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention,$cookies,$uibModal) {
 
+    Extention.postAsync('checkPopUp', {}).then(function (msg) {
+        if (msg.Status == 'success') {
+            var popUp = $cookies.get("popup");
+            if (popUp) {
+                return;
+            } else {
+                var expireDate = new Date();
+                expireDate.setDate(expireDate.getDate() + 1);
+                // Setting a cookie
+                $cookies.put('popup', 'true', {'expires': expireDate , 'path':'/' });
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: 'popUp.html',
+                    controller: function ($scope, $uibModalInstance) {
+                        $scope.popup = msg.Data;
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                    },
+                    size: 'md'
+                });
+            }
+        }
+    });
     $scope.UserMessages = [];
     $scope.AnswerBadge = {};
     $scope.QuestionBadge = {};
@@ -35,6 +59,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         $scope.AnswerBadge = res.Data.Answer;
         $scope.QuestionBadge = res.Data.Question;
         $scope.UserBadge = res.Data.User;
+        $scope.Message = res.Data.Message;
     });
     Extention.post("getUserNotifications").then(function (res) {
         $scope.notifications = res.Data;

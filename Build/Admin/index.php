@@ -536,7 +536,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li id="SPopUps">
-                                <a ui-sref="new_popup">
+                                <a ui-sref="popup_manager">
                                     <i class="fa fa-circle-o"></i>
                                     مدیریت پاپ آپ                                </a>
                             </li>
@@ -653,6 +653,9 @@
                         <a ui-sref="message({id:session.UserID})">
                             <i class="fa fa-envelope"></i>
                             <span>ارسال پیام</span>
+                            <small ng-show="Message.MessageCount != 0" class="label pull-right bg-orange">
+                                <span ng-bind="Message.MessageCount | pNumber"></span>
+                            </small>
                         </a>
                     </li>
                     <li id="SProfile">
@@ -874,7 +877,16 @@
         <div class="control-sidebar-bg"></div>
     </div>
     <!-- ./wrapper -->
-
+    <script type="text/ng-template" id="popUp.html">
+        <div class="modal-header vazir-font text-right">
+            <h3 class="modal-title text-danger" ng-bind="popup.Title"></h3>
+        </div>
+        <div class="modal-body vazir-font text-right" compile="popup.ModalText ">
+        </div>
+        <div class="modal-footer vazir-font">
+            <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+        </div>
+    </script>
     <?php generateRequiredCMSJavaFiles() ?>
     <script src="ng-vendor.min.js"></script>
     <script src="templates.min.js"></script>

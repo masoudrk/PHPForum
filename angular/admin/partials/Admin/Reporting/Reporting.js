@@ -4,15 +4,24 @@ angular.module(appName).controller('ReportingCtrl', function ($scope, $rootScope
     $scope.pagingController = {};
     $scope.users = [];
     $scope.Position= {selected : null};
+    $scope.Forum= {selected : null};
+    $scope.Forums= [];
 
     Extention.postAsync('getAllPositions', {}).then(function (msg) {
         $scope.allPositions = msg;
+    });
+    Extention.postAsync('getAllForumTypes', {}).then(function (msg) {
+        $scope.Forums = msg.Data;
     });
 
     $scope.search = function () {
         $scope.pagingController.update();
     }
 
+    $scope.changeForum = function () {
+        $scope.pagingParams.ForumMainSubjectID = ($scope.Forum.selected) ? $scope.Forum.selected.ID : null;
+        $scope.search();
+    }
     $scope.changePosition = function () {
         $scope.pagingParams.OrganizationID = ($scope.Position.selected) ? $scope.Position.selected.ID : null;
         $scope.search();

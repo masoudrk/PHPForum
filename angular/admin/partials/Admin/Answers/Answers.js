@@ -101,6 +101,7 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	        controller: function ($scope, $uibModalInstance) {
 	            $scope.Answer = answer;
 	            $scope.AnswerText = $scope.Answer.AnswerText;
+				$scope.QuestionText= $scope.Answer.QuestionText;
 	            $scope.cancel = function () {
 	                $uibModalInstance.dismiss('cancel');
 	            };

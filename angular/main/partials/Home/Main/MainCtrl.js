@@ -1,5 +1,29 @@
-﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache, $state, $rootScope, $routeParams, $uibModal, Extention ) {
+﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache, $state, $rootScope, $routeParams, $uibModal, Extention ,$cookies) {
 
+    Extention.postAsync('checkPopUp', {}).then(function (msg) {
+        if (msg.Status == 'success') {
+            var popUp = $cookies.get("popup");
+            if (popUp) {
+                return;
+            } else {
+                var expireDate = new Date();
+                expireDate.setDate(expireDate.getDate() + 1);
+                // Setting a cookie
+                $cookies.put('popup', 'true', {'expires': expireDate , 'path':'/' });
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: 'popUp.html',
+                    controller: function ($scope, $uibModalInstance) {
+                        $scope.popup = msg.Data;
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                    },
+                    size: 'md'
+                });
+            }
+        }
+    });
 
     $scope.user = {};
     $scope.emailError = false;

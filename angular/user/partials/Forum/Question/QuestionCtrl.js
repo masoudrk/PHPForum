@@ -122,7 +122,7 @@
     $scope.saveAnswer = function() {
         if (!$scope.answerTextIn || $scope.answerTextIn.length == 0) {
             Extention.popError('متن خود را وارد کنید');
-            return;re
+            return;
         }
 
         Extention.setBusy(true);

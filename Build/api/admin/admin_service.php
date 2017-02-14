@@ -1,5 +1,73 @@
 <?php
 
+$app->post('/deletePopUp', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+    $qID =  $app->db->deleteFromTable('pop_up','ID='.$data->PopUpID);
+    if($qID)
+        echoSuccess();
+    else
+        echoError();
+});
+$app->post('/getAllPopUps', function() use ($app) {
+    $data = json_decode($app->request->getBody());
+    $pr = new Pagination($data);
+    $resq = $pr->getPage($app->db,"SELECT * , (SELECT IF(p.`ExpireDate` > NOW(), 'true', 'false') )  AS PopUpState FROM `pop_up` p ORDER BY p.ID");
+    if($resq)
+        echoResponse(200,$resq);
+    else
+        echoError();
+});
+$app->post('/checkPopUp', function() use ($app) {
+    $r = json_decode($app->request->getBody());
+    $resq = $app->db->makeQuery("SELECT * FROM `pop_up` p WHERE p.ExpireDate > NOW() ORDER BY p.ID LIMIT 1");
+    $res = $resq->fetch_assoc();
+    if($res)
+        echoSuccess($res);
+    else
+        echoError();
+});
+$app->post('/saveNewPopUp', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    
+    $qID = $app->db->insertToTable('pop_up','Title,ModalText,CreationDate,ExpireDate',
+        "'$data->Title','$data->ModalText',now(),'".$data->ExpireDate."'",true);
+    if($qID)
+        echoSuccess();
+    else
+        echoError();
+});
+$app->post('/getAllUserReciveMessages', function() use ($app)  {
+
+    require_once '../db/message.php';
+
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+
+    $pin = new PaginationInput($data);
+    $res = getPageUserMessages($app->db,$sess->UserID,$pin);
+
+    echoResponse(200, $res);
+});
+
 $app->post('/getSocketData', function() use ($app)  {
 $s = new Session();
 
@@ -110,24 +178,31 @@ $app->post('/getUsersReport', function() use ($app)  {
     $sess = new Session();
 
     $where = "WHERE (user.UserAccepted ='1')";
-    if(isset($data->filter)){
-        $where .=" AND (Username LIKE '%".$data->filter."%' OR FullName LIKE '%".$data->filter."%' OR Email LIKE '%".$data->filter."%')";
-    }
-
+//    if(isset($data->filter)){
+//        $where .=" AND (Username LIKE '%".$data->filter."%' OR FullName LIKE '%".$data->filter."%' OR Email LIKE '%".$data->filter."%')";
+//    }
     if(isset($data->OrganizationID)){
-        $where .=" AND (user.OrganizationID ='$data->OrganizationID')";
-    }
+        $where .=" AND (user.OrganizationID ='$data->OrganizationID')";}
+    if(isset($data->ForumMainSubjectID)){
+        $pageRes = $pr->getPage($app->db,"SELECT (SELECT COUNT(*) FROM forum_answer as fa 
+INNER JOIN forum_question fq on fq.ID = fa.QuestionID
+INNER JOIN forum_subject fss on fss.ID = fq.SubjectID
+ WHERE fa.AuthorID = user.`ID` AND fa.AdminAccepted =1 and fss.ParentSubjectID = '$data->ForumMainSubjectID' ) as AnswerCount ,
+(SELECT COUNT(*) FROM forum_question as fq
+INNER JOIN forum_subject fss on fss.ID = fq.SubjectID
+ WHERE fq.AuthorID = user.`ID` AND fq.AdminAccepted =1 and fss.ParentSubjectID = '$data->ForumMainSubjectID') as QuestionCount ,
+(SELECT COUNT(*) FROM person_follow as pf WHERE pf.TargetUserID = user.`ID`) as FollowersCount ,
+(SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount ,
+user.`ID`, `FullName`, `Email`, `Username`,op.ID as OrganID , op.OrganizationName,
+`PhoneNumber`, `Tel`, `SignupDate`, `Gender`, user.`Description`,
+`MailAccepted`, `ValidSessionID`, `UserAccepted`, user.LastActiveTime, user.SignupDate , user.score , file_storage.FullPath
+FROM user LEFT  JOIN organ_position as op on op.ID = user.OrganizationID
+LEFT JOIN file_storage on file_storage.ID = user.AvatarID ".$where." ORDER BY AnswerCount+QuestionCount DESC");
 
-//    if(isset($data->genderType)){
-//        $where .=" AND (user.Gender ='$data->genderType')";
-//    }
-//
-//    if(isset($data->searchValue) && strlen($data->searchValue) > 0){
-//        $s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
-//        $where .= " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
-//    }
-
-    $pageRes = $pr->getPage($app->db,"SELECT (SELECT COUNT(*) FROM forum_answer as fa WHERE fa.AuthorID = user.`ID` AND fa.AdminAccepted =1) as AnswerCount ,
+        echoResponse(200, $pageRes);
+    }else
+    {
+        $pageRes = $pr->getPage($app->db,"SELECT (SELECT COUNT(*) FROM forum_answer as fa WHERE fa.AuthorID = user.`ID` AND fa.AdminAccepted =1) as AnswerCount ,
 (SELECT COUNT(*) FROM forum_question as fq WHERE fq.AuthorID = user.`ID` AND fq.AdminAccepted =1) as QuestionCount ,
 (SELECT COUNT(*) FROM person_follow as pf WHERE pf.TargetUserID = user.`ID`) as FollowersCount ,
 (SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount ,
@@ -137,7 +212,10 @@ user.`ID`, `FullName`, `Email`, `Username`,op.ID as OrganID , op.OrganizationNam
 FROM user LEFT  JOIN organ_position as op on op.ID = user.OrganizationID
 LEFT JOIN file_storage on file_storage.ID = user.AvatarID ".$where." ORDER BY user.score DESC");
 
-    echoResponse(200, $pageRes);
+        echoResponse(200, $pageRes);
+    }
+
+
 });
 
 $app->post('/getAllAwardedQuestions', function() use ($app)  {
@@ -998,7 +1076,7 @@ $app->post('/getAllAnswers', function() use ($app)  {
 		$hasWhere = TRUE;
 	}
 
-	$pageRes = $pr->getPage($app->db,"SELECT fa.* ,fq.AuthorID as QuestionAuthorID , fq.ID as QuestionID ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID FROM forum_answer as fa 
+	$pageRes = $pr->getPage($app->db,"SELECT fa.*,fq.QuestionText ,fq.AuthorID as QuestionAuthorID , fq.ID as QuestionID ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID FROM forum_answer as fa 
 INNER JOIN forum_question as fq on fq.ID = fa.QuestionID
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
@@ -1312,8 +1390,6 @@ LEFT JOIN file_storage on file_storage.ID = user.AvatarID ".$where." ORDER BY us
 
 $app->post('/getAllForumTypes', function() use ($app)  {
 
-
-
     $pageRes = $app->db->makeQuery("SELECT * FROM `forum_main_subject`");
     $res=[];
     while($r = $pageRes->fetch_assoc())
@@ -1412,7 +1488,7 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
     if($sql['val'] == 0)
         echoError('You don\'t have permision to do this action');
 
-	$res = $app->db->deleteFromTable('common_message',"ID='$data->MessageID'");
+	$res = $app->db->deleteFromTable('message',"ID='$data->MessageID'");
 	if($res)
 		echoSuccess();
 	else
@@ -1445,12 +1521,12 @@ where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
 
 $app->post('/getUsersByName', function() use ($app)  {
 
-	
+
 	$data = json_decode($app->request->getBody());
     if(!isset($data->filter))
         echoError("bad request");
 
-    $resQ = $app->db->makeQuery("SELECT u.FullName , u.Email , u.ID FROM user as u where u.FullName LIKE N'%$data->filter%' or u.Email LIKE N'%$data->filter%' limit 10");
+    $resQ = $app->db->makeQuery("SELECT u.FullName , u.Email , u.ID FROM user as u where u.FullName LIKE N'%$data->filter%' or u.Email LIKE N'%$data->filter%' limit 20");
     $res=[];
     while($r = $resQ->fetch_assoc())
         $res[] = $r;
@@ -1504,9 +1580,9 @@ where u.ID = '$sess->UserID' limit 1");
 	echoSuccess();
 });
 
-$app->post('/getAllMessages', function() use ($app)  {
+$app->post('/getAllUserMessages', function() use ($app)  {
 
-	
+
 	$data = json_decode($app->request->getBody());
 	$pr = new Pagination($data);
 	$sess = new Session();
@@ -1734,6 +1810,8 @@ LIMIT 1");
     $resp["Answer"] = $resQ->fetch_assoc();
             $resQ = $app->db->makeQuery("SELECT COUNT(*) as UserCount FROM user as u WHERE u.UserAccepted = 0");
     $resp["User"] = $resQ->fetch_assoc();
+    $resQ = $app->db->makeQuery("SELECT COUNT(*) as MessageCount FROM message as u WHERE u.UserID = '$sess->UserID' AND u.MessageViewed = 0");
+    $resp["Message"] = $resQ->fetch_assoc();
     echoSuccess($resp);
 });
 

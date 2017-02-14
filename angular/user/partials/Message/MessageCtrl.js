@@ -1,12 +1,84 @@
 
-angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, $stateParams, $state,
-                                                            $location, $timeout,$uibModal , Extention,Upload) {
+angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $stateParams, $uibModal, Extention) {
 
-    if($stateParams.id){
-        Extention.post('getUserMessageByID',{ MessageID:$stateParams.id})
-            .then(function (res) {
-            $scope.showMessage(res);
-        })
+    $scope.showInbux = true;
+    $scope.showSendMessage = false;
+    $scope.showReciveMessage= false;
+
+    $scope.dropDwonTitle = 'نمایش پیام ها';
+    $scope.user = {};
+    $scope.pagingController = {};
+    $scope.user.selectedUser = [];
+    $scope.users = [];
+    $scope.Message = {};
+    $scope.Messages = [];
+    $scope.all = {};
+    $scope.checkAll = function() {
+        if ($scope.all.checked) {
+            for (var i = 0; i < $scope.Messages.length; i++) {
+                $scope.Messages[i].checked = true;
+            }
+        }
+    }
+
+    $scope.clearMiniSpace = function () {
+        $scope.Message.MessageIn = $scope.Message.MessageIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ");
+    }
+    
+    $scope.getPersons = function (filter) {
+        console.log(filter);
+        Extention.postAsync('getUsersByName', { filter: filter }).then(function (res) {
+            if (res && res.Status == 'success') {
+                $scope.users = res.Data;
+            	}else{
+            		Extention.popError("مشکل در اتصال.");
+            	}
+            });
+    }
+    $scope.sentMessage = function (messageType) {
+        if ($scope.user.selectedUser.length == 0 || !$scope.Message.MessageIn || !$scope.Message.MessageTitle) return;
+        if (messageType == 1) {
+            $scope.Message.MessageType = 1;
+        } else {
+            $scope.Message.MessageType = 0;
+        }
+        $scope.Message.Message = $scope.Message.MessageIn.replace(/\r\n|\r|\n/g, "<br />");
+        Extention.post('sendMessage', { Message: $scope.Message, Users: $scope.user.selectedUser }).then(function (res) {
+            if (res && res.Status == 'success') {
+                $scope.user.selectedUser = [];
+                Extention.popSuccess("پیام های شما ارسال شد");
+                $scope.showInbux = true;
+                $scope.showSendMessage = false;
+                $scope.showReciveMessage= false;
+            } else {
+                Extention.popError("مشکل در اتصال.");
+            }
+        }, function(err) {
+            console.log(err);
+        });
+    }
+
+    $scope.changeTypeFilter = function (type) {
+        $scope.pagingParams.MessageType = type;
+        switch (type) {
+            case null:
+                $scope.dropDwonTitle = 'همه ی پیام ها';
+                break;
+            case 1:
+                $scope.dropDwonTitle = 'پیام های ایمیلی';
+                break;
+            case 0:
+                $scope.dropDwonTitle = 'پیام های مستقیم';
+                break;
+            default:
+                $scope.dropDwonTitle = 'نمایش پیام ها';
+                break;
+        }
+        $scope.search();
+    }
+
+    $scope.search = function () {
+        $scope.pagingController.update();
     }
 
     $scope.showMessage = function (message) {
@@ -51,6 +123,19 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
             }
         });
     }
-
+    $scope.openMessageModal = function (message) {
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'Message1Modal.html',
+            controller: function ($scope, $uibModalInstance) {
+                $scope.message = message;
+                console.log($scope.message);
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+            },
+            size: 'md'
+        });
+    }
     activeElement('#SMessage');
 });

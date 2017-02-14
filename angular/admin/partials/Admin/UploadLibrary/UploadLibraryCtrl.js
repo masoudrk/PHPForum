@@ -1,8 +1,13 @@
 angular.module(appName).controller('UploadLibraryCtrl', function ($scope, $rootScope, $state, $timeout, Extention , Upload) {
 
+	$scope.allTags = [];
 	// uploading -> 0
 	// uploaded -> 1
 	// upload_error -> 2
+
+	Extention.post('getAllTags').then(function (res) {
+		$scope.allTags = res.Items;
+	});
 	$scope.isResumeSupported = Upload.isResumeSupported();
 
 	Extention.post('getUploadLibraryData').then(function (res) {
@@ -73,12 +78,15 @@ angular.module(appName).controller('UploadLibraryCtrl', function ($scope, $rootS
 		if(angular.isDefined(file.Subject)){
 			subjectID = file.Subject.ID;
 		}
-
+console.log({file: file , Description : file.Description ,
+	SubjectID : subjectID, MainSubjectID :mainSubjectID,
+	Title : file.Title , Tags : file.Tags
+});
 		file.uploader = Upload.upload({
 			url: uploadURL + 'upload_library.php',
 			data: {file: file , Description : file.Description ,
 				SubjectID : subjectID, MainSubjectID :mainSubjectID,
-				Title : file.Title
+				Title : file.Title , Tags : file.Tags
 			}
 		});
 

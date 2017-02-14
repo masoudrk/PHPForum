@@ -62,9 +62,10 @@ class Pagination {
 		}else{
 
 			$startFromStr = strrpos($query, 'FROM');
-
 			$rest = substr($query,$startFromStr);
-			
+			$startOrderStr = strrpos($rest, 'ORDER');
+			$restOrder = substr($rest,$startOrderStr);
+			$rest = substr($rest , 0 , strlen($rest)-strlen($restOrder));
 			$countQ = $db->makeQuery("SELECT count(*) as Total ".$rest);
 			$countRes = $countQ->fetch_assoc();
 			$total = $countRes['Total'];

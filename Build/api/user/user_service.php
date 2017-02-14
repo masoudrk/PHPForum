@@ -1,4 +1,158 @@
 <?php
+
+$app->post('/getForumSubjects', function() use ($app) {
+    $r = json_decode($app->request->getBody());
+    if(!isset($r->ID))
+        echoError('bad request');
+    $resQ = $app->db->makeQuery("SELECT * FROM `forum_subject` where ParentSubjectID= '$r->ID'");
+    $res=[];
+    while($r = $resQ->fetch_assoc())
+        $res[] = $r;
+    echoSuccess($res);
+});
+
+$app->post('/getLibraryData', function() use ($app) {
+    $r = json_decode($app->request->getBody());
+    $response = array();
+    $resQ = $app->db->makeQuery("SELECT * FROM `tag`");
+    $res=[];
+    while($r = $resQ->fetch_assoc())
+        $res[] = $r;
+    $response["Tags"] = $res;
+    $resQ = $app->db->makeQuery("SELECT * FROM `forum_main_subject`");
+    $res=[];
+    while($r = $resQ->fetch_assoc())
+        $res[] = $r;
+    $response["AllSubjects"] = $res;
+    echoSuccess($response);
+});
+
+$app->post('/checkPopUp', function() use ($app) {
+    $r = json_decode($app->request->getBody());
+    $resq = $app->db->makeQuery("SELECT * FROM `pop_up` p WHERE p.ExpireDate > NOW() ORDER BY p.ID LIMIT 1");
+    $res = $resq->fetch_assoc();
+    if($res)
+        echoSuccess($res);
+    else
+        echoError();
+});
+
+$app->post('/deleteMyAnswer', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+
+    $sess = $app->session;
+    if(!isset($data->AnswerID))
+    {echoResponse(201, 'bad Request');return;}
+    $resQ = $app->db->makeQuery("Select * from forum_answer as fa where fa.AdminAccepted =0 and fa.AuthorID = '$sess->UserID' and fa.ID = '$data->AnswerID'");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+
+    $res = $app->db->deleteFromTable("forum_answer","ID='$data->AnswerID'");
+    echoSuccess();
+});
+$app->post('/updateAnswer', function() use ($app)  {
+    $data = json_decode($_POST['data']);
+
+    $sess = $app->session;
+    if(!isset($data->AnswerID) || !isset($data->AnswerText))
+    {echoResponse(201, 'bad Request');return;}
+    $resQ = $app->db->makeQuery("Select * from forum_answer as fa where fa.AdminAccepted =0 and fa.AuthorID = '$sess->UserID' and fa.ID = '$data->AnswerID'");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $aID = $data->AnswerID;
+    $res = $app->db->updateRecord('forum_answer',"AnswerText = '$data->AnswerText'","ID=".$data->AnswerID);
+
+    if (isset($_FILES['file'])) {
+        $file_ary = reArrayFiles($_FILES['file']);
+
+        if (!file_exists('../content/user_upload/')) {
+            mkdir('../content/user_upload/', 0777, true);
+        }
+
+        foreach ($file_ary as $file) {
+                $filename = $file['name'];
+                $rand = generateRandomString(18);
+                $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+                $destination ='content/user_upload/'.$rand.'.'.$ext;
+                $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
+                if($uploadSuccess){
+                    $fileTypeQ = $app->db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+
+                    $fileTypeID = -1;
+                    if(mysqli_num_rows($fileTypeQ) > 0)
+                        $fileTypeID = $fileTypeQ->fetch_assoc()['ID'];
+
+                    $fileSize = $file['size'] / 1024;
+                    $fid = $app->db->insertToTable('file_storage','AbsolutePath,FullPath,Filename,IsAvatar,UserID,FileTypeID,
+                FileSize,UploadDate',
+                        "'$destination','../$destination','$filename','0','$sess->UserID','$fileTypeID','$fileSize',NOW()",
+                        true);
+
+                    $app->db->insertToTable('answer_attachment','AnswerID,FileID',
+                        "'$aID','$fid'");
+                }
+        }
+    }
+    echoResponse(200, true);
+    return;
+});
+$app->post('/sendMessage', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+
+    foreach ($data->Users as $value)
+    {
+        $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+            "'$sess->UserID','$value->ID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','".$data->Message->MessageType."'");
+
+        if($value->ID != $sess->UserID)
+            $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID',"$value->ID,5,now(),$sess->UserID");
+    }
+    echoSuccess();
+});
+
+$app->post('/getAllUserMessages', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $pr = new Pagination($data);
+    $sess = new Session();
+    $where = "WHERE au.ID = '$sess->UserID'";
+    $hasWhere = FALSE;
+    if(isset($data->MessageType)){
+        $where .=" AND (m.MessageType ='$data->MessageType')";
+    }
+    if(isset($data->searchValue) && strlen($data->searchValue) > 0){
+        $s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
+        $where .= " AND ( m.Message LIKE '%".$s."%' OR m.MessageTitle LIKE '%".$s."%' OR u.FullName LIKE '%".$s."%')";
+        $hasWhere = TRUE;
+    }
+
+    $pageRes = $pr->getPage($app->db,"SELECT u.FullName ,fs.FullPath, u.Email , m.* FROM message as m
+INNER JOIN user as u on u.ID = m.UserID
+INNER join user as au on au.ID = m.SenderUserID
+LEFT JOIN file_storage as fs on u.AvatarID = fs.ID ".$where." ORDER BY m.ID desc");
+
+    echoResponse(200, $pageRes);
+});
+
+
+$app->post('/getUsersByName', function() use ($app)  {
+
+
+    $data = json_decode($app->request->getBody());
+    if(!isset($data->filter))
+        echoError("bad request");
+
+    $resQ = $app->db->makeQuery("SELECT u.FullName , u.Email , u.ID FROM user as u INNER JOIN admin as a on a.UserID = u.ID
+where u.FullName LIKE N'%$data->filter%' or u.Email LIKE N'%$data->filter%' limit 10");
+    $res=[];
+    while($r = $resQ->fetch_assoc())
+        $res[] = $r;
+    echoSuccess($res);
+});
+
 $app->post('/getSocketData', function() use ($app)  {
     
     $s = $app->session;
@@ -343,7 +497,7 @@ $app->post('/getUserMessageByID', function() use ($app)  {
     echoResponse(200 , $res);
 });
 
-$app->post('/getAllUserMessages', function() use ($app)  {
+$app->post('/getAllUserReciveMessages', function() use ($app)  {
 
     require_once '../db/message.php';
 
@@ -392,9 +546,41 @@ $app->post('/getAllMyAnswers', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $sess = $app->session;
 
-    $pin = new PaginationInput($data);
-    $res = getPageUserAnswers($app->db,$sess->UserID,$pin);
 
+    $resQ = $app->db->makeQuery("SELECT a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName 
+from forum_answer as a
+inner join user as u on u.ID = a.AuthorID
+inner join file_storage as f on f.ID = u.AvatarID
+left join organ_position as o on u.OrganizationID = o.ID
+where a.AuthorID = '$sess->UserID' ORDER BY a.CreationDate DESC ");
+
+    $Answers = [];
+    while($item = $resQ->fetch_assoc()){
+        $aID = $item['ID'];
+
+        $resaQ = $app->db->makeQuery("select fs.*,ft.GeneralType from answer_attachment as att
+inner join file_storage as fs on fs.ID = att.FileID
+left join file_type as ft on ft.ID=fs.FileTypeID
+where att.AnswerID='$aID'");
+
+        $aAtt = [];
+        while($itema = $resaQ->fetch_assoc())
+            $aAtt[] = $itema;
+        $item['Attachments'] = $aAtt;
+
+        $Answers[] = $item;
+    }
+    $pr = new Pagination(null);
+    $pin = new PaginationInput($data);
+    $pr->setParams($pin);
+
+    $res= $pr->getPage($app->db,"SELECT a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName 
+FROM forum_answer as a
+inner join user as u on u.ID = a.AuthorID
+inner join file_storage as f on f.ID = u.AvatarID
+left join organ_position as o on u.OrganizationID = o.ID
+where a.AuthorID = '$sess->UserID' ORDER BY a.CreationDate DESC ");
+    $res['Items'] = $Answers;
     echoResponse(200, $res);
 });
 
@@ -530,6 +716,24 @@ $app->post('/getLibraryFiles', function() use ($app)  {
 
     $res = [];
     $pr = new Pagination($data);
+    $where = "WHERE 1=1";
+
+    if(isset($data->searchValue) && strlen($data->searchValue) > 0){
+        $s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
+        $where .= " AND (file_storage.Filename LIKE '%".$s."%' )";
+    }
+    if(isset($data->childSubjectID)){
+        $where .=" AND (forum_subject.ID ='$data->childSubjectID')";
+    }
+
+    if(isset($data->tagID)){
+        $where .=" AND ('$data->tagID' in (SELECT `tag_library`.TagID FROM `tag_library` INNER  join library l on l.ID = tag_library.LibraryID
+ where l.ID= library.ID))";
+    }
+
+    if(isset($data->mainSubjectID)){
+        $where .=" AND (forum_main_subject.ID ='$data->mainSubjectID')";
+    }
     $res = $pr->getPage($app->db,"SELECT file_storage.*  , library.ID as LibraryID , library.Title ,
 forum_main_subject.Title as MainSubjectTitle , forum_subject.Title as SubjectTitle , file_type.GeneralType,
 fs_user.FullPath as UserAvatar,user.FullName
@@ -539,7 +743,7 @@ left join file_type on file_type.ID=file_storage.FileTypeID
 left join forum_main_subject on forum_main_subject.ID=library.MainSubjectID
 left join forum_subject on forum_subject.ID=library.SubjectID
 inner join user on user.ID=file_storage.UserID
-left join file_storage as fs_user on user.AvatarID=fs_user.ID
+left join file_storage as fs_user on user.AvatarID=fs_user.ID ".$where."
 order by file_storage.UploadDate desc");
 
     echoResponse(200, $res);

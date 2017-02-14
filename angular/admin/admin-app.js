@@ -5,7 +5,7 @@ var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
-    'ngFileUpload','anim-in-out','am-charts' ,'ADM-dateTimePicker','ngSanitize',
+    'ngFileUpload','anim-in-out','am-charts' ,'ADM-dateTimePicker','ngSanitize', 'ngCookies',
     'textAngular']);
 
 app.config([
@@ -241,8 +241,8 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                 return 'گزارش گیری';
             }
         }
-    })/*.state("new_popup", {
-        url: "/NewPopUp",
+    }).state("new_popup", {
+        url: "/NewPopUp:id",
         templateUrl: "angular.partial.NewPopUp.html",
         controller: 'NewPopUpCtrl',
         resolve: {
@@ -253,8 +253,20 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                 return 'پاپ آپ جدید';
             }
         }
-    })*/;
-
+    }).state("popup_manager", {
+        url: "/PopUpManager",
+        templateUrl: "angular.partial.PopUpManager.html",
+        controller: 'PopUpManagerCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load([]);
+            }],
+            $title: function () {
+                return 'مدیریت پاپ آپ';
+            }
+        }
+    });
+    
 
     $provide.decorator('taOptions', ['taRegisterTool', '$uibModal' , '$delegate',
         function(taRegisterTool,$uibModal, taOptions) {

@@ -90,7 +90,18 @@
                                             </ui-select>
                                         </div>
                                     </div>
-
+                                    <div class="row"  style="margin-top: 5px">
+                                        <span class="col-xs-12 control-label text-right">تگ فایل :</span>
+                                        <div class="col-xs-12">
+                                            <ui-select multiple ng-model="f.Tags" theme="bootstrap" sortable="true" close-on-select="false" style="">
+                                                <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Text}}</ui-select-match>
+                                                <ui-select-choices
+                                                        repeat="t in allTags | filter: {Text: $select.search}">
+                                                    <div compile="t.Text" class="text-right"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
                                     <div style="margin-top: 15px;">
                                         <input class="form-control" placeholder="موضوع ..."
                                                   ng-disabled="f.uploadState == 0 || f.uploadState == 1"

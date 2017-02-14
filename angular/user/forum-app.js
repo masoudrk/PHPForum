@@ -1,12 +1,12 @@
 ﻿var appName = 'forumApp';
 var serviceBaseURL = '../api/user/';
 var uploadURL = '../api/upload/';
-var debugMode = true;
+var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
     'ngFileUpload','anim-in-out','am-charts','ng-fx','ngImgCrop','ADM-dateTimePicker','ngSanitize',
-    'textAngular']);
+    'textAngular', 'ngCookies']);
 
 app.config([
     '$provide','$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
