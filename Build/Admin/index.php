@@ -340,7 +340,7 @@
                             <span>داشبورد</span>
                         </a>
                     </li>
-                    <li ng-if="session.AdminPermissionLevel =='Base'" class="treeview" id="SUsers">
+                    <li ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin'" class="treeview" id="SUsers">
                         <a ui-sref="all_users">
                             <i class="fa fa-user"></i>
                             <span>مدیریت اعضا</span>
@@ -361,7 +361,7 @@
                             <span>مطالب ادمین</span>
                         </a>
                     </li>
-                    <li id="SAwardQuestion"  ng-if="session.AdminPermissionLevel =='Base'">
+                    <li id="SAwardQuestion" ng-if="session.AdminPermissionLevel =='Base'">
                         <a>
                             <i class="fa fa-star"></i>
                             <span>سوال های جایزه دار</span>
@@ -393,7 +393,7 @@
                             </small>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="SSTransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
+                            <li id="SSTransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="questions({id:'Transition'})" href="#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
@@ -402,7 +402,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <li id="SSTransportManagement" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement'">
+                            <li id="SSTransportManagement" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="questions({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
                                     <i class="fa
                         fa-circle-o"></i>
@@ -412,7 +412,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <li id="SSDataSwitch" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch'">
+                            <li id="SSDataSwitch" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="questions({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
@@ -421,7 +421,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <li id="SSRadio" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio'">
+                            <li id="SSRadio" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="questions({id:'Radio'})" href="#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
@@ -430,7 +430,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <li id="SSCommonTopics" class="active" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics'">
+                            <li id="SSCommonTopics" class="active" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="questions({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
@@ -452,7 +452,7 @@
                         </a>
 
                         <ul class="treeview-menu">
-                            <li id="STransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition'">
+                            <li id="STransition" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Transition' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="answers({id:'Transition'})" href="#/MainForum/Transition">
                                     <i class="fa fa-circle-o"></i>
                                     خطوط انتقال
@@ -461,7 +461,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <li id="STransportManagement" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement'">
+                            <li id="STransportManagement" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'TransportManagement' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="answers({id:'TransportManagement'})" href="#/MainForum/TransportManagement">
                                     <i class="fa
                         fa-circle-o"></i>
@@ -471,7 +471,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <li id="SDataSwitch" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch'">
+                            <li id="SDataSwitch" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'DataSwitch' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="answers({id:'DataSwitch'})" href="#/MainForum/DataSwitch">
                                     <i class="fa fa-circle-o"></i>
                                     مراکز خودکار و دیتا سوئیچ
@@ -480,7 +480,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <li id="SRadio" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio'">
+                            <li id="SRadio" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'Radio' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="answers({id:'Radio'})" href="#/MainForum/Radio">
                                     <i class="fa fa-circle-o"></i>
                                     رادیوئی
@@ -489,7 +489,7 @@
                                     </small>
                                 </a>
                             </li>
-                            <li id="SCommonTopics" class="active" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics'">
+                            <li id="SCommonTopics" class="active" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermission == 'CommonTopics' ||session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="answers({id:'CommonTopics'})" href="#/MainForum/CommonTopics">
                                     <i class="fa fa-circle-o"></i>
                                     مباحث مشترک
@@ -522,7 +522,7 @@
                             <li id="SOrganReport">
                                 <a ui-sref="organ_report">
                                     <i class="fa fa-circle-o"></i>
-                                  نمودار مناطق
+                                  گزارش سوابق آموزشی
                                 </a>
                             </li>
                         </ul>
@@ -582,7 +582,7 @@
                         </ul>
                     </li>
 
-                   <li id="SLibrary" class="treeview">
+                   <li id="SLibrary" class="treeview"  ng-if="session.AdminPermissionLevel =='Base'">
                         <a class="link">
                             <i class="fa fa-book"></i>
                             <span>کتابخانه</span>

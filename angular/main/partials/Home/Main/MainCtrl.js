@@ -1,7 +1,8 @@
 ﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache, $state, $rootScope, $routeParams, $uibModal, Extention ,$cookies) {
 
     Extention.postAsync('checkPopUp', {}).then(function (msg) {
-        if (msg.Status == 'success') {
+        console.log(msg);return;
+        if (msg.Status == 'success'&& msg.Data !=null) {
             var popUp = $cookies.get("popup");
             if (popUp) {
                 return;

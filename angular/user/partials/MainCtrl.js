@@ -4,7 +4,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     $scope.awardQuestion = null;
     
     Extention.postAsync('checkPopUp', {}).then(function (msg) {
-        if (msg.Status == 'success') {
+        if (msg.Status == 'success'&& msg.Data !=null) {
             var popUp = $cookies.get("popup");
             if (popUp) {
                 return;

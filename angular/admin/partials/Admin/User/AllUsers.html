@@ -89,6 +89,7 @@
                                 <span class="label label-success" ng-switch-when="1">تایید شده</span>
                                 <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
                                 <span class="label label-danger" ng-switch-when="-1">رد شده</span>
+                                <span class="label label-info" ng-switch-when="2">تایید ناحیه</span>
                             </td>
                             <td>{{u.Email}}</td>
                             <td ng-switch="u.MailAccepted">
@@ -96,14 +97,16 @@
                                 <span class="label label-danger" ng-switch-when="0"> تایید نشده</span>
                             </td>
                             <td>
-                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin'">
                                     <i class="fa fa-eye text-blue link hvr-grow" ng-click="openUserModal(u)" title="جزئیات کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i confirm="آیا مطمئن هستید که میخواهید این کاربر '{{u.FullName}}' را حذف کنید؟"
+                                    <i  ng-if="session.AdminPermissionLevel =='Base'" confirm="آیا مطمئن هستید که میخواهید این کاربر '{{u.FullName}}' را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" ng-click="removeUser(u.ID)" title="حذف کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i class="fa fa-times link hvr-grow" ng-if="u.UserAccepted==1" style="color: #e67e22;"
+                                    <i class="fa fa-times link hvr-grow" ng-if="u.UserAccepted==1 || u.UserAccepted==2" style="color: #e67e22;"
                                        ng-click="changeUserState(u.ID ,-1)" title="رد کردن کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-blue link hvr-grow"
-                                       ng-if="u.UserAccepted==-1 || u.UserAccepted==0" ng-click="changeUserState(u.ID ,1)" title="تایید کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                       ng-if="session.AdminPermissionLevel =='OrganAdmin' && (u.UserAccepted==-1 || u.UserAccepted==0)" ng-click="changeUserState(u.ID ,1)" title="تایید کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-check text-blue link hvr-grow"
+                                       ng-if="session.AdminPermissionLevel =='Base' &&(u.UserAccepted==-1 || u.UserAccepted==0 || u.UserAccepted==2)" ng-click="changeUserState(u.ID ,1)" title="تایید کاربر" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <a ng-if="u.UserAccepted==1" class="link" ng-href="../Forum/#/UserProfile/{{u.ID}}"><i class="fa fa-angle-double-left text-maroon link hvr-pulse" title="پروفایل شخص" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
@@ -176,6 +179,14 @@
                 </div>
                 <div class="col-xs-9">
                     {{user.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    ناحیه :
+                </div>
+                <div class="col-xs-9">
+                    {{user.OrganizationName | pNumber}}
                 </div>
             </div>
             <div class="form-group col-xs-12">

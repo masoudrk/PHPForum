@@ -67,9 +67,13 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	            $scope.Question = Question;
 	            $scope.QuestionText = $scope.Question.QuestionText;
 	            $scope.Title = $scope.Question.Title;
-	            $scope.cancel = function () {
-	                $uibModalInstance.dismiss('cancel');
-	            };
+                $scope.editMode = false;
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+                $scope.changeEditMode = function () {
+                    $scope.editMode = !$scope.editMode;
+                };
 	            $scope.editQuestion = function() {
 	                if ($scope.Title && $scope.QuestionText) {
 	                    Extention.post('editQuestion', { QuestionID: $scope.Question.ID, QuestionText: $scope.QuestionText, Title: $scope.Title }).then(function (res) {

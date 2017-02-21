@@ -4,10 +4,7 @@ $app->post('/checkPopUp', function() use ($app) {
     $r = json_decode($app->request->getBody());
     $resq = $app->db->makeQuery("SELECT * FROM `pop_up` p WHERE p.ExpireDate > NOW() ORDER BY p.ID LIMIT 1");
     $res = $resq->fetch_assoc();
-    if($res)
-        echoSuccess($res);
-    else
-        echoError();
+    echoSuccess($res);
 });
 
 $app->post('/savePerson', function() use ($app) {

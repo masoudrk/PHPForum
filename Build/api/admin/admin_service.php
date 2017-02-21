@@ -1,5 +1,4 @@
 <?php
-
 $app->post('/deletePopUp', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
@@ -31,10 +30,7 @@ $app->post('/checkPopUp', function() use ($app) {
     $r = json_decode($app->request->getBody());
     $resq = $app->db->makeQuery("SELECT * FROM `pop_up` p WHERE p.ExpireDate > NOW() ORDER BY p.ID LIMIT 1");
     $res = $resq->fetch_assoc();
-    if($res)
-        echoSuccess($res);
-    else
-        echoError();
+    echoSuccess($res);
 });
 $app->post('/saveNewPopUp', function() use ($app)  {
 
@@ -864,12 +860,13 @@ $app->post('/changeUserAccepted', function() use ($app)  {
 
                 $resQ = $app->db->makeQuery("select Count(*) as val from user as u INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
-where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base'");
+where u.ID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = 'OrganAdmin')");
 
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
         echoError('You don\'t have permision to do this action');
-
+            if($sess->AdminPermissionLevel == "OrganAdmin" && $data->State == "1")
+                $data->State = "2";
 			$res = $app->db->updateRecord('user',"UserAccepted='$data->State'","ID='$data->UserID'");
 
 			if($res){
@@ -1076,6 +1073,12 @@ $app->post('/getAllAnswers', function() use ($app)  {
 		$hasWhere = TRUE;
 	}
 
+    if($sess->AdminPermissionLevel == "OrganAdmin"){
+        $admin = $app->db->makeQuery("select user.OrganizationID from user where user.ID = '$sess->UserID'");
+        $admin =$admin->fetch_assoc();
+        $where .= "AND u.OrganizationID = ".$admin["OrganizationID"];
+    }
+
 	$pageRes = $pr->getPage($app->db,"SELECT fa.*,fq.QuestionText ,fq.AuthorID as QuestionAuthorID , fq.ID as QuestionID ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID FROM forum_answer as fa 
 INNER JOIN forum_question as fq on fq.ID = fa.QuestionID
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
@@ -1125,6 +1128,11 @@ $app->post('/getAllQuestions', function() use ($app)  {
 		$hasWhere = TRUE;
 	}
 
+    if($sess->AdminPermissionLevel == "OrganAdmin"){
+        $admin = $app->db->makeQuery("select user.OrganizationID from user where user.ID = '$sess->UserID'");
+        $admin =$admin->fetch_assoc();
+        $where .= "AND u.OrganizationID = ".$admin["OrganizationID"];
+    }
 	$pageRes = $pr->getPage($app->db,"SELECT fq.* ,fs.Title as SubjectName ,u.FullName , lq.TargetQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID
 FROM forum_question as fq
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
@@ -1374,15 +1382,22 @@ $app->post('/getAllUsers', function() use ($app)  {
 		$where .= " AND (Username LIKE '%".$s."%' OR FullName LIKE '%".$s."%' OR Email LIKE '%".$s."%')";
 	}
 
+    if($sess->AdminPermissionLevel == "OrganAdmin"){
+        $admin = $app->db->makeQuery("select user.OrganizationID from user where user.ID = '$sess->UserID'");
+        $admin =$admin->fetch_assoc();
+        $where .= "AND user.OrganizationID = ".$admin["OrganizationID"];
+    }
+
 	$pageRes = $pr->getPage($app->db,"SELECT (SELECT COUNT(*) FROM forum_answer as fa WHERE fa.AuthorID = user.`ID`) as AnswerCount ,
 (SELECT COUNT(*) FROM forum_question as fq WHERE fq.AuthorID = user.`ID`) as QuestionCount ,
 (SELECT COUNT(*) FROM person_follow as pf WHERE pf.TargetUserID = user.`ID`) as FollowersCount ,
 (SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount ,
-user.`ID`, `FullName`, `Email`, `Username`,
+user.`ID`, `FullName`, `Email`, `Username` , orp.OrganizationName
 `PhoneNumber`, `Tel`, `SignupDate`, `Gender`, user.`Description`, `SessionID`,
 `MailAccepted`, `ValidSessionID`, `UserAccepted`,  admin.ID as
 AdminID , user.LastActiveTime, user.SignupDate , user.score , file_storage.FullPath
 FROM user LEFT JOIN admin on admin.UserID = user.ID
+inner JOIN organ_position orp on orp.ID = user.OrganizationID
 LEFT JOIN file_storage on file_storage.ID = user.AvatarID ".$where." ORDER BY user.ID desc");
 
 	echoResponse(200, $pageRes);
@@ -1469,7 +1484,8 @@ $app->post('/getAllAdmins', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $pr = new Pagination($data);
 
-    $pageRes = $pr->getPage($app->db,"SELECT u.ID as UserID , u.FullName, u.SignupDate , u.Email , ap.ID as PID , ap.Permission , ap.PermissionLevel ,a.ID , a.ForumID FROM `admin` as a INNER JOIN user as u on u.ID = a.`UserID` INNER JOIN admin_permission as ap on ap.ID = a.`PermissionID`");
+    $pageRes = $pr->getPage($app->db,"SELECT u.ID as UserID,org.OrganizationName , u.FullName, u.SignupDate , u.Email , ap.ID as PID , ap.Permission , ap.PermissionLevel ,a.ID , a.ForumID FROM `admin` as a INNER JOIN user as u on u.ID = a.`UserID` INNER JOIN admin_permission as ap on ap.ID = a.`PermissionID` 
+inner JOIN organ_position org on org.ID = u.OrganizationID");
 
     echoResponse(200, $pageRes);
 });
@@ -1526,7 +1542,7 @@ $app->post('/getUsersByName', function() use ($app)  {
     if(!isset($data->filter))
         echoError("bad request");
 
-    $resQ = $app->db->makeQuery("SELECT u.FullName , u.Email , u.ID FROM user as u where u.FullName LIKE N'%$data->filter%' or u.Email LIKE N'%$data->filter%' limit 20");
+    $resQ = $app->db->makeQuery("SELECT u.FullName ,o.OrganizationName, u.Email , u.ID FROM user as u inner join organ_position o on o.ID = u.OrganizationID where u.FullName LIKE N'%$data->filter%' or u.Email LIKE N'%$data->filter%' limit 20");
     $res=[];
     while($r = $resQ->fetch_assoc())
         $res[] = $r;
@@ -1727,7 +1743,6 @@ $app->post('/getUserNotifications', function() use ($app)  {
 });
 
 $app->post('/getUserMessages', function() use ($app)  {
-
     require_once '../db/message.php';
     $sess = new Session();
 

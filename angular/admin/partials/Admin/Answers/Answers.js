@@ -99,12 +99,16 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	        animation: true,
 	        templateUrl: 'myModalContent.html',
 	        controller: function ($scope, $uibModalInstance) {
+                $scope.editMode = false;
 	            $scope.Answer = answer;
 	            $scope.AnswerText = $scope.Answer.AnswerText;
 				$scope.QuestionText= $scope.Answer.QuestionText;
 	            $scope.cancel = function () {
 	                $uibModalInstance.dismiss('cancel');
 	            };
+                $scope.changeEditMode = function () {
+                    $scope.editMode = !$scope.editMode;
+                }
 	            $scope.editAnswer = function () {
 	                if ($scope.AnswerText) {
 	                    Extention.post('editAnswer', { AnswerID: $scope.Answer.ID, AnswerText: $scope.AnswerText }).then(function (res) {

@@ -39,8 +39,9 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
 	        console.log($scope.selectedAdmin);
 	        Extention.post('updateAdmin', $scope.selectedAdmin).then(function (res) {
 	            if (res && res.Status == 'success') {
+                    $scope.search();
 	                if($scope.action == 'افزودن')
-	                    Extention.popSuccess("مدیر با موفقیت اضافه شد!");
+                    Extention.popSuccess("مدیر با موفقیت اضافه شد!");
 	                else if ($scope.action == 'ویرایش') {
 	                    Extention.popSuccess("مدیر با موفقیت ویرایش شد!");
 	                    $scope.action = 'افزودن';
