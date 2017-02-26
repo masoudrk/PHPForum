@@ -25,5 +25,36 @@ angular.module(appName).controller('PopUpManagerCtrl', function ($scope, $rootSc
             size: 'md'
         });
     }
-    activeElement('#SContact');
+
+    $scope.openPopUpUpdate  = function (Data) {
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'popUpUpdate.html',
+            controller: function ($scope, $uibModalInstance) {
+                $scope.mindate =Date.now();
+                $scope.ExpireDate=new Date(Date.parse(Data.ExpireDate.replace('-','/','g'))).getTime();
+                console.log($scope.mindate);
+                $scope.popup = Data;
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+                $scope.upgrade = function () {
+                    if(!$scope.toFull.unix){
+                        Extention.popError('تاریخ اتمام پاپ آپ را انتخاب کنید');return;
+                    }
+                    var ExpireDate = new Date($scope.toFull.unix);
+                    Extention.post('updatePopUp',{ExpireDate : ExpireDate , PopUpID:$scope.popup.ID}).then(function (res) {
+                        if(res && res.Status=='success'){
+                            Extention.popSuccess("پاپ آپ با موفقیت تمدید شد!");
+                            $scope.cancel();
+                        }else{
+                            Extention.popError("مشکل در تمدید پاپ آپ ، لطفا دوباره امتحان کنید.");
+                        }
+                    });
+                }
+            },
+            size: 'md'
+        });
+    }
+    activeElement('#SPopUp' ,'#SPopUps');
 });

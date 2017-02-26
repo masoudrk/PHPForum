@@ -30,7 +30,7 @@
                                 <th>تاریخ افزودن</th>
                                 <th>تاریخ اتمام</th>
                                 <th>وضعیت</th>
-                                <th style="width: 75px"></th>
+                                <th style="width: 125px"></th>
                             </tr>
                             <tr ng-repeat="mes in popUps">
                                 <td>{{mes.Title | pNumber}}</td>
@@ -46,6 +46,7 @@
                                         <i confirm="آیا مطمئن هستید که میخواهید این پاپ آپ را حذف کنید؟"
                                            class="fa fa-trash text-red link hvr-grow" ng-click="deletePopUp(mes)" title="حذف پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                         <i class="fa fa-eye text-blue link hvr-grow" ng-click="openPopUpModal(mes)" title="متن پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                        <i class="fa fa-clock-o text-yellow link hvr-grow" ng-click="openPopUpUpdate(mes)" title="تمدید پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -75,5 +76,29 @@
         <!-- /.col -->
     </div>
 </section>
+<script  id="popUpUpdate.html" type="text/ng-template">
+    <div class="modal-header">
+        <h3 class="modal-title text-right">تمدید پاپ آپ</h3>
+    </div>
+    <div class="modal-body form">
+        <div class="row persian-rtl">
+            <div class="col-xs-12">
+                <div class="form-horizontal form-group">
 
+                    <div class="col-xs-12 col-md-8">
+                        <adm-dtp ng-model='ExpireDate'
+                                 options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true , default:"today"}'
+                                 full-data="toFull" class="english-font"
+                                 mindate="{{mindate}}"></adm-dtp>
+                    </div>
+                    <label class="col-md-4 col-xs-12 control-label">پایان پاپ آپ</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info btn-flat pull-right" type="button" ng-click="upgrade()">تمدید</button>
+        <button class="btn btn-success btn-flat pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
 

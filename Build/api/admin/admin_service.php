@@ -1,4 +1,23 @@
 <?php
+$app->post('/updatePopUp', function() use ($app)  {
+
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and ap.PermissionLevel = 'Base' limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $qID = $app->db->updateRecord('pop_up',"ExpireDate='$data->ExpireDate'"
+        , "ID='$data->PopUpID'");
+    if($qID)
+        echoSuccess();
+    else
+        echoError();
+});
+
 $app->post('/markAsReadMessage', function() use ($app)  {
 
     $sess = $app->session;
@@ -146,23 +165,32 @@ $app->post('/getReportChartData', function() use ($app)  {
     require_once "../db/organ_position.php";
 
     $data = json_decode($app->request->getBody());
-
+    $limitDateAnswer = "";
+    $limitDateQuestion = "";
+    if(isset($data->StartDate)){
+        $limitDateAnswer .= " and forum_answer.CreationDate > '$data->StartDate'";
+        $limitDateQuestion .= " and forum_question.CreationDate > '$data->StartDate'";
+    }
+    if(isset($data->EndDate)){
+        $limitDateAnswer .= " and forum_answer.CreationDate < '$data->EndDate'";
+        $limitDateQuestion .= " and forum_question.CreationDate < '$data->EndDate'";
+    }
     if(isset($data->OrganizationID)){
         $resQ = $app->db->makeQuery("select u.ID , u.FullName as OrganizationName,
     (select count(*) from user
-  where organ_position.ID=user.OrganizationID and user.UserAccepted =1) as UserTotal,
+  where organ_position.ID=user.OrganizationID and user.UserAccepted =1 ) as UserTotal,
   sum((select count(*) from forum_question
-  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =1) ) as QTotal,
+  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =1 $limitDateQuestion) ) as QTotal,
   sum((select count(*) from forum_question
-  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =0) ) as QTotalNA,
+  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =0 $limitDateQuestion) ) as QTotalNA,
   sum((select count(*) from forum_answer
     inner join forum_question on forum_question.ID=forum_answer.QuestionID
   where forum_answer.AuthorID=u.ID and forum_answer.AdminAccepted =1
-        and forum_question.AdminAccepted =1) ) as ATotal,
+        and forum_question.AdminAccepted =1 $limitDateAnswer) ) as ATotal,
   sum((select count(*) from forum_answer
     inner join forum_question on forum_question.ID=forum_answer.QuestionID
   where forum_answer.AuthorID=u.ID and forum_answer.AdminAccepted =0
-        and forum_question.AdminAccepted =1) ) as ATotalNA
+        and forum_question.AdminAccepted =1 $limitDateAnswer) ) as ATotalNA
 from organ_position
   LEFT JOIN user as u on u.OrganizationID=organ_position.ID
   where u.OrganizationID = '$data->OrganizationID'
@@ -190,17 +218,17 @@ ORDER by u.score DESC");
     (select count(*) from user
   where organ_position.ID=user.OrganizationID and user.UserAccepted =1) as UserTotal,
   sum((select count(*) from forum_question
-  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =1) ) as QTotal,
+  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =1 $limitDateQuestion) ) as QTotal,
   sum((select count(*) from forum_question
-  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =0) ) as QTotalNA,
+  where forum_question.AuthorID=u.ID and forum_question.AdminAccepted =0 $limitDateQuestion) ) as QTotalNA,
   sum((select count(*) from forum_answer
     inner join forum_question on forum_question.ID=forum_answer.QuestionID
   where forum_answer.AuthorID=u.ID and forum_answer.AdminAccepted =1
-        and forum_question.AdminAccepted =1) ) as ATotal,
+        and forum_question.AdminAccepted =1 $limitDateAnswer) ) as ATotal,
   sum((select count(*) from forum_answer
     inner join forum_question on forum_question.ID=forum_answer.QuestionID
   where forum_answer.AuthorID=u.ID and forum_answer.AdminAccepted =0
-        and forum_question.AdminAccepted =1) ) as ATotalNA
+        and forum_question.AdminAccepted =1 $limitDateAnswer) ) as ATotalNA
 from organ_position
   LEFT JOIN user as u on u.OrganizationID=organ_position.ID
 GROUP BY organ_position.ID

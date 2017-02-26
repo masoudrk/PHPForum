@@ -9,7 +9,8 @@ angular.module(appName).controller('OrganReportingCtrl', function ($scope, $root
     });
 
     $scope.changePosition = function () {
-        ($scope.Position.selected)?$scope.getChartData($scope.Position.selected.ID):$scope.getChartData(null);
+        $scope.dateChanged();
+
     };
 
     $scope.stackChartOptions = [{
@@ -85,10 +86,24 @@ angular.module(appName).controller('OrganReportingCtrl', function ($scope, $root
     }];
     activeElement('#SReporting','#SOrganReport');
 
-    $scope.getChartData= function (OrganizationID) {
-        Extention.post('getReportChartData',{OrganizationID:OrganizationID}).then(function (res) {
+    $scope.getChartData= function (OrganizationID , StartDate , EndDate) {
+        Extention.post('getReportChartData',{OrganizationID:OrganizationID , StartDate :StartDate, EndDate :EndDate}).then(function (res) {
             $scope.data = res;
+            console.log(res);
         });
     }
-    $scope.getChartData(null);
+
+    $scope.dateChanged = function () {
+        var EndDate   = null;
+        var StartDate = null;
+        if($scope.EndDate){
+            var EndDate = new Date($scope.toFullEnd.unix);
+        }
+        if($scope.StartDate){
+            var StartDate = new Date($scope.toFullStart.unix);
+        }
+        ($scope.Position.selected)?$scope.getChartData($scope.Position.selected.ID , StartDate , EndDate):$scope.getChartData(null , StartDate , EndDate);
+    }
+
+    $scope.getChartData(null,null,null);
 });

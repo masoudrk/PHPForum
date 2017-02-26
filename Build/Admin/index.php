@@ -522,7 +522,7 @@
                             <li id="SOrganReport">
                                 <a ui-sref="organ_report">
                                     <i class="fa fa-circle-o"></i>
-                                  گزارش سوابق آموزشی
+                                  گزارش نواحی
                                 </a>
                             </li>
                         </ul>

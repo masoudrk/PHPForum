@@ -39,6 +39,7 @@ $app->post('/selectSurveyOption', function() use ($app)  {
         echoError('not such survey');
     echoSuccess();
 });
+
 $app->post('/getSurvey', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $sess = $app->session;
