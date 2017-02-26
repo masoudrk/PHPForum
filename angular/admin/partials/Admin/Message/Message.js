@@ -27,7 +27,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
     }
 
     $scope.clearMiniSpace = function () {
-        $scope.Message.MessageIn = $scope.Message.MessageIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ");
+        $scope.Message.MessageIn = $scope.Message.MessageIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ").replace(/&#34;/g, "\"");
     }
     
     $scope.getPersons = function (filter) {
@@ -119,7 +119,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
     $scope.openMessageModal = function (message) {
         $uibModal.open({
             animation: true,
-            templateUrl: 'MessageModal.html',
+            templateUrl: 'Message1Modal.html',
             controller: function ($scope, $uibModalInstance) {
                 $scope.message = message;
                 console.log($scope.message);
@@ -154,7 +154,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
 
         $uibModal.open({
             animation: true,
-            templateUrl: 'messageModal.html',
+            templateUrl: 'MessageModal.html',
             controller: function ($scope , $uibModalInstance , Message) {
                 $scope.message =  Message;
 

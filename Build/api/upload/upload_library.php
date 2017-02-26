@@ -39,7 +39,7 @@ $cols = 'FileID';
 $values = "'$fid'";
 $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
-where u.ID = '$session->UserID' and ap.PermissionLevel = 'Base' limit 1");
+where u.ID = '$session->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = 'ForumManager') limit 1");
 $sql =$resQ->fetch_assoc();
 
 if($sql){

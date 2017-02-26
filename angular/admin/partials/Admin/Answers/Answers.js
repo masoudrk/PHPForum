@@ -94,11 +94,12 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	    });
 	}
 
-	$scope.openRoleModal = function (answer) {
+	$scope.openRoleModal = function (answer,adminType) {
 	    var modalInstance = $uibModal.open({
 	        animation: true,
 	        templateUrl: 'myModalContent.html',
 	        controller: function ($scope, $uibModalInstance) {
+                $scope.adminType=adminType;
                 $scope.editMode = false;
 	            $scope.Answer = answer;
 	            $scope.AnswerText = $scope.Answer.AnswerText;

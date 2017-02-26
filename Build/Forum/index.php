@@ -465,13 +465,38 @@
 <!--                        <small class="label pull-right bg-green">جدید</small>-->
                     </a>
                 </li>
-                    <li id="SLibrary">
-                        <a ui-sref="library">
-                            <i class="fa fa-book"></i>
-                            <span>کتابخانه</span>
-                            <!--                        <small class="label pull-right bg-green">جدید</small>-->
-                        </a>
-                    </li>
+                <li id="SLibrary" class="treeview">
+                    <a class="link">
+                        <i class="fa fa-book"></i> <span>کتابخانه</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="SLibraryList">
+                            <a ui-sref="library">
+                                <i class="fa fa-circle-o"></i>کتابخانه
+                            </a>
+                        </li>
+                        <li id="SLibraryUpload">
+                            <a ui-sref="upload_library">
+                                <i class="fa fa-circle-o"></i>آپلود فایل
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li id="SSurvey" class="treeview" ng-show="Surveys.length>0">
+                    <a class="link">
+                        <i class="fa fa-list-alt"></i> <span>نظرسنجی</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="SSurvey{{item.ID}}" ng-repeat="item in Surveys">
+                            <a ui-sref="survey({id : item.ID})">
+                                <i class="fa fa-circle-o"></i>
+                                {{item.Name | pNumber |subString :20}}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li ng-if="user.IsAdmin=='1'" >
                     <a href="../Admin/#/">
                         <i class="fa fa-briefcase"></i><span> پنل ادمین </span>

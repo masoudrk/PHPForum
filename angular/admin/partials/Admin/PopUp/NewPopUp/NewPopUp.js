@@ -6,13 +6,13 @@ angular.module(appName).controller('NewPopUpCtrl', function ($scope, $rootScope,
 	$scope.editMode = false;
 	$scope.savePopUp= function () {
 		if(!$scope.popUp.toFull.unix){
-			Extention.popError('تاریخ اتمام پاپ آپ را انتخاب کنید');
+			Extention.popError('تاریخ اتمام پاپ آپ را انتخاب کنید');return;
 		}
 		if(!$scope.popUp.Title){
-			Extention.popError('موضوع پاپ آپ را انتخاب کنید');
+			Extention.popError('موضوع پاپ آپ را انتخاب کنید');return;
 		}
 		if(!$scope.popUp.ModalText){
-			Extention.popError('متن پاپ آپ را انتخاب کنید');
+			Extention.popError('متن پاپ آپ را انتخاب کنید');return;
 		}
 		$scope.popUp.ExpireDate = new Date($scope.popUp.toFull.unix);
 		Extention.post('saveNewPopUp',$scope.popUp).then(function (res) {
@@ -26,7 +26,7 @@ angular.module(appName).controller('NewPopUpCtrl', function ($scope, $rootScope,
 	}
 
 	$scope.fieldChanged = function (name , value) {
-		$scope.popUp.ModalText = $scope.popUp.ModalText.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ");
+		$scope.popUp.ModalText = $scope.popUp.ModalText.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ").replace(/&#34;/g, "\"");
 	}
 
 	activeElement('#SPopUp', '#SNewPopUp');

@@ -118,7 +118,7 @@
                                        ng-click="openDiscardModal(u.ID , u.AuthorID)" title="رد کردن سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
                                        ng-if="(u.AdminAccepted==-1 || u.AdminAccepted==0)&& (session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)" ng-click="changeQuestionState(u,1)" title="تایید سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u)" title="متن و ویرایش سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u,adminType)" title="متن و ویرایش سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     <a ng-if="u.AdminAccepted==1" class="link" ng-href="../Forum/#/Question/{{u.ID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                     <a ng-if="u.AdminAccepted==-2" class="link" ng-href="../Forum/#/Question/{{u.TargetQuestionID}}"><i class="fa fa-angle-double-left text-maroon link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
                                 </div>
@@ -147,7 +147,7 @@
         <div>
             <h4 class="text-danger">
                 تیتر سوال
-                <i ng-if="(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)" ng-click="changeEditMode()" class="fa fa-pencil text-blue link hvr-grow" title="" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" data-original-title="ویرایش سوال"></i>
+                <i ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType" ng-click="changeEditMode()" class="fa fa-pencil text-blue link hvr-grow" title="" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" data-original-title="ویرایش سوال"></i>
             </h4>
         </div>
         <hr />

@@ -359,12 +359,12 @@
                         مطالب ادمین
                     </a>
                 </li>
-                <li class="link">
-                    <a ng-click="getDownTab(1)" data-toggle="tab" aria-expanded="true">
-                        سوالات با بهترین جواب ها
-                        <i class="fa fa-question text-muted"></i>
-                    </a>
-                </li>
+                <!--<li class="link">-->
+                    <!--<a ng-click="getDownTab(1)" data-toggle="tab" aria-expanded="true">-->
+                        <!--سوالات با بهترین جواب ها-->
+                        <!--<i class="fa fa-question text-muted"></i>-->
+                    <!--</a>-->
+                <!--</li>-->
             </ul>
             <div class="tab-content" style="padding: 0">
                 <!-- Best questions -->
@@ -437,59 +437,60 @@
                     </div>
                 </div><!-- /.tab-pane -->
                 <!-- Last questions -->
-                <div class="tab-pane" ng-class="(activeDownTab == 1)?'active':''">
-                    <div class="table-responsive no-padding">
-                        <table class="table table-hover"
-                               ng-show="question.bestAnswered.length > 0">
-                            <tbody>
-                            <tr class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"
-                                ng-repeat="q in question.bestAnswered">
-                                <td style="width: 50px;">
-                                    <img class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"
-                                         style="width: 40px;"
-                                         ng-style="{'border': (q.Rate > 5) ? activity.high :
-                                            (q.Rate > 2.5)?activity.medium:activity.low}"
-                                         title="{{(q.score || '0' )| number:1 | pNumber | concat : ' امتیاز '}}" data-toggle="tooltip" data-placement="top"
-                                         tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
-                                         tooltip-append-to-body="true">
-                                </td>
-                                <td ui-sref="question({id:q.ID})">
-                                    {{q.FullName | subString :20| pNumber}}
-                                    <span class="badge bg-yellow"> {{q.score | pNumber}} </span>
-                                </td>
-                                <td compile="q.QuestionText | subString :30| pNumber" ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}"></td>
+                <!--<div class="tab-pane" ng-class="(activeDownTab == 1)?'active':''">-->
+                    <!--<div class="table-responsive no-padding">-->
+                        <!--<table class="table table-hover"-->
+                               <!--ng-show="question.bestAnswered.length > 0">-->
+                            <!--<tbody>-->
+                            <!--<tr class="link fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50"-->
+                                <!--ng-repeat="q in question.bestAnswered">-->
+                                <!--<td style="width: 50px;">-->
+                                    <!--<img class="img-circle" ng-src="{{q.Image}}" err-src="../images/Avatar.jpg"-->
+                                         <!--style="width: 40px;"-->
+                                         <!--ng-style="{'border': (q.Rate > 5) ? activity.high :-->
+                                            <!--(q.Rate > 2.5)?activity.medium:activity.low}"-->
+                                         <!--title="{{(q.score || '0' )| number:1 | pNumber | concat : ' امتیاز '}}" data-toggle="tooltip" data-placement="top"-->
+                                         <!--tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"-->
+                                         <!--tooltip-append-to-body="true">-->
+                                <!--</td>-->
+                                <!--<td ui-sref="question({id:q.ID})">-->
+                                    <!--{{q.FullName | subString :20| pNumber}}-->
+                                    <!--<span class="badge bg-yellow"> {{q.score | pNumber}} </span>-->
+                                <!--</td>-->
+                                <!--<td compile="q.QuestionText | subString :30| pNumber" ui-sref="question({id:q.ID})" ng-style="{color: (!q.QViewID)?'rgb(234, 189, 54)':'#777'}"></td>-->
 
-                                <td ui-sref="question({id:q.ID})">
-                                    {{q.ViewCount | pNumber}}
-                                    <i class="fa fa-eye palette-peter-river"></i>
-                                </td>
-                                <td class="text-center" ui-sref="question({id:q.ID})">
-                                    {{(q.AnswersCount)?q.AnswersCount :' بدون ' |pNumber}} جواب
-                                </td>
-                                <td ui-sref="question({id:q.ID})">
-                                    <span class="persian-rtl text-muted" style="font-size: 12px;">
-                                                {{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}
-                                            </span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="clearfix text-center" style="padding-bottom: 5px;">
-                        <auto-paging page="1"
-                                     page-size="20"
-                                     ul-class="pagination pagination-sm no-margin"
-                                     action-name="getForumBestAnswers"
-                                     data-params="pagingParams"
-                                     ng-control="pagingControllerBestAnswered"
-                                     items="question.bestAnswered"
-                                     ng-show="question.bestAnswered.length > 0">
-                        </auto-paging>
-                        <h4 class="text-center text-muted" ng-show="question.bestAnswered.length == 0">
-                            بدون سوال
-                        </h4>
-                    </div>
-                </div><!-- /.tab-pane -->
+                                <!--<td ui-sref="question({id:q.ID})">-->
+                                    <!--{{q.ViewCount | pNumber}}-->
+                                    <!--<i class="fa fa-eye palette-peter-river"></i>-->
+                                <!--</td>-->
+                                <!--<td class="text-center" ui-sref="question({id:q.ID})">-->
+                                    <!--{{(q.AnswersCount)?q.AnswersCount :' بدون ' |pNumber}} جواب-->
+                                <!--</td>-->
+                                <!--<td ui-sref="question({id:q.ID})">-->
+                                    <!--<span class="persian-rtl text-muted" style="font-size: 12px;">-->
+                                                <!--{{q.CreationDate | jalaliDate :'jYYYY/jMM/jDD'|pNumber}}-->
+                                            <!--</span>-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                    <!--<div class="clearfix text-center" style="padding-bottom: 5px;">-->
+                        <!--<auto-paging page="1"-->
+                                     <!--page-size="20"-->
+                                     <!--ul-class="pagination pagination-sm no-margin"-->
+                                     <!--action-name="getForumBestAnswers"-->
+                                     <!--data-params="pagingParams"-->
+                                     <!--ng-control="pagingControllerBestAnswered"-->
+                                     <!--items="question.bestAnswered"-->
+                                     <!--ng-show="question.bestAnswered.length > 0">-->
+                        <!--</auto-paging>-->
+                        <!--<h4 class="text-center text-muted" ng-show="question.bestAnswered.length == 0">-->
+                            <!--بدون سوال-->
+                        <!--</h4>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!-- /.tab-pane -->
             </div><!-- /.tab-content -->
         </div>
 

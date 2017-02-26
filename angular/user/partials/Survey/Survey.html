@@ -1,0 +1,106 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>انجمن</small>
+       نظرسنجی
+    </h1>
+
+    <ol class="breadcrumb">
+        <li><a href="home.php"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">نظرسنجی</li>
+    </ol>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font ng-binding">نظرسنجی</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-sm-4" style="margin-top: 10px">
+                                <span class="description persian-rtl"><i class="fa fa-clock-o text-green" aria-hidden="true" style="margin-left: 10px"></i>تاریخ شروع</span>
+                                <span class="description persian-rtl pull-left text-muted">{{Survey.StartDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
+                            </div>
+                            <div class="col-sm-4" style="margin-top: 10px">
+                                <span class="description persian-rtl"><i class="fa fa-clock-o text-red" aria-hidden="true" style="margin-left: 10px"></i>تاریخ اتمام</span>
+                                <span class="description persian-rtl pull-left text-muted">{{Survey.ExpireDate| jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
+                            </div>
+
+                            <div class="col-sm-4" style="margin-top: 10px">
+                                <span class="description persian-rtl"><i class="fa fa-user text-blue" aria-hidden="true" style="margin-left: 10px"></i>نام نویسنده</span>
+                                <span class="description persian-rtl pull-left text-muted">{{Survey.FullName | pNumber}}</span>
+                            </div>
+
+                            <div class="col-sm-4" style="margin-top: 10px">
+                                <span class="description persian-rtl"><i class="fa fa-list-alt text-primary" aria-hidden="true" style="margin-left: 10px"></i>نام نظرسنجی</span>
+                                <span class="description persian-rtl pull-left text-muted">{{Survey.Name | pNumber}}</span>
+                            </div>
+
+                            <div class="col-sm-4" style="margin-top: 10px">
+                                <span class="description persian-rtl"><i class="fa fa-bookmark text-black" aria-hidden="true" style="margin-left: 10px"></i>نوع نظرسنجی</span>
+                                <span class="description persian-rtl pull-left text-muted">{{Survey.SurveyTypeName | pNumber}}</span>
+                            </div>
+
+                            <div class="col-sm-4" style="margin-top: 10px">
+                                <span class="description persian-rtl"><i class="fa fa-users text-aqua" aria-hidden="true" style="margin-left: 10px"></i>تعداد مشارکت</span>
+                                <span class="description persian-rtl pull-left text-muted">{{Survey.Total | pNumber}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font ng-binding">نظرسنجی</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="col-xs-12 text-center" style="text-align: justify;font-size:16px">
+                        {{Survey.Title}}
+                    </div>
+                    <br/>
+                    <br />
+                    <div class="col-xs-12 text-center" style="text-align: justify;font-size:16px" >
+                        <p compile="Survey.Description"><span class="text-success fa fa-exclamation-triangle"></span>
+                        </p>
+                        <div class="col-md-12">
+                            <p class="text-center">
+                                <strong class="persian-rtl">گزینه ها</strong>
+                            </p>
+
+                            <div class="progress-group" ng-repeat="item in Survey.Options">
+                                <span class="progress-text persian-rtl">
+                                    <span ng-click="SelectOptione(Survey.ID , item.ID)" ng-if="Survey.SurveyTypeID == '1' && item.answered !='true'" class="fa fa-square-o text-green link hvr-buzz" style="margin-left: 10px;"></span>
+                                    <span ng-click="removeFromSelected(Survey.ID , item.ID)" ng-if="Survey.SurveyTypeID == '1' && item.answered =='true'" class="fa fa-times text-red link hvr-grow" style="margin-left: 10px;"></span>
+                                    <span ng-click="SelectOptione(Survey.ID , item.ID)" ng-if="Survey.SurveyTypeID == '2' && checkForAnswer()" class="fa fa fa-circle-o text-green link hvr-buzz" style="margin-left: 10px;"></span>
+                                    <span ng-click="removeFromSelected(Survey.ID , item.ID)"  ng-if="Survey.SurveyTypeID == '2' && item.answered =='true'" class="fa fa-times text-red link hvr-grow" style="margin-left: 10px;"></span>
+                                    {{item.SurveyText | pNumber}}</span>
+                                <span class="progress-number"><b>{{item.Count | pNumber}}</b>/{{Survey.Total | pNumber}}</span>
+
+                                <div class="progress-sm">
+                                    <div class="progress-bar" ng-class="getProgresColor(item.ID)" ng-style="{ 'width' : getProgressValueStyle(item.Count ,Survey.Total)+ '%'}"></div>
+                                </div>
+                            </div>
+                            <!-- /.progress-group -->
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                </div><!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+

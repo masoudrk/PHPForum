@@ -91,7 +91,7 @@
                                     <span class="label label-primary" ng-switch-when="0">پیام</span>
                                 </td>
                                 <td>
-                                    <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+                                    <div class="table-action-icons">
                                         <i confirm="آیا مطمئن هستید که میخواهید این پیام را حذف کنید؟"
                                            class="fa fa-trash text-red link hvr-grow" ng-click="deleteMessage(mes)" title="حذف پیام" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                         <i class="fa fa-eye text-blue link hvr-grow" ng-click="openMessageModal(mes)" title="متن پیام" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
@@ -229,6 +229,7 @@
         <!-- /.col -->
     </div>
 </section>
+
 <script  id="MessageModal.html" type="text/ng-template">
     <div class="modal-header">
         <h3 class="modal-title text-right">نمایش پیام دریافتی</h3>
@@ -284,7 +285,7 @@
         <div class="table-responsive mailbox-messages">
             <table class="table no-border">
                 <tr class="text-center">
-                    <td colspan="5">گیرونده</td>
+                    <td colspan="5">گیرنده</td>
                 </tr>
                 <tr>
                     <td><img class="img-circle" ng-src="{{message.FullPath}}" style="width: 40px;" /></td>

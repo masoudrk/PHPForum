@@ -1,0 +1,83 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small>پیام</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/dashboard"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">گزارش</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"> فیلتر</h3>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="form-group col-sm-6">
+                        <div class="col-sm-8">
+                            <button type="button" class="btn btn-sm btn-block btn-green" add-bom="UTF-8" csv-label="true"
+                                    ng-csv="data.StackChartData" filename="Report.csv">دانلود فایل CSV</button>
+                        </div>
+                        <label class="col-sm-4 control-label">فایل</label>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <div class="col-sm-8">
+                            <ui-select ng-model="Position.selected" on-select="changePosition()" theme="bootstrap" sortable="true" close-on-select="true">
+                                <ui-select-match allow-clear placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
+                                <ui-select-choices repeat="edu in allPositions">
+                                    <div compile="edu.OrganizationName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <label class="col-sm-4 control-label">ناحیه</label>
+                    </div>
+                </div>
+
+                <!-- /.box-body -->
+            </div>
+            <!-- /. box -->
+        </div>
+
+        <div class="col-xs-12">
+            <div class="box box-warning" style="background: #3f3f4f; color: #ffffff;">
+                <div class="box-header  ">
+                    <h3 class="box-title vazir-font">
+                        <span style="color: #eee;" ng-show="Position.selected == null"> نمودار فعالیت نواحی </span>
+                        <span style="color: #eee;" ng-hide="Position.selected == null"> نمودار فعالیت  {{Position.selected.OrganizationName}}</span>
+                    </h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <stack-bar-chart
+                            chart-id="chart267"
+                            chart-data="data.StackChartData"
+                            chart-graphs="stackChartOptions"
+                            enable-scroll-bar="true"
+                            chart-height="{{data.StackChartData.length * 30}}">
+                    </stack-bar-chart>
+                    <div class="col-xs-12 text-center">
+                        <ul class="nav nav-pills" style="padding-right: 0px; display: inline-block;">
+                            <li style="padding-left: 20px">
+                                <i class="fa fa-circle" style="color: #FF6600;"></i>
+                                <span>سوال ها</span>
+                            </li>
+                            <li>
+                                <i class="fa fa-circle " style="color: #B0DE09"></i>
+                                <span>جواب ها</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

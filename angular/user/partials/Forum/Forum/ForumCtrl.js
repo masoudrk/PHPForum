@@ -33,7 +33,7 @@ angular.module(appName).controller('ForumCtrl',
     $scope.pagingControllerFollowingQuestions = {};
     $scope.pcAdminPost = {};
     $scope.pcAdminPosts = {};
-    $scope.pagingControllerBestAnswered = {};
+    // $scope.pagingControllerBestAnswered = {};
 
     $scope.getTab = function (id) {
         switch (id){
@@ -61,9 +61,9 @@ angular.module(appName).controller('ForumCtrl',
             case 0:
                 $scope.pcAdminPosts.update();
                 break;
-            case 1:
-                $scope.pagingControllerBestAnswered.update();
-                break;
+            // case 1:
+            //     $scope.pagingControllerBestAnswered.update();
+            //     break;
         }
         $scope.activeDownTab = id;
     }

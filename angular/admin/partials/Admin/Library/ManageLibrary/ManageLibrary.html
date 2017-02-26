@@ -1,0 +1,242 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small> اعضا</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/dashboard"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active"> جواب ها</li>
+    </ol>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">فایل ها</h3>
+                    <h3 class="box-title vazir-font pull-left">تعداد {{allTotal | pNumber}}</h3>
+
+                    <!--<div class="box-tools">
+                        <div class="input-group col-xs-9 col-md-4">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
+                                    {{dropDwonTitle}}
+                                    <span class="fa fa-caret-down"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی جواب ها</a></li>
+                                    <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">جواب های تایید شده</a></li>
+                                    <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">جواب های در انتظار تایید</a></li>
+                                    <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">جواب ها تایید نشده</a></li>
+                                </ul>
+                            </div>
+                            <input type="text" name="table_search" ng-model="pagingParams.searchValue"
+                                   ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
+                                   placeholder="جستجو ...">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default left-radius-btn"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>-->
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>عکس</th>
+                            <th>آپلود شده توسط</th>
+                            <th>توضیحات</th>
+                            <th>تاریخ آپلود</th>
+                            <th>نوع فایل</th>
+                            <th>وضعیت</th>
+                            <th>حجم</th>
+                            <th style="width: 175px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in files">
+                            <td>
+                                <img ng-src="{{u.UserPic || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
+                            </td>
+                            <td>{{u.FullName| pNumber}}</td>
+                            <td>{{u.Title | pNumber | subString:30}}</td>
+                            <td>{{u.UploadDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                            <td>
+                                {{u.GeneralType}}
+                            </td>
+                            <td ng-switch="u.AdminAccepted">
+                                <span class="label label-success" ng-switch-when="1">تایید شده</span>
+                                <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
+                                <span class="label label-danger" ng-switch-when="-1">رد شده</span>
+                                <span class="label label-info" ng-switch-when="2">تایید ناحیه</span>
+                            </td>
+                            <td>
+                                {{u.FileSize | fileSizeFilter }}
+                            </td>
+                            <td>
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این فایل را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeFile(u)" title="حذف فایل" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-times link hvr-grow" ng-if="(u.AdminAccepted==1 || u.AdminAccepted==0)&&(session.AdminPermissionLevel=='Base' || session.AdminPermissionLevel == 'ForumManager')" style="color: #e67e22;"
+                                       ng-click="openDiscardModal(u.ID , u.UserID)" title="رد کردن فایل" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-check text-green link hvr-grow"
+                                       ng-if="(u.AdminAccepted==-1 || u.AdminAccepted==0)&& (session.AdminPermissionLevel=='Base' || session.AdminPermissionLevel == 'ForumManager')" ng-click="changeFileState(u ,1)" title="تایید جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u)" title="جزئیات فایل" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <a class="link" href="{{u.FullPath}}" target="_blank"><i class="fa fa-download text-green link hvr-pulse" title="دانلود فایل" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="getAllFiles"
+                                 data-params="pagingParams"
+                                 ng-control="pagingController"
+                                 total-items="allTotal"
+                                 items="files">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+        <h3 class="modal-title text-right">{{File.FullName |subString :40|pNumber}}
+            <img class="img-circle" ng-src="{{File.UserPic}}" style="width: 40px;"></h3>
+    </div>
+    <div class="modal-body form">
+        <div class="row persian-rtl">
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    نام فایل :
+                </div>
+                <div class="col-xs-9">
+                    <a class="link palette-emerald">
+                        {{File.Filename |pNumber}}
+                    </a>
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    توضیحات :
+                </div>
+                <div class="col-xs-9 text-muted">
+                    {{File.Description | pNumber}}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    تاریخ آپلود :
+                </div>
+                <div class="col-xs-9">
+                    {{File.UploadDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}
+                </div>
+            </div>
+            <div ng-if="File.SubjectName" class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                     نام انجمن:
+                </div>
+                <div class="col-xs-9">
+                    {{File.SubjectName | pNumber}}
+                </div>
+            </div>
+            <div ng-if="File.Title" class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    نام زیرشاخه:
+                </div>
+                <div class="col-xs-9">
+                    {{File.Title | pNumber}}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    حجم :
+                </div>
+                <div class="col-xs-9">
+                    {{File.FileSize | fileSizeFilter }}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <div class="col-xs-3 pull-right">
+                    وضعیت :
+                </div>
+                <div class="col-xs-9" ng-switch="File.AdminAccepted">
+                    <span class="label label-success" ng-switch-when="1">تایید شده</span>
+                    <span class="label label-warning" ng-switch-when="0">در انتظار تایید</span>
+                    <span class="label label-danger" ng-switch-when="-1">رد شده</span>
+                    <span class="label label-info" ng-switch-when="2">تایید ناحیه</span>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-12" ng-if="File.GeneralType">
+                <div class="col-xs-3 pull-right">
+                    نوع فایل :
+                </div>
+                <div class="col-xs-9">
+                    {{File.GeneralType | pNumber }}
+                </div>
+            </div>
+            <div class="form-group col-xs-12" ng-if="File.TypeName && File.TypeName != ''">
+                <div class="col-xs-3 pull-right">
+                    پسوند فایل :
+                </div>
+                <div class="col-xs-9">
+                    {{File.TypeName | pNumber }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info btn-flat pull-left" type="button" ng-click="cancel()">بستن</button>
+        <a class="btn btn-green btn-flat link" href="{{File.FullPath}}" target="_blank">دانلود</a>
+    </div>
+</script>
+<script type="text/ng-template" id="DiscardAnswerModal.html">
+    <div class="modal-header vazir-font text-right">
+        <label class="modal-title text-danger" style="font-size:15px">دلیل رد فایل را انتخاب کنید</label>
+    </div>
+    <div class="modal-body vazir-font text-right persian-rtl">
+        <div class="table-responsive mailbox-messages">
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <th>شماره</th>
+                    <th>دلیل رد فایل</th>
+                    <th style="width : 25px"></th>
+                </tr>
+                <tr class="link" ng-repeat="u in common" ng-click="send(u)">
+                    <td class="persian-rtl">
+                        {{$index | pNumber}}
+                    </td>
+                    <td class="persian-rtl">
+                        {{u.Message | pNumber}}
+                    </td>
+                    <td>
+                        <div class="table-action-icons">
+                            <i class="fa fa-times text-yellow link hvr-grow" ng-click="send(u)" title="رد جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-warning pull-right" type="button" ng-click="send(null)">رد فایل بدون فیدبک</button>
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+</script>
+
+
+
+
+
+

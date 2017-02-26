@@ -43,7 +43,19 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                     return 'داشبورد';
                 }
             }
-        })
+        }).state("upload_library", {
+        url: "/UploadLibrary",
+        templateUrl: "angular.partial.UploadLibrary.html",
+        controller: 'UploadLibraryCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load([]);
+            }],
+            $title: function () {
+                return 'آپلود فایل';
+            }
+        }
+    })
         // .state("forum_home", {
         //     url: "/Home",
         //     templateUrl: "partials/Forum/_Home/Home.html",
@@ -292,6 +304,21 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 ],
                 $title: function () {
                     return 'مطلب ادمین';
+                }
+            }
+        })
+        .state("survey", {
+            url: "/Survey/:id",
+            templateUrl: "angular.partial.Survey.html",
+            controller: 'SurveyCtrl',
+            resolve: {
+                deps: [
+                    '$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }
+                ],
+                $title: function () {
+                    return 'نظرسنجی';
                 }
             }
         });

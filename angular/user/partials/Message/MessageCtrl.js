@@ -22,7 +22,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
     }
 
     $scope.clearMiniSpace = function () {
-        $scope.Message.MessageIn = $scope.Message.MessageIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ");
+        $scope.Message.MessageIn = $scope.Message.MessageIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ").replace(/&#34;/g, "\"");
     }
     
     $scope.getPersons = function (filter) {

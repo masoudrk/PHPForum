@@ -1,4 +1,62 @@
 <?php
+$app->post('/markAsReadMessage', function() use ($app)  {
+
+    $sess = $app->session;
+    $data = json_decode($app->request->getBody());
+
+    $res = $app->db->updateRecord('message',"MessageViewed='1'"
+        , "ID='$data->MessageID' and UserID='$sess->UserID'");
+    echoSuccess($res);
+});
+
+$app->post('/changeLibraryFileAccepted', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+
+    if(isset($data->State)){
+        if($data->State=='1' || $data->State=='-1'|| $data->State=='2'){
+            $sess = new Session();
+
+            $resQ = $app->db->makeQuery("select a.ID, ap.PermissionLevel from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID'LIMIT 1");
+
+            $sql =$resQ->fetch_assoc();
+            if(!$sql)
+                echoError('You don\'t have permision to do this action');
+            if($sql["PermissionLevel"] == 'OrganAdmin' && $data->State == 1)
+                $data->State = 2;
+            $res = $app->db->updateRecord('library',"AdminAccepted='$data->State'","ID='$data->LibraryID'");
+            if($res)
+            {
+                if($data->State == 1)
+                {
+                    $app->db->updateRecord('user',"score=(score+1)" , "ID = '$data->UserID'");
+                    $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                        "'$sess->UserID','$data->UserID',NOW(),'".'تایید سوال'."','".'سوال شما تایید شد'."','2'");
+                    if($data->UserID != $sess->UserID)
+                        $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',
+                            "$data->UserID,13,now(),$sess->UserID,0");
+
+                }
+                else if($data->State == -1 && isset($data->Message))
+                {
+                    $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                        "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','2'");
+                }
+                echoSuccess();
+            }
+            else
+                echoError("Cannot update record.");
+        }else{
+            echoError("Sended value:$data->State is not valid!");
+        }
+    }
+
+    echoError("User state is not set!");
+});
+
+
 $app->post('/deletePopUp', function() use ($app)  {
 
     $data = json_decode($app->request->getBody());
@@ -180,7 +238,10 @@ $app->post('/getUsersReport', function() use ($app)  {
     if(isset($data->OrganizationID)){
         $where .=" AND (user.OrganizationID ='$data->OrganizationID')";}
     if(isset($data->ForumMainSubjectID)){
-        $pageRes = $pr->getPage($app->db,"SELECT (SELECT COUNT(*) FROM forum_answer as fa 
+        $pageRes = $pr->getPage($app->db,"SELECT user.`ID`, `FullName`, `Email`,op.ID as OrganID , op.OrganizationName,
+`PhoneNumber`, `Tel`, `SignupDate`, `Gender`, user.`Description`,
+`MailAccepted`, `ValidSessionID`, `UserAccepted`, user.LastActiveTime, user.SignupDate , user.score , file_storage.FullPath 
+,(SELECT COUNT(*) FROM forum_answer as fa 
 INNER JOIN forum_question fq on fq.ID = fa.QuestionID
 INNER JOIN forum_subject fss on fss.ID = fq.SubjectID
  WHERE fa.AuthorID = user.`ID` AND fa.AdminAccepted =1 and fss.ParentSubjectID = '$data->ForumMainSubjectID' ) as AnswerCount ,
@@ -188,23 +249,20 @@ INNER JOIN forum_subject fss on fss.ID = fq.SubjectID
 INNER JOIN forum_subject fss on fss.ID = fq.SubjectID
  WHERE fq.AuthorID = user.`ID` AND fq.AdminAccepted =1 and fss.ParentSubjectID = '$data->ForumMainSubjectID') as QuestionCount ,
 (SELECT COUNT(*) FROM person_follow as pf WHERE pf.TargetUserID = user.`ID`) as FollowersCount ,
-(SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount ,
-user.`ID`, `FullName`, `Email`, `Username`,op.ID as OrganID , op.OrganizationName,
-`PhoneNumber`, `Tel`, `SignupDate`, `Gender`, user.`Description`,
-`MailAccepted`, `ValidSessionID`, `UserAccepted`, user.LastActiveTime, user.SignupDate , user.score , file_storage.FullPath
+(SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount 
 FROM user LEFT  JOIN organ_position as op on op.ID = user.OrganizationID
 LEFT JOIN file_storage on file_storage.ID = user.AvatarID ".$where." ORDER BY AnswerCount+QuestionCount DESC");
 
         echoResponse(200, $pageRes);
     }else
     {
-        $pageRes = $pr->getPage($app->db,"SELECT (SELECT COUNT(*) FROM forum_answer as fa WHERE fa.AuthorID = user.`ID` AND fa.AdminAccepted =1) as AnswerCount ,
-(SELECT COUNT(*) FROM forum_question as fq WHERE fq.AuthorID = user.`ID` AND fq.AdminAccepted =1) as QuestionCount ,
-(SELECT COUNT(*) FROM person_follow as pf WHERE pf.TargetUserID = user.`ID`) as FollowersCount ,
-(SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount ,
-user.`ID`, `FullName`, `Email`, `Username`,op.ID as OrganID , op.OrganizationName,
+        $pageRes = $pr->getPage($app->db,"SELECT user.`ID`, `FullName`, `Email`,op.ID as OrganID , op.OrganizationName,
 `PhoneNumber`, `Tel`, `SignupDate`, `Gender`, user.`Description`,
 `MailAccepted`, `ValidSessionID`, `UserAccepted`, user.LastActiveTime, user.SignupDate , user.score , file_storage.FullPath
+,(SELECT COUNT(*) FROM forum_answer as fa WHERE fa.AuthorID = user.`ID` AND fa.AdminAccepted =1) as AnswerCount ,
+(SELECT COUNT(*) FROM forum_question as fq WHERE fq.AuthorID = user.`ID` AND fq.AdminAccepted =1) as QuestionCount ,
+(SELECT COUNT(*) FROM person_follow as pf WHERE pf.TargetUserID = user.`ID`) as FollowersCount ,
+(SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount 
 FROM user LEFT  JOIN organ_position as op on op.ID = user.OrganizationID
 LEFT JOIN file_storage on file_storage.ID = user.AvatarID ".$where." ORDER BY user.score DESC");
 
@@ -618,7 +676,7 @@ ORDER by organ_position.ID asc");
 
 $app->post('/getAllTags', function() use ($app)  {
 
-	
+
 	$data = json_decode($app->request->getBody());
 	$pr = new Pagination($data);
 
@@ -929,7 +987,7 @@ LIMIT 1");
 	if($res)
     {
         $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                   "'$sess->UserID','$data->UserID',NOW(),'".'حذف جواب'."','".'جواب شما حذف شد'."','0'");
+                   "'$sess->UserID','$data->UserID',NOW(),'".'حذف جواب'."','".'جواب شما حذف شد'."','2'");
         echoSuccess();
     }
 	else
@@ -989,7 +1047,7 @@ LIMIT 1");
                 if($data->State == 1){
                     $app->db->updateRecord('user',"score=(score+2)" , "ID = '$data->UserID'");
                     $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                    "'$sess->UserID','$data->UserID',NOW(),'".'تایید پیام'."','".'پیام شما تایید شد'."','0'");
+                    "'$sess->UserID','$data->UserID',NOW(),'".'تایید پیام'."','".'پیام شما تایید شد'."','2'");
                     if($data->UserID != $sess->UserID)
                         $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->UserID,10,now(),$sess->UserID,$data->QuestionID");
                     if($data->AuthorID != $data->UserID)
@@ -1006,7 +1064,7 @@ LIMIT 1");
                 else if($data->State == -1 && isset($data->Message))
                 {
                     $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                        "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','0'");
+                        "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','2'");
                 }
         echoSuccess();
             }
@@ -1025,7 +1083,22 @@ $app->post('/getAllFiles', function() use ($app)  {
 
 	$data = json_decode($app->request->getBody());
 	$pr = new Pagination($data);
-	//$sess = new Session();
+    $sess = new Session();
+    $resQ = $app->db->makeQuery("select a.ID, ap.PermissionLevel , u.OrganizationID, ap.Permission from user as u
+INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+WHERE a.UserID = '$sess->UserID'LIMIT 1");
+
+    $sql =$resQ->fetch_assoc();
+    $where = " WHERE 1=1";
+
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+	if($sql['PermissionLevel'] == 'OrganAdmin'){
+        $where .= " AND u.OrganizationID = " .$sql["OrganizationID"];
+    }else if($sql['PermissionLevel'] == 'ForumManager'){
+        $where .= " AND fms.SubjectName = " .$sql["Permission"];
+    }
 
     //$where = "WHERE fms.SubjectName = '$data->SubjectName'";
 	
@@ -1041,12 +1114,15 @@ $app->post('/getAllFiles', function() use ($app)  {
     //    $hasWhere = TRUE;
     //}
 
-	$pageRes = $pr->getPage($app->db,"SELECT f.ID as ID ,f.ID as FileID , fs.FullPath as UserPic, f.Filename , u.FullName
-, f.FullPath , f.UploadDate ,f.FileSize ,f.Description,ft.TypeName , ft.GeneralType, l.* , f.AbsolutePath
+	$pageRes = $pr->getPage($app->db,"SELECT u.ID as UserID, f.ID as ID ,f.ID as FileID , fs.FullPath as UserPic, f.Filename , u.FullName
+, f.FullPath , f.UploadDate ,f.FileSize ,f.Description,ft.TypeName , ft.GeneralType, l.* , f.AbsolutePath , fms.SubjectName,
+forum_subject.Title
 FROM `library` as l inner JOIN file_storage as f on f.ID = l.FileID and f.FileSize > 0
 INNER JOIN user as u on u.ID = f.UserID
+left JOIN forum_main_subject as fms on fms.ID = l.MainSubjectID
+left JOIN forum_subject on forum_subject.ParentSubjectID = l.SubjectID
 left JOIN file_type as ft on ft.ID = f.FileTypeID
-LEFT JOIN file_storage as fs on fs.ID = u.AvatarID
+LEFT JOIN file_storage as fs on fs.ID = u.AvatarID".$where."
 ORDER BY l.ID desc");
 
 	echoResponse(200, $pageRes);
@@ -1198,7 +1274,7 @@ LIMIT 1");
     }
 	if($res){
         $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                "'$sess->UserID','$data->UserID',NOW(),'".'حذف سوال'."','".'سوال شما حذف شد'."','0'");
+                "'$sess->UserID','$data->UserID',NOW(),'".'حذف سوال'."','".'سوال شما حذف شد'."','2'");
 		echoSuccess();
     }
 	else
@@ -1278,8 +1354,8 @@ LIMIT 1");
 			if($res)
             {
                     $app->db->updateRecord('user',"score=(score+1)" , "ID = '$data->UserID'");
-                    $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType,LinkQuestionID',
-                "'$sess->UserID','$data->UserID',NOW(),'".'لینک سوال'."','".'سوال شما به سوال دیگری لینک داده شد'."','0','$data->TargetQuestionID'");
+                    $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                "'$sess->UserID','$data->UserID',NOW(),'".'لینک سوال'."','".'سوال شما به سوال دیگری لینک داده شد'."','2'");
                 echoSuccess();
             }
 			else
@@ -1314,7 +1390,7 @@ LIMIT 1");
                 {
                     $app->db->updateRecord('user',"score=(score+1)" , "ID = '$data->UserID'");
                     $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                "'$sess->UserID','$data->UserID',NOW(),'".'تایید سوال'."','".'سوال شما تایید شد'."','0'");
+                "'$sess->UserID','$data->UserID',NOW(),'".'تایید سوال'."','".'سوال شما تایید شد'."','2'");
                     if($data->UserID != $sess->UserID)
                         $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',"$data->UserID,3,now(),$sess->UserID,$data->QuestionID");
                         $pageRes = $app->db->makeQuery("SELECT pf.UserID FROM person_follow as pf WHERE pf.TargetUserID = '$data->UserID'");
@@ -1343,7 +1419,7 @@ LIMIT 1");
                 else if($data->State == -1 && isset($data->Message))
                 {
                     $app->db->insertToTable('message','SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                        "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','0'");
+                        "'$sess->UserID','$data->UserID',NOW(),'".$data->Message->MessageTitle."','".$data->Message->Message."','2'");
                 }
                 echoSuccess();
             }
@@ -1606,7 +1682,7 @@ $app->post('/getAllUserMessages', function() use ($app)  {
         echoError('invalid UserID');
     if($data->UserID != $sess->UserID )
         echoError('invalid UserID');
-	$where = "WHERE au.ID = '$data->UserID'";
+	$where = "WHERE au.ID = '$data->UserID' AND m.MessageType in (0,1) ";// 0 is for direct ,1 is for mail , 2 is for common messages
 	$hasWhere = FALSE;
     if(isset($data->MessageType)){
         $where .=" AND (m.MessageType ='$data->MessageType')";

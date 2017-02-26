@@ -20,8 +20,12 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body text-right persian-rtl">
-                    <div class="form-group col-sm-6">
-                        <div class="col-sm-8">
+                    <div class="form-group col-sm-2">
+                        <button type="button" class="btn btn-sm btn-block btn-green" add-bom="UTF-8" csv-label="true"
+                                ng-csv="users" filename="Report.csv">دانلود فایل CSV</button>
+                    </div>
+                    <div class="form-group col-sm-5">
+                        <div class="col-sm-9">
                             <ui-select ng-model="Forum.selected" on-select="changeForum()" theme="bootstrap" sortable="true" close-on-select="true">
                                 <ui-select-match allow-clear placeholder="انجمن">{{Forum.selected.Title}}</ui-select-match>
                                 <ui-select-choices repeat="edu in Forums">
@@ -29,10 +33,10 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        <label class="col-sm-4 control-label">انجمن</label>
+                        <label class="col-sm-3 control-label">انجمن</label>
                     </div>
-                    <div class="form-group col-sm-6">
-                        <div class="col-sm-8">
+                    <div class="form-group col-sm-5">
+                        <div class="col-sm-9">
                             <ui-select ng-model="Position.selected" on-select="changePosition()" theme="bootstrap" sortable="true" close-on-select="true">
                                 <ui-select-match allow-clear placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
                                 <ui-select-choices repeat="edu in allPositions">
@@ -40,7 +44,7 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        <label class="col-sm-4 control-label">ناحیه</label>
+                        <label class="col-sm-3 control-label">ناحیه</label>
                     </div>
                 </div>
                 <!-- /.box-body -->

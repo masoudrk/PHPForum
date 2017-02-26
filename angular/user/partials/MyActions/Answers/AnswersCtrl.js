@@ -31,7 +31,7 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $element, $r
     }
     
 	$scope.fieldChanged = function () {
-		$scope.answerTextIn = $scope.answerTextIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ");
+		$scope.answerTextIn = $scope.answerTextIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ").replace(/&#34;/g, "\"");
 	}
 	$scope.saveAnswer = function() {
 		if (!$scope.answerTextIn || $scope.answerTextIn.length == 0) {

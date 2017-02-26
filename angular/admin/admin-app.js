@@ -5,7 +5,7 @@ var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
-    'ngFileUpload','anim-in-out','am-charts' ,'ADM-dateTimePicker','ngSanitize', 'ngCookies',
+    'ngFileUpload','anim-in-out','am-charts' ,'ADM-dateTimePicker','ngSanitize', 'ngCookies','ngCsv',
     'textAngular']);
 
 app.config([
@@ -263,6 +263,30 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             }],
             $title: function () {
                 return 'مدیریت پاپ آپ';
+            }
+        }
+    }).state("new_survey", {
+        url: "/NewSurvey:id",
+        templateUrl: "angular.partial.NewSurvey.html",
+        controller: 'NewSurveyCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load([]);
+            }],
+            $title: function () {
+                return 'نظرسنجی جدید';
+            }
+        }
+    }).state("survey_manager", {
+        url: "/SurveyManager",
+        templateUrl: "angular.partial.SurveyManager.html",
+        controller: 'SurveyManagerCtrl',
+        resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                return $ocLazyLoad.load([]);
+            }],
+            $title: function () {
+                return 'مدیریت نظرسنجی';
             }
         }
     });

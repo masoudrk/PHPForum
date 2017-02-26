@@ -4,7 +4,6 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
     $scope.pagingParams = { SubjectName: $stateParams.id, questionType: null};
 	$scope.pagingController = {};
 	$scope.dropDwonTitle = 'نمایش سوال ها';
-
 	$scope.Position = {};
 	Extention.postAsync('getAllPositions', {}).then(function (msg) {
 	    $scope.allPositions = msg;
@@ -59,11 +58,12 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 	    $scope.search();
 	}
 
-	$scope.openRoleModal = function (Question ) {
+	$scope.openRoleModal = function (Question,adminType) {
 	    var modalInstance = $uibModal.open({
 	        animation: true,
 	        templateUrl: 'myModalContent.html',
 	        controller: function ($scope, $uibModalInstance) {
+                $scope.adminType=adminType;
 	            $scope.Question = Question;
 	            $scope.QuestionText = $scope.Question.QuestionText;
 	            $scope.Title = $scope.Question.Title;
@@ -112,6 +112,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 
 	            $scope.Link = function (question) {
 	                Extention.post('linkQuestion', { TargetQuestionID: question.ID, LinkedQuestionID: $scope.question.ID, UserID: $scope.question.AuthorID }).then(function (res) {
+	                	console.log(res);
 	                    if (res && res.Status == 'success') {
 	                        Extention.popSuccess("سوال با موفقیت لینک داده شد!");
 	                        $uibModalInstance.dismiss('cancel');

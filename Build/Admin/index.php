@@ -528,6 +528,26 @@
                         </ul>
                     </li>
 
+                    <li id="SSurvey" ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
+                        <a class="link">
+                            <i class="fa fa-list-alt"></i>
+                            <span>مدیریت نظرسنجی</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="SAllSurveys">
+                                <a ui-sref="survey_manager">
+                                    <i class="fa fa-circle-o"></i>
+                                    مدیریت نظرسنجی                                </a>
+                            </li>
+                            <li id="SNewSurvey">
+                                <a ui-sref="new_survey">
+                                    <i class="fa fa-circle-o"></i>
+                                    نظرسنجی جدید
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li id="SPopUp" ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
                         <a class="link">
                             <i class="fa fa-paper-plane-o"></i>
@@ -582,7 +602,7 @@
                         </ul>
                     </li>
 
-                   <li id="SLibrary" class="treeview"  ng-if="session.AdminPermissionLevel =='Base'">
+                   <li id="SLibrary" class="treeview">
                         <a class="link">
                             <i class="fa fa-book"></i>
                             <span>کتابخانه</span>

@@ -82,5 +82,5 @@ angular.module(appName).controller('LibraryCtrl', function ($scope, $rootScope, 
 
         Extention.popInfo('لینک فایل کپی شد.');
     };
-    activeElement('#SLibrary');
+    activeElement('#SLibrary','#SLibraryList');
 });

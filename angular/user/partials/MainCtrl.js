@@ -2,7 +2,8 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
 
     $scope.UserMessages = [];
     $scope.awardQuestion = null;
-    
+    $scope.Surveys = [];
+
     Extention.postAsync('checkPopUp', {}).then(function (msg) {
         if (msg.Status == 'success'&& msg.Data !=null) {
             var popUp = $cookies.get("popup");
@@ -32,6 +33,14 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
             $scope.awardQuestion = res.Data;
         } else {
             $scope.awardQuestion = null;
+        }
+    });
+
+    Extention.post("getActiveSurveys").then(function (res) {
+        if (res.Status == 'success') {
+            $scope.Surveys = res.Data;
+        } else {
+            $scope.Surveys = [];
         }
     });
 

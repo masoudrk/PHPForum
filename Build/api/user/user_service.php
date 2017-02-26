@@ -1,5 +1,76 @@
 <?php
 
+$app->post('/removeSurveyOption', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+    if(!isset($data->SurveyID) || !isset($data->OptionID))
+        echoError('bad request');
+    $app->db->deleteFromTable('survey_options_user',"SurveyOptionID='$data->OptionID' and UserID='$sess->UserID'");
+    $app->db->updateRecord('survey_options',"Count = Count-1","ID=".$data->OptionID);
+    echoSuccess();
+});
+
+$app->post('/selectSurveyOption', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+    if(!isset($data->SurveyID) || !isset($data->OptionID))
+        echoError('bad request');
+    $resq = $app->db->getOneRecord("SELECT p.* FROM `survey` p
+  INNER JOIN survey_type st on st.ID = p.SurveyTypeID 
+ WHERE (p.`ExpireDate` > NOW()) and (p.`StartDate` < NOW()) and p.ID = ".$data->SurveyID."");
+
+    if($resq['SurveyTypeID'] == 1){
+        $user = $app->db->getOneRecord("SELECT * from survey_options_user where SurveyOptionID='$data->OptionID' and UserID='$sess->UserID'");
+        if($user){
+            echoError('duplicated select');
+        }
+        $app->db->updateRecord('survey_options',"Count = Count+1","ID=".$data->OptionID);
+        $app->db->insertToTable('survey_options_user','SurveyOptionID,UserID,CreationDate',
+            "$data->OptionID,$sess->UserID,NOW()");
+    }else if($resq['SurveyTypeID'] == 2){
+        $user = $app->db->getOneRecord("SELECT * FROM survey s INNER JOIN survey_options so on so.SurveyID = s.ID INNER JOIN survey_options_user sou on sou.SurveyOptionID = so.ID where sou.UserID = '$sess->UserID' and s.ID = ".$data->SurveyID);
+        if($user){
+            echoError('duplicated select');
+        }
+        $app->db->updateRecord('survey_options',"Count = Count+1","ID=".$data->OptionID);
+        $app->db->insertToTable('survey_options_user','SurveyOptionID,UserID,CreationDate',
+            "$data->OptionID,$sess->UserID,NOW()");
+    }else
+        echoError('not such survey');
+    echoSuccess();
+});
+$app->post('/getSurvey', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = $app->session;
+    $resq = $app->db->getOneRecord("SELECT p.* , u.FullName ,st.SurveyTypeName ,st.TypeDescription ,(SELECT sum(so.Count) FROM survey_options as so where so.SurveyID = p.ID) as Total FROM `survey` p
+  INNER JOIN survey_type st on st.ID = p.SurveyTypeID 
+ INNER JOIN user u on u.id = p.UserID
+ WHERE (p.`ExpireDate` > NOW()) and (p.`StartDate` < NOW()) and p.ID = ".$data->SurveyID." ORDER BY p.ID");
+    $resq["Options"] = $app->db->getRecords("SELECT so.* , (SELECT 'true' FROM survey_options_user sou WHERE sou.SurveyOptionID = so.ID and sou.UserID = '$sess->UserID'  LIMIT 1) as answered from survey_options so where so.SurveyID = ".$data->SurveyID);
+    if($resq)
+        echoSuccess($resq);
+    else
+        echoError();
+    echoSuccess();
+});
+$app->post('/getActiveSurveys', function() use ($app)  {
+
+    $resq = $app->db->getRecords("SELECT p.* FROM `survey` p WHERE (p.`ExpireDate` > NOW()) and (p.`StartDate` < NOW())");
+    if($resq)
+        echoSuccess($resq);
+    else
+        echoError();
+    echoSuccess();
+});
+$app->post('/getUploadLibraryData', function() use ($app)  {
+    require_once '../db/forum_subject.php';
+    require_once '../db/tag.php';
+    $resp = [];
+    $resp['ForumMainSubjects'] = getAllMainSubjectsWithChilds($app->db);
+    $resp['Tags'] = getAllTags($app->db);
+    echoResponse(200, $resp);
+});
+
 $app->post('/getForumSubjects', function() use ($app) {
     $r = json_decode($app->request->getBody());
     if(!isset($r->ID))
@@ -640,7 +711,8 @@ $app->post('/saveQuestion', function() use ($app)  {
     }else{
         $qID = $app->db->insertToTable('forum_question','QuestionText,Title,SubjectID,AuthorID,CreationDate',
             "'$data->QuestionText','$data->Title','".$data->Subject->ID."','".$sess->UserID."',NOW()",true);
-
+        $app->db->insertToTable('question_follow','UserID,QuestionID,QuestionFollowDate',
+            "'$sess->UserID','$qID',NOW()");
         if (isset($_FILES['file'])) {
             $file_ary = reArrayFiles($_FILES['file']);
 
@@ -713,7 +785,7 @@ $app->post('/getLibraryFiles', function() use ($app)  {
 
     $res = [];
     $pr = new Pagination($data);
-    $where = "WHERE 1=1";
+    $where = "WHERE library.AdminAccepted = 1 ";
 
     if(isset($data->searchValue) && strlen($data->searchValue) > 0){
         $s = mb_convert_encoding($data->searchValue, "UTF-8", "auto");
