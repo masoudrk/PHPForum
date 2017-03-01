@@ -1,5 +1,67 @@
 <?php
 
+$app->post('/finishAwardedQuestion', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+
+    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel') limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $app->db->updateRecord('avarded_question',"IsFinished =1 ","ForumQuestionID=".$data->QuestionID);
+    echoSuccess();
+});
+$app->post('/setAwardedQuestion', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+
+    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel') limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $app->db->insertToTable('avarded_question','ForumQuestionID',
+        "$data->QuestionID");
+
+    $resQ = $app->db->makeQuery("SELECT user.* FROM user ");
+    $users = [];
+    while($r = $resQ->fetch_assoc())
+        $users[] = $r;
+    foreach ($users as $user){
+        $app->db->insertToTable('event','EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',$user['ID'].",12,now(),$sess->UserID,$data->QuestionID");
+    }
+    echoSuccess();
+});
+
+$app->post('/deleteAwardedQuestion', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+
+    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID'and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel') limit 1");
+
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+    $app->db->deleteFromTable('avarded_question',"ForumQuestionID='$data->QuestionID'");
+    echoSuccess();
+});
+
+$app->post('/getAllPositions', function() use ($app)  {
+
+    $resq = $app->db->makeQuery("SELECT * FROM `organ_position` WHERE 1");
+    $res=[];
+    while($r = $resq->fetch_assoc())
+        $res[] = $r;
+    echoResponse(200, $res);
+});
+
 $app->post('/removeSurveyOption', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $sess = $app->session;
@@ -240,12 +302,14 @@ $app->post('/getSocketData', function() use ($app)  {
 });
 
 $app->post('/getAwardQuestion', function() use ($app)  {
-    $resQ = $app->db->makeQuery("select q.ID from forum_question q INNER JOIN avarded_question aq on aq.ForumQuestionID = q.ID WHERE aq.IsFinished =0 limit 1");
-    $sql =$resQ->fetch_assoc();
-    if(!$sql)
+    $resQ = $app->db->getRecords("select q.ID from forum_question q 
+INNER JOIN avarded_question aq on aq.ForumQuestionID = q.ID 
+WHERE aq.IsFinished =0");
+
+    if(!$resQ)
         echoError(null);
     else
-        echoSuccess($sql);
+        echoSuccess($resQ);
 });
 
 $app->post('/globalSearch', function() use ($app)  {
@@ -1569,7 +1633,7 @@ $app->post('/getUserProfile', function() use ($app)  {
     $user['AllSkills'] = getAllSkills($app->db);
 
     $user['ActiveSessions'] = getAllUserActiveSessions($app->db,$sess->UserID);
-
+    $user['Organ'] = $app->db->getOneRecord("SELECT p.* FROM user u INNER JOIN organ_position p on p.ID = u.OrganizationID WHERE u.ID = ".$sess->UserID);
     echoResponse(200, $user);
 });
 
@@ -1714,7 +1778,7 @@ $app->post('/getQuestionByID', function() use ($app)  {
     if($sql['val'] == 0)
         {$resQ =$app->db->makeQuery("insert into question_view (UserID, QuestionID , ViewDate) values ('$r->UserID','$r->QuestionID',now())");}
 
-    $resQ = $app->db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainSubject , ms.SubjectName , o.OrganizationName ,
+    $resQ = $app->db->makeQuery("select aq.ID AvardedQuestion,aq.AwardedUserID,aqu.FullName as AwardedFullName ,aq.IsFinished, q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainSubject , ms.SubjectName , o.OrganizationName ,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT count(*) FROM question_view where QuestionID = q.ID) as ViewCount ,
@@ -1728,6 +1792,8 @@ inner join file_storage as f on f.ID = u.AvatarID
 inner join forum_subject as s on q.SubjectID = s.ID
 inner join forum_main_subject as ms on ms.ID = s.ParentSubjectID
 inner join organ_position as o on u.OrganizationID = o.ID
+left join avarded_question as aq on aq.ForumQuestionID = q.ID
+left join user as aqu on aq.AwardedUserID = aqu.ID
 where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
@@ -2118,14 +2184,14 @@ $app->post('/saveUserInfo', function() use ($app)  {
             $pass = passwordHash::hash($data->Password);
 
             $resQ = $app->db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
-`Tel`='$data->Tel',`Password`='$pass'","user.ID='$sess->UserID'");
+`Tel`='$data->Tel',`Password`='$pass',OrganizationID='$data->OrganizationID'","user.ID='$sess->UserID'");
         }else{
             echoError("OldPasswordIsNotValid");
         }
     }else{
 
         $resQ = $app->db->updateRecord('user',"`FullName`='$data->FullName',`Email`='$data->Email',`Username`='$data->Username',`PhoneNumber`='$data->PhoneNumber',
-`Tel`='$data->Tel'","user.ID='$sess->UserID'");
+`Tel`='$data->Tel',OrganizationID='$data->OrganizationID'","user.ID='$sess->UserID'");
     }
 
     $sess->updateFullName($data->FullName);
@@ -2191,6 +2257,12 @@ LIMIT 1");
     if($sess->IsAdmin && $sql)
     {
         $app->db->updateRecord('forum_question',"BestAnswerID = null" , "ID = '$data->QuestionID'");
+        $resq = $app->db->getOneRecord("SELECT aq.* FROM `avarded_question` aq
+  INNER JOIN forum_question fq on fq.ID = aq.ForumQuestionID 
+ WHERE fq.ID = ".$data->QuestionID."");
+        if($resq){
+            $app->db->updateRecord('avarded_question',"AwardedUserID = null","ID=".$resq["ID"]);
+        }
         echoSuccess();
         return;
     }else{
@@ -2206,7 +2278,7 @@ $app->post('/setBestAnswer', function() use ($app)  {
     $sess = $app->session;
 
     if(!isset($data->QuestionID) || !isset($data->AnswerID))
-        {echoResponse(201, 'bad Request');return;}
+        {echoResponse(201, 'badd Request');return;}
 $resQ = $app->db->makeQuery("select a.ID from user as u
 INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
@@ -2218,10 +2290,16 @@ LIMIT 1");
     if($sess->IsAdmin && $sql)
     {
         $app->db->updateRecord('forum_question',"BestAnswerID = '$data->AnswerID'" , "ID = '$data->QuestionID'");
+        $resq = $app->db->getOneRecord("SELECT aq.* FROM `avarded_question` aq
+  INNER JOIN forum_question fq on fq.ID = aq.ForumQuestionID 
+ WHERE fq.ID = ".$data->QuestionID."");
+        if($resq){
+            $resqAnswer = $app->db->getOneRecord("SELECT u.AuthorID FROM forum_answer u where u.ID = " .$data->AnswerID);
+            $app->db->updateRecord('avarded_question',"AwardedUserID = ".$resqAnswer["AuthorID"],"ID=".$resq["ID"]);
+        }
         echoSuccess();
         return;
     }else{
-
         echoError('you dont have permission to do this action');
     }
 });

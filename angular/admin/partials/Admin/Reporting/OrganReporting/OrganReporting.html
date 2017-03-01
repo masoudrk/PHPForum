@@ -42,7 +42,7 @@
 
                         <div class="col-xs-12 col-md-8">
                             <adm-dtp ng-model='EndDate'  on-datechange="dateChanged()"
-                                     options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true , default:"today"}'
+                                     options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true}'
                                      full-data="toFullEnd" class="english-font"
                                      mindate="{{toFullStart.unix}}"></adm-dtp>
                         </div>
@@ -52,7 +52,7 @@
 
                         <div class="col-xs-12 col-md-8">
                             <adm-dtp ng-model='StartDate'  on-datechange="dateChanged()"
-                                     options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true , default:"today"}'
+                                     options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true}'
                                      full-data="toFullStart" class="english-font"
                                      mindate="{{mindate}}"></adm-dtp>
                         </div>

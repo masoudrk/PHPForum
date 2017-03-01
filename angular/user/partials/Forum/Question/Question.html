@@ -67,7 +67,7 @@
         <div class="col-md-8">
             <div class="box box-solid" style="min-height:218px">
                 <div class="box-header with-border vazir-font">
-                    <h3 class="box-title">عنوان سوال</h3>
+                    <h3 class="box-title"> <i ng-if="question.AvardedQuestion" class="fa fa-star faa-ring text-yellow animated"></i> عنوان سوال</h3>
                     <span class="description persian-rtl pull-left text-muted" style="margin-right: 4%"><i class="fa fa-clock-o text-yellow" aria-hidden="true"></i>   {{question.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</span>
                     <span class="description pull-left text-blue" style="margin-right: 4%">{{question.ViewCount | pNumber}}   <i class="fa fa-eye" aria-hidden="true"></i></span>
                     <span class="description pull-left text-olive" style="margin-right: 4%">{{question.FollowCount | pNumber}}   <i class="fa fa-users" aria-hidden="true"></i></span>
@@ -83,13 +83,20 @@
                     </div>
                 </div><!-- /.box-body -->
                 <div class="box-footer">
-                    <span ng-repeat="tag in question.Tags" class="label pull-right fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50" ng-class="getTagColor(tag.ID)" style="margin: 5px">  {{tag.Text | pNumber}}  <i class="fa fa-tag" aria-hidden="true"></i></span>
-                    <!--TODO kar dare in ghesmat-->
+                    <!--<span ng-repeat="tag in question.Tags" class="label pull-right fx-zoom-right fx-dur-600 fx-ease-expo fx-stagger-50" ng-class="getTagColor(tag.ID)" style="margin: 5px">  {{tag.Text | pNumber}}  <i class="fa fa-tag" aria-hidden="true"></i></span>-->
+
                     <i class="fa fa-thumbs-up palette-nephritis" ng-show="question.PersonQuestionRate == 1" style="font-size: 20px" aria-hidden="true"></i>
                     <i ng-click="setLikeQuestion(1)" class="fa fa-thumbs-o-up link hvr-pulse" ng-show="question.PersonQuestionRate != 1" style="font-size: 20px;" aria-hidden="true"></i>
                     <span class="badge bg-yellow" style="margin-bottom: 5px;">{{(question.QuestionScore)?question.QuestionScore:0 | pNumber}}</span>
                     <i ng-click="setLikeQuestion(-1)" class="fa fa-thumbs-o-down link hvr-pulse" ng-show="question.PersonQuestionRate != -1" style="font-size: 20px;" aria-hidden="true"></i>
                     <i class="fa fa-thumbs-down  palette-pomegranate" ng-show="question.PersonQuestionRate == -1" style="font-size: 20px" aria-hidden="true"></i>
+                    <div ng-if="user.AdminPermissionLevel == 'Base' || user.AdminPermission == question.SubjectName">
+                        <a ng-show="!question.AvardedQuestion" ng-click="addToAvardedQuestions(question.ID)" class="btn btn-info btn-xs pull-right" style="margin: 5px"><b>ثبت به عنوان سوال جایزه دار</b> <i class="fa fa-check"></i> </a>
+                        <a ng-hide="!question.AvardedQuestion" ng-click="rmAvardedQuestions(question.ID)" class="btn btn-danger btn-xs pull-right" style="margin: 5px"><b>حذف سوال جایزه دار</b> <i class="fa fa-times"></i> </a>
+                        <a ng-show="question.AvardedQuestion && question.IsFinished == 0 " ng-click="finishAvardedQuestions(question.ID)" class="btn btn-success btn-xs pull-left" style="margin: 5px"><b>اتمام سوال جایزه دار</b> <i class="fa fa-star"></i> </a>
+
+                    </div>
+                    <a ng-show="question.AvardedQuestion && question.IsFinished == 1 && question.AwardedFullName" ng-click="finishAvardedQuestions(question.ID)" class="btn btn-success btn-xs pull-right" style="margin: 5px"><b>جواب کاربر {{question.AwardedFullName |pNumber}} به عنوان بهترین جواب انتخاب شد</b> <i class="fa fa-star"></i> </a>
                 </div>
             </div><!-- /.box -->
         </div>

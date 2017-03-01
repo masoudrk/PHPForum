@@ -30,9 +30,9 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     });
     Extention.post("getAwardQuestion").then(function (res) {
         if (res.Status == 'success') {
-            $scope.awardQuestion = res.Data;
+            $scope.awardQuestions = res.Data;
         } else {
-            $scope.awardQuestion = null;
+            $scope.awardQuestions = null;
         }
     });
 

@@ -430,7 +430,7 @@
     <Content Include="Admin\partials\Admin\Tag\TagCtrl.js" />
     <Content Include="Admin\partials\Admin\User\AllUsers.html" />
     <Content Include="Admin\partials\Admin\Answers\Answers.js" />
-    <Content Include="Admin\partials\Admin\User\NewPopUp.js" />
+    <Content Include="Admin\partials\Admin\User\NewSurvey.js" />
     <Content Include="Admin\plugins\fastclick\fastclick.js" />
     <Content Include="Admin\plugins\fastclick\fastclick.min.js" />
     <Content Include="Admin\plugins\jQueryUI\jquery-ui.js" />
@@ -623,7 +623,7 @@
     <Content Include="Forum\partials\Library\Library.html" />
     <Content Include="Forum\partials\Library\LibraryCtrl.js" />
     <Content Include="Forum\partials\Help\Help.html" />
-    <Content Include="Forum\partials\Help\HelpCtrl.js" />
+    <Content Include="Forum\partials\Help\SurveyCtrl.js" />
     <Content Include="Forum\partials\MainCtrl.js" />
     <Content Include="Forum\partials\Message\Message.html" />
     <Content Include="Forum\partials\Message\MessageCtrl.js" />

@@ -1,6 +1,16 @@
 
 angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, $stateParams, $state, $uibModal,$timeout, Extention,Upload) {
 
+    $scope.Position = {selected:null};
+    Extention.postAsync('getAllPositions', {}).then(function (msg) {
+        var pos
+        if($scope.Position.selected){
+         pos =$scope.Position.selected;
+        }
+        $scope.allPositions = msg;
+        $scope.Position.selected = pos;
+    });
+
     $scope.onChangeAvatar = function ($files, $file) {
         if($files.length == 0)
             return;
@@ -207,6 +217,7 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
 
         Extention.post('getUserProfile').then(function (res) {
             $scope.curUser = res;
+            $scope.Position.selected = res.Organ;
         });
     }
     $scope.getUser();
@@ -243,6 +254,7 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
             return;
         }
 
+        $scope.curUser.OrganizationID = $scope.Position.selected.ID;
         Extention.post('saveUserInfo', $scope.curUser).then(function (res) {
 
             if(res && res.Status=='success'){
@@ -260,6 +272,7 @@ angular.module(appName).controller('ProfileCtrl', function ($scope, $rootScope, 
                 }else if(res.Message == 'PasswordIsNotValid'){
                     Extention.popError(persianJs('خطا : رمز عبور جدید بایستی حداقل 5 کاراکتر باشد.').englishNumber().toString());
                 }else {
+                    console.log(res);
                     Extention.popError('مشکل در تغییر اطلاعات ، لطفا دوباره تلاش کنید.');
                 }
             }

@@ -439,11 +439,18 @@
 <!--                        </li>-->
 <!--                    </ul>-->
 <!--                </li>-->
-
-                <li ng-show="awardQuestion">
-                    <a ui-sref="question({id:awardQuestion.ID})">
-                        <i class="fa fa-star faa-ring text-yellow animated"></i><span>سوال با جایزه</span>
+                <li id="SAwardQuestions" class="treeview"  ng-show="awardQuestions">
+                    <a class="link">
+                        <i class="fa fa-star faa-ring text-yellow animated"></i> <span>سولات با جایزه</span>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
+                    <ul class="treeview-menu">
+                        <li ng-repeat="question in awardQuestions" >
+                            <a ui-sref="question({id:question.ID})">
+                                <i class="fa fa-circle-o"></i>سوال با جایزه
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li id="SMessage">
                     <a ui-sref="messages">

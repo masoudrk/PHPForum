@@ -28,7 +28,7 @@ angular.module(appName).controller('OrganReportingCtrl', function ($scope, $root
                 persianJs( item.category ).englishNumber().toString()
                 + "</b><br><span class='pull-right' style='font-size=15px'> &nbsp;" +
                 persianJs( item.values.value.toString() ).englishNumber().toString()
-                + "</span><span style='font-size=15px'>" + 'سوال' + "</span>" ;
+                + "</span><span style='font-size=15px'>" + 'سوال' + "</span>";
         }
     }, {
         "fillAlphas": 0.8,
@@ -84,7 +84,6 @@ angular.module(appName).controller('OrganReportingCtrl', function ($scope, $root
                 + "</span><span style='font-size=15px'>" + 'سوال تایید نشده' + "</span>" ;
         }
     }];
-    activeElement('#SReporting','#SOrganReport');
 
     $scope.getChartData= function (OrganizationID , StartDate , EndDate) {
         Extention.post('getReportChartData',{OrganizationID:OrganizationID , StartDate :StartDate, EndDate :EndDate}).then(function (res) {
@@ -106,4 +105,6 @@ angular.module(appName).controller('OrganReportingCtrl', function ($scope, $root
     }
 
     $scope.getChartData(null,null,null);
+
+    activeElement('#SReporting','#SOrganReport');
 });

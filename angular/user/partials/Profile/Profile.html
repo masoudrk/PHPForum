@@ -189,6 +189,17 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
+                                    <ui-select ng-model="Position.selected" theme="bootstrap" sortable="true" close-on-select="true" required>
+                                        <ui-select-match placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
+                                        <ui-select-choices repeat="edu in allPositions">
+                                            <div compile="edu.OrganizationName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label for="inputEmail" class="col-sm-3 control-label">ناحیه</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9">
                                     <input type="text" ng-model="curUser.Username" ng-disabled="true"
                                            class="form-control"
                                            id="inputPhone"

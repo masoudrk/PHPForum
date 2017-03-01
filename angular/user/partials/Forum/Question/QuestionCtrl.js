@@ -21,6 +21,22 @@
         });
     })();
 
+    $scope.addToAvardedQuestions = function (questionID) {
+        Extention.post("setAwardedQuestion",  { QuestionID: questionID }).then(function (res) {
+            if (res.Status == 'success') {
+                $scope.getQuestionByID();
+            }
+        });
+    }
+
+    $scope.rmAvardedQuestions = function (questionID) {
+        Extention.post("deleteAwardedQuestion", { QuestionID: questionID }).then(function (res) {
+            if (res.Status == 'success') {
+                $scope.getQuestionByID();
+            }
+        });
+    }
+
     $scope.deleteBestAnswer = function (AnswerID) {
         Extention.post("deleteBestAnswer", { QuestionID: $stateParams.id, AnswerID: AnswerID }).then(function (res) {
             if (res.Status == 'success') {
@@ -34,6 +50,17 @@
             if (res.Status == 'success') {
                 $scope.getQuestionByID();
             }
+            else
+                console.log(res);
+        });
+    }
+    $scope.finishAvardedQuestions = function(questionID ) {
+        Extention.post("finishAwardedQuestion",  { QuestionID: questionID }).then(function (res) {
+            if (res.Status == 'success') {
+                $scope.getQuestionByID();
+            }
+            else
+                console.log(res);
         });
     }
 
