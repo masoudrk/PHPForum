@@ -55,10 +55,9 @@
                             </a>
                         </li>
                         <!-- Messages: style can be found in dropdown.less-->
-                        <li class="dropdown messages-menu">
-                            <a class="dropdown-toggle link" data-toggle="dropdown">
+                        <li class="dropdown messages-menu"><a class="dropdown-toggle link" data-toggle="dropdown">
                                 <i class="fa fa-envelope-o"
-                                    ng-class="(messages && messages.Total != '0' )?'faa-horizontal animated':''"></i>
+                                   ng-class="(messages && messages.Total != '0' )?'faa-horizontal animated':''"></i>
                                 <span class="label label-warning" ng-bind="messages.Total || '0'| pNumber"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -76,17 +75,17 @@
                                     event -->
                                             <a>
                                                 <div class="pull-right link" ui-sref="messages({id:item.ID})">
-                                                    <img err-src="../images/Avatar.jpg" ng-src="{{item.Image}}"
-                                                        class="img-circle"
-                                                        alt="User Image"
-                                                        style="border: solid 2px #f1c40f" />
+                                                    <img err-src="../../shared/images/Avatar.jpg" ng-src="{{item.Image}}"
+                                                         class="img-circle"
+                                                         alt="User Image"
+                                                         style="border: solid 2px #f1c40f" />
                                                     <div class="text-center" style="margin: auto auto auto 10px;">
                                                         <i class="fa fa-envelope  palette-sun-flower" style="font-size: 19px;"></i>
                                                     </div>
                                                 </div>
                                                 <h4>
                                                     <span class="link" ui-sref="messages({id:item.ID})"
-                                                        style="color:#3c8dbc;">
+                                                          style="color:#3c8dbc;">
                                                         {{item.FullName}}
                                                     </span>
                                                     <small class="persian-rtl" style="margin-top: 2px;margin-left: 20px;">
@@ -95,8 +94,8 @@
                                                     </small>
                                                     <small class="persian-rtl">
                                                         <i class="fa fa-times link palette-alizarin faa-pulse animated-hover"
-                                                            style="font-size: 16px;"
-                                                            ng-click="markAsReadMessage($event, item)"></i>
+                                                           style="font-size: 16px;"
+                                                           ng-click="markAsReadMessage($event, item)"></i>
                                                     </small>
                                                 </h4>
                                                 <h5 class="text-right link" ui-sref="messages({id:item.ID})"
@@ -104,17 +103,17 @@
                                                     {{item.EventUser|pNumber}}
                                                 </h5>
                                                 <p class="text-right text-info "
-                                                    style="margin-top: 5px;">
-                                                    <p class="link" style="font-size: 14px" ui-sref="messages({id:item.ID})">
+                                                   style="margin-top: 5px;">
+                                                <p class="link" style="font-size: 14px" ui-sref="messages({id:item.ID})">
                                                         <span class="palette-concrete">
                                                             موضوع :
                                                         </span>
-                                                        {{item.MessageTitle | subString :30|pNumber}}
-                                                    </p>
-                                                    <p class="link" style="padding-right: 5px" ui-sref="messages({id:item.ID})">
-                                                        <span class="palette-concrete">متن پیام :</span>
-                                                        <span compile="item.Message | subString :100|pNumber"></span>
-                                                    </p>
+                                                    {{item.MessageTitle | subString :30|pNumber}}
+                                                </p>
+                                                <p class="link" style="padding-right: 5px" ui-sref="messages({id:item.ID})">
+                                                    <span class="palette-concrete">متن پیام :</span>
+                                                    <span compile="item.Message | subString :100|pNumber"></span>
+                                                </p>
                                                 </p>
                                             </a>
                                         </li>
@@ -123,12 +122,12 @@
                                 </li>
                                 <li class="footer">
                                     <a class="link faa-parent animated-hover" ng-click="updateMessages($event)"
-                                        ng-class="(messagesUpdating)? 'text-muted unlink':''"
-                                        style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;">
+                                       ng-class="(messagesUpdating)? 'text-muted unlink':''"
+                                       style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;">
                                         بروزرسانی
                                         <i
-                                            class="fa fa-refresh faa-spin animated-hover"
-                                            ng-class="(messagesUpdating)? 'fa-spin ':''"></i>
+                                                class="fa fa-refresh faa-spin animated-hover"
+                                                ng-class="(messagesUpdating)? 'fa-spin ':''"></i>
                                     </a>
                                     <a class="link faa-parent animated-hover" ui-sref="messages">
                                         نمایش همه پیام ها
@@ -142,16 +141,15 @@
                         <li class="dropdown messages-menu">
                             <a class="dropdown-toggle link" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"
-                                    ng-class="(notifications && notifications.Total != '0' )?'faa-shake animated':''"></i>
-                                <span class="label label-success"
-                                    ng-bind="notifications.Total | pNumber"></span>
+                                   ng-class="(notifications && notifications.Total != '0' )?'faa-shake animated':''"></i>
+                                <span class="label label-danger"
+                                      ng-bind="notifications.Total || '0' | pNumber"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header">
                                     شما
                                     <span>{{notifications.Total| pNumber}} </span>
-                                    اعلان جدید
-                                دارید!
+                                    اعلان جدید دارید!
                                 </li>
                                 <li>
                                     <!-- inner menu: contains the actual data -->
@@ -163,10 +161,10 @@
                                     event -->
                                             <a>
                                                 <div class="pull-right link" ui-sref="question({id:item.QuestionID})">
-                                                    <img err-src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
-                                                        class="img-circle"
-                                                        alt="User Image"
-                                                        style="border: solid 2px #1abc9c;margin-top: " />
+                                                    <img err-src="../../shared/images/Avatar.jpg" ng-src="{{ou.FullPath}}"
+                                                         class="img-circle"
+                                                         alt="User Image"
+                                                         style="border: solid 2px #1abc9c;margin-top: " />
                                                     <div class="text-center" style="margin: -12px -15px auto 10px;">
                                                         <i class="fa fa-bell palette-sun-flower" style="font-size: 19px;"></i>
                                                     </div>
@@ -181,19 +179,19 @@
                                                     </small>
                                                     <small class="persian-rtl">
                                                         <i class="fa fa-times link palette-alizarin faa-pulse animated-hover"
-                                                            style="font-size: 16px;"
-                                                            ng-click="markAsReadNotification($event, item)"></i>
+                                                           style="font-size: 16px;"
+                                                           ng-click="markAsReadNotification($event, item)"></i>
                                                     </small>
                                                 </h4>
                                                 <p class="text-right persian-rtl link"
-                                                    ui-sref="question({id:item.QuestionID})"
-                                                    style="margin-top: 8px;margin-bottom:5px;">
+                                                   ui-sref="question({id:item.QuestionID})"
+                                                   style="margin-top: 8px;margin-bottom:5px;">
                                                     <span class="palette-turquoise"
-                                                        ng-bind="item.EventTypeFA"></span>
+                                                          ng-bind="item.EventTypeFA"></span>
                                                 </p>
                                                 <p class="text-right text-info link"
-                                                    ui-sref="question({id:item.QuestionID})"
-                                                    style="margin-top: 5px;" ng-if="item.HasQuestion">
+                                                   ui-sref="question({id:item.QuestionID})"
+                                                   style="margin-top: 5px;" ng-if="item.HasQuestion">
                                                     <span class="persian-rtl">
                                                         سرتیتر سوال : {{item.Title | subString :100|pNumber}}
                                                     </span>
@@ -205,18 +203,18 @@
                                 </li>
                                 <li class="footer">
                                     <a class="link col-xs-6 faa-parent animated-hover"
-                                        ui-sref="profile({action:'Timeline'})"
-                                        style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;
+                                       ui-sref="profile({action:'Timeline'})"
+                                       style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;
                                    ">
                                         تایم لاین
                                         <i class="fa fa-clock-o faa-spin"></i>
                                     </a>
                                     <a class="link col-xs-6 faa-parent animated-hover" ng-click="updateNotifications($event)"
-                                        style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;"
-                                        ng-class="(notificationsUpdating)? 'text-muted unlink':''">
+                                       style="border-bottom-left-radius: 0;border-bottom-right-radius: 0;clear: initial;"
+                                       ng-class="(notificationsUpdating)? 'text-muted unlink':''">
                                         بروزرسانی
                                         <i class="fa fa-refresh faa-spin"
-                                            ng-class="(notificationsUpdating)? 'fa-spin ':''"></i>
+                                           ng-class="(notificationsUpdating)? 'fa-spin ':''"></i>
                                     </a>
 
                                     <a class="link faa-parent animated-hover" ng-click="markLastNotifications($event)">
@@ -506,7 +504,7 @@
                             <span>مدیریت موضوعات</span>
                         </a>
                     </li>-->
-                    <li id="SReporting" ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
+                    <li id="SReporting" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin'" class="treeview">
                         <a class="link">
                             <i class="fa fa-bar-chart"></i>
                             <span>گزارش گیری</span>

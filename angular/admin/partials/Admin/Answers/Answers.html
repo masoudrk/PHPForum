@@ -35,7 +35,7 @@
                             <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">جواب ها تایید نشده</a></li>
                         </ul>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4" ng-if="session.AdminPermissionLevel !='OrganAdmin'">
                         <div>
                             <ui-select ng-model="Position.selected" on-select="changePosition()" theme="bootstrap" sortable="true" close-on-select="true" required>
                                 <ui-select-match allow-clear placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4 pull-right">
+                    <div class="col-sm-4">
                         <input type="text" name="table_search" ng-model="pagingParams.searchValue"
                                ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
                                placeholder="جستجو ...">

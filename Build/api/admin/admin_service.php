@@ -164,6 +164,7 @@ $app->post('/getReportChartData', function() use ($app)  {
     require_once "../db/forum_subject.php";
     require_once "../db/organ_position.php";
 
+    $sess = new Session();
     $data = json_decode($app->request->getBody());
     $limitDateAnswer = "";
     $limitDateQuestion = "";
@@ -175,6 +176,13 @@ $app->post('/getReportChartData', function() use ($app)  {
         $limitDateAnswer .= " and forum_answer.CreationDate < '$data->EndDate'";
         $limitDateQuestion .= " and forum_question.CreationDate < '$data->EndDate'";
     }
+    if($sess->AdminPermissionLevel =="OrganAdmin"){
+        $resq = $app->db->getOneRecord("SELECT u.* FROM user as u 
+INNER JOIN organ_position op on op.ID = u.OrganizationID 
+WHERE u.ID='".$sess->UserID."'");
+        $data->OrganizationID = $resq["OrganizationID"];
+    }
+
     if(isset($data->OrganizationID)){
         $resQ = $app->db->makeQuery("select u.ID , u.FullName as OrganizationName,
     (select count(*) from user
@@ -264,7 +272,14 @@ $app->post('/getUsersReport', function() use ($app)  {
 //        $where .=" AND (Username LIKE '%".$data->filter."%' OR FullName LIKE '%".$data->filter."%' OR Email LIKE '%".$data->filter."%')";
 //    }
     if(isset($data->OrganizationID)){
-        $where .=" AND (user.OrganizationID ='$data->OrganizationID')";}
+        $where .=" AND (user.OrganizationID ='$data->OrganizationID')";
+    }
+    if($sess->AdminPermissionLevel =="OrganAdmin"){
+        $resq = $app->db->getOneRecord("SELECT u.* FROM user as u 
+INNER JOIN organ_position op on op.ID = u.OrganizationID 
+WHERE u.ID='".$sess->UserID."'");
+        $where .=" AND (user.OrganizationID ='".$resq["OrganizationID"]."')";
+    }
     if(isset($data->ForumMainSubjectID)){
         $pageRes = $pr->getPage($app->db,"SELECT user.`ID`, `FullName`, `Email`,op.ID as OrganID , op.OrganizationName,
 `PhoneNumber`, `Tel`, `SignupDate`, `Gender`, user.`Description`,
@@ -1496,7 +1511,7 @@ $app->post('/getAllUsers', function() use ($app)  {
 (SELECT COUNT(*) FROM forum_question as fq WHERE fq.AuthorID = user.`ID`) as QuestionCount ,
 (SELECT COUNT(*) FROM person_follow as pf WHERE pf.TargetUserID = user.`ID`) as FollowersCount ,
 (SELECT COUNT(*) FROM person_follow as pf WHERE pf.UserID = user.`ID`) as FollowingCount ,
-user.`ID`, `FullName`, `Email`, `Username` , orp.OrganizationName
+user.`ID`, `FullName`, `Email`, `Username` , orp.OrganizationName ,
 `PhoneNumber`, `Tel`, `SignupDate`, `Gender`, user.`Description`, `SessionID`,
 `MailAccepted`, `ValidSessionID`, `UserAccepted`,  admin.ID as
 AdminID , user.LastActiveTime, user.SignupDate , user.score , file_storage.FullPath
@@ -1883,6 +1898,14 @@ LIMIT 1");
     $sql =$resQ->fetch_assoc();
     if(!$sql)
         echoError('You don\'t have permision to do this action');
+    $where ="";
+    if($sess->AdminPermissionLevel =="OrganAdmin"){
+        $resq = $app->db->getOneRecord("SELECT u.* FROM user as u 
+INNER JOIN organ_position op on op.ID = u.OrganizationID 
+WHERE u.ID='".$sess->UserID."'");
+        $where .=" AND (user.OrganizationID ='".$resq["OrganizationID"]."')";
+    }
+
     $resp = [];
     $resQ = $app->db->makeQuery("SELECT COUNT(CASE WHEN fms.SubjectName = 'DataSwitch' THEN 1
                   ELSE NULL
@@ -1903,7 +1926,8 @@ LIMIT 1");
     FROM forum_question as fq INNER JOIN
     forum_subject as fs on fs.ID = fq.SubjectID
     INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
-    WHERE fq.AdminAccepted = 0");
+    INNER JOIN user on user.ID = fq.AuthorID
+    WHERE fq.AdminAccepted = 0".$where);
     $resp["Question"] = $resQ->fetch_assoc();
         $resQ = $app->db->makeQuery("SELECT COUNT(CASE WHEN fms.SubjectName = 'DataSwitch' THEN 1
                   ELSE NULL
@@ -1922,12 +1946,13 @@ LIMIT 1");
                          END) AS AnswerCommonTopics
        ,COUNT(*) AS AllAnswers
     FROM forum_answer as fa INNER JOIN
-    forum_question as fq on fa.QuestionID = fq.ID INNER JOIN
-    forum_subject as fs on fs.ID = fq.SubjectID
+    forum_question as fq on fa.QuestionID = fq.ID
+    INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
     INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
-    WHERE fa.AdminAccepted = 0");
+    INNER JOIN user on user.ID = fa.AuthorID
+    WHERE fa.AdminAccepted = 0.$where");
     $resp["Answer"] = $resQ->fetch_assoc();
-            $resQ = $app->db->makeQuery("SELECT COUNT(*) as UserCount FROM user as u WHERE u.UserAccepted = 0");
+            $resQ = $app->db->makeQuery("SELECT COUNT(*) as UserCount FROM user WHERE user.UserAccepted = 0".$where);
     $resp["User"] = $resQ->fetch_assoc();
     $resQ = $app->db->makeQuery("SELECT COUNT(*) as MessageCount FROM message as u WHERE u.UserID = '$sess->UserID' AND u.MessageViewed = 0");
     $resp["Message"] = $resQ->fetch_assoc();

@@ -35,7 +35,7 @@
                         </div>
                         <label class="col-sm-3 control-label">انجمن</label>
                     </div>
-                    <div class="form-group col-sm-5">
+                    <div class="form-group col-sm-5" ng-if="session.AdminPermissionLevel !='OrganAdmin'">
                         <div class="col-sm-9">
                             <ui-select ng-model="Position.selected" on-select="changePosition()" theme="bootstrap" sortable="true" close-on-select="true">
                                 <ui-select-match allow-clear placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
