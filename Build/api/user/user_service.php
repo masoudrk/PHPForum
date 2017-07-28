@@ -1,10 +1,121 @@
 <?php
 
+$app->post('/changeUserContractor', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+    if(!isset($data->UserID))
+        echoError('set user id');
+    if($data->UserID != $sess->UserID)
+        echoError('somthing bad happend');
+    $app->db->updateRecord('user',"IsContractor = ".$data->Contractor,"ID=".$sess->UserID);
+    echoSuccess();
+});
+$app->post('/insertOrUpdateAssessment', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+    $resq = $app->db->getOneRecord("SELECT ass.* FROM user u INNER JOIN assessment ass on ass.UserID = u.ID WHERE u.ID = ".$sess->UserID);
+
+    if($resq){
+        //Update
+        if($data->type == 1){
+            $app->db->updateRecord('assessment',"AssessmentEducationID='$data->AssessmentEducationID'
+            ".(isset($data->JobExperience)?",JobExperience='$data->JobExperience'":"").",JobRecordID='$data->JobRecordID'
+            ".(isset($data->Depo1ID)?",Depo1ID='$data->Depo1ID'":"").(isset($data->Depo2ID)?",Depo2ID='$data->Depo2ID'":"")
+                .",AssessmentEducationLevelID = '$data->AssessmentEducationLevelID',CurrentPositionID = '$data->CurrentPositionID'
+                ,BrithDate = '$data->BrithDate'".(isset($data->AssessmentEducationName)?",AssessmentEducationName='$data->AssessmentEducationName'":""), "ID='".$resq["ID"]."'");
+
+            $app->db->deleteFromTable('assessment_positions',"AssessmentID='".$resq["ID"]."'" );
+            foreach ($data->Positions as $value) {
+                $app->db->insertToTable('assessment_positions'
+                    ,'AssessmentID,OrganPositionID',$resq["ID"].",$value->ID");
+            }
+
+            echoSuccess($resq["ID"]);
+        }else if($data->type == 2){
+            $app->db->deleteFromTable('assessment_job_record_info',"AssessmentID='".$resq["ID"]."'" );
+
+            foreach ($data->jobs as $value) {
+                $app->db->insertToTable('assessment_job_record_info'
+                    ,'AssessmentID,OrganPositionID,EndDate,StartDate,JobTitle,ContractorCompany'
+                    ,$resq["ID"].",$value->OrganPositionID,'$value->EndDate','$value->StartDate','$value->JobTitle','$value->ContractorCompany'");
+            }
+            echoSuccess();
+        }else if($data->type == 3){
+            $app->db->deleteFromTable('assessment_system_expertise',"AssessmentID='".$resq["ID"]."'" );
+
+            foreach ($data->jobsExpDef as $value) {
+                $app->db->insertToTable('assessment_system_expertise'
+                    ,'SystemID,SystemName,SystemType,TrainingTime,Description,SelfScore,AssessmentID'
+                    ,"$value->ID,'$value->SystemName','$value->SystemType','$value->TrainingTime','$value->Description','$value->SelfScore',".$resq["ID"]);
+            }
+            foreach ($data->jobsExpDef2 as $job) {
+                $app->db->insertToTable('assessment_system_expertise'
+                    ,'SystemID,SystemName,SystemType,TrainingTime,Description,SelfScore,AssessmentID'
+                    ,"'0'
+                    ,'$job->SystemName'
+                    ,'$job->SystemType'
+                    ,'$job->TrainingTime'
+                    ,'$job->Description'
+                    ,'$job->SelfScore',".$resq["ID"]);
+            }
+
+            echoSuccess();
+        }
+    }else
+    {
+        //Insert
+        if($data->type == 1){
+            $assessmentID =  $app->db->insertToTable('assessment'
+                ,'UserID,AssessmentEducationID ,JobExperience,JobRecordID,Depo1ID,Depo2ID
+            ,AssessmentEducationLevelID,CurrentPositionID,BrithDate, AssessmentEducationName'
+                ,$sess->UserID.",$data->AssessmentEducationID,'".(isset($data->JobExperience)?$data->JobExperience:"")."'
+            ,$data->JobRecordID,".(isset($data->Depo1ID)?"$data->Depo1ID":"'0'").",".(isset($data->Depo2ID)?"$data->Depo2ID":"'0'")."
+            ,$data->AssessmentEducationLevelID,$data->CurrentPositionID,
+            '".$data->BrithDate."','".(isset($data->AssessmentEducationName)?$data->AssessmentEducationName:"")."'", true);
+
+            foreach ($data->Positions as $value) {
+                $app->db->insertToTable('assessment_positions'
+                    ,'AssessmentID,OrganPositionID'
+                    ,"$assessmentID,$value->ID'");
+            }
+
+            echoSuccess($assessmentID);
+        }
+    }
+
+});
+
+
+$app->post('/getAssessmentData', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $sess = new Session();
+    $res = [];
+    $res["AllEducations"] = $app->db->getRecords("SELECT * FROM `assessment_education`");
+    $res["AllEducationLevels"] = $app->db->getRecords("SELECT * FROM `assessment_education_level`");
+    $res["AllJobRecords"] = $app->db->getRecords("SELECT * FROM `assessment_job_record`");
+    $res["AllPositions"] = $app->db->getRecords("SELECT * FROM `organ_position`");
+    $res["Depos"] = $app->db->getRecords("SELECT * FROM `depo`");
+    $res["AssessmentJobInfo"] = $app->db->getRecords("SELECT aj.* FROM `assessment_job_record_info` aj
+INNER JOIN assessment as a on a.ID = aj.AssessmentID
+ WHERE a.UserID = '".$sess->UserID."'");
+    $res["SystemExperience"] = $app->db->getRecords("SELECT ae.* FROM `assessment_system_expertise` as ae
+INNER JOIN assessment as a on a.ID = ae.AssessmentID
+ WHERE a.UserID = '".$sess->UserID."' AND ae.SystemID = '0'");
+
+    $res["SystemExperienceDef"] = $app->db->getRecords("SELECT ass.*, ae.SystemID, ae.SystemType, ae.TrainingTime, ae.Description, ae.Score, ae.SelfScore
+ FROM `assessment_systems` as ass LEFT JOIN assessment_system_expertise ae on ae.SystemID = ass.ID");
+
+    $res["Assessment"] = $app->db->getOneRecord("SELECT ass.* FROM user u INNER JOIN assessment ass on ass.UserID = u.ID WHERE u.ID = ".$sess->UserID);
+    if($res["Assessment"])
+        $res["AssessmentPositions"] = $app->db->getRecords("SELECT * FROM `assessment_positions` WHERE AssessmentID=".$res["Assessment"]["ID"]);
+    echoSuccess($res);
+});
+
 $app->post('/finishAwardedQuestion', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $sess = new Session();
 
-    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+    $resQ = $app->db->makeQuery("select ap.ID as val FROM user as u INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
 where u.ID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel') limit 1");
 
@@ -18,7 +129,7 @@ $app->post('/setAwardedQuestion', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $sess = new Session();
 
-    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+    $resQ = $app->db->makeQuery("select ap.ID as val FROM user as u INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
 where u.ID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel') limit 1");
 
@@ -42,7 +153,7 @@ $app->post('/deleteAwardedQuestion', function() use ($app)  {
     $data = json_decode($app->request->getBody());
     $sess = new Session();
 
-    $resQ = $app->db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+    $resQ = $app->db->makeQuery("select ap.ID as val FROM user as u INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
 where u.ID = '$sess->UserID'and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel') limit 1");
 
@@ -82,7 +193,7 @@ $app->post('/selectSurveyOption', function() use ($app)  {
  WHERE (p.`ExpireDate` > NOW()) and (p.`StartDate` < NOW()) and p.ID = ".$data->SurveyID."");
 
     if($resq['SurveyTypeID'] == 1){
-        $user = $app->db->getOneRecord("SELECT * from survey_options_user where SurveyOptionID='$data->OptionID' and UserID='$sess->UserID'");
+        $user = $app->db->getOneRecord("SELECT * FROM survey_options_user where SurveyOptionID='$data->OptionID' and UserID='$sess->UserID'");
         if($user){
             echoError('duplicated select');
         }
@@ -109,7 +220,7 @@ $app->post('/getSurvey', function() use ($app)  {
   INNER JOIN survey_type st on st.ID = p.SurveyTypeID 
  INNER JOIN user u on u.id = p.UserID
  WHERE (p.`ExpireDate` > NOW()) and (p.`StartDate` < NOW()) and p.ID = ".$data->SurveyID." ORDER BY p.ID");
-    $resq["Options"] = $app->db->getRecords("SELECT so.* , (SELECT 'true' FROM survey_options_user sou WHERE sou.SurveyOptionID = so.ID and sou.UserID = '$sess->UserID'  LIMIT 1) as answered from survey_options so where so.SurveyID = ".$data->SurveyID);
+    $resq["Options"] = $app->db->getRecords("SELECT so.* , (SELECT 'true' FROM survey_options_user sou WHERE sou.SurveyOptionID = so.ID and sou.UserID = '$sess->UserID'  LIMIT 1) as answered FROM survey_options so where so.SurveyID = ".$data->SurveyID);
     if($resq)
         echoSuccess($resq);
     else
@@ -122,7 +233,7 @@ $app->post('/getActiveSurveys', function() use ($app)  {
     if($resq)
         echoSuccess($resq);
     else
-        echoError();
+        echoError('non surveys');
     echoSuccess();
 });
 $app->post('/getUploadLibraryData', function() use ($app)  {
@@ -174,7 +285,7 @@ $app->post('/deleteMyAnswer', function() use ($app)  {
     $sess = $app->session;
     if(!isset($data->AnswerID))
     {echoResponse(201, 'bad Request');return;}
-    $resQ = $app->db->makeQuery("Select * from forum_answer as fa where fa.AdminAccepted =0 and fa.AuthorID = '$sess->UserID' and fa.ID = '$data->AnswerID'");
+    $resQ = $app->db->makeQuery("Select * FROM forum_answer as fa where fa.AdminAccepted =0 and fa.AuthorID = '$sess->UserID' and fa.ID = '$data->AnswerID'");
     $sql =$resQ->fetch_assoc();
     if(!$sql)
         echoError('You don\'t have permision to do this action');
@@ -188,7 +299,7 @@ $app->post('/updateAnswer', function() use ($app)  {
     $sess = $app->session;
     if(!isset($data->AnswerID) || !isset($data->AnswerText))
     {echoResponse(201, 'bad Request');return;}
-    $resQ = $app->db->makeQuery("Select * from forum_answer as fa where fa.AdminAccepted =0 and fa.AuthorID = '$sess->UserID' and fa.ID = '$data->AnswerID'");
+    $resQ = $app->db->makeQuery("Select * FROM forum_answer as fa where fa.AdminAccepted =0 and fa.AuthorID = '$sess->UserID' and fa.ID = '$data->AnswerID'");
     $sql =$resQ->fetch_assoc();
     if(!$sql)
         echoError('You don\'t have permision to do this action');
@@ -210,7 +321,7 @@ $app->post('/updateAnswer', function() use ($app)  {
                 $destination ='content/user_upload/'.$rand.'.'.$ext;
                 $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
                 if($uploadSuccess){
-                    $fileTypeQ = $app->db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+                    $fileTypeQ = $app->db->makeQuery("select file_type.ID FROM file_type where file_type.TypeName='$ext'");
 
                     $fileTypeID = -1;
                     if(mysqli_num_rows($fileTypeQ) > 0)
@@ -288,7 +399,7 @@ $app->post('/getSocketData', function() use ($app)  {
     
     $s = $app->session;
 
-    $resQ = $app->db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image from user LEFT JOIN file_storage on 
+    $resQ = $app->db->makeQuery("Select user.ID,user.FullName,user.LastActiveTime,file_storage.FullPath as Image FROM user LEFT JOIN file_storage on 
     file_storage.ID=user.AvatarID 
  where UserAccepted=1 and user.ID!='$s->UserID' and user.LastActiveTime > NOW() - INTERVAL 3 MINUTE");
 
@@ -302,7 +413,7 @@ $app->post('/getSocketData', function() use ($app)  {
 });
 
 $app->post('/getAwardQuestion', function() use ($app)  {
-    $resQ = $app->db->getRecords("select q.ID from forum_question q 
+    $resQ = $app->db->getRecords("select q.ID FROM forum_question q 
 INNER JOIN avarded_question aq on aq.ForumQuestionID = q.ID 
 WHERE aq.IsFinished =0");
 
@@ -335,15 +446,15 @@ $app->post('/globalSearch', function() use ($app)  {
             $searchQuery .= " AND ( (Title LIKE N'%$s%') OR (QuestionText LIKE N'%$s%') )";
         }
 
-        $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+        $rateSelection = "(SELECT count(*) FROM forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
- (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
- (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ (SELECT count(*) FROM forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 FROM question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
         $res = $p->getPage($app->db,"SELECT forum_question.* , u.score, u.FullName , file_storage.FullPath as Image,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
    as 'AnswersCount' ,
  ($rateSelection) as Rate
 FROM `forum_question` 
@@ -364,10 +475,10 @@ WHERE forum_question.AdminAccepted=1 $searchQuery");
             $searchQuery .= " AND u.FullName LIKE N'%$s%' ";
         }
 
-        $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+        $rateSelection = "(SELECT count(*) FROM forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
- (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
- (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ (SELECT count(*) FROM forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 FROM question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
         $res = $p->getPage($app->db,"SELECT u.FullName,u.Email ,u.ID,u.Gender,u.PhoneNumber,u.SignupDate 
@@ -388,15 +499,15 @@ WHERE u.UserAccepted=1 ".$searchQuery);
             $searchQuery .= " AND ( t.Text LIKE N'%$s%' )";
         }
 
-        $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() -
+        $rateSelection = "(SELECT count(*) FROM forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() -
  INTERVAL 7 DAY))+
- (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
- (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() -
+ (SELECT count(*) FROM forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 FROM question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() -
  INTERVAL 7 DAY))";
         $res = $p->getPage($app->db,"SELECT forum_question.* , u.score, u.FullName , file_storage.FullPath as Image,
- (SELECT question_view.ID from question_view
+ (SELECT question_view.ID FROM question_view
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
    as 'AnswersCount' ,
  ($rateSelection) as Rate
 FROM `forum_question`
@@ -446,8 +557,8 @@ $app->post('/getMyFollowing', function() use ($app)  {
             $query = "select 
             u.FullName , u.Email , u.ID as UserID ,person_follow.ID as PersonFollowID , u.score,
              person_follow.PersonFollowDate , file_storage.FullPath as Image,
-             (select count(*) from forum_question where forum_question.AuthorID=u.ID) as QuestionsCount,
-             (select count(*) from forum_answer where forum_answer.AuthorID=u.ID) as AnswersCount
+             (select count(*) FROM forum_question where forum_question.AuthorID=u.ID) as QuestionsCount,
+             (select count(*) FROM forum_answer where forum_answer.AuthorID=u.ID) as AnswersCount
             FROM person_follow
               inner join user as u on u.ID=person_follow.TargetUserID
               left join file_storage on file_storage.ID= u.AvatarID
@@ -460,7 +571,7 @@ $app->post('/getMyFollowing', function() use ($app)  {
              u.FullName , u.Email , u.ID as UserID ,question_follow.ID as PersonFollowID , u.score
             ,question_follow.ID as QuestionFollowID, question_follow.QuestionFollowDate , file_storage.FullPath as Image
             ,fq.Title , question_follow.QuestionID,
-             (select question_view.ID from question_view 
+             (select question_view.ID FROM question_view 
         where question_view.QuestionID=fq.ID AND question_view.UserID=$session->UserID LIMIT 1) as 'QViewID'
             FROM question_follow
               inner join forum_question as fq on fq.ID=question_follow.QuestionID
@@ -526,7 +637,7 @@ $app->post('/deleteSession', function() use ($app)  {
 
     $sess= $app->session;
 
-    $resQ = $app->db->makeQuery("select * from user_session where user_session.ID='".$data->ID."'");
+    $resQ = $app->db->makeQuery("select * FROM user_session where user_session.ID='".$data->ID."'");
     $s = $resQ->fetch_assoc();
 
     if($s['SessionID'] == $sess->SSN)
@@ -537,7 +648,7 @@ $app->post('/deleteSession', function() use ($app)  {
     if($res)
         echoSuccess();
 
-    echoError("Cannot delete from table.");
+    echoError("Cannot delete FROM table.");
 });
 
 $app->post('/getUserLastQuestion', function() use ($app)  {
@@ -547,11 +658,11 @@ $app->post('/getUserLastQuestion', function() use ($app)  {
     if(!isset($data->UserID))
     {echoResponse(201,"bad request"); return;}
     $resQ= $app->db->makeQuery("select DISTINCT q.ID ,q.Title ,q.CreationDate,
-(select sum(RateValue) from question_rate where QuestionID = q.ID) as QuestionRate,
-(select count(*) from question_follow where QuestionID = q.ID) as QuestionUserFollow,
-(select count(*) from question_view where QuestionID = q.ID) as questionView,
-(select count(*) from forum_answer where QuestionID = q.ID) as questionAnswers
-from forum_question as q  where q.AuthorID = '$data->UserID' and q.AdminAccepted = 1 order by q.CreationDate limit 5");
+(select sum(RateValue) FROM question_rate where QuestionID = q.ID) as QuestionRate,
+(select count(*) FROM question_follow where QuestionID = q.ID) as QuestionUserFollow,
+(select count(*) FROM question_view where QuestionID = q.ID) as questionView,
+(select count(*) FROM forum_answer where QuestionID = q.ID) as questionAnswers
+FROM forum_question as q  where q.AuthorID = '$data->UserID' and q.AdminAccepted = 1 order by q.CreationDate limit 5");
 
     $resp = [];
     while($r = $resQ->fetch_assoc()){
@@ -681,7 +792,7 @@ $app->post('/getAllMyAnswers', function() use ($app)  {
 
 
     $resQ = $app->db->makeQuery("SELECT a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName 
-from forum_answer as a
+FROM forum_answer as a
 inner join user as u on u.ID = a.AuthorID
 inner join file_storage as f on f.ID = u.AvatarID
 left join organ_position as o on u.OrganizationID = o.ID
@@ -691,7 +802,7 @@ where a.AuthorID = '$sess->UserID' ORDER BY a.CreationDate DESC ");
     while($item = $resQ->fetch_assoc()){
         $aID = $item['ID'];
 
-        $resaQ = $app->db->makeQuery("select fs.*,ft.GeneralType from answer_attachment as att
+        $resaQ = $app->db->makeQuery("select fs.*,ft.GeneralType FROM answer_attachment as att
 inner join file_storage as fs on fs.ID = att.FileID
 left join file_type as ft on ft.ID=fs.FileTypeID
 where att.AnswerID='$aID'");
@@ -724,7 +835,7 @@ $app->post('/editQuestion', function() use ($app)  {
 
     $qID = $data->ID;
 
-    $resQ = $app->db->makeQuery("Select forum_question.AdminAccepted from forum_question 
+    $resQ = $app->db->makeQuery("Select forum_question.AdminAccepted FROM forum_question 
 where ID='$qID' and AuthorID='$sess->UserID'");
     $count = mysqli_num_rows($resQ);
     if($count > 0 ){
@@ -793,7 +904,7 @@ $app->post('/saveQuestion', function() use ($app)  {
                 $destination ='content/user_upload/'.$rand.'.'.$ext;
                 $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
                 if($uploadSuccess){
-                    $fileTypeQ = $app->db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+                    $fileTypeQ = $app->db->makeQuery("select file_type.ID FROM file_type where file_type.TypeName='$ext'");
 
                     $fileTypeID = -1;
                     if(mysqli_num_rows($fileTypeQ) > 0)
@@ -889,11 +1000,11 @@ $app->post('/getQuestionMetaEdit', function() use ($app)  {
     require_once '../db/forum_subject.php';
     require_once '../db/question_attachment.php';
     $data = json_decode($app->request->getBody());
-    
+
     $res = [];
 
     if(isset($data)) {
-        $resQ = $app->db->makeQuery("select * from forum_question where forum_question.ID='$data->QuestionID'");
+        $resQ = $app->db->makeQuery("select * FROM forum_question where forum_question.ID='$data->QuestionID'");
         $res['Question'] = $resQ->fetch_assoc();
 
         $res['Question']['Subject'] = getQuestionSubject($app->db , $data->QuestionID);
@@ -938,33 +1049,33 @@ FROM forum_subject as fs WHERE fs.ParentSubjectID='$mainSubjectID'");
     $res['SubjectChilds'] = $subjectChilds;
 
     $curDate = date('Y-m-d');
-    $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resCQ = $app->db->makeQuery("select * FROM calendar_day where calendar_day.IntervalDay='$curDate'");
     $resC  = $resCQ->fetch_assoc();
 
     $resQ = $app->db->makeQuery("
 
 SELECT cd.IntervalDay as date,
-  (select count(*) from forum_question
+  (select count(*) FROM forum_question
     left join forum_subject on forum_subject.ID=forum_question.SubjectID
   where forum_subject.ParentSubjectID='$mainSubjectID' 
   and forum_question.AdminAccepted=1 
   and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
   ,
-  (select count(*) from forum_answer
+  (select count(*) FROM forum_answer
     left join forum_question on forum_answer.QuestionID=forum_question.ID
     left join forum_subject on forum_subject.ID=forum_question.SubjectID
   where forum_subject.ParentSubjectID='$mainSubjectID' 
   and forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) < cd.IntervalDay) 
   as IAnswerCount,
-  (select count(*) from forum_question
+  (select count(*) FROM forum_question
     left join forum_subject on forum_subject.ID=forum_question.SubjectID
   where forum_subject.ParentSubjectID='$mainSubjectID' 
   and forum_question.AdminAccepted=1 
   and Date(forum_question.CreationDate) = cd.IntervalDay) 
   as QuestionCount
   ,
-  (select count(*) from forum_answer
+  (select count(*) FROM forum_answer
     left join forum_question on forum_answer.QuestionID=forum_question.ID
     left join forum_subject on forum_subject.ID=forum_question.SubjectID
   where forum_subject.ParentSubjectID='$mainSubjectID'
@@ -972,7 +1083,7 @@ SELECT cd.IntervalDay as date,
   and Date(forum_answer.CreationDate) = cd.IntervalDay)
   as AnswerCount  
   
-from calendar_day as cd
+FROM calendar_day as cd
 where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
     $cqData = [];
@@ -982,14 +1093,14 @@ where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
     $res['PieChartData']=[];
 
-    $resQ = $app->db->makeQuery("select 'سوال' as Name, count(*) as Value from forum_question
+    $resQ = $app->db->makeQuery("select 'سوال' as Name, count(*) as Value FROM forum_question
     inner join forum_subject on forum_subject.ID=forum_question.SubjectID
   where forum_subject.ParentSubjectID='$mainSubjectID' 
   and forum_question.AdminAccepted=1 
   ");
     $res['PieChartData'][0] =$resQ->fetch_assoc();
 
-    $resQ = $app->db->makeQuery("select 'جواب' as Name, count(*) as Value from forum_answer
+    $resQ = $app->db->makeQuery("select 'جواب' as Name, count(*) as Value FROM forum_answer
     inner join forum_question on forum_answer.QuestionID=forum_question.ID
     inner join forum_subject on forum_subject.ID=forum_question.SubjectID
   where forum_subject.ParentSubjectID='$mainSubjectID'
@@ -998,7 +1109,7 @@ where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
     $resQ = $app->db->makeQuery("select 
 admin.UserID ,user.FullName ,user.Email ,user.Tel, file_storage.FullPath as Image 
-from admin_permission 
+FROM admin_permission 
 left join admin on admin.PermissionID=admin_permission.ID
 inner join user on user.ID =admin.UserID
 left join file_storage on file_storage.ID=user.AvatarID
@@ -1029,37 +1140,37 @@ $app->post('/getSubForumData', function() use ($app)  {
 
 
     $curDate = date('Y-m-d');
-    $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resCQ = $app->db->makeQuery("select * FROM calendar_day where calendar_day.IntervalDay='$curDate'");
     $resC  = $resCQ->fetch_assoc();
 
     $resQ = $app->db->makeQuery("
 SELECT cd.IntervalDay as date,
-  (select count(*) from forum_question
+  (select count(*) FROM forum_question
   where forum_question.SubjectID='$data->SubjectID' 
   and forum_question.AdminAccepted=1 
   and Date(forum_question.CreationDate) < cd.IntervalDay) 
   as 'IQuestionCount'
   ,
-  (select count(*) from forum_answer
+  (select count(*) FROM forum_answer
     left join forum_question on forum_answer.QuestionID=forum_question.ID
   where forum_question.SubjectID='$data->SubjectID' 
   and forum_answer.AdminAccepted=1 
   and Date(forum_answer.CreationDate) < cd.IntervalDay) 
   as 'IAnswerCount',
-  (select count(*) from forum_question
+  (select count(*) FROM forum_question
   where forum_question.SubjectID='$data->SubjectID' 
   and forum_question.AdminAccepted=1 
   and Date(forum_question.CreationDate) = cd.IntervalDay) 
   as 'QuestionCount'
   ,
-  (select count(*) from forum_answer
+  (select count(*) FROM forum_answer
     left join forum_question on forum_answer.QuestionID=forum_question.ID
   where forum_question.SubjectID='$data->SubjectID' 
   and forum_answer.AdminAccepted=1 
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
   as 'AnswerCount'
 
-from calendar_day as cd
+FROM calendar_day as cd
 where cd.ID BETWEEN ".($resC['ID'] - 10)." and ".($resC['ID']+1));
 
     $cqData = [];
@@ -1080,9 +1191,9 @@ $app->post('/getLastFollowingQuestions', function() use ($app)  {
     $pageRes['Items'] = [];
 
     $rateSelection =
-        "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
- INTERVAL 7 DAY)) + (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
- (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+        "(SELECT count(*) FROM forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+ INTERVAL 7 DAY)) + (SELECT count(*) FROM forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 FROM question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
     if(isset($data->MainSubjectName)){
@@ -1132,11 +1243,11 @@ FROM subject_follow
         $offset = ($data->pageIndex - 1) * $data->pageSize;
 
         $resQ = $app->db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, ($rateSelection) as Rate,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
  
 (SELECT count(*) FROM question_view where QuestionID = res.ID) 
  as 'ViewCount' ,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=res.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
 FROM (
   (SELECT forum_question.*
@@ -1218,11 +1329,11 @@ LEFT JOIN file_storage on file_storage.ID=u.AvatarID")->fetch_assoc()['Total'];
 
         $resQ = $app->db->makeQuery("SELECT DISTINCT res.* , file_storage.FullPath as Image, u.FullName , u.score, 
 ($rateSelection) as Rate,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=res.ID) as 'AnswersCount' ,
  
 (SELECT count(*) FROM question_view where QuestionID = res.ID) 
  as 'ViewCount' ,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=res.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
 FROM (
   (SELECT forum_question.*
@@ -1265,14 +1376,14 @@ ORDER BY res.CreationDate DESC
 
 $app->post('/getForumBestQuestions', function() use ($app)  {
     $data = json_decode($app->request->getBody());
-    
+
     $sess = $app->session;
     $pr = new Pagination($data);
 
-    $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+    $rateSelection = "(SELECT count(*) FROM forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
- (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
- (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ (SELECT count(*) FROM forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 FROM question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
     if(isset($data->MainSubjectName)){
@@ -1282,13 +1393,13 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
         $offset = $pr->calculateOffset();
 
-        $query = "SELECT q.* from (SELECT u.score,u.FullName,forum_question.`ID`, `QuestionText`, forum_question
+        $query = "SELECT q.* FROM (SELECT u.score,u.FullName,forum_question.`ID`, `QuestionText`, forum_question
         .`Title`, `AuthorID`, `CreationDate`, `FullPath` as Image ,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
    as 'AnswersCount' ,
 (SELECT count(*) FROM question_view where QuestionID = forum_question.ID and forum_question.AdminAccepted=1 ) 
    as 'ViewCount' ,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate,
  (SELECT sum(question_rate.RateValue) FROM question_rate 
@@ -1327,15 +1438,15 @@ $app->post('/getForumBestQuestions', function() use ($app)  {
 
         $offset = $pr->calculateOffset();
 
-        $query = "SELECT q.* from (SELECT u.score,u.FullName,forum_question.`ID`, `QuestionText`, forum_question
+        $query = "SELECT q.* FROM (SELECT u.score,u.FullName,forum_question.`ID`, `QuestionText`, forum_question
         .`Title`, 
         `AuthorID`, `CreationDate`,
 `FullPath` as Image ,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
    as 'AnswersCount' ,
 (SELECT count(*) FROM question_view where QuestionID = forum_question.ID and forum_question.AdminAccepted=1) as 
 'ViewCount' ,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate,
  (SELECT sum(question_rate.RateValue) FROM question_rate where question_rate.QuestionID=forum_question.ID
@@ -1380,10 +1491,10 @@ $app->post('/getForumBestAnswers', function() use ($app)  {
     $sess = $app->session;
     $pr = new Pagination($data);
 
-    $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+    $rateSelection = "(SELECT count(*) FROM forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
- (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
- (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ (SELECT count(*) FROM forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 FROM question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
     $offset = $pr->calculateOffset();
@@ -1394,10 +1505,10 @@ $app->post('/getForumBestAnswers', function() use ($app)  {
 
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
 
-        $query = "SELECT q.* from (SELECT u.score,u.FullName,fq.`ID`,
+        $query = "SELECT q.* FROM (SELECT u.score,u.FullName,fq.`ID`,
 fq.Title, fq.`CreationDate`, fq.BestAnswerID,
 `FullPath` as Image ,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=fq.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate
  ,
@@ -1407,7 +1518,7 @@ fq.Title, fq.`CreationDate`, fq.BestAnswerID,
  Left join forum_answer on forum_answer.ID = answer_rate.AnswerID
  Left join forum_question on forum_question.ID = forum_answer.QuestionID
  where forum_question.ID=fq.ID) as 'AScore',
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=fq.ID and forum_answer.AdminAccepted=1)
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=fq.ID and forum_answer.AdminAccepted=1)
    as 'AnswersCount' 
  FROM forum_question as fq
  inner JOIN forum_answer on fq.BestAnswerID = forum_answer.ID 
@@ -1439,10 +1550,10 @@ fq.Title, fq.`CreationDate`, fq.BestAnswerID,
     }
     else if(isset($data->SubjectID)){
 
-        $query = "SELECT q.* from (SELECT u.score,u.FullName,fq.`ID`,
+        $query = "SELECT q.* FROM (SELECT u.score,u.FullName,fq.`ID`,
 fq.Title, fq.`CreationDate`,
 `FullPath` as Image ,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=fq.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate
  ,
@@ -1453,7 +1564,7 @@ fq.Title, fq.`CreationDate`,
  ,
 (SELECT count(*) FROM question_view where QuestionID = fq.ID and fq.AdminAccepted=1) as 
 'ViewCount' ,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=fq.ID and forum_answer.AdminAccepted=1)
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=fq.ID and forum_answer.AdminAccepted=1)
    as 'AnswersCount' 
  FROM forum_question as fq
  LEFT JOIN forum_answer  on fq.BestAnswerID = forum_answer.ID 
@@ -1494,10 +1605,10 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
     $sess = $app->session;
     $pr = new Pagination($data);
 
-    $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+    $rateSelection = "(SELECT count(*) FROM forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
- (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
- (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ (SELECT count(*) FROM forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 FROM question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
     if(isset($data->MainSubjectName)){
@@ -1507,11 +1618,11 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
         $subjectID= $resQ->fetch_assoc()['SubjectID'];
         $query = "SELECT u.score,u.FullName,forum_question.`ID`, `QuestionText`, forum_question.`Title`, `AuthorID`, `CreationDate`,
 `FullPath` as Image ,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1)
    as 'AnswersCount' ,
 (SELECT count(*) FROM question_view where QuestionID = forum_question.ID and forum_question.AdminAccepted=1) as 
 'ViewCount' ,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' ,
  ($rateSelection) as Rate
  FROM forum_question 
@@ -1519,27 +1630,30 @@ $app->post('/getForumLastQuestions', function() use ($app)  {
  LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
  WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' 
- order by forum_question.CreationDate desc";
+ ORDER by forum_question.CreationDate desc";
 
         $pageRes = $pr->getPage($app->db,$query);
         echoResponse(200, $pageRes);
+//        echoResponse(200, $query);
     }
     else if(isset($data->SubjectID)){
 
         $query = "SELECT u.FullName ,u.score,forum_question.`ID` ,`QuestionText`, forum_question.`Title`, `AuthorID`, 
         `CreationDate`,
 `FullPath` as Image ,($rateSelection) as Rate,
- (SELECT count(*) from forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1) as 'AnswersCount' ,
+ (SELECT count(*) FROM forum_answer where forum_answer.QuestionID=forum_question.ID and forum_answer.AdminAccepted=1) as 'AnswersCount' ,
 (SELECT count(*) FROM question_view where QuestionID = forum_question.ID and forum_question.AdminAccepted=1) as 'ViewCount' ,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID' 
  FROM forum_question LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on 
 file_storage.ID=u.AvatarID LEFT  JOIN forum_subject on forum_subject.ID=forum_question.SubjectID WHERE forum_question
 .AdminAccepted='1' 
-AND forum_question.SubjectID='$data->SubjectID' order by forum_question.CreationDate desc";
+AND forum_question.SubjectID='$data->SubjectID' ORDER by forum_question.CreationDate desc";
 
         $pageRes = $pr->getPage($app->db,$query);
         echoResponse(200, $pageRes);
+//
+//        echoResponse(200, $query);
     }
 
     echoError('Subject ID is not found.');
@@ -1553,10 +1667,10 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
     $sess= $app->session;
     $pr = new Pagination($data);
 
-    $rateSelection = "(SELECT count(*) from forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
+    $rateSelection = "(SELECT count(*) FROM forum_question where forum_question.AuthorID=u.ID and (forum_question.CreationDate > NOW() - 
  INTERVAL 7 DAY))+
- (SELECT count(*) from forum_answer where forum_answer.AuthorID=u.ID)+
- (SELECT count(*)/2 from question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
+ (SELECT count(*) FROM forum_answer where forum_answer.AuthorID=u.ID)+
+ (SELECT count(*)/2 FROM question_view where question_view.UserID=u.ID and (question_view.ViewDate > NOW() - 
  INTERVAL 7 DAY))";
 
     if(isset($data->MainSubjectName)){
@@ -1568,14 +1682,14 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
  forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount,
 (SELECT count(*) FROM question_view where QuestionID = forum_question.ID) as 'ViewCount' ,
  ($rateSelection) as Rate,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
   FROM forum_question 
  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=u.AvatarID 
  LEFT JOIN forum_subject on forum_subject.ID=forum_question.SubjectID 
- LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID from forum_answer group by forum_answer.QuestionID) s on 
+ LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID FROM forum_answer group by forum_answer.QuestionID) s on 
  s.QuestionID=forum_question.ID 
- WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' AND s.AnswersCount > 0 order 
+ WHERE forum_question.AdminAccepted='1' AND forum_subject.ParentSubjectID='$subjectID' AND s.AnswersCount > 0 ORDER 
  by s.AnswersCount 
  desc";
 
@@ -1588,13 +1702,13 @@ $app->post('/getLastForumAnsweredQuestions', function() use ($app)  {
  forum_question.`CreationDate`,`FullPath` as Image ,s.AnswersCount ,
 (SELECT count(*) FROM question_view where QuestionID = forum_question.ID) as 'ViewCount' ,
 ($rateSelection) as Rate,
- (SELECT question_view.ID from question_view 
+ (SELECT question_view.ID FROM question_view 
         where question_view.QuestionID=forum_question.ID AND question_view.UserID=$sess->UserID LIMIT 1) as 'QViewID'
  FROM forum_question 
  LEFT JOIN user as u on u.ID=forum_question.AuthorID LEFT JOIN file_storage on file_storage.ID=u.AvatarID
- LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID from forum_answer group by forum_answer.QuestionID) s on 
+ LEFT JOIN (select count(*) as AnswersCount ,forum_answer.QuestionID FROM forum_answer group by forum_answer.QuestionID) s on 
  s.QuestionID=forum_question.ID 
- WHERE forum_question.AdminAccepted='1' AND forum_question.SubjectID='$data->SubjectID' AND s.AnswersCount > 0 order 
+ WHERE forum_question.AdminAccepted='1' AND forum_question.SubjectID='$data->SubjectID' AND s.AnswersCount > 0 ORDER 
  by s.AnswersCount 
  desc";
 
@@ -1617,7 +1731,7 @@ $app->post('/getUserProfile', function() use ($app)  {
 
 
     $resQ = $app->db->makeQuery("SELECT user.`ID`,user.Description, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, 
-    `SignupDate`,
+    `SignupDate`,IsContractor,
  `Gender` , FullPath as AvatarImagePath ,
  (SELECT count(*) FROM forum_question where forum_question.AuthorID='$sess->UserID') as QuestionsCount,
  (SELECT count(*) FROM forum_answer where forum_answer.AuthorID='$sess->UserID') as AnswersCount,
@@ -1645,7 +1759,7 @@ $app->post('/getProfile', function() use ($app)  {
     if(!$r->TargetUserID)
         echoError('bad request');
 
-    $resQ =$app->db->makeQuery("select count(*) as val from user where ID = '$r->TargetUserID' and UserAccepted = 1");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM user where ID = '$r->TargetUserID' and UserAccepted = 1");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
         {echoError('not found');}
@@ -1654,13 +1768,13 @@ $app->post('/getProfile', function() use ($app)  {
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
 (SELECT count(*) FROM person_follow where TargetUserID = '$r->TargetUserID' and UserID = '$session->UserID' ) as PersonFollow
-from user as u
+FROM user as u
 inner join file_storage as f on f.ID = u.AvatarID
 left join organ_position as o on u.OrganizationID = o.ID
 where u.UserAccepted = 1 and u.ID = '$r->TargetUserID'");
 
     $resp = $resQ->fetch_assoc();
-    $resQ = $app->db->makeQuery("select distinct s.Skill from skill as s
+    $resQ = $app->db->makeQuery("select distinct s.Skill FROM skill as s
 inner join user_skill as us on us.UserID = s.ID
 where us.UserID = '$session->UserID'");
 
@@ -1669,46 +1783,46 @@ where us.UserID = '$session->UserID'");
             $skills[] = $item;
     $resp['Skills'] = $skills;
 
-    $resQ = $app->db->makeQuery("select * from forum_question as q where q.AuthorID = '$r->TargetUserID' order by q.CreationDate desc");
+    $resQ = $app->db->makeQuery("select * FROM forum_question as q where q.AuthorID = '$r->TargetUserID' ORDER by q.CreationDate desc");
 
     $resp['LastQuestion'] = $resQ->fetch_assoc();
 
     $resQ = $app->db->makeQuery("select q.* ,(SELECT sum(RateValue) FROM question_rate where QuestionID = q.ID) as QuestionRate
-from forum_question as q
+FROM forum_question as q
 where q.AuthorID = '$r->TargetUserID' and q.AdminAccepted = 1
-order by QuestionRate desc
+ORDER by QuestionRate desc
 ");
 
     $resp['BestQuestion'] = $resQ->fetch_assoc();
 
     $curDate = date('Y-m-d');
-    $resCQ = $app->db->makeQuery("select * from calendar_day where calendar_day.IntervalDay='$curDate'");
+    $resCQ = $app->db->makeQuery("select * FROM calendar_day where calendar_day.IntervalDay='$curDate'");
     $cid  = $resCQ->fetch_assoc()['ID'];
 
     $resQ = $app->db->makeQuery("
 
 SELECT cd.IntervalDay as date,
-  (select count(*) from forum_question
+  (select count(*) FROM forum_question
   where forum_question.AuthorID='$r->TargetUserID' 
   and forum_question.AdminAccepted=1 
   and Date(forum_question.CreationDate) = cd.IntervalDay) as QuestionCount
   ,
-  (select count(*) from forum_answer
+  (select count(*) FROM forum_answer
   where forum_answer.AuthorID='$r->TargetUserID' 
   and forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) = cd.IntervalDay) 
   as AnswerCount,
-  (select count(*) from forum_question
+  (select count(*) FROM forum_question
   where forum_question.AuthorID='$r->TargetUserID' 
   and forum_question.AdminAccepted=1 
   and Date(forum_question.CreationDate) < cd.IntervalDay) as IQuestionCount
   ,
-  (select count(*) from forum_answer
+  (select count(*) FROM forum_answer
   where forum_answer.AuthorID='$r->TargetUserID' 
   and forum_answer.AdminAccepted=1
   and Date(forum_answer.CreationDate) < cd.IntervalDay) 
   as IAnswerCount
-from calendar_day as cd
+FROM calendar_day as cd
 where cd.ID BETWEEN ".($cid - 20)." and ".($cid+1));
 
     $cqData = [];
@@ -1729,7 +1843,7 @@ $app->post('/getAdminPostID', function() use ($app)  {
         {echoError('bad request');}
 
 
-    $resQ =$app->db->makeQuery("select count(*) as val from admin_post where ID = '$r->AdminPostID'");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM admin_post where ID = '$r->AdminPostID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
         {echoError('not fount');}
@@ -1737,7 +1851,7 @@ $app->post('/getAdminPostID', function() use ($app)  {
     $resQ = $app->db->makeQuery("select q.* , u.FullName ,u.ID as UserID, u.Email ,u.score, u.Description , f.FullPath ,s.Title as Subject,ms.Title as MainSubject , ms.SubjectName , o.OrganizationName ,
 (SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
 (SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount
-from admin_post as q
+FROM admin_post as q
 inner join user as u on u.ID = q.AuthorID
 inner join file_storage as f on f.ID = u.AvatarID
 inner join forum_subject as s on q.SubjectID = s.ID
@@ -1746,7 +1860,7 @@ inner join organ_position as o on u.OrganizationID = o.ID
 where q.ID = '$r->AdminPostID' and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
-    $resQ = $app->db->makeQuery("select fs.*,ft.GeneralType from admin_post_attachment as qt
+    $resQ = $app->db->makeQuery("select fs.*,ft.GeneralType FROM admin_post_attachment as qt
 inner join file_storage as fs on fs.ID = qt.FileID
 left join file_type as ft on ft.ID=fs.FileTypeID
 where qt.AdminPostID='$r->AdminPostID'");
@@ -1768,12 +1882,12 @@ $app->post('/getQuestionByID', function() use ($app)  {
         {echoError('bad request');}
 
 
-    $resQ =$app->db->makeQuery("select count(*) as val from forum_question where ID = '$r->QuestionID' and AdminAccepted = 1");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM forum_question where ID = '$r->QuestionID' and AdminAccepted = 1");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
         {echoError('not fount');}
 
-    $resQ =$app->db->makeQuery("select count(*) as val from question_view where UserID = '$r->UserID' and QuestionID = '$r->QuestionID'");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM question_view where UserID = '$r->UserID' and QuestionID = '$r->QuestionID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)
         {$resQ =$app->db->makeQuery("insert into question_view (UserID, QuestionID , ViewDate) values ('$r->UserID','$r->QuestionID',now())");}
@@ -1786,7 +1900,7 @@ $app->post('/getQuestionByID', function() use ($app)  {
 (SELECT count(*) FROM question_follow where QuestionID = q.ID) as FollowCount ,
 (SELECT sum(RateValue) FROM question_rate where QuestionID = q.ID) as QuestionScore ,
 (SELECT count(*) FROM question_follow where QuestionID = q.ID and UserID = '$r->UserID') as PersonFollow
-from forum_question as q
+FROM forum_question as q
 inner join user as u on u.ID = q.AuthorID
 inner join file_storage as f on f.ID = u.AvatarID
 inner join forum_subject as s on q.SubjectID = s.ID
@@ -1797,7 +1911,7 @@ left join user as aqu on aq.AwardedUserID = aqu.ID
 where q.ID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ");
 
     $resp = $resQ->fetch_assoc();
-    $resQ = $app->db->makeQuery("select fs.*,ft.GeneralType from question_attachment as qt
+    $resQ = $app->db->makeQuery("select fs.*,ft.GeneralType FROM question_attachment as qt
 inner join file_storage as fs on fs.ID = qt.FileID
 left join file_type as ft on ft.ID=fs.FileTypeID
 where qt.QuestionID='$r->QuestionID'");
@@ -1807,7 +1921,7 @@ where qt.QuestionID='$r->QuestionID'");
         $aAtt[] = $item;
     $resp['Attachments'] = $aAtt;
 
-    $resQ = $app->db->makeQuery("select t.* from tag as t
+    $resQ = $app->db->makeQuery("select t.* FROM tag as t
 inner join tag_question as tg on tg.tagID = t.ID
 where tg.QuestionID = '$r->QuestionID'");
 
@@ -1834,17 +1948,17 @@ where lq.TargetQuestionID = '$r->QuestionID'");
 (SELECT sum(RateValue) FROM answer_rate where AnswerID = a.ID) as AnswerScore ,
 (SELECT count(*) FROM person_follow where TargetUserID = a.AuthorID and UserID = '$r->UserID') as PersonFollow,
 (SELECT count(*) FROM forum_question as qst where qst.ID = '$r->QuestionID' and qst.BestAnswerID = a.ID) as BestAnswer
-from forum_answer as a
+FROM forum_answer as a
 inner join user as u on u.ID = a.AuthorID
 inner join file_storage as f on f.ID = u.AvatarID
 left join organ_position as o on u.OrganizationID = o.ID
-where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 order by a.CreationDate");
+where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ORDER by a.CreationDate");
 
     $Answers = [];
     while($item = $resQ->fetch_assoc()){
         $aID = $item['ID'];
 
-        $resaQ = $app->db->makeQuery("select fs.*,ft.GeneralType from answer_attachment as att
+        $resaQ = $app->db->makeQuery("select fs.*,ft.GeneralType FROM answer_attachment as att
 inner join file_storage as fs on fs.ID = att.FileID
 left join file_type as ft on ft.ID=fs.FileTypeID
 where att.AnswerID='$aID'");
@@ -1869,7 +1983,7 @@ $app->post('/followMainSubject', function() use ($app)  {
     if(!isset($data->MainSubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$app->db->makeQuery("select count(*) as val from main_subject_follow where UserID = '$sess->UserID' and MainSubjectID = '$data->MainSubjectID'");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM main_subject_follow where UserID = '$sess->UserID' and MainSubjectID = '$data->MainSubjectID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
         {echoError('you followed this main subject erlier');return;}
@@ -1884,7 +1998,7 @@ $app->post('/followQuestion', function() use ($app)  {
     if(!isset($data->UserID) || !isset($data->QuestionID)|| !isset($data->AuthorID) )
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$app->db->makeQuery("select count(*) as val from question_follow where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM question_follow where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
     {echoError('you followed this question erlier');return;}
@@ -1902,7 +2016,7 @@ $app->post('/followPerson', function() use ($app)  {
     if(!isset($data->UserID) || !isset($data->TargetUserID))
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$app->db->makeQuery("select count(*) as val from person_follow where UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM person_follow where UserID = '$data->UserID' and TargetUserID = '$data->TargetUserID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
         {echoError('you followed this question erlier');return;}
@@ -1920,7 +2034,7 @@ $app->post('/followSubject', function() use ($app)  {
     if( !isset($data->SubjectID))
         {echoResponse(201, 'bad request');return;}
 
-    $resQ =$app->db->makeQuery("select count(*) as val from subject_follow where UserID = '$sess->UserID' and SubjectID = '$data->SubjectID'");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM subject_follow where UserID = '$sess->UserID' and SubjectID = '$data->SubjectID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
         {echoError('you followed this subject erlier');return;}
@@ -1986,7 +2100,7 @@ $app->post('/rateQuestion', function() use ($app)  {
     else if($data->RateValue < -1)
         $data->RateValue = -1;
 
-    $resQ =$app->db->makeQuery("select count(*) as val from question_rate where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM question_rate where UserID = '$data->UserID' and QuestionID = '$data->QuestionID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
     {
@@ -2019,7 +2133,7 @@ $app->post('/rateAnswer', function() use ($app)  {
     else if($data->RateValue < -1)
         $data->RateValue = -1;
 
-    $resQ =$app->db->makeQuery("select count(*) as val from answer_rate where UserID = '$data->UserID' and AnswerID = '$data->AnswerID'");
+    $resQ =$app->db->makeQuery("select count(*) as val FROM answer_rate where UserID = '$data->UserID' and AnswerID = '$data->AnswerID'");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] > 0)
     {
@@ -2049,7 +2163,7 @@ $app->post('/saveAnswer', function() use ($app)  {
         {echoResponse(201, 'bad Request');return;}
 
     $aID = -1;
-    if($sess->IsAdmin)
+    if($sess->IsAdmin && $sess->AdminPermissionLevel !="OrganAdmin")
     {
         $aID = $app->db->insertToTable('forum_answer',"AuthorID,QuestionID,AnswerText,CreationDate,AdminAccepted",
             "'$sess->UserID','$data->QuestionID','$data->AnswerText',now(),1",true);
@@ -2075,7 +2189,7 @@ $app->post('/saveAnswer', function() use ($app)  {
             $destination ='content/user_upload/'.$rand.'.'.$ext;
             $uploadSuccess = move_uploaded_file( $file['tmp_name'] , '../../'.$destination );
             if($uploadSuccess){
-                $fileTypeQ = $app->db->makeQuery("select file_type.ID from file_type where file_type.TypeName='$ext'");
+                $fileTypeQ = $app->db->makeQuery("select file_type.ID FROM file_type where file_type.TypeName='$ext'");
 
                 $fileTypeID = -1;
                 if(mysqli_num_rows($fileTypeQ) > 0)
@@ -2158,7 +2272,7 @@ $app->post('/saveUserInfo', function() use ($app)  {
 
     $sess = $app->session;
 
-    $resQ = $app->db->makeQuery("select 1 from user where Email='$data->Email' and ID!='$sess->UserID' LIMIT 1");
+    $resQ = $app->db->makeQuery("select 1 FROM user where Email='$data->Email' and ID!='$sess->UserID' LIMIT 1");
     $count = mysqli_num_rows($resQ);
     if($count > 0){
         echoError("EmailExists");
@@ -2178,7 +2292,7 @@ $app->post('/saveUserInfo', function() use ($app)  {
             echoError("PasswordIsNotValid");
         }
 
-        $userPassword = $app->db->makeQuery("SELECT user.Password from user where user.ID='$sess->UserID'")->fetch_assoc()['Password'];
+        $userPassword = $app->db->makeQuery("SELECT user.Password FROM user where user.ID='$sess->UserID'")->fetch_assoc()['Password'];
         if(passwordHash::check_password($userPassword,$data->OldPassword)){
 
             $pass = passwordHash::hash($data->Password);
@@ -2246,7 +2360,7 @@ $app->post('/deleteBestAnswer', function() use ($app)  {
     if(!isset($data->QuestionID))
         {echoResponse(201, 'bad Request');return;}
 
-                        $resQ = $app->db->makeQuery("select a.ID from user as u
+                        $resQ = $app->db->makeQuery("select a.ID FROM user as u
 INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
 WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
@@ -2279,7 +2393,7 @@ $app->post('/setBestAnswer', function() use ($app)  {
 
     if(!isset($data->QuestionID) || !isset($data->AnswerID))
         {echoResponse(201, 'badd Request');return;}
-$resQ = $app->db->makeQuery("select a.ID from user as u
+$resQ = $app->db->makeQuery("select a.ID FROM user as u
 INNER JOIN admin as a on a.UserID = u.ID
 INNER JOIN admin_permission ap on ap.ID = a.PermissionID
 WHERE a.UserID = '$sess->UserID' and (ap.PermissionLevel = 'Base' or ap.PermissionLevel = '$sess->AdminPermissionLevel')
@@ -2312,7 +2426,7 @@ $app->post('/getUserTimeline', function() use ($app)  {
     $session = $app->session;
     $offset = $p->calculateOffset();
 
-    $total = $app->db->makeQuery("select count(*) as Total from event 
+    $total = $app->db->makeQuery("select count(*) as Total FROM event 
 where event.EventUserID='$session->UserID'")->fetch_assoc()['Total'];
 
     $resQ = $app->db->makeQuery("
@@ -2321,13 +2435,13 @@ select
   user.FullName , file_storage.FullPath ,event.EventSeen ,event_type.EventType ,
    event.EventCauseID ,event_type.HasQuestion, forum_question.Title ,forum_question.QuestionText ,
     forum_question.ID as QuestionID , event.EventTypeID
-from event
+FROM event
   left join user on user.ID=event.EventCauseID
   left join file_storage on file_storage.ID=user.AvatarID
   left join event_type on event_type.ID=event.EventTypeID
   left join forum_question on forum_question.ID=event.EvenLinkID
 where event.EventUserID='$session->UserID'
-order by Date(event.EventDate) desc
+ORDER by Date(event.EventDate) desc
 limit $offset,$data->pageSize");
 
     $cqData = [];
@@ -2357,7 +2471,7 @@ limit $offset,$data->pageSize");
         $dateItem['EventTypeID'] = '-1';
         $dateItem['EventType'] = 'SU';
         $dateItem['User'] =
-            $app->db->makeQuery("select user.SignupDate from user where ID='$session->UserID'")->fetch_assoc();
+            $app->db->makeQuery("select user.SignupDate FROM user where ID='$session->UserID'")->fetch_assoc();
         array_push($cqData, $dateItem);
     }
 
@@ -2377,7 +2491,7 @@ $app->post('/getAllAdminsForAbout', function() use ($app)  {
     $resQ = $app->db->makeQuery("
 select user.FullName, user.Username , user.Email , user.PhoneNumber , user.Tel ,admin.UserID,
 forum_main_subject.Title , admin_permission.PermissionLevel,forum_main_subject.SubjectName
-from user
+FROM user
 inner join admin on admin.UserID=user.ID
 left join admin_permission on admin_permission.ID=admin.PermissionID
 left join forum_main_subject on forum_main_subject.SubjectID=admin_permission.MainSubjectID");

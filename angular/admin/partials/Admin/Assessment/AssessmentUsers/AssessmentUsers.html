@@ -1,0 +1,314 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small> لیست پیمانکاران</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/dashboard"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">همه پیمانکاران</li>
+    </ol>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">فیلتر کردن پیمانکاران</h3>
+
+                </div><!-- /.box-header -->
+                <div class="box-body" dir="rtl">
+                    <div class="col-xs-4 pull-right">
+                        <input type="text" name="table_search" ng-model="pagingParams.searchValue"
+                               ng-model-options="{debounce:1000}" ng-change="search()" class="form-control input-sm"
+                               placeholder="جستجو ...">
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+        <div class="col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">پیمانکاران </h3>
+                    <h3 class="box-title vazir-font pull-left">تعداد {{allTotal | pNumber}}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>شماره</th>
+                            <th>نام کامل</th>
+                            <th>ناحیه</th>
+                            <th>تاریخ عضویت</th>
+                            <th>تلفن سازمانی</th>
+                            <th>ایمیل</th>
+                            <th style="width: 25px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in user.all">
+                            <td>{{u.ID| pNumber}}</td>
+                            <td>{{u.FullName| pNumber}}</td>
+                            <td>{{u.OrganizationName| pNumber}}</td>
+                            <td>{{u.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
+                            <td>{{u.Tel| pNumber}}</td>
+                            <td>{{u.Email}}</td>
+                            <td>
+                                <div class="table-action-icons"
+                                     ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin'">
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openUserModal(u)"
+                                       title="جزئیات پیمانکار" data-toggle="tooltip" data-placement="top"
+                                       tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
+                                       tooltip-append-to-body="true"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+                    <auto-paging page="1"
+                                 page-size="20"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="Assessment/getAllUsers"
+                                 data-params="pagingParams"
+                                 total-items="allTotal"
+                                 ng-control="pagingController"
+                                 items="user.all">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+
+<script type="text/ng-template" id="UserDetail.html">
+    <div id="assessment_print_area">
+        <div class="modal-header">
+            <h3 class="modal-title text-right">{{user.FullName |subString :40|pNumber}}
+                <img class="img-circle" ng-src="{{user.FullPath}}" style="width: 40px;"></h3>
+        </div>
+        <div class="modal-body form">
+            <div class="row" dir="rtl">
+                <div class="form-group col-xs-6">
+                    <div class="col-xs-5 pull-right">
+                        <span class="english-font">نام :</span>
+                    </div>
+                    <div class="col-xs-7">
+                        <a class="link">
+                            {{user.FullName | subString :40|pNumber}}&nbsp;&nbsp;
+                            <small ng-show="user.Gender==0"><i class="fa fa-mars"></i></small>
+                            <small ng-hide="user.Gender==0"><i class="fa fa-venus"></i></small>
+                        </a>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <div class="col-xs-5 pull-right">
+                        ایمیل :
+                    </div>
+                    <div class="col-xs-7 text-muted">
+                        {{user.Email | pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <div class="col-xs-5 pull-right">
+                        شماره موبایل :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.PhoneNumber | pNumber}}
+                    </div>
+                </div>
+                <div ng-if="user.Tel" class="form-group col-xs-6">
+                    <div class="col-xs-5 pull-right">
+                        شماره ثابت :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.Tel | pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <div class="col-xs-5 pull-right">
+                        تاریخ عضویت :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <div class="col-xs-5 pull-right">
+                        ناحیه :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.OrganizationName | pNumber}}
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row persian-rtl" dir="rtl">
+                <div class="form-group col-xs-6" ng-if="user.Assessment.AssessmentEducationName">
+                    <div class="col-xs-5 pull-right">
+                        رشته تحصیلی :
+                    </div>
+                    <div class="col-xs-7 text-muted">
+                        {{user.Assessment.AssessmentEducationName | pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6" ng-if="user.Assessment.NameFA">
+                    <div class="col-xs-5 pull-right">
+                        مدرک تحصیلی :
+                    </div>
+                    <div class="col-xs-7 text-muted">
+                        {{user.Assessment.NameFA | pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6" ng-if="user.Assessment.JobRecord">
+                    <div class="col-xs-5 pull-right">
+                        سابقه کار در ارتباطات :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.Assessment.JobRecord | pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6" ng-if="user.Assessment.JobExperience">
+                    <div class="col-xs-5 pull-right">
+                        تخصص و تجارب فنی :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.Assessment.JobExperience | pNumber}}
+                    </div>
+                </div>
+                <div  ng-if="user.Assessment.BrithDate" class="form-group col-xs-6">
+                    <div class="col-xs-5 pull-right">
+                        سال تولد :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.Assessment.BrithDate | pNumber}}
+                    </div>
+                </div>
+                <div ng-if="user.AssessmentPositions && user.AssessmentPositions.length>0"
+                     ng-repeat="position in user.AssessmentPositions" class="form-group col-xs-6">
+                    <div class="col-xs-5 pull-right">
+                        نواحی مشغول بکار {{$index +1}} :
+                    </div>
+                    <div class="col-xs-7">
+                        {{position.OrganizationName| pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6" ng-if="user.Assessment.OrganizationName">
+                    <div class="col-xs-5 pull-right">
+                        ناحیه فعلی مشغول به کار :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.Assessment.OrganizationName | pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6" ng-if="user.Assessment.Depo1Name">
+                    <div class="col-xs-5 pull-right">
+                        دپو 1 :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.Assessment.Depo1Name | pNumber}}
+                    </div>
+                </div>
+                <div class="form-group col-xs-6" ng-if="user.Assessment.Depo2Name">
+                    <div class="col-xs-5 pull-right">
+                        دپو 2 :
+                    </div>
+                    <div class="col-xs-7">
+                        {{user.Assessment.Depo2Name | pNumber}}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <table class="table table-hover">
+                    <tbody>
+                    <tr>
+                        <th>تاریخ شروع</th>
+                        <th>تاریخ پایان</th>
+                        <th>شرکت پیمانکار</th>
+                        <th>ناحیه</th>
+                        <th>عنوان شغلی</th>
+                    </tr>
+                    <tr ng-repeat="u in user.AssessmentJobInfo">
+                        <td>
+                            {{u.StartDate | jalaliDateSimple :'jYYYY/jMM/jDD' | pNumber}}
+                        </td>
+                        <td>
+                            {{u.EndDate | jalaliDateSimple :'jYYYY/jMM/jDD' | pNumber}}
+                        </td>
+                        <td>{{u.ContractorCompany | pNumber}}</td>
+                        <td>
+                            {{u.OrganizationName | pNumber}}
+                        </td>
+                        <td>
+                            {{u.JobTitle | pNumber}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+
+                <table class="table table-hover">
+                    <tbody>
+                    <tr>
+                        <th>نام سیستم یا تجهیز</th>
+                        <th>نوع سیستم / دستگاه	</th>
+                        <th>مدت دوره آموزشی (ساعت)</th>
+                        <th>امتیازخود ارزیابی</th>
+                        <th>توضیحات</th>
+                        <th>امتیاز کارشناس</th>
+                    </tr>
+                    <tr ng-repeat="u in user.SystemExperienceDef">
+                        <td>
+                            {{u.SystemName | pNumber}}
+                        </td>
+                        <td>
+                            {{u.SystemType | pNumber}}
+                        </td>
+                        <td>{{u.TrainingTime | pNumber}}</td>
+                        <td>
+                            {{u.SelfScore | pNumber}}
+                        </td>
+                        <td>
+                            {{u.Description | pNumber}}
+                        </td>
+                        <td>
+                            {{u.Score | pNumber}}
+                        </td>
+                    </tr>
+                    <tr ng-repeat="u in user.SystemExperience">
+                        <td>
+                            {{u.SystemName | pNumber}}
+                        </td>
+                        <td>
+                            {{u.SystemType | pNumber}}
+                        </td>
+                        <td>{{u.TrainingTime | pNumber}}</td>
+                        <td>
+                            {{u.SelfScore | pNumber}}
+                        </td>
+                        <td>
+                            {{u.Description | pNumber}}
+                        </td>
+                        <td>
+                            {{u.Score | pNumber}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning btn-flat pull-left" type="button" ng-click="cancel()">بستن</button>
+        <button class="btn btn-primary btn-flat pull-right" csv-label="true"
+                ng-csv="userPrintData" filename="{{user.FullName}}.csv" add-bom="UTF-8"
+                type="button"><span class="fa fa-print"></span>&nbsp;&nbsp; پرینت</button>
+    </div>
+</script>
+
+
+

@@ -64,7 +64,7 @@
         <div class="col-xs-12">
             <div class="box box-danger">
                 <div class="box-header">
-                    <h3 class="box-title vazir-font">اعضا</h3>
+                    <h3 class="box-title vazir-font">اعضا <small style="background: powderblue">کاربران با این رنگ دارای خود ارزیابی هستند</small></h3>
                     <h3 class="box-title vazir-font pull-left">تعداد {{allTotal | pNumber}}</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
@@ -80,7 +80,7 @@
                             <th>وضعیت ایمیل</th>
                             <th style="width: 150px;"></th>
                         </tr>
-                        <tr ng-repeat="u in user.all">
+                        <tr ng-repeat="u in user.all" ng-style="(u.HaveAssessment ==1)?{'background':'powderblue'}:{}">
                             <td>{{u.ID| pNumber}}</td>
                             <td>{{u.FullName| pNumber}}</td>
                             <td>{{u.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>

@@ -2,7 +2,7 @@
 <section class="content-header">
     <h1 class="content-header vazir-font">
         <small>مدیریت</small>
-       پروفایل من
+        پروفایل من
     </h1>
 
     <ol class="breadcrumb">
@@ -11,7 +11,7 @@
     </ol>
 </section>
 
-<script  id="cropModal.html" type="text/ng-template">
+<script id="cropModal.html" type="text/ng-template">
     <div class="modal-header">
         <h3 class="modal-title">حاشیه برداری تصویر</h3>
     </div>
@@ -29,7 +29,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success btn-flat pull-left" ng-click="changeAvatar()">تایید و تغییر تصویر پروفایل</button>
+        <button class="btn btn-success btn-flat pull-left" ng-click="changeAvatar()">تایید و تغییر تصویر پروفایل
+        </button>
         <button class="btn btn-warning btn-flat pull-right" ng-click="cancel()">بازگشت</button>
     </div>
 </script>
@@ -45,7 +46,9 @@
                     <li class="link" ng-class="(activeTab == 3)?'active':''">
                         <a ng-click="getTab(3)" data-toggle="tab" aria-expanded="false">
                             <small class="badge bg-red" style="margin-top: -3px;margin-right: 8px"
-                              ng-show="curUser.Educations.length==0||curUser.Skills.length==0||!curUser.Description">ناقص</small>
+                                   ng-show="curUser.Educations.length==0||curUser.Skills.length==0||!curUser.Description">
+                                ناقص
+                            </small>
                             اطلاعات تکمیلی
                         </a>
                     </li>
@@ -60,12 +63,15 @@
                     </li>
                     <li class="link" ng-class="(activeTab == 0)?'active':''">
                         <a ng-click="getTab(0)" data-toggle="tab"
-                    aria-expanded="false">تایم لاین</a>
+                           aria-expanded="false">تایم لاین</a>
                     </li>
-
+                    <li class="link" ng-class="(activeTab == 4)?'active':''">
+                        <a ng-click="getTab(4)" data-toggle="tab"
+                           aria-expanded="false">خود ارزیابی</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane" ng-class="(activeTab == 0)?'active':''" >
+                    <div class="tab-pane" ng-class="(activeTab == 0)?'active':''">
                         <!-- The timeline -->
                         <ul class="timeline timeline-inverse">
                             <!-- timeline time label -->
@@ -84,8 +90,8 @@
                                         {{item.EventDateTime | jalaliDate : 'jYYYY/jMM/jDD' | pNumber}}
                                     </span>
                                     <h3 class="timeline-header persian-rtl">
-                                        <img  class="img-circle" ng-src="{{item.FullPath}}"
-                                              style="width:27px" err-src="../images/Avatar.jpg">
+                                        <img class="img-circle" ng-src="{{item.FullPath}}"
+                                             style="width:27px" err-src="../images/Avatar.jpg">
                                         <a ui-sref="UserProfile({id:'{{item.EventCauseID}}'})">{{item.FullName}}</a>
                                         <span style="font-size: 12px">{{item.EventTypeFA}}</span>
                                     </h3>
@@ -110,17 +116,18 @@
 
                                 <div class="timeline-item" ng-switch-when="SU" style="margin-right: 70px">
                                     <div class="timeline-body row"
-                                         style="height: 100px;" >
+                                         style="height: 100px;">
                                         <div class="col-xs-12 text-center">
-                                            <img  class="img-circle" ng-src="{{user.Image}}" err-src="../images/Avatar.jpg"
-                                                  style="width:50px;border: solid 3px #f1c40f;margin-bottom: 8px">
+                                            <img class="img-circle" ng-src="{{user.Image}}"
+                                                 err-src="../images/Avatar.jpg"
+                                                 style="width:50px;border: solid 3px #f1c40f;margin-bottom: 8px">
                                         </div>
                                         <div class="col-xs-12">
                                             <div class="text-center persian-rtl">
                                                 <span>شما در تاریخ </span>
                                                 <b
-                                                ng-bind="item.User.SignupDate | jalaliDateSimple : 'HH:MM jYYYY/jMM/jDD' | pNumber"
-                                                class="text-blue">
+                                                        ng-bind="item.User.SignupDate | jalaliDateSimple : 'HH:MM jYYYY/jMM/jDD' | pNumber"
+                                                        class="text-blue">
 
                                                 </b>
                                                 <span>ثبت نام کردید.</span>
@@ -145,7 +152,7 @@
                             </auto-paging>
                         </div>
                     </div><!-- /.tab-pane -->
-                    <div class="tab-pane" ng-class="(activeTab == 1)?'active':''" style="margin: -10px;" >
+                    <div class="tab-pane" ng-class="(activeTab == 1)?'active':''" style="margin: -10px;">
                         <div class="table-responsive">
                             <table class="table table-hover border-bottom-table" style="margin-bottom: 0">
                                 <tbody>
@@ -172,7 +179,7 @@
                             </table>
                         </div>
                     </div><!-- /.tab-pane -->
-                    <div class="tab-pane row" ng-class="(activeTab == 2)?'active':''" >
+                    <div class="tab-pane row" ng-class="(activeTab == 2)?'active':''">
                         <form class="form-horizontal col-md-9 col-xs-12 pull-right" style="direction: rtl">
                             <div class="form-group">
                                 <div class="col-sm-9">
@@ -183,14 +190,17 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <input type="email" ng-model="curUser.Email" class="form-control" id="inputEmail" placeholder="ایمیل ... ">
+                                    <input type="email" ng-model="curUser.Email" class="form-control" id="inputEmail"
+                                           placeholder="ایمیل ... ">
                                 </div>
                                 <label for="inputEmail" class="col-sm-3 control-label">ایمیل</label>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <ui-select ng-model="Position.selected" theme="bootstrap" sortable="true" close-on-select="true" required>
-                                        <ui-select-match placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
+                                    <ui-select ng-model="Position.selected" theme="bootstrap" sortable="true"
+                                               close-on-select="true" required>
+                                        <ui-select-match placeholder="منطقه">{{Position.selected.OrganizationName}}
+                                        </ui-select-match>
                                         <ui-select-choices repeat="edu in allPositions">
                                             <div compile="edu.OrganizationName | highlight: $select.search"></div>
                                         </ui-select-choices>
@@ -242,19 +252,22 @@
                             <div class="form-group">
                                 <div class="col-sm-9" ng-class="(isEqualWithVerify)?'':'has-error'">
                                     <input type="password" ng-model="curUser.VerifyPassword" class="form-control"
-                                           id="passVerify" ng-change="passwordChanged()" ng-model-options="{debounce:100}"
+                                           id="passVerify" ng-change="passwordChanged()"
+                                           ng-model-options="{debounce:100}"
                                            placeholder="تکرار رمز جدید ...">
                                 </div>
                                 <label for="passVerify" class="col-sm-3 control-label">تکرار رمز جدید</label>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <button type="submit" ng-click="saveUserInfo()" class="btn btn-success pull-left">بروزرسانی</button>
+                                    <button type="submit" ng-click="saveUserInfo()" class="btn btn-success pull-left">
+                                        بروزرسانی
+                                    </button>
                                 </div>
                             </div>
                         </form>
                     </div><!-- /.tab-pane -->
-                    <div class="tab-pane row" ng-class="(activeTab == 3)?'active':''" >
+                    <div class="tab-pane row" ng-class="(activeTab == 3)?'active':''">
                         <form class="form-horizontal col-md-9 col-xs-12 pull-right" style="direction: rtl">
 
                             <div class="form-group">
@@ -272,7 +285,7 @@
                                             <label>
                                                 <input type="radio"
                                                        data-ng-model="curUser.GenderSelected"
-                                                       data-ng-checked="curUser.Gender == 1" ng-value="true" >
+                                                       data-ng-checked="curUser.Gender == 1" ng-value="true">
                                                 خانم
                                             </label>
                                         </div>
@@ -290,8 +303,11 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <ui-select multiple ng-model="curUser.Educations" theme="bootstrap" ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
-                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Name|pNumber}}</ui-select-match>
+                                    <ui-select multiple ng-model="curUser.Educations" theme="bootstrap"
+                                               ng-disabled="ctrl.disabled" sortable="true" close-on-select="false"
+                                               style="">
+                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Name|pNumber}}
+                                        </ui-select-match>
                                         <ui-select-choices
                                                 repeat="edu in curUser.AllEducations | propsFilter: {Name: $select.search}">
                                             <div compile="edu.Name | highlight: $select.search|pNumber"></div>
@@ -303,8 +319,10 @@
                             <div class="form-group">
                                 <div class="col-sm-9">
                                     <ui-select multiple id="" ng-model="curUser.Skills" theme="bootstrap"
-                                               ng-disabled="ctrl.disabled" sortable="true" close-on-select="false" style="">
-                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Skill|pNumber}}</ui-select-match>
+                                               ng-disabled="ctrl.disabled" sortable="true" close-on-select="false"
+                                               style="">
+                                        <ui-select-match placeholder="انتخاب نشده ... ">{{$item.Skill|pNumber}}
+                                        </ui-select-match>
                                         <ui-select-choices
                                                 repeat="edu in curUser.AllSkills | propsFilter: {Skill: $select.search}">
                                             <div compile="edu.Skill | highlight: $select.search |pNumber"></div>
@@ -327,7 +345,370 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <button type="submit" ng-click="saveUserAddintionalInfo()" class="btn btn-success pull-left">بروزرسانی
+                                    <button type="submit" ng-click="saveUserAddintionalInfo()"
+                                            class="btn btn-success pull-left">بروزرسانی
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.tab-pane -->
+
+                    <div class="tab-pane row" ng-class="(activeTab == 4)?'active':''">
+                        <div ng-show="!curUser.IsContractor" class="col-xs-12">
+                            <div class="form-group">
+                                <button class="btn btn-success col-md-1 col-sm-2 col-xs-3" ng-click="setAsContractor(curUser.ID)" >بله</button>
+                                <button class="btn btn-danger  col-md-1 col-sm-2 col-xs-3" ng-click="setAsNotContractor(curUser.ID)">خیر</button>
+                                <label class="col-md-10 col-sm-8 col-xs-6 control-label text-right">آیا شما پیمانکار هستید؟</label>
+                            </div>
+                        </div>
+                        <div ng-show="curUser.IsContractor && curUser.IsContractor == '0'" class="col-xs-12">
+                            <div class="form-group">
+                                <button class="btn btn-success col-md-2 col-xs-4" confirm="آیا می خواهید خود را پیمانکار معرفی کنید؟"
+                                        ng-click="setAsContractor(curUser.ID)" >تغییر</button>
+                                <label class="col-md-10 col-xs-8 col-xs-6 control-label text-right">شما پیمانکار نیستید . آیا می خواهید تغییر دهید</label>
+                            </div>
+                        </div>
+                        <form class="form-horizontal col-xs-12" style="direction: rtl"
+                              ng-show="curUser.IsContractor && curUser.IsContractor == '1'">
+                            <div class="box-header with-border text-green" style="margin-bottom: 20px;"><h3
+                                    class="box-title vazir-font">اطلاعات فردی</h3></div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <ui-select title="رشته تحصیلی" ng-model="education.selected" theme="bootstrap"
+                                               sortable="true">
+                                        <ui-select-match placeholder="رشته تحصیلی">
+                                            {{education.selected.NameFA|pNumber}}
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in page.AllEducations">
+                                            <div compile="edu.NameFA | highlight: $select.search |pNumber"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label class="col-xs-4 control-label">رشته تحصیلی</label>
+                            </div>
+                            <div class="form-group" ng-show="education.selected && education.selected.ID =='10000' ">
+                                <div class="col-xs-8">
+                                    <input type="text" ng-model="Assessment.AssessmentEducationName"
+                                           class="form-control"
+                                           placeholder="رشته تحصیلی">
+                                </div>
+                                <label class="col-xs-4 control-label">رشته تحصیلی</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <ui-select ng-model="educationLevel.selected"
+                                               theme="bootstrap"
+                                               title="مدرک تحصیلی">
+                                        <ui-select-match placeholder="مدرک تحصیلی">{{educationLevel.selected.NameFA |
+                                            pNumber}}
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in page.AllEducationLevels">
+                                            <div compile="edu.NameFA | highlight: $select.search |pNumber"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label class="col-xs-4 control-label">مدرک تحصیلی</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <ui-select ng-model="jobRecord.selected"
+                                               theme="bootstrap"
+                                               title="مدت سابقه کار در ارتباطات">
+                                        <ui-select-match placeholder="مدت سابقه کار در ارتباطات">
+                                            {{jobRecord.selected.NameFA | pNumber}}
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in page.AllJobRecords">
+                                            <div compile="edu.NameFA | highlight: $select.search |pNumber"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label class="col-xs-4 control-label">سابقه کار در ارتباطات</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <textarea ng-model="Assessment.JobExperience" class="form-control"
+                                              placeholder="تخصص و تجارب فنی" rows="5" style="resize: none;"></textarea>
+                                </div>
+                                <label class="col-xs-4 control-label">تخصص و تجارب فنی</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8" ng-init="(Assessment.BrithDate)?Assessment.BrithDate:1340">
+                                    <input ng-model="Assessment.BrithDate" ng-model-options="{debounce:1000}" ng-change="checkDate()" type="number" class="form-control"
+                                           placeholder="سال تولد">
+                                </div>
+                                <label for="inputExperience" class="col-xs-4 control-label">سال تولد</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <ui-select multiple ng-model="Positions.items" theme="bootstrap" sortable="true"
+                                               close-on-select="false" style="">
+                                        <ui-select-match placeholder="نواحی مشغول بکار">
+                                            {{$item.OrganizationName|pNumber}}
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in page.AllPositions | propsFilter: {OrganizationName: $select.search}">
+                                            <div compile="edu.OrganizationName | highlight: $select.search |pNumber"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label for="inputExperience" class="col-xs-4 control-label">نواحی مشغول بکار</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <ui-select ng-model="AssessmentPosition.selected"
+                                               theme="bootstrap"
+                                               title="ناحیه فعلی مشغول به کار">
+                                        <ui-select-match placeholder="ناحیه فعلی مشغول به کار">
+                                            {{AssessmentPosition.selected.OrganizationName | pNumber}}
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in page.AllPositions">
+                                            <div compile="edu.OrganizationName | highlight: $select.search |pNumber"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label class="col-xs-4 control-label">ناحیه فعلی مشغول به کار</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <ui-select ng-model="Depo1.selected"
+                                               theme="bootstrap"
+                                               title="دپو 1">
+                                        <ui-select-match placeholder="دپو 1">{{Depo1.selected.Name | pNumber}}
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in page.Depos">
+                                            <div compile="edu.Name | highlight: $select.search |pNumber"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label class="col-xs-4 control-label">دپو 1</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <ui-select ng-model="Depo2.selected"
+                                               theme="bootstrap"
+                                               title="دپو 2">
+                                        <ui-select-match placeholder="دپو 2">{{Depo2.selected.Name | pNumber}}
+                                        </ui-select-match>
+                                        <ui-select-choices
+                                                repeat="edu in page.Depos">
+                                            <div compile="edu.Name | highlight: $select.search |pNumber"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <label class="col-xs-4 control-label">دپو 2</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button type="submit" ng-click="updateAssessment(1)"
+                                            class="btn btn-success pull-left">بروزرسانی
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div ng-show="HaveAssessment" class="box-header with-border text-green"
+                                 style="margin-bottom: 20px;"><h3 class="box-title vazir-font">اطلاعات سوابق کاری</h3>
+                            </div>
+                            <div ng-show="HaveAssessment" class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <th style="min-width: 150px;">تاریخ شروع</th>
+                                        <th style="min-width: 150px;">تاریخ پایان</th>
+                                        <th style="min-width: 150px;">شرکت پیمانکار</th>
+                                        <th style="min-width: 150px;">ناحیه</th>
+                                        <th style="min-width: 150px;">عنوان شغلی</th>
+                                        <th style="width: 50px;"></th>
+                                    </tr>
+                                    <tr ng-repeat="u in page.AssessmentJobInfo">
+                                        <td>
+                                            <adm-dtp ng-model='u.startDate.from'
+                                                     options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true}'
+                                                     full-data="u.startDate.fromFull" class="english-font"
+                                                     maxdate="{{u.endDate.toFull.unix}}"></adm-dtp>
+                                        </td>
+                                        <td>
+                                            <adm-dtp ng-model='u.endDate.to'
+                                                     options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true}'
+                                                     full-data="u.endDate.toFull" class="english-font"
+                                                     mindate="{{u.startDate.fromFull.unix}}"></adm-dtp>
+                                        </td>
+                                        <td><input type="text" ng-model="u.ContractorCompany" class="form-control"
+                                                   placeholder="شرکت پیمانکار"></td>
+                                        <td>
+                                            <ui-select ng-model="u.JobInfo.selected"
+                                                       theme="bootstrap"
+                                                       title="ناحیه">
+                                                <ui-select-match placeholder="ناحیه">
+                                                    {{u.JobInfo.selected.OrganizationName | pNumber}}
+                                                </ui-select-match>
+                                                <ui-select-choices
+                                                        repeat="edu in page.AllPositions">
+                                                    <div compile="edu.OrganizationName | highlight: $select.search | pNumber"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td><input type="text" ng-model="u.JobTitle" class="form-control"
+                                                   placeholder="عنوان شغلی"></td>
+                                        <td>
+                                            <div class="table-action-icons">
+                                                <i class="fa fa-minus text-danger link hvr-buzz"
+                                                   ng-click="removeItem(1 , $index)" data-toggle="tooltip"
+                                                   data-placement="top" tooltip="Tooltip on left"
+                                                   tooltip-placement="top" tooltip-class="vazir-font"
+                                                   tooltip-append-to-body="true"></i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <adm-dtp ng-model='startDate.from'
+                                                     options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true}'
+                                                     full-data="startDate.fromFull" class="english-font"
+                                                     maxdate="{{endDate.toFull.unix}}"></adm-dtp>
+                                        </td>
+                                        <td>
+                                            <adm-dtp ng-model='endDate.to'
+                                                     options='{calType: "jalali",dtpType:"date", format: "YYYY/MM/DD", autoClose:true}'
+                                                     full-data="endDate.toFull" class="english-font"
+                                                     mindate="{{startDate.fromFull.unix}}"></adm-dtp>
+                                        </td>
+                                        <td><input type="text" ng-model="AssessmentJobInfo.ContractorCompany"
+                                                   class="form-control"
+                                                   placeholder="شرکت پیمانکار"></td>
+                                        <td>
+                                            <ui-select ng-model="JobInfo.selected"
+                                                       theme="bootstrap"
+                                                       title="ناحیه">
+                                                <ui-select-match placeholder="ناحیه">{{JobInfo.selected.OrganizationName
+                                                    | pNumber}}
+                                                </ui-select-match>
+                                                <ui-select-choices
+                                                        repeat="edu in page.AllPositions">
+                                                    <div compile="edu.OrganizationName | highlight: $select.search |pNumber"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td><input type="text" ng-model="AssessmentJobInfo.JobTitle"
+                                                   class="form-control"
+                                                   placeholder="عنوان شغلی"></td>
+                                        <td>
+                                            <div class="table-action-icons">
+                                                <i class="fa fa-plus text-success link hvr-buzz"
+                                                   ng-click="addNewJobInfo(AssessmentJobInfo)" data-toggle="tooltip"
+                                                   data-placement="top" tooltip="Tooltip on left"
+                                                   tooltip-placement="top" tooltip-class="vazir-font"
+                                                   tooltip-append-to-body="true"></i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div ng-show="HaveAssessment" class="form-group">
+                                <div class="col-sm-12">
+                                    <button type="submit" ng-click="updateAssessment(2)"
+                                            class="btn btn-success pull-left">بروزرسانی
+                                    </button>
+                                </div>
+                            </div>
+                            <div ng-show="HaveAssessment" class="box-header with-border text-green"
+                                 style="margin-bottom: 20px;"><h3 class="box-title vazir-font">تخصص در سیستم ها و
+                                تجهیزات مربوط به ارتباطات</h3></div>
+
+                            <div ng-show="HaveAssessment" class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <th style="min-width: 170px;"> نام سیستم یا تجهیز</th>
+                                        <th style="min-width: 110px;">نوع سیستم / دستگاه</th>
+                                        <th style="min-width: 110px;"> مدت دوره آموزشی (ساعت)</th>
+                                        <th style="min-width: 110px;">امتیازخود ارزیابی</th>
+                                        <th style="min-width: 110px;">توضیحات</th>
+                                        <th style="min-width: 70px;">امتیاز کارشناس</th>
+                                        <th style="width: 50px;"></th>
+                                    </tr>
+                                    <tr ng-repeat="u in page.SystemExperienceDef">
+                                        <td><input type="text" ng-model="u.SystemName" class="form-control"
+                                                   placeholder="نام سیستم" disabled></td>
+                                        <td><input type="text" ng-model="u.SystemType" class="form-control"
+                                                   placeholder="نوع"></td>
+                                        <td><input type="number" ng-model="u.TrainingTime" class="form-control"
+                                                   placeholder="مدت دوره"></td>
+                                        <td><input type="number" ng-model="u.SelfScore" class="form-control"
+                                                   placeholder="امتیازخود"></td>
+                                        <td><input type="text" ng-model="u.Description" class="form-control"
+                                                   placeholder="توضیحات"></td>
+                                        <td>{{u.Score| pNumber}}</td>
+                                        <td>
+                                            <!--<div class="table-action-icons">-->
+                                            <!--<i class="fa fa-minus text-danger link hvr-buzz" ng-click="openExchangeModal(u)" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>-->
+                                            <!--</div>-->
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="u in page.SystemExperience">
+                                        <td><input type="text" ng-model="u.SystemName" class="form-control"
+                                                   placeholder="نام سیستم" ng-disabled="u.ID"></td>
+                                        <td><input type="text" ng-model="u.SystemType" class="form-control"
+                                                   placeholder="دستگاه"></td>
+                                        <td><input type="number" ng-model="u.TrainingTime" class="form-control"
+                                                   placeholder="مدت دوره"></td>
+                                        <td><input type="number" ng-model="u.SelfScore" class="form-control"
+                                                   placeholder="امتیازخود"></td>
+                                        <td><input type="text" ng-model="u.Description" class="form-control"
+                                                   placeholder="توضیحات"></td>
+                                        <td>{{u.Score| pNumber}}</td>
+                                        <td>
+                                            <div class="table-action-icons">
+                                                <i class="fa fa-minus text-danger link hvr-buzz"
+                                                   ng-click="removeItem(2 , $index)" data-toggle="tooltip"
+                                                   data-placement="top" tooltip="Tooltip on left"
+                                                   tooltip-placement="top" tooltip-class="vazir-font"
+                                                   tooltip-append-to-body="true"></i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="text" ng-model="SystemExperience.SystemName"
+                                                   class="form-control"
+                                                   placeholder="نام سیستم"></td>
+                                        <td><input type="text" ng-model="SystemExperience.SystemType"
+                                                   class="form-control"
+                                                   placeholder="دستگاه"></td>
+                                        <td><input type="number" ng-model="SystemExperience.TrainingTime"
+                                                   class="form-control"
+                                                   placeholder="مدت دوره"></td>
+                                        <td><input type="number" ng-model="SystemExperience.SelfScore"
+                                                   class="form-control"
+                                                   placeholder="امتیازخود"></td>
+                                        <td><input type="text" ng-model="SystemExperience.Description"
+                                                   class="form-control"
+                                                   placeholder="توضیحات"></td>
+                                        <td><input type="text" ng-model="SystemExperience.Score" class="form-control"
+                                                   placeholder="کارشناس" disabled></td>
+                                        <td>
+                                            <div class="table-action-icons">
+                                                <i class="fa fa-plus text-success link hvr-buzz"
+                                                   ng-click="addNewJobExp(SystemExperience)" data-toggle="tooltip"
+                                                   data-placement="top" tooltip="Tooltip on left"
+                                                   tooltip-placement="top" tooltip-class="vazir-font"
+                                                   tooltip-append-to-body="true"></i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div ng-show="HaveAssessment" class="form-group">
+                                <div class="col-sm-12">
+                                    <button type="submit" ng-click="updateAssessment(3)"
+                                            class="btn btn-success pull-left">بروزرسانی
                                     </button>
                                 </div>
                             </div>
@@ -366,7 +747,7 @@
                     <h3 class="box-title">درباره من</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body" style="direction: rtl;">
-                    <strong><i class="fa fa-book margin-r-5"></i>  تحصیلات</strong>
+                    <strong><i class="fa fa-book margin-r-5"></i> تحصیلات</strong>
                     <ul class="nav nav-pills red" style="padding-right: 0px;font-size: 11px;">
                         <li ng-repeat="s in curUser.Educations" class="active">
                             <a style="border-top: none;" class="label-{{randomColor(s.ID)}}">{{s.Name | pNumber}}</a>

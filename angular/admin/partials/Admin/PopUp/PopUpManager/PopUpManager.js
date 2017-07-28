@@ -33,7 +33,6 @@ angular.module(appName).controller('PopUpManagerCtrl', function ($scope, $rootSc
             controller: function ($scope, $uibModalInstance) {
                 $scope.mindate =Date.now();
                 $scope.ExpireDate=new Date(Date.parse(Data.ExpireDate.replace('-','/','g'))).getTime();
-                console.log($scope.mindate);
                 $scope.popup = Data;
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');

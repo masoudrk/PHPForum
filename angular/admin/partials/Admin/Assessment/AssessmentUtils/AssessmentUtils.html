@@ -1,0 +1,229 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 class="content-header vazir-font">
+        <small> امکانات ارزیابی</small>
+        مدیریت
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#/dashboard"><i class="fa fa-dashboard"></i> خانه</a></li>
+        <li class="active">امکانات ارزیابی</li>
+    </ol>
+</section>
+
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-8 pull-right">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">مدرک تحصیلی</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>شماره</th>
+                            <th>مدرک تحصیلی</th>
+                            <th style="width: 100px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in educationLevels">
+                            <td>{{u.ID| pNumber}}</td>
+                            <td>{{u.NameFA| pNumber}}</td>
+                            <td>
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این مدرک تحصیلی '{{u.NameFA}}' را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow" title="حذف مدرک تحصیلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="deleteEducationLevel(u.ID)"></i>
+                                    <i class="fa fa-pencil text-blue link hvr-grow" title="ویرایش مدرک تحصیلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editEducationLevel(u)"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+
+                    <auto-paging page="1"
+                                 page-size="3"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="Assessment/getAllEducationLevels"
+                                 data-params="pagingParamsEducationLevel"
+                                 ng-control="pagingControllerEducationLevel"
+                                 items="educationLevels">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+        <div class="col-xs-4">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">{{actionEducationLevel}} مدرک تحصیلی</h3>
+                    <i class="fa fa-plus fa-2x text-muted"></i>
+                    <i ng-show="actionEducationLevel == 'ویرایش'" ng-click="actionEducationLevel = 'افزودن'; EducationLevel = {NameFA:null}" class="fa fa-times fa-2x text-muted pull-left link"></i>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="form">
+                        <div class="form-group row">
+                            <label class="col-xs-12 control-labe">مدرک تحصیلی</label>
+                            <div class="col-xs-12">
+                                <input type="text" class="form-control" placeholder="نام" ng-model="EducationLevel.NameFA">
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-top: 5px">
+                            <div class="col-xs-12">
+                                <button class="btn btn-success pull-left text-center" type="submit" ng-click="updateEducationLevel()">
+                                    {{actionEducationLevel}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-8 pull-right">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">رشته تحصیلی</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>شماره</th>
+                            <th>رشته تحصیلی</th>
+                            <th style="width: 100px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in educations">
+                            <td>{{u.ID| pNumber}}</td>
+                            <td>{{u.NameFA| pNumber}}</td>
+                            <td>
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این رشته تحصیلی '{{u.NameFA}}' را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow" title="حذف رشته تحصیلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="deleteEducation(u.ID)"></i>
+                                    <i class="fa fa-pencil text-blue link hvr-grow" title="ویرایش رشته تحصیلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editEducation(u)"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+
+                    <auto-paging page="1"
+                                 page-size="3"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="Assessment/getAllEducations"
+                                 data-params="pagingParamsEducation"
+                                 ng-control="pagingControllerEducation"
+                                 items="educations">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+        <div class="col-xs-4">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">{{actionEducation}} رشته تحصیلی</h3>
+                    <i class="fa fa-plus fa-2x text-muted"></i>
+                    <i ng-show="actionEducation == 'ویرایش'" ng-click="actionEducation = 'افزودن'; Education = {NameFA:null}" class="fa fa-times fa-2x text-muted pull-left link"></i>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="form">
+                        <div class="form-group row">
+                            <label class="col-xs-12 control-labe">رشته تحصیلی</label>
+                            <div class="col-xs-12">
+                                <input type="text" class="form-control" placeholder="نام" ng-model="Education.NameFA">
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-top: 5px">
+                            <div class="col-xs-12">
+                                <button class="btn btn-success pull-left text-center" type="submit" ng-click="updateEducation()">
+                                    {{actionEducation}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-8 pull-right">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">سیستم ها و تجهیزات</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>شماره</th>
+                            <th>سیستم ها و تجهیزات</th>
+                            <th style="width: 100px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in systems">
+                            <td>{{u.ID| pNumber}}</td>
+                            <td>{{u.SystemName| pNumber}}</td>
+                            <td>
+                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این سیستم ها و تجهیزات '{{u.SystemName}}' را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow" title="حذف سیستم ها و تجهیزات" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="deleteSystem(u.ID)"></i>
+                                    <i class="fa fa-pencil text-blue link hvr-grow" title="ویرایش سیستم ها و تجهیزات" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editSystem(u)"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+
+                    <auto-paging page="1"
+                                 page-size="3"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="Assessment/getAllSystems"
+                                 data-params="pagingParamsSystem"
+                                 ng-control="pagingControllerSystem"
+                                 items="systems">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+        <div class="col-xs-4">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">{{actionSystem}} سیستم ها و تجهیزات</h3>
+                    <i class="fa fa-plus fa-2x text-muted"></i>
+                    <i ng-show="actionSystem == 'ویرایش'" ng-click="actionSystem = 'افزودن'; System = {SystemName:null}" class="fa fa-times fa-2x text-muted pull-left link"></i>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="form">
+                        <div class="form-group row">
+                            <label class="col-xs-12 control-labe">سیستم ها و تجهیزات</label>
+                            <div class="col-xs-12">
+                                <input type="text" class="form-control" placeholder="سیستم ها و تجهیزات" ng-model="System.SystemName">
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-top: 5px">
+                            <div class="col-xs-12">
+                                <button class="btn btn-success pull-left text-center" type="submit" ng-click="updateSystem()">
+                                    {{actionSystem}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
+
+
+

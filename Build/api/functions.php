@@ -139,4 +139,19 @@ function reArrayFiles(&$file_post) {
 }
 
 
+function checkPermission($db  , $sess , $permissionLevel = ['Base']) {
+    $where = '( 1!=1';
+    foreach ($permissionLevel as $level){
+        $where.=" OR ap.PermissionLevel = '$level'";
+    }
+    $where .=')';
+
+        $resQ = $db->makeQuery("select ap.ID as val from user as u INNER JOIN admin as a on a.UserID = u.ID
+INNER JOIN admin_permission ap on ap.ID = a.PermissionID
+where u.ID = '$sess->UserID' and $where limit 1");
+    $sql =$resQ->fetch_assoc();
+    if(!$sql)
+        echoError('You don\'t have permision to do this action');
+}
+
 ?>

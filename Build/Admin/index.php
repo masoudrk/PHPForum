@@ -566,6 +566,33 @@
                             </li>
                         </ul>
                     </li>
+                    <li id="SAssessment" ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
+                        <a class="link">
+                            <i class="fa fa-paper-plane-o"></i>
+                            <span>مدیریت خودارزیابی</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="SDepo">
+                                <a ui-sref="depo">
+                                    <i class="fa fa-circle-o"></i>
+                                    مدیریت دپو ها                                </a>
+                            </li>
+
+                            <li id="SAssessmentUtils">
+                                <a ui-sref="assessment_utils">
+                                    <i class="fa fa-circle-o"></i>
+                                    مدیریت امکانات ارزیابی                                </a>
+                            </li>
+
+                            <li id="SAssessmentUsers">
+                                <a ui-sref="assessment_users">
+                                    <i class="fa fa-circle-o"></i>
+                                    لیست پیمانکاران
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li id="SMeta" ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
                         <a class="link">
                             <i class="fa fa-tag"></i>

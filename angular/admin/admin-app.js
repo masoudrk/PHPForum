@@ -4,39 +4,39 @@ var serviceBaseURL = '../api/admin/';
 var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
-    'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select',  'ngPersian',
-    'ngFileUpload','anim-in-out','am-charts' ,'ADM-dateTimePicker','ngSanitize', 'ngCookies','ngCsv',
+    'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
+    'ngFileUpload', 'anim-in-out', 'am-charts', 'ADM-dateTimePicker', 'ngSanitize', 'ngCookies', 'ngCsv',
     'textAngular']);
 
 app.config([
-    '$provide', '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider','ADMdtpProvider',
-function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMdtp) {
-    // Add nested user links to the "foo" menu.
-    $ocLazyLoadProvider.config({
-        debug: debugMode,
-        events: true
-    });
-    ADMdtp.setOptions({
-        calType: 'jalali',
-        format: 'YYYY/MM/DD hh:mm',
-       // default: 'today'
-    });
+    '$provide', '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'ADMdtpProvider',
+    function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider, ADMdtp) {
+        // Add nested user links to the "foo" menu.
+        $ocLazyLoadProvider.config({
+            debug: debugMode,
+            events: true
+        });
+        ADMdtp.setOptions({
+            calType: 'jalali',
+            format: 'YYYY/MM/DD hh:mm',
+            // default: 'today'
+        });
 
-    $stateProvider
+        $stateProvider
         // Admin states
-        .state("dashboard", {
-            url: "/dashboard",
-            templateUrl: "angular.partial.Dashboard.html",
-            controller: 'DashboardCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'داشبورد';
+            .state("dashboard", {
+                url: "/dashboard",
+                templateUrl: "angular.partial.Dashboard.html",
+                controller: 'DashboardCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'داشبورد';
+                    }
                 }
-            }
-        }).state("tag", {
+            }).state("tag", {
             url: "/tag",
             templateUrl: "angular.partial.Tag.html",
             controller: 'TagCtrl',
@@ -78,7 +78,7 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
             controller: 'AllAdminsCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([ '../app/directives/auto-pagination.js']);
+                    return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
                 }],
                 $title: function () {
                     return 'مدیریت مدیران';
@@ -97,30 +97,30 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                 }
             }
         }).state("questions", {
-        url: "/questions/:id",
-        templateUrl: "angular.partial.Questions.html",
-        controller: 'QuestionsCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
-            }],
-            $title: function () {
-                return 'مدیریت سوال ها';
+            url: "/questions/:id",
+            templateUrl: "angular.partial.Questions.html",
+            controller: 'QuestionsCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت سوال ها';
+                }
             }
-        }
-    }).state("award_questions", {
-        url: "/AwardQuestions",
-        templateUrl: "angular.partial.AwardQuestions.html",
-        controller: 'AwardQuestionsCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
-            }],
-            $title: function () {
-                return 'مدیریت سوال های جایزه دار';
+        }).state("award_questions", {
+            url: "/AwardQuestions",
+            templateUrl: "angular.partial.AwardQuestions.html",
+            controller: 'AwardQuestionsCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load(['../app/directives/auto-pagination.js']);
+                }],
+                $title: function () {
+                    return 'مدیریت سوال های جایزه دار';
+                }
             }
-        }
-    }).state("message", {
+        }).state("message", {
             url: "/message/:id",
             templateUrl: "angular.partial.Message.html",
             controller: 'MessageCtrl',
@@ -133,17 +133,17 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                 }
             }
         }).state("skill", {
-        url: "/skill",
-        templateUrl: "angular.partial.Skill.html",
-        controller: 'SkillCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'مدیریت مهارت ها';
+            url: "/skill",
+            templateUrl: "angular.partial.Skill.html",
+            controller: 'SkillCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'مدیریت مهارت ها';
+                }
             }
-        }
         }).state("upload_library", {
             url: "/UploadLibrary",
             templateUrl: "angular.partial.UploadLibrary.html",
@@ -181,19 +181,19 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                 }
             }
         })
-        .state("new_admin_post", {
-            url: "/NewAdminPost/:id",
-            templateUrl: "angular.partial.NewAdminPost.html",
-            controller: 'NewAdminPostCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'مطلب ادمین جدید';
+            .state("new_admin_post", {
+                url: "/NewAdminPost/:id",
+                templateUrl: "angular.partial.NewAdminPost.html",
+                controller: 'NewAdminPostCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'مطلب ادمین جدید';
+                    }
                 }
-            }
-        }).state("admin_post", {
+            }).state("admin_post", {
             url: "/AdminPost",
             templateUrl: "angular.partial.AdminPost.html",
             controller: 'AdminPostCtrl',
@@ -206,217 +206,253 @@ function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider,ADMd
                 }
             }
         }).state("award_question", {
-        url: "/AwardQuestion/:id",
-        templateUrl: "angular.partial.AwardQuestion.html",
-        controller: 'AwardQuestionCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'سوال جایزه دار';
-            }
-        }
-    }).state("reporting", {
-        url: "/Reporting",
-        templateUrl: "angular.partial.Reporting.html",
-        controller: 'ReportingCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'گزارش گیری';
-            }
-        }
-    }).state("organ_report", {
-        url: "/OrganReporting",
-        templateUrl: "angular.partial.OrganReporting.html",
-        controller: 'OrganReportingCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'گزارش گیری';
-            }
-        }
-    }).state("new_popup", {
-        url: "/NewPopUp:id",
-        templateUrl: "angular.partial.NewPopUp.html",
-        controller: 'NewPopUpCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'پاپ آپ جدید';
-            }
-        }
-    }).state("popup_manager", {
-        url: "/PopUpManager",
-        templateUrl: "angular.partial.PopUpManager.html",
-        controller: 'PopUpManagerCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'مدیریت پاپ آپ';
-            }
-        }
-    }).state("new_survey", {
-        url: "/NewSurvey:id",
-        templateUrl: "angular.partial.NewSurvey.html",
-        controller: 'NewSurveyCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'نظرسنجی جدید';
-            }
-        }
-    }).state("survey_manager", {
-        url: "/SurveyManager",
-        templateUrl: "angular.partial.SurveyManager.html",
-        controller: 'SurveyManagerCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'مدیریت نظرسنجی';
-            }
-        }
-    });
-    
-
-    $provide.decorator('taOptions', ['taRegisterTool', '$uibModal' , '$delegate',
-        function(taRegisterTool,$uibModal, taOptions) {
-
-            taOptions.toolbar = [
-                ['h1', 'h4', 'h6', 'p', 'pre', 'quote'],
-                ['html', 'customInsertImage','insertLink', 'wordcount', 'charcount'],
-                ['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
-                ['justifyLeft', 'justifyCenter', 'justifyRight'],
-                ['dirLtr','dirRtl']
-            ];
-
-            taRegisterTool('dirLtr', {
-                iconclass: "fa fa-indent",
-                action: function(){
-                    return this.$editor().wrapSelection("formatBlock", '<P style="direction:ltr">');
+            url: "/AwardQuestion/:id",
+            templateUrl: "angular.partial.AwardQuestion.html",
+            controller: 'AwardQuestionCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'سوال جایزه دار';
                 }
-            });
-            taRegisterTool('dirRtl', {
-                iconclass: "fa fa-dedent",
-                action: function(){
-                    return this.$editor().wrapSelection("formatBlock", '<P style="direction:rtl">');
+            }
+        }).state("reporting", {
+            url: "/Reporting",
+            templateUrl: "angular.partial.Reporting.html",
+            controller: 'ReportingCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'گزارش گیری';
                 }
-            });
+            }
+        }).state("organ_report", {
+            url: "/OrganReporting",
+            templateUrl: "angular.partial.OrganReporting.html",
+            controller: 'OrganReportingCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'گزارش گیری';
+                }
+            }
+        }).state("new_popup", {
+            url: "/NewPopUp:id",
+            templateUrl: "angular.partial.NewPopUp.html",
+            controller: 'NewPopUpCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'پاپ آپ جدید';
+                }
+            }
+        }).state("popup_manager", {
+            url: "/PopUpManager",
+            templateUrl: "angular.partial.PopUpManager.html",
+            controller: 'PopUpManagerCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'مدیریت پاپ آپ';
+                }
+            }
+        }).state("new_survey", {
+            url: "/NewSurvey:id",
+            templateUrl: "angular.partial.NewSurvey.html",
+            controller: 'NewSurveyCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'نظرسنجی جدید';
+                }
+            }
+        }).state("survey_manager", {
+            url: "/SurveyManager",
+            templateUrl: "angular.partial.SurveyManager.html",
+            controller: 'SurveyManagerCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'مدیریت نظرسنجی';
+                }
+            }
+        }).state("assessment_users", {
+            url: "/AssessmentUsers",
+            templateUrl: "angular.partial.AssessmentUsers.html",
+            controller: 'AssessmentUsersCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'مدیریت خود ارزیابی';
+                }
+            }
+        }).state("assessment_utils", {
+            url: "/AssessmentUtils",
+            templateUrl: "angular.partial.AssessmentUtils.html",
+            controller: 'AssessmentUtilsCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'مدیریت امکانات ارزیابی';
+                }
+            }
+        }).state("depo", {
+            url: "/Depo",
+            templateUrl: "angular.partial.Depo.html",
+            controller: 'DepoCtrl',
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([]);
+                }],
+                $title: function () {
+                    return 'مدیریت دپوها';
+                }
+            }
+        });
 
-            // Create our own insertImage button
-            taRegisterTool('customInsertImage', {
-                iconclass: "fa fa-picture-o",
-                action: function($deferred) {
-                    var textAngular = this;
-                    var savedSelection = rangy.saveSelection();
-                    var modalInstance = $uibModal.open({
-                        // Put a link to your template here or whatever
-                        templateUrl: '../js/text-angular/CustomSelectImageModal.tmpl.html',
-                        size: 'md',
-                        controller: ['$uibModalInstance', '$scope', 'Upload', '$state',
-                            function($uibModalInstance, $scope , Upload , state) {
-                                $scope.activeTab = 0;
-                                $scope.img = {
-                                    url: ''
-                                };
-                                $scope.submit = function() {
-                                    $uibModalInstance.close($scope.img.url);
-                                };
-                                $scope.cancel = function() {
-                                    $uibModalInstance.close();
-                                };
 
-                                $scope.getTab= function (tabId) {
-                                    $scope.activeTab = tabId;
+        $provide.decorator('taOptions', ['taRegisterTool', '$uibModal', '$delegate',
+            function (taRegisterTool, $uibModal, taOptions) {
+
+                taOptions.toolbar = [
+                    ['h1', 'h4', 'h6', 'p', 'pre', 'quote'],
+                    ['html', 'customInsertImage', 'insertLink', 'wordcount', 'charcount'],
+                    ['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
+                    ['justifyLeft', 'justifyCenter', 'justifyRight'],
+                    ['dirLtr', 'dirRtl']
+                ];
+
+                taRegisterTool('dirLtr', {
+                    iconclass: "fa fa-indent",
+                    action: function () {
+                        return this.$editor().wrapSelection("formatBlock", '<P style="direction:ltr">');
+                    }
+                });
+                taRegisterTool('dirRtl', {
+                    iconclass: "fa fa-dedent",
+                    action: function () {
+                        return this.$editor().wrapSelection("formatBlock", '<P style="direction:rtl">');
+                    }
+                });
+
+                // Create our own insertImage button
+                taRegisterTool('customInsertImage', {
+                    iconclass: "fa fa-picture-o",
+                    action: function ($deferred) {
+                        var textAngular = this;
+                        var savedSelection = rangy.saveSelection();
+                        var modalInstance = $uibModal.open({
+                            // Put a link to your template here or whatever
+                            templateUrl: '../js/text-angular/CustomSelectImageModal.tmpl.html',
+                            size: 'md',
+                            controller: ['$uibModalInstance', '$scope', 'Upload', '$state',
+                                function ($uibModalInstance, $scope, Upload, state) {
+                                    $scope.activeTab = 0;
+                                    $scope.img = {
+                                        url: ''
+                                    };
+                                    $scope.submit = function () {
+                                        $uibModalInstance.close($scope.img.url);
+                                    };
+                                    $scope.cancel = function () {
+                                        $uibModalInstance.close();
+                                    };
+
+                                    $scope.getTab = function (tabId) {
+                                        $scope.activeTab = tabId;
+                                    }
+
+                                    $scope.addImageLink = function (link) {
+                                        $uibModalInstance.close(link);
+                                    }
+
+                                    $scope.filesChanged = function (files, file) {
+                                        var url = uploadURL;
+                                        url += 'upload_inline_attachment.php';
+                                        var data = {file: file};
+                                        data.Type = state.current.name;
+
+                                        file.uploader = Upload.upload({
+                                            url: url,
+                                            data: data
+                                        });
+
+                                        file.uploader.then(function (resp) {
+
+                                            $uibModalInstance.close(resp.data);
+                                            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                                        }, function (resp) {
+                                            console.log('Error status: ' + resp.status);
+                                        }, function (evt) {
+                                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                            evt.config.data.file.percent = progressPercentage;
+                                            // evt.config.data.file.loaded = $scope.sizeFilter(evt.loaded);
+                                            //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                                        });
+                                    }
+
+                                    $scope.stopUploadImage = function (file) {
+                                        file.uploader.abort();
+                                    }
                                 }
+                            ]
+                        });
 
-                                $scope.addImageLink= function (link) {
-                                    $uibModalInstance.close(link);
-                                }
+                        modalInstance.result.then(function (imgUrl) {
+                            if (!imgUrl)
+                                return;
 
-                                $scope.filesChanged = function (files, file) {
-                                    var url = uploadURL;
-                                    url += 'upload_inline_attachment.php';
-                                    var data = {file : file};
-                                    data.Type = state.current.name;
+                            rangy.restoreSelection(savedSelection);
 
-                                    file.uploader = Upload.upload({
-                                        url:  url ,
-                                        data: data
-                                    });
+                            var embed = '<a href="' + imgUrl + '" target="_blank">' +
+                                '<img class="img-responsive link attachment-inline-img" '
+                                + ' src="' + imgUrl + '"  /></a>';
+                            // insert
+                            textAngular.$editor().wrapSelection('insertHtml', embed);
 
-                                    file.uploader.then(function (resp) {
+                            //textAngular.$editor().wrapSelection('insertImage', imgUrl);
+                            $deferred.resolve();
+                        });
+                        return false;
+                    },
+                    //     // activeState: function(commonElement) {
+                    //     // return angular.element(taSelection.getSelectionElement()).attr('ng-click');
+                    // }
+                });
 
-                                        $uibModalInstance.close(resp.data);
-                                        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-                                    }, function (resp) {
-                                        console.log('Error status: ' + resp.status);
-                                    }, function (evt) {
-                                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                        evt.config.data.file.percent = progressPercentage;
-                                        // evt.config.data.file.loaded = $scope.sizeFilter(evt.loaded);
-                                        //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-                                    });
-                                }
+                // Now add the button to the default toolbar definition
+                // Note: It'll be the last button
+                //taOptions.toolbar[3].push('customInsertImage');
+                return taOptions;
+            }]
+        );
 
-                                $scope.stopUploadImage = function (file) {
-                                    file.uploader.abort();
-                                }
-                            }
-                        ]
-                    });
-
-                    modalInstance.result.then(function(imgUrl) {
-                        if(!imgUrl)
-                            return;
-
-                        rangy.restoreSelection(savedSelection);
-
-                        var embed = '<a href="'+imgUrl+'" target="_blank">' +
-                            '<img class="img-responsive link attachment-inline-img" '
-                            + ' src="'+imgUrl+'"  /></a>';
-                        // insert
-                        textAngular.$editor().wrapSelection('insertHtml', embed);
-
-                        //textAngular.$editor().wrapSelection('insertImage', imgUrl);
-                        $deferred.resolve();
-                    });
-                    return false;
-                },
-                //     // activeState: function(commonElement) {
-                //     // return angular.element(taSelection.getSelectionElement()).attr('ng-click');
-                // }
-            });
-
-            // Now add the button to the default toolbar definition
-            // Note: It'll be the last button
-            //taOptions.toolbar[3].push('customInsertImage');
-            return taOptions;
-        }]
-    );
-
-    $urlRouterProvider.otherwise(function ($injector, $location) {
-        var $state = $injector.get('$state');
-        //$state.go('home.home');
-        $state.go('dashboard');
-    });
-}
+        $urlRouterProvider.otherwise(function ($injector, $location) {
+            var $state = $injector.get('$state');
+            //$state.go('home.home');
+            $state.go('dashboard');
+        });
+    }
 ]);
 
-var persian = { 0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹' };
+var persian = {0: '۰', 1: '۱', 2: '۲', 3: '۳', 4: '۴', 5: '۵', 6: '۶', 7: '۷', 8: '۸', 9: '۹'};
 var traverse = function (el) {
     if (el.nodeType == 3) {
         var list = el.data.match(/[0-9]/g);
@@ -438,8 +474,8 @@ var fixFooter = function () {
     traverse(document.body);
 }
 
-var activeElement = function (parent , name) {
-    if(name){
+var activeElement = function (parent, name) {
+    if (name) {
         var elem = $(name);
         elem.addClass('active').siblings().removeClass('active');
     }
@@ -449,21 +485,21 @@ var activeElement = function (parent , name) {
 
 var cmsVars = {};
 var hideCMS = function (hide) {
-    if(hide){
+    if (hide) {
         cmsVars.v1 = $('.content-wrapper').css('marginRight');
         cmsVars.v2 = $('.main-footer').css('marginRight');
         cmsVars.v3 = $('.main-header').css('display');
         cmsVars.v4 = $('.main-sidebar').css('display');
-        $('.content-wrapper').css('margin-right','0');
-        $('.main-footer').css('margin-right','0');
-        $('.main-header').css('display','none');
-        $('.main-sidebar').css('display','none');
+        $('.content-wrapper').css('margin-right', '0');
+        $('.main-footer').css('margin-right', '0');
+        $('.main-header').css('display', 'none');
+        $('.main-sidebar').css('display', 'none');
     }
-    else{
-        $('.content-wrapper').css('margin-right',cmsVars.v1);
-        $('.main-footer').css('margin-right',cmsVars.v2);
-        $('.main-header').css('display',cmsVars.v3);
-        $('.main-sidebar').css('display',cmsVars.v4);
+    else {
+        $('.content-wrapper').css('margin-right', cmsVars.v1);
+        $('.main-footer').css('margin-right', cmsVars.v2);
+        $('.main-header').css('display', cmsVars.v3);
+        $('.main-sidebar').css('display', cmsVars.v4);
     }
 }
 
@@ -473,9 +509,9 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         $rootScope.logout = function () {
             obj.post('logout').then(function (res) {
-                if(res&&res.Status=='success'){
+                if (res && res.Status == 'success') {
                     window.location = "../";
-                }else{
+                } else {
                     obj.popError('مشکل ، لطفا دوباره امتحان کنید.');
                 }
             });
@@ -557,15 +593,15 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             obj.setBusy(true);
             return $http.post(obj.serviceBase + q, object).then(function (results) {
 
-                if(obj.debugMode ){
+                if (obj.debugMode) {
                     console.log(results.data);
 
-                    if(results.status != 200)
+                    if (results.status != 200)
                         obj.popModal(results);
                 }
                 obj.setBusy(false);
 
-                if(results.data.AuthState && results.data.AuthState == 'UN_AUTH'){
+                if (results.data.AuthState && results.data.AuthState == 'UN_AUTH') {
                     console.log('State : UN_AUTHORIZED_USER');
                     window.location = '../';
                 }
@@ -573,12 +609,12 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 return results.data;
             }, function (err) {
 
-                if(obj.debugMode){
+                if (obj.debugMode) {
                     console.log(err.data);
                     obj.popModal(err.data);
                 }
 
-                if(err.data.AuthState && err.data.AuthState == 'UN_AUTH'){
+                if (err.data.AuthState && err.data.AuthState == 'UN_AUTH') {
                     console.log('State : UN_AUTHORIZED_USER');
                     window.location = '../';
                 }
@@ -591,12 +627,12 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         obj.postAsync = function (q, object) {
             return $http.post(obj.serviceBase + q, object).then(function (results) {
 
-                if(obj.debugMode && results.status != 200){
+                if (obj.debugMode && results.status != 200) {
                     obj.popModal(results);
                 }
                 return results.data;
             }, function (err) {
-                if(obj.debugMode)
+                if (obj.debugMode)
                     obj.popModal(err.data);
                 return err;
             });
@@ -606,7 +642,21 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             $rootScope.spinner.active = false;
         }
 
-
+        obj.popModal = function (data) {
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'notifyModal.html',
+                controller: function ($scope , $uibModalInstance , data) {
+                    $scope.data =  data;
+                },
+                size: 'md',
+                resolve: {
+                    data: function () {
+                        return data;
+                    }
+                }
+            });
+        }
         obj.authUser = function (user) {
             $rootScope.authenticated = true;
             $rootScope.user = {};
@@ -626,7 +676,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         }
 
         obj.getAuth = function () {
-            return { authenticated: $rootScope.authenticated, isAdmin: $rootScope.isAdmin };
+            return {authenticated: $rootScope.authenticated, isAdmin: $rootScope.isAdmin};
         }
 
         obj.openSignupPanel = function (lang) {
@@ -665,7 +715,8 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             var stopY = y;//elmYPosition(eID);
             var distance = stopY > startY ? stopY - startY : startY - stopY;
             if (distance < 100) {
-                scrollTo(0, stopY); return;
+                scrollTo(0, stopY);
+                return;
             }
             var speed = Math.round(distance / 10);
             if (speed >= 5) speed = 5;
@@ -675,12 +726,17 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             if (stopY > startY) {
                 for (var i = startY; i < stopY; i += step) {
                     setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                    leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-                } return;
+                    leapY += step;
+                    if (leapY > stopY) leapY = stopY;
+                    timer++;
+                }
+                return;
             }
             for (var i = startY; i > stopY; i -= step) {
                 setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
+                leapY -= step;
+                if (leapY < stopY) leapY = stopY;
+                timer++;
             }
 
             function currentYPosition() {
@@ -701,7 +757,8 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             var stopY = elmYPosition(element) + offsetY;
             var distance = stopY > startY ? stopY - startY : startY - stopY;
             if (distance < 100) {
-                scrollTo(0, stopY); return;
+                scrollTo(0, stopY);
+                return;
             }
             var speed = Math.round(distance / 10);
             if (speed >= 5) speed = 5;
@@ -711,12 +768,17 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             if (stopY > startY) {
                 for (var i = startY; i < stopY; i += step) {
                     setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                    leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-                } return;
+                    leapY += step;
+                    if (leapY > stopY) leapY = stopY;
+                    timer++;
+                }
+                return;
             }
             for (var i = startY; i > stopY; i -= step) {
                 setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
+                leapY -= step;
+                if (leapY < stopY) leapY = stopY;
+                timer++;
             }
 
             function currentYPosition() {
@@ -737,7 +799,8 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 while (node.offsetParent && node.offsetParent != document.body) {
                     node = node.offsetParent;
                     y += node.offsetTop;
-                } return y;
+                }
+                return y;
             }
 
         };
@@ -784,17 +847,17 @@ app.directive('errSrc', function () {
 
 app.run(function ($rootScope, $templateCache, $state, $location, Extention, OnlineSocket) {
 
-    $rootScope.spinner ={};
+    $rootScope.spinner = {};
 
     $rootScope.$on("$stateChangeSuccess", function () {
         Extention.setBusy(false);
     });
     $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error){
+        function (event, toState, toParams, fromState, fromParams, error) {
             Extention.setBusy(false);
         });
     $rootScope.$on('$stateNotFound',
-        function(event, unfoundState, fromState, fromParams){
+        function (event, unfoundState, fromState, fromParams) {
             Extention.setBusy(false);
         })
 
@@ -805,23 +868,23 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention, Onli
 
 });
 
-app.filter('fileSizeFilter', function() {
-    return function(bytes, precision) {
+app.filter('fileSizeFilter', function () {
+    return function (bytes, precision) {
         if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
         if (typeof precision === 'undefined') precision = 1;
         var units = ['بایت', 'کیلوبایت', 'مگابایت', 'گیگابایت', 'ترابایت', 'پتابایت'],
             number = Math.floor(Math.log(bytes) / Math.log(1024));
         return persianJs((bytes / Math.pow(1024, Math.floor(number))).toFixed(precision)).englishNumber().toString() +
-            ' '+units[number] ;
+            ' ' + units[number];
     }
 });
-app.filter('fileSizeFilterEnglish', function() {
-    return function(bytes, precision) {
+app.filter('fileSizeFilterEnglish', function () {
+    return function (bytes, precision) {
         if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
         if (typeof precision === 'undefined') precision = 1;
         var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PT'],
             number = Math.floor(Math.log(bytes) / Math.log(1024));
-        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' '+units[number] ;
+        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' ' + units[number];
     }
 });
 
@@ -841,7 +904,7 @@ app.filter('jalaliDateSimple', function () {
 
 app.filter('moment', function () {
     return function (inputDate, format) {
-        return moment(inputDate).format(format);
+        return momentsa(inputDate).format(format);
     }
 });
 
@@ -947,53 +1010,53 @@ app.directive('compile', [
 ]);
 
 angular.module("ui.router.title", ["ui.router"])
-	.run(["$rootScope", "$timeout", "$state", "Extention", function ($rootScope, $timeout, $state, Extention) {
+    .run(["$rootScope", "$timeout", "$state", "Extention", function ($rootScope, $timeout, $state, Extention) {
 
-	    $rootScope.$on("$stateChangeSuccess", function () {
-	        var title = $state.$current.locals.globals.$title;
-	        var isAsync = $state.$current.locals.globals.$isAsyncTitle;
-	        if (isAsync) {
-	            Extention.post(title).then(function (res) {
-	                $timeout(function () {
-	                    $rootScope.$title = res.SiteName;
-	                });
+        $rootScope.$on("$stateChangeSuccess", function () {
+            var title = $state.$current.locals.globals.$title;
+            var isAsync = $state.$current.locals.globals.$isAsyncTitle;
+            if (isAsync) {
+                Extention.post(title).then(function (res) {
+                    $timeout(function () {
+                        $rootScope.$title = res.SiteName;
+                    });
 
-	                $rootScope.$breadcrumbs = [];
-	                var state = $state.$current;
-	                while (state) {
-	                    if (state.resolve && state.resolve.$title) {
-	                        $rootScope.$breadcrumbs.unshift({
-	                            title: getTitleValue(state.locals.globals.$title),
-	                            state: state.self.name,
-	                            stateParams: state.locals.globals.$stateParams
-	                        });
-	                    }
-	                    state = state.parent;
-	                }
-	            });
-	        } else {
-	            var t = getTitleValue(title);
-	            $timeout(function () {
-	                $rootScope.$title = t;
-	            });
+                    $rootScope.$breadcrumbs = [];
+                    var state = $state.$current;
+                    while (state) {
+                        if (state.resolve && state.resolve.$title) {
+                            $rootScope.$breadcrumbs.unshift({
+                                title: getTitleValue(state.locals.globals.$title),
+                                state: state.self.name,
+                                stateParams: state.locals.globals.$stateParams
+                            });
+                        }
+                        state = state.parent;
+                    }
+                });
+            } else {
+                var t = getTitleValue(title);
+                $timeout(function () {
+                    $rootScope.$title = t;
+                });
 
-	            $rootScope.$breadcrumbs = [];
-	            var state = $state.$current;
-	            while (state) {
-	                if (state.resolve && state.resolve.$title) {
-	                    $rootScope.$breadcrumbs.unshift({
-	                        title: getTitleValue(state.locals.globals.$title),
-	                        state: state.self.name,
-	                        stateParams: state.locals.globals.$stateParams
-	                    });
-	                }
-	                state = state.parent;
-	            }
-	        }
-	    });
+                $rootScope.$breadcrumbs = [];
+                var state = $state.$current;
+                while (state) {
+                    if (state.resolve && state.resolve.$title) {
+                        $rootScope.$breadcrumbs.unshift({
+                            title: getTitleValue(state.locals.globals.$title),
+                            state: state.self.name,
+                            stateParams: state.locals.globals.$stateParams
+                        });
+                    }
+                    state = state.parent;
+                }
+            }
+        });
 
-	    function getTitleValue(title) {
-	        return angular.isFunction(title) ? title() : title;
-	    }
+        function getTitleValue(title) {
+            return angular.isFunction(title) ? title() : title;
+        }
 
-	}]);
+    }]);
