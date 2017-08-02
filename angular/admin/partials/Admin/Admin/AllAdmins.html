@@ -35,9 +35,10 @@
                             <td>{{u.SignupDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
                             <td>{{u.OrganizationName}}</td>
                             <td ng-switch="u.PermissionLevel">
-                                <span class="label label-success" ng-switch-when="Base">اصلی</span>
+                                <span class="label label-primary" ng-switch-when="Base">اصلی</span>
                                 <span class="label label-warning" ng-switch-when="ForumManager">مدیر انجمن</span>
                                 <span class="label label-info" ng-switch-when="OrganAdmin">مدیر ناحیه</span>
+                                <span class="label label-success" ng-switch-when="AssessmentManager">مدیر خودارزیابی</span>
                             </td>
                             <td>
                                 {{u.Permission}}
@@ -112,6 +113,12 @@
                             <label class="col-xs-12 control-labe">نام ناحیه</label>
                             <div class="col-xs-12">
                                 <input type="text" class="form-control" placeholder="Enter ..." ng-model="Person.selected.OrganizationName" disabled="">
+                            </div>
+                        </div>
+                        <div class="form-group row" ng-show="adminType.selected">
+                            <label class="col-xs-12 control-labe">توضیحات </label>
+                            <div class="col-xs-12">
+                                <p>{{adminType.selected.Description || pNumber }}</p>
                             </div>
                         </div>
                         <div class="form-group row" style="margin-top: 5px">

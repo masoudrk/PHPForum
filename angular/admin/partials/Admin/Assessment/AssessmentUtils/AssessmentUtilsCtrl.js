@@ -91,7 +91,7 @@ angular.module(appName).controller('AssessmentUtilsCtrl', function ($scope, $roo
         $scope.actionEducation = 'ویرایش';
     }
 
-    /////////////////////////////////////////
+     /////////////////////////////////////////
 
 
 
@@ -139,5 +139,53 @@ angular.module(appName).controller('AssessmentUtilsCtrl', function ($scope, $roo
         $scope.actionSystem = 'ویرایش';
     }
 
-	activeElement('#SAssessment','#SAssessmentUtils');
+    /////////////////////////////////////////
+
+
+
+    $scope.actionJob = 'افزودن';
+    $scope.pagingParamsJob = {};
+    $scope.pagingControllerJob = {};
+    $scope.Job = {};
+
+    $scope.searchJob = function () {
+        $scope.pagingControllerJob.update();
+    }
+
+    $scope.updateJob = function() {
+        if ($scope.Job.NameFA) {
+            Extention.post('Assessment/addOrUpdateAssessmentJob', $scope.Job).then(function (res) {
+                if (res && res.Status == 'success') {
+                    $scope.searchJob();
+                    if($scope.actionJob == 'افزودن')
+                        Extention.popSuccess("عنوان شغلی با موفقیت اضافه شد!");
+                    else if ($scope.actionJob == 'ویرایش') {
+                        Extention.popSuccess("عنوان شغلی با موفقیت ویرایش شد!");
+                        $scope.actionJob = 'افزودن';
+                    }
+                    $scope.Job = {};
+                }
+            });
+        }else {
+            Extention.popError('اطلاعات را درست وارد کنید');
+        }
+    }
+
+    $scope.deleteJob = function (uid) {
+        Extention.post('Assessment/deleteAssessmentJob', { ID: uid }).then(function (res) {
+            if(res && res.Status=='success'){
+                Extention.popSuccess("عنوان شغلی با موفقیت حذف شد!");
+                $scope.searchJob();
+            }else{
+                Extention.popError("مشکل در حذف عنوان شغلی ، لطفا دوباره امتحان کنید.");
+            }
+        });
+    }
+
+    $scope.editJob = function(Job) {
+        $scope.Job = Job;
+        $scope.actionJob = 'ویرایش';
+    }
+
+    activeElement('#SAssessment','#SAssessmentUtils');
 });

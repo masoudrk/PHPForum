@@ -29,7 +29,7 @@
                             <td>{{u.ID| pNumber}}</td>
                             <td>{{u.NameFA| pNumber}}</td>
                             <td>
-                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                <div class="table-action-icons"  ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='AssessmentManager'">
                                     <i confirm="آیا مطمئن هستید که میخواهید این مدرک تحصیلی '{{u.NameFA}}' را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" title="حذف مدرک تحصیلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="deleteEducationLevel(u.ID)"></i>
                                     <i class="fa fa-pencil text-blue link hvr-grow" title="ویرایش مدرک تحصیلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editEducationLevel(u)"></i>
@@ -101,7 +101,7 @@
                             <td>{{u.ID| pNumber}}</td>
                             <td>{{u.NameFA| pNumber}}</td>
                             <td>
-                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                <div class="table-action-icons"  ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='AssessmentManager'">
                                     <i confirm="آیا مطمئن هستید که میخواهید این رشته تحصیلی '{{u.NameFA}}' را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" title="حذف رشته تحصیلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="deleteEducation(u.ID)"></i>
                                     <i class="fa fa-pencil text-blue link hvr-grow" title="ویرایش رشته تحصیلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editEducation(u)"></i>
@@ -173,7 +173,7 @@
                             <td>{{u.ID| pNumber}}</td>
                             <td>{{u.SystemName| pNumber}}</td>
                             <td>
-                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
+                                <div class="table-action-icons"  ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='AssessmentManager'">
                                     <i confirm="آیا مطمئن هستید که میخواهید این سیستم ها و تجهیزات '{{u.SystemName}}' را حذف کنید؟"
                                        class="fa fa-trash text-red link hvr-grow" title="حذف سیستم ها و تجهیزات" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="deleteSystem(u.ID)"></i>
                                     <i class="fa fa-pencil text-blue link hvr-grow" title="ویرایش سیستم ها و تجهیزات" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editSystem(u)"></i>
@@ -225,5 +225,75 @@
     </div>
 </section>
 
+<section class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-8 pull-right">
+            <div class="box box-danger">
+                <div class="box-header">
+                    <h3 class="box-title vazir-font">عنوان شغلی</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>شماره</th>
+                            <th>عنوان شغلی</th>
+                            <th style="width: 100px;"></th>
+                        </tr>
+                        <tr ng-repeat="u in jobs">
+                            <td>{{u.ID| pNumber}}</td>
+                            <td>{{u.NameFA| pNumber}}</td>
+                            <td>
+                                <div class="table-action-icons"  ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='AssessmentManager'">
+                                    <i confirm="آیا مطمئن هستید که میخواهید این عنوان شغلی '{{u.NameFA}}' را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow" title="حذف عنوان شغلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="deleteJob(u.ID)"></i>
+                                    <i class="fa fa-pencil text-blue link hvr-grow" title="ویرایش عنوان شغلی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="editJob(u)"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix text-center">
+
+                    <auto-paging page="1"
+                                 page-size="3"
+                                 ul-class="pagination pagination-sm no-margin"
+                                 action-name="Assessment/getAllJobs"
+                                 data-params="pagingParamsJob"
+                                 ng-control="pagingControllerJob"
+                                 items="jobs">
+                    </auto-paging>
+                </div>
+            </div><!-- /.box -->
+        </div>
+        <div class="col-xs-4">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">{{actionJob}} عنوان شغلی</h3>
+                    <i class="fa fa-plus fa-2x text-muted"></i>
+                    <i ng-show="actionJob == 'ویرایش'" ng-click="actionJob = 'افزودن'; Job = {NameFA:null}" class="fa fa-times fa-2x text-muted pull-left link"></i>
+                </div><!-- /.box-header -->
+                <div class="box-body persian-rtl">
+                    <div class="form">
+                        <div class="form-group row">
+                            <label class="col-xs-12 control-labe">عنوان شغلی</label>
+                            <div class="col-xs-12">
+                                <input type="text" class="form-control" placeholder="عنوان شغلی" ng-model="Job.NameFA">
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-top: 5px">
+                            <div class="col-xs-12">
+                                <button class="btn btn-success pull-left text-center" type="submit" ng-click="updateJob()">
+                                    {{actionJob}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>
 
 

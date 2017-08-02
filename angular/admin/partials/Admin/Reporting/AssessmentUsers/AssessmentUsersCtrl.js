@@ -10,6 +10,11 @@ angular.module(appName).controller('AssessmentUsersCtrl', function ($scope, $uib
     $scope.forumTypes = [];
     $scope.Person = {};
     $scope.selectedAdmin = {};
+    $scope.Position= {selected : null};
+    Extention.postAsync('getAllPositions', {}).then(function (msg) {
+        $scope.allPositions = msg;
+    });
+
 
     Extention.post('getAllAdminTypes', {}).then(function (res) {
         if (res && res.Status == 'success') {
@@ -22,7 +27,10 @@ angular.module(appName).controller('AssessmentUsersCtrl', function ($scope, $uib
             $scope.forumTypes = res.Data;
         }
     });
-
+    $scope.changePosition = function () {
+        ($scope.Position.selected)?$scope.pagingParams.PositionID = $scope.Position.selected.ID:$scope.pagingParams.PositionID = null;
+        $scope.search();
+    }
     $scope.search = function () {
         $scope.pagingController.update();
     }
@@ -179,5 +187,5 @@ angular.module(appName).controller('AssessmentUsersCtrl', function ($scope, $uib
         });
     }
 
-    activeElement('#SAssessment', '#SAssessmentUsers');
+    activeElement('#SReporting', '#SAssessmentUsers');
 });

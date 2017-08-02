@@ -17,20 +17,7 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         events: true
     });
 
-    $stateProvider 
-        // .state('home', {
-        //     url: "/",
-        //     templateUrl: "partials/Forum/_Home/Home.html",
-        //     controller: 'HomeCtrl',
-        //     resolve: {
-        //         deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-        //             return $ocLazyLoad.load(['partials/Forum/_Home/HomeCtrl.js']);
-        //         }],
-        //         $title: function () {
-        //             return 'انجمن';
-        //         }
-        //     }
-        // })
+    $stateProvider
         .state("dashboard", {
             url: "/Dashboard",
             templateUrl: "angular.partial.Dashboard.html",

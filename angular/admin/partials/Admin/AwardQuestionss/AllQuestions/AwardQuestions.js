@@ -48,6 +48,7 @@ angular.module(appName).controller('AwardQuestionsCtrl', function ($scope, $root
 	                    Extention.post('editQuestion', { QuestionID: $scope.Question.ID, QuestionText: $scope.QuestionText, Title: $scope.Title }).then(function (res) {
 	                        if (res && res.Status == 'success') {
 	                            Extention.popSuccess("سوال با موفقیت ویرایش شد!");
+                                $uibModalInstance.close('success');
 	                            $scope.editMode = false;
 	                        } else {
 	                            Extention.popError("مشکل در ویرایش سوال ، لطفا دوباره امتحان کنید.");
@@ -58,10 +59,12 @@ angular.module(appName).controller('AwardQuestionsCtrl', function ($scope, $root
 	        },
 	        size: 'md'
 	    });
-	    modalInstance.result.then(function () {
-	    }, function () {
-	        $scope.pagingController.update();
-	    });
+        modalInstance.result.then(function (res) {
+            if(res == 'success'){
+                $scope.pagingController.update();
+            }
+        }, function () {
+        });
 	}
 
 
@@ -83,7 +86,7 @@ angular.module(appName).controller('AwardQuestionsCtrl', function ($scope, $root
 	                        Extention.post('changeQuestionAccepted', { State: -1, QuestionID: $scope.questionID, AdminPermissionLevel: session.AdminPermissionLevel, UserID: $scope.authorID, Message: message }).then(function (res) {
 	                            if (res && res.Status == 'success') {
 	                                Extention.popSuccess("وضعیت سوال با موفقیت تغییر کرد!");
-	                                $uibModalInstance.dismiss('cancel');
+	                                $uibModalInstance.close('success');
 	                            } else {
 	                                Extention.popError("مشکل در تغییر وضعیت سوال ، لطفا دوباره تلاش کنید.");
 	                            }
@@ -92,9 +95,11 @@ angular.module(appName).controller('AwardQuestionsCtrl', function ($scope, $root
 	                },
 	                size: 'md'
 	            });
-	            modalInstance.result.then(function () {
+	            modalInstance.result.then(function (res) {
+	            	if(res == 'success'){
+                        $scope.pagingController.update();
+					}
 	            }, function () {
-	                $scope.pagingController.update();
 	            });
 	        } else {
 	            return;
@@ -104,7 +109,7 @@ angular.module(appName).controller('AwardQuestionsCtrl', function ($scope, $root
 	}
 
 
-    activeElement('#SQuestions', '#SS' + $stateParams.id);
+    activeElement('#SAwardQuestion', '#SAllAwardQuestion');
 	fixFooter();
 
 });

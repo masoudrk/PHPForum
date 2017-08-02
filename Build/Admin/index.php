@@ -73,9 +73,9 @@
                                             class="fx-bounce-normal fx-dur-50 fx-ease-none fx-stagger-50">
                                             <!-- start
                                     event -->
-                                            <a>
-                                                <div class="pull-right link" ui-sref="messages({id:item.ID})">
-                                                    <img err-src="../../shared/images/Avatar.jpg" ng-src="{{item.Image}}"
+                                            <a  ng-href="{{'../Forum/#/Messages/'+item.ID}}" >
+                                                <div class="pull-right link">
+                                                    <img err-src="../images/Avatar.jpg" ng-src="{{item.Image}}"
                                                          class="img-circle"
                                                          alt="User Image"
                                                          style="border: solid 2px #f1c40f" />
@@ -84,7 +84,7 @@
                                                     </div>
                                                 </div>
                                                 <h4>
-                                                    <span class="link" ui-sref="messages({id:item.ID})"
+                                                    <span class="link"
                                                           style="color:#3c8dbc;">
                                                         {{item.FullName}}
                                                     </span>
@@ -98,19 +98,19 @@
                                                            ng-click="markAsReadMessage($event, item)"></i>
                                                     </small>
                                                 </h4>
-                                                <h5 class="text-right link" ui-sref="messages({id:item.ID})"
+                                                <h5 class="text-right link"
                                                     style="margin-top: 0px;margin-bottom: 5px;">
                                                     {{item.EventUser|pNumber}}
                                                 </h5>
                                                 <p class="text-right text-info "
                                                    style="margin-top: 5px;">
-                                                <p class="link" style="font-size: 14px" ui-sref="messages({id:item.ID})">
+                                                <p class="link" style="font-size: 14px"  >
                                                         <span class="palette-concrete">
                                                             موضوع :
                                                         </span>
                                                     {{item.MessageTitle | subString :30|pNumber}}
                                                 </p>
-                                                <p class="link" style="padding-right: 5px" ui-sref="messages({id:item.ID})">
+                                                <p class="link" style="padding-right: 5px"  >
                                                     <span class="palette-concrete">متن پیام :</span>
                                                     <span compile="item.Message | subString :100|pNumber"></span>
                                                 </p>
@@ -161,7 +161,7 @@
                                     event -->
                                             <a>
                                                 <div class="pull-right link" ui-sref="question({id:item.QuestionID})">
-                                                    <img err-src="../../shared/images/Avatar.jpg" ng-src="{{ou.FullPath}}"
+                                                    <img err-src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
                                                          class="img-circle"
                                                          alt="User Image"
                                                          style="border: solid 2px #1abc9c;margin-top: " />
@@ -353,7 +353,7 @@
                             <span>مدیران</span>
                         </a>
                     </li>
-                    <li class="treeview" id="SAdminPost">
+                    <li ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin' || session.AdminPermissionLevel =='ForumManager'" class="treeview" id="SAdminPost">
                         <a ui-sref="admin_post">
                             <i class="fa fa-magic"></i>
                             <span>مطالب ادمین</span>
@@ -381,7 +381,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="SQuestions">
+                    <li id="SQuestions"  ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin' || session.AdminPermissionLevel =='ForumManager'">
                         <a>
                             <i class="fa fa-question-circle"></i>
                             <span>مدیریت سوال ها</span>
@@ -439,7 +439,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="SAnswers">
+                    <li id="SAnswers" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin' || session.AdminPermissionLevel =='ForumManager'">
                         <a>
                             <i class="fa fa-pencil"></i>
                             <span>مدیریت جواب ها</span>
@@ -504,23 +504,29 @@
                             <span>مدیریت موضوعات</span>
                         </a>
                     </li>-->
-                    <li id="SReporting" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin'" class="treeview">
+                    <li id="SReporting"  ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin' || session.AdminPermissionLevel =='AssessmentManager'" class="treeview">
                         <a class="link">
                             <i class="fa fa-bar-chart"></i>
                             <span>گزارش گیری</span>
                             <i class="fa fa-angle-right pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="SPersonReport">
+                            <li id="SPersonReport" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin'" >
                                 <a ui-sref="reporting()">
                                     <i class="fa fa-circle-o"></i>
                                     گزارش فردی
                                 </a>
                             </li>
-                            <li id="SOrganReport">
+                            <li id="SOrganReport" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='OrganAdmin'">
                                 <a ui-sref="organ_report">
                                     <i class="fa fa-circle-o"></i>
                                   گزارش نواحی
+                                </a>
+                            </li>
+                            <li id="SAssessmentUsers" ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='AssessmentManager'">
+                                <a ui-sref="assessment_users">
+                                    <i class="fa fa-circle-o"></i>
+                                    گزارش ارزیابی
                                 </a>
                             </li>
                         </ul>
@@ -566,14 +572,14 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="SAssessment" ng-if="session.AdminPermissionLevel =='Base'" class="treeview">
+                    <li id="SAssessment"  ng-if="session.AdminPermissionLevel =='Base' || session.AdminPermissionLevel =='AssessmentManager'" class="treeview">
                         <a class="link">
-                            <i class="fa fa-paper-plane-o"></i>
+                            <i class="fa fa-print"></i>
                             <span>مدیریت خودارزیابی</span>
                             <i class="fa fa-angle-right pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="SDepo">
+                            <li id="SDepo" ng-if="session.AdminPermissionLevel =='Base'">
                                 <a ui-sref="depo">
                                     <i class="fa fa-circle-o"></i>
                                     مدیریت دپو ها                                </a>
@@ -582,15 +588,9 @@
                             <li id="SAssessmentUtils">
                                 <a ui-sref="assessment_utils">
                                     <i class="fa fa-circle-o"></i>
-                                    مدیریت امکانات ارزیابی                                </a>
+                                  سوال ه  مدیریت امکانات ارزیابی                                </a>
                             </li>
 
-                            <li id="SAssessmentUsers">
-                                <a ui-sref="assessment_users">
-                                    <i class="fa fa-circle-o"></i>
-                                    لیست پیمانکاران
-                                </a>
-                            </li>
                         </ul>
                     </li>
                     <li id="SMeta" ng-if="session.AdminPermissionLevel =='Base'" class="treeview">

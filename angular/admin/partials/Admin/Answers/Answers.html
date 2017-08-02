@@ -24,21 +24,30 @@
 
                     </div>
                     <div class="col-sm-2">
-                        <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right" data-toggle="dropdown" aria-expanded="false" style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
+                        <button type="button" class="btn btn-success btn-sm dropdown-toggle pull-right"
+                                data-toggle="dropdown" aria-expanded="false"
+                                style="border-bottom-right-radius: 3px; border-top-right-radius: 3px;">
                             {{dropDwonTitle}}
                             <span class="fa fa-caret-down"></span>
                         </button>
                         <ul class="dropdown-menu pull-right">
-                            <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی جواب ها</a></li>
-                            <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">جواب های تایید شده</a></li>
-                            <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">جواب های در انتظار تایید</a></li>
-                            <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">جواب ها تایید نشده</a></li>
+                            <li><a ng-click="changeTypeFilter(null)" class="link persian-rtl text-right">همه ی جواب
+                                ها</a></li>
+                            <li><a ng-click="changeTypeFilter(1)" class="link persian-rtl text-right">جواب های تایید
+                                شده</a></li>
+                            <li><a ng-click="changeTypeFilter(0)" class="link persian-rtl text-right">جواب های در انتظار
+                                تایید</a></li>
+                            <li><a ng-click="changeTypeFilter(-1)" class="link persian-rtl text-right">جواب ها تایید
+                                نشده</a></li>
                         </ul>
                     </div>
                     <div class="col-sm-4" ng-if="session.AdminPermissionLevel !='OrganAdmin'">
                         <div>
-                            <ui-select ng-model="Position.selected" on-select="changePosition()" theme="bootstrap" sortable="true" close-on-select="true" required>
-                                <ui-select-match allow-clear placeholder="منطقه">{{Position.selected.OrganizationName}}</ui-select-match>
+                            <ui-select ng-model="Position.selected" on-select="changePosition()" theme="bootstrap"
+                                       sortable="true" close-on-select="true" required>
+                                <ui-select-match allow-clear placeholder="منطقه">
+                                    {{Position.selected.OrganizationName}}
+                                </ui-select-match>
                                 <ui-select-choices repeat="edu in allPositions">
                                     <div compile="edu.OrganizationName | highlight: $select.search"></div>
                                 </ui-select-choices>
@@ -48,7 +57,8 @@
 
                     <div class="col-sm-4">
                         <input type="text" name="table_search" ng-model="pagingParams.searchValue"
-                               ng-model-options="{debounce:500}" ng-change="search()" class="form-control input-sm pull-right"
+                               ng-model-options="{debounce:500}" ng-change="search()"
+                               class="form-control input-sm pull-right"
                                placeholder="جستجو ...">
                     </div>
                 </div><!-- /.box-body -->
@@ -75,7 +85,8 @@
                         </tr>
                         <tr ng-repeat="u in answer.all">
                             <td>
-                                <img ng-src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
+                                <img ng-src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle"
+                                     alt="User Image" style="width: 38px;">
                             </td>
                             <td>{{u.FullName| pNumber}}</td>
                             <td>{{u.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>
@@ -87,15 +98,35 @@
                             </td>
                             <td>{{u.Email}}</td>
                             <td>
-                                <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType || session.AdminPermissionLevel == 'OrganAdmin'">
-                                    <i ng-if="(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)" confirm="آیا مطمئن هستید که میخواهید این جواب را حذف کنید؟"
-                                       class="fa fa-trash text-red link hvr-grow" ng-click="removeAnswer(u.ID ,u.AuthorID )" title="حذف جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i class="fa fa-times link hvr-grow" ng-if="(u.AdminAccepted==1 || u.AdminAccepted==0)&&(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)" style="color: #e67e22;"
-                                       ng-click="openDiscardModal(u.ID , u.AuthorID)" title="رد کردن جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                <div class="table-action-icons"
+                                     ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType || session.AdminPermissionLevel == 'OrganAdmin'">
+                                    <i ng-if="(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)"
+                                       confirm="آیا مطمئن هستید که میخواهید این جواب را حذف کنید؟"
+                                       class="fa fa-trash text-red link hvr-grow"
+                                       ng-click="removeAnswer(u.ID ,u.AuthorID )" title="حذف جواب" data-toggle="tooltip"
+                                       data-placement="top" tooltip="Tooltip on left" tooltip-placement="top"
+                                       tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-times link hvr-grow"
+                                       ng-if="(u.AdminAccepted==1 || u.AdminAccepted==0)&&(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)"
+                                       style="color: #e67e22;"
+                                       ng-click="openDiscardModal(u.ID , u.AuthorID)" title="رد کردن جواب"
+                                       data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left"
+                                       tooltip-placement="top" tooltip-class="vazir-font"
+                                       tooltip-append-to-body="true"></i>
                                     <i class="fa fa-check text-green link hvr-grow"
-                                       ng-if="(u.AdminAccepted==-1 || u.AdminAccepted==0)&& (session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)" ng-click="changeAnswerState(u ,1)" title="تایید جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u,adminType)" title="متن و ویرایش جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                    <a class="link" href="../Forum/#/Question/{{u.QuestionID}}"><i class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i></a>
+                                       ng-if="(u.AdminAccepted==-1 || u.AdminAccepted==0)&& (session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)"
+                                       ng-click="openScoreModal(u)" title="تایید جواب" data-toggle="tooltip"
+                                       data-placement="top" tooltip="Tooltip on left" tooltip-placement="top"
+                                       tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                    <i class="fa fa-eye text-blue link hvr-grow" ng-click="openRoleModal(u,adminType)"
+                                       title="متن و ویرایش جواب" data-toggle="tooltip" data-placement="top"
+                                       tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
+                                       tooltip-append-to-body="true"></i>
+                                    <a class="link" href="../Forum/#/Question/{{u.QuestionID}}"><i
+                                            class="fa fa-angle-double-left text-teal link hvr-pulse" title="لینک سوال"
+                                            data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left"
+                                            tooltip-placement="top" tooltip-class="vazir-font"
+                                            tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -121,7 +152,10 @@
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header vazir-font text-right">
         <h3 class="modal-title text-info vazir-font">
-            <i  ng-if="(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)" class="fa fa-pencil text-green link hvr-grow" title="" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true" ng-click="changeEditMode()" data-original-title="ویرایش جواب"></i>
+            <i ng-if="(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)"
+               class="fa fa-pencil text-green link hvr-grow" title="" data-toggle="tooltip" data-placement="top"
+               tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
+               tooltip-append-to-body="true" ng-click="changeEditMode()" data-original-title="ویرایش جواب"></i>
             متن جواب
         </h3>
     </div>
@@ -136,14 +170,16 @@
             جواب:
         </h4>
         <div compile="AnswerText | pNumber " ng-hide="editMode">
-            
+
         </div>
         <div ng-show="editMode">
             <textarea rows="12" class="col-xs-12" ng-model="AnswerText"></textarea>
         </div>
     </div>
     <div class="modal-footer vazir-font">
-        <button ng-if="(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)" ng-show="editMode" class="btn btn-success pull-right" type="button" ng-click="editAnswer()">ویرایش</button>
+        <button ng-if="(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)"
+                ng-show="editMode" class="btn btn-success pull-right" type="button" ng-click="editAnswer()">ویرایش
+        </button>
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
     </div>
 </script>
@@ -156,24 +192,39 @@
         <div class="table-responsive mailbox-messages">
             <table class="table table-hover">
                 <tbody>
-                    <tr>
-                        <th>شماره</th>
-                        <th>دلیل رد جواب</th>
-                        <th style="width : 25px"></th>
-                    </tr>
-                    <tr class="link" ng-repeat="u in common" ng-click="send(u)">
-                        <td class="persian-rtl">
-                            {{$index | pNumber}}
-                        </td>
-                        <td class="persian-rtl">
-                            {{u.Message | pNumber}}
-                        </td>
-                        <td>
-                            <div class="table-action-icons">
-                                <i class="fa fa-times text-yellow link hvr-grow" ng-click="send(u)" title="رد جواب" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                            </div>
-                        </td>
-                    </tr>
+                <tr>
+                    <th>شماره</th>
+                    <th>دلیل رد جواب</th>
+                    <th style="width : 25px"></th>
+                </tr>
+                <tr class="link" ng-repeat="u in common" ng-click="send(u)">
+                    <td class="persian-rtl">
+                        {{$index | pNumber}}
+                    </td>
+                    <td class="persian-rtl">
+                        {{u.Message | pNumber}}
+                    </td>
+                    <td>
+                        <div class="table-action-icons">
+                            <i class="fa fa-times text-yellow link hvr-grow" ng-click="send(u)" title="رد جواب"
+                               data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left"
+                               tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="link">
+                    <td class="persian-rtl">
+                        سایر
+                    </td>
+                    <td class="persian-rtl">
+                        <input type="text" class="form-control input-sm pull-right" ng-model="Message">
+                    </td>
+                    <td>
+                        <div class="table-action-icons">
+                            <button class="btn btn-sm" ng-click="send({MessageTitle:'رد جواب',Message:Message})">رد جواب</button>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -186,5 +237,67 @@
 </script>
 
 
+<script type="text/ng-template" id="ScoreModal.html">
+    <div class="modal-header vazir-font text-right">
+        <label class="modal-title text-danger" style="font-size:15px">امتیاز جواب را انتخاب کنید</label>
+    </div>
+    <div class="modal-body vazir-font text-right persian-rtl">
+        <div class="table-responsive mailbox-messages">
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <th>امتیاز</th>
+                    <th></th>
+                    <th style="width : 125px"></th>
+                </tr>
+                <tr class="link" ng-repeat="u in common" ng-click="send(u)">
+                    <td class="persian-rtl">
+                        {{u | pNumber}}
+                    </td>
+                    <td class="persian-rtl" ng-switch="u">
+                        <div class="table-action-icons" ng-switch-when="1" ng-click="send(u)">
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                        </div>
+                        <div class="table-action-icons" ng-switch-when="2" ng-click="send(u)">
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                        </div>
+                        <div class="table-action-icons" ng-switch-when="3" ng-click="send(u)">
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                        </div>
+                        <div class="table-action-icons" ng-switch-when="4" ng-click="send(u)">
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                        </div>
+                        <div class="table-action-icons" ng-switch-when="5" ng-click="send(u)">
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                            <i class="fa fa-star text-yellow link hvr-grow"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="table-action-icons">
+                            <i class="fa fa-check text-green link hvr-grow" ng-click="send(u)" title="تایید جواب"
+                               data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left"
+                               tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
+
+</script>
 
 

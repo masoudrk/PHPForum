@@ -83,6 +83,7 @@
                                 chart-graphs="dailyChartOptions"
                                 enable-scroll-bar="true"
                                 enable-export="true"
+                                category-field="date"
                                 chart-height="290"></serial-chart>
                         </div>
                     </div>
@@ -111,6 +112,7 @@
                 </div><!-- /.box-header -->
                 <div class="box-body persian-rtl">
                     <radar-chart
+                            category-field="Title"
                         chart-id="chart3"
                         chart-data="dashboardData.RadarChartData"
                         chart-graphs="radarChartGraphs"
@@ -148,6 +150,7 @@
                         chart-graphs="incrementChartOptions"
                         enable-scroll-bar="true"
                         enable-export="true"
+                        category-field="date"
                         chart-height="300"></serial-chart>
                     <div class="col-xs-12 text-center">
                         <ul class="nav nav-pills" style="padding-right: 0px; display: inline-block;">
@@ -173,6 +176,7 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <stack-bar-chart
+                            category-field="OrganizationName"
                         chart-id="chart267"
                         chart-data="dashboardData.StackChartData"
                         chart-graphs="stackChartOptions"
@@ -189,6 +193,63 @@
                                 <i class="fa fa-circle " style="color: #B0DE09"></i>
                                 <span>جواب ها</span>
                             </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">
+                        <span> نمودار بازدید </span>
+                        <span ng-bind="'10' | pNumber"></span>
+                        <span>روز گذشته </span>
+                    </h3>
+                </div><!-- /.box-header -->
+                <div class="box-body english-ltr">
+                    <cylinder-chart
+                            chart-id="cylinder1"
+                            chart-data="dashboardData.CylinderData"
+                            chart-graphs="CylinderChart3D"
+                            enable-export="true"
+                            chart-height="350"
+                    category-field="category"></cylinder-chart>
+                    <div class="col-xs-12 text-center">
+                        <!--<ul class="nav nav-pills" style="padding-right: 0px; display: inline-block;">-->
+                            <!--<li style="padding-left: 20px">-->
+                                <!--<i class="fa fa-circle text-red"></i>-->
+                                <!--<span>جواب ها</span>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<i class="fa fa-circle" style="color: #00BBCC;"></i>-->
+                                <!--<span>سوال ها</span>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title vazir-font">
+                        <span class="persian-rtl vazir-font" dir="rtl"> نمودار مجموع فعالیت های نواحی  </span>
+                    </h3>
+                </div><!-- /.box-header -->
+                <div class="box-body english-ltr">
+                    <column-chart
+                            chart-id="columnChart1"
+                            chart-data="dashboardData.ColumnData"
+                            chart-graphs="ColumnChart3D"
+                            enable-export="true"
+                            chart-height="350"
+                            category-field="OrganizationName"></column-chart>
+                    <div class="col-xs-12 text-center">
+                        <ul class="nav nav-pills" style="padding-right: 0px; display: inline-block;">
+                        <li style="padding-left: 20px">
+                        <span>مجموع سوال و جواب ها ی هر ناحیه</span>
+                        </li>
                         </ul>
                     </div>
                 </div>

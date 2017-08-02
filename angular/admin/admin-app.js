@@ -242,7 +242,7 @@ app.config([
                 }
             }
         }).state("new_popup", {
-            url: "/NewPopUp:id",
+            url: "/NewPopUp/:id",
             templateUrl: "angular.partial.NewPopUp.html",
             controller: 'NewPopUpCtrl',
             resolve: {
@@ -266,7 +266,7 @@ app.config([
                 }
             }
         }).state("new_survey", {
-            url: "/NewSurvey:id",
+            url: "/NewSurvey/:id",
             templateUrl: "angular.partial.NewSurvey.html",
             controller: 'NewSurveyCtrl',
             resolve: {
@@ -298,7 +298,7 @@ app.config([
                     return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
-                    return 'مدیریت خود ارزیابی';
+                    return 'لیست خود ارزیابی ها';
                 }
             }
         }).state("assessment_utils", {

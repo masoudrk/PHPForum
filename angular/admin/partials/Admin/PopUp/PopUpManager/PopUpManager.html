@@ -30,7 +30,7 @@
                                 <th>تاریخ افزودن</th>
                                 <th>تاریخ اتمام</th>
                                 <th>وضعیت</th>
-                                <th style="width: 125px"></th>
+                                <th style="width: 175px"></th>
                             </tr>
                             <tr ng-repeat="mes in popUps">
                                 <td>{{mes.Title | pNumber}}</td>
@@ -45,8 +45,10 @@
                                     <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType">
                                         <i confirm="آیا مطمئن هستید که میخواهید این پاپ آپ را حذف کنید؟"
                                            class="fa fa-trash text-red link hvr-grow" ng-click="deletePopUp(mes)" title="حذف پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                        <i ng-if="mes.PopUpState == 'true'" confirm="آیا مطمئن هستید که میخواهید به این پاپ آپ پایان بدید؟" class="fa fa-flag-checkered link hvr-grow" ng-click="finishPopUo(mes.ID)" title="پایان دادن به پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                         <i class="fa fa-eye text-blue link hvr-grow" ng-click="openPopUpModal(mes)" title="متن پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                         <i class="fa fa-clock-o text-yellow link hvr-grow" ng-click="openPopUpUpdate(mes)" title="تمدید پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                        <i ui-sref="new_popup({id:mes.ID})" class="fa fa-pencil text-green link hvr-grow" title="ویرایش پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     </div>
                                 </td>
                             </tr>

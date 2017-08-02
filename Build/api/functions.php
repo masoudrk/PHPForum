@@ -97,7 +97,7 @@ function echoResponse($status_code, $response) {
     die();
 }
 
-function echoError($message) {
+function echoError($message = null) {
     $response=[];
     $response["Status"] = "error";
     $response["Message"] = $message;

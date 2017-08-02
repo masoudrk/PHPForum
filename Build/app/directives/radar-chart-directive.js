@@ -10,7 +10,8 @@ angular.module('am-charts').directive('radarChart', function () {
             chartHeight : '@',
             chartGraphs : '=',
             chartId : '@',
-            delay : '@'
+            delay : '@',
+            categoryField : '@'
         },
         template: '<div id="{{chartId}}" style="width: 100%; height: {{chartHeight}}px;"></div>',
         controller : function ($scope,$timeout) {
@@ -26,7 +27,7 @@ angular.module('am-charts').directive('radarChart', function () {
                         type: "radar",
                         dataProvider : $scope.chartData ,
 
-                        categoryField: "Title",
+                        categoryField: $scope.categoryField ? $scope.categoryField : 'Title',
                         startDuration: 1,
                         colors : ["#00BBCC","#dd4b39"],
 

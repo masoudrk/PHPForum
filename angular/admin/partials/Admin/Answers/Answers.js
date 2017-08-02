@@ -14,7 +14,7 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 		$scope.pagingController.update();
 	}
 	$scope.changeAnswerState = function (uid, s) {
-	    Extention.post('changeAnswerAccepted', { State: s, AnswerID: uid.ID, AdminPermissionLevel: session.AdminPermissionLevel, UserID: uid.AuthorID, AuthorID: uid.QuestionAuthorID, QuestionID: uid.QuestionID }).then(function (res) {
+	    Extention.post('changeAnswerAccepted', { State: s,Score: uid.rate, AnswerID: uid.ID, AdminPermissionLevel: session.AdminPermissionLevel, UserID: uid.AuthorID, AuthorID: uid.QuestionAuthorID, QuestionID: uid.QuestionID }).then(function (res) {
 			if(res && res.Status == 'success'){
 			    Extention.popSuccess("وضعیت جواب با موفقیت تغییر کرد!");
 				$scope.pagingController.update();
@@ -57,13 +57,14 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	}
 
 	$scope.openDiscardModal = function (answerID, authorID) {
-	    Extention.post('getCommonMessages', { filter: 'رد جواب' }).then(function (res) {
+	    Extention.postAsync('getCommonMessages', { filter: 'رد جواب' }).then(function (res) {
 	        if (res && res.Status == 'success') {
 	            var modalInstance = $uibModal.open({
 	                animation: true,
 	                templateUrl: 'DiscardAnswerModal.html',
 	                controller: function ($scope, $uibModalInstance) {
 	                    $scope.common = res.Data;
+                        $scope.Message = null;
 	                    $scope.answerID = answerID;
 	                    $scope.authorID = authorID;
 	                    $scope.cancel = function () {
@@ -71,10 +72,14 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	                    };
 
 	                    $scope.send = function (message) {
+	                    	if(!message.Message){
+	                    		Extention.popError('متن رد جواب خالی است');
+	                    		return;
+							}
 	                        Extention.post('changeAnswerAccepted', { State: -1, AnswerID: $scope.answerID, AdminPermissionLevel: session.AdminPermissionLevel, UserID: $scope.authorID, Message: message }).then(function (res) {
 	                            if (res && res.Status == 'success') {
 	                                Extention.popSuccess("وضعیت جواب با موفقیت تغییر کرد!");
-	                                $uibModalInstance.dismiss('cancel');
+                                    $uibModalInstance.close('success');
 	                            } else {
 	                                Extention.popError("مشکل در تغییر وضعیت جواب ، لطفا دوباره تلاش کنید.");
 	                            }
@@ -83,10 +88,12 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	                },
 	                size: 'md'
 	            });
-	            modalInstance.result.then(function () {
-	            }, function () {
-	                $scope.pagingController.update();
-	            });
+                modalInstance.result.then(function (res) {
+                    if (res == 'success') {
+                        $scope.pagingController.update();
+                    }
+                }, function () {
+                });
 	        } else {
 	            return;
 	        }
@@ -115,6 +122,7 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	                    Extention.post('editAnswer', { AnswerID: $scope.Answer.ID, AnswerText: $scope.AnswerText }).then(function (res) {
 	                        if (res && res.Status == 'success') {
 	                            Extention.popSuccess("جواب با موفقیت ویرایش شد!");
+                                $uibModalInstance.close('success');
 	                            $scope.editMode = false;
 	                        } else {
 	                            Extention.popError("مشکل در ویرایش جواب ، لطفا دوباره امتحان کنید.");
@@ -125,11 +133,40 @@ angular.module(appName).controller('AnswersCtrl', function ($scope, $rootScope, 
 	        },
 	        size: 'md'
 	    });
-	    modalInstance.result.then(function () {
-	    }, function () {
-	        $scope.pagingController.update();
-	    });
+        modalInstance.result.then(function (res) {
+            if (res == 'success') {
+                $scope.pagingController.update();
+            }
+        }, function () {
+        });
 	}
+
+    $scope.openScoreModal = function (ans) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'ScoreModal.html',
+            controller: function ($scope, $uibModalInstance) {
+                $scope.ans = ans;
+                $scope.common = [1, 2, 3, 4, 5];
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+
+                $scope.send = function (rate) {
+                    $scope.ans.rate = rate;
+                    $uibModalInstance.close($scope.ans);
+                };
+            },
+            size: 'md'
+        });
+        modalInstance.result.then(function (res) {
+            if (res) {
+                $scope.changeAnswerState(res, 1);
+            }
+        }, function () {
+
+        });
+    }
 	$scope.changePosition = function () {
 	    $scope.pagingParams.OrganizationID = ($scope.Position.selected) ? $scope.Position.selected.ID : null;
 	    $scope.search();

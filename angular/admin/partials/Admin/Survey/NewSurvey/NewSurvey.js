@@ -7,11 +7,38 @@ angular.module(appName).controller('NewSurveyCtrl', function ($scope, $rootScope
     $scope.SurveyTypes =[];
     $scope.surveyType ={selected:null};
     $scope.newOption ="";
-    Extention.post('Survey/getAllSurveyTypes', { }).then(function (res) {
-        if (res && res.Status == 'success') {
-            $scope.SurveyTypes = res.Data;
-        }
-    });
+
+    if($stateParams.id){
+        editMode=true;
+        Extention.post('Survey/getSurveyByIDForEdit',{surveyID:$stateParams.id}).then(function (res) {
+            if(res && res.Status=='success'){
+                $scope.survey = res.Data;
+                $scope.ExpireDate = new Date(Date.parse(res.Data.ExpireDate.replace('-', '/', 'g'))).getTime();
+                $scope.StartDate = new Date(Date.parse(res.Data.StartDate.replace('-', '/', 'g'))).getTime();
+                Extention.post('Survey/getAllSurveyTypes', { }).then(function (res) {
+                    if (res && res.Status == 'success') {
+                        $scope.SurveyTypes = res.Data;
+                        for (var i = 0 ; i<$scope.SurveyTypes.length;i++){
+                            if($scope.SurveyTypes[i].ID == $scope.survey.SurveyTypeID){
+                                $scope.surveyType.selected =$scope.SurveyTypes[i];
+                                break;
+                            }
+                        }
+                    }
+                });
+            }else{
+                Extention.popError("مشکل در دریافت اطلاعات.");
+            }
+        });
+
+    }else {
+        Extention.post('Survey/getAllSurveyTypes', { }).then(function (res) {
+            if (res && res.Status == 'success') {
+                $scope.SurveyTypes = res.Data;
+            }
+        });
+    }
+
     $scope.addNewOption = function () {
     	if($scope.newOption.length <3){
             Extention.popError('متن گزینه را وارد کنید');return;
@@ -49,9 +76,12 @@ angular.module(appName).controller('NewSurveyCtrl', function ($scope, $rootScope
         $scope.survey.StartDate = new Date($scope.survey.toFullStart.unix);
         $scope.survey.SurveyTypeID = $scope.surveyType.selected.ID;
 
-		Extention.post('Survey/saveSurvey',$scope.survey).then(function (res) {
+		Extention.post('Survey/updateSurvey',$scope.survey).then(function (res) {
 			if(res && res.Status=='success'){
-				Extention.popSuccess("نظرسنجی با موفقیت اضافه شد!");
+			    if($scope.editMode){
+                    Extention.popSuccess("نظرسنجی با موفقیت ویرایش شد!");
+                }else
+                    Extention.popSuccess("نظرسنجی با موفقیت اضافه شد!");
 				$state.go('survey_manager');
 			}else{
 				Extention.popError("مشکل در افزودن نظرسنجی ، لطفا دوباره امتحان کنید.");

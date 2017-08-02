@@ -19,7 +19,6 @@ angular.module(appName).controller('SurveyManagerCtrl', function ($scope, $rootS
             controller: function ($scope, $uibModalInstance) {
                 $scope.Survey = {};
                 Extention.post('Survey/getSurveyByID', { SurveyID: Data.ID}).then(function (res) {
-                    console.log(res);
                     if (res && res.Status == 'success') {
                         $scope.Survey = res.Data;
                     }
@@ -61,26 +60,25 @@ angular.module(appName).controller('SurveyManagerCtrl', function ($scope, $rootS
     }
 
     $scope.openSurveyUpdate  = function (Data) {
-        $uibModal.open({
+        var modalInstance =$uibModal.open({
             animation: true,
             templateUrl: 'surveyUpdate.html',
             controller: function ($scope, $uibModalInstance) {
                 $scope.mindate =Date.now();
                 $scope.ExpireDate=new Date(Date.parse(Data.ExpireDate.replace('-','/','g'))).getTime();
-                console.log($scope.mindate);
                 $scope.survey = Data;
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
                 $scope.upgrade = function () {
                     if(!$scope.toFull.unix){
-                        Extention.popError('تاریخ اتمام پاپ آپ را انتخاب کنید');return;
+                        Extention.popError('تاریخ اتمام نظرسنجی را انتخاب کنید');return;
                     }
                     var ExpireDate = new Date($scope.toFull.unix);
                     Extention.post('Survey/updateSurvey',{ExpireDate : ExpireDate , SurveyID:$scope.survey.ID}).then(function (res) {
                         if(res && res.Status=='success'){
                             Extention.popSuccess("نظرسنجی با موفقیت تمدید شد!");
-                            $scope.cancel();
+                            $uibModalInstance.close('success');
                         }else{
                             Extention.popError("مشکل در تمدید نظرسنجی ، لطفا دوباره امتحان کنید.");
                         }
@@ -88,6 +86,24 @@ angular.module(appName).controller('SurveyManagerCtrl', function ($scope, $rootS
                 }
             },
             size: 'md'
+        });
+
+        modalInstance.result.then(function (res) {
+            if (res == 'success') {
+                $scope.pagingController.update();
+            }
+        }, function () {
+        });
+    }
+
+    $scope.finishSurvey = function (SurveyID) {
+        Extention.post('Survey/updateSurvey',{SurveyID:SurveyID, finishPopUp: true}).then(function (res) {
+            if(res && res.Status=='success'){
+                Extention.popSuccess("نظرسنجی با موفقیت پایان یافت!");
+                $scope.pagingController.update();
+            }else{
+                Extention.popError("مشکل در تمدید نظرسنجی ، لطفا دوباره امتحان کنید.");
+            }
         });
     }
     activeElement('#SSurvey','#SAllSurveys');

@@ -5,8 +5,8 @@ angular.module(appName).controller('AllAdminsCtrl', function ($scope, $rootScope
     $scope.pagingParams = {};
 	$scope.pagingController = {};
 	$scope.user = {};
-    $scope.adminType = { selected: {} };
-    $scope.forumType = { selected: {} };
+    $scope.adminType = { selected: null };
+    $scope.forumType = { selected: null };
 	$scope.adminTypes = [];
     $scope.forumTypes = [];
     $scope.Person = {};

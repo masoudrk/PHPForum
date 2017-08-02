@@ -31,7 +31,7 @@
                                 <th>تاریخ شروع</th>
                                 <th>تاریخ اتمام</th>
                                 <th>وضعیت</th>
-                                <th style="width: 125px"></th>
+                                <th style="width: 175px"></th>
                             </tr>
                             <tr ng-repeat="mes in surveys">
                                 <td>{{mes.Name | pNumber}}</td>
@@ -47,8 +47,11 @@
                                     <div class="table-action-icons" ng-if="session.AdminPermissionLevel=='Base'">
                                         <i confirm="آیا مطمئن هستید که میخواهید این نظرسنجی را حذف کنید؟"
                                            class="fa fa-trash text-red link hvr-grow" ng-click="deleteSurvey(mes)" title="حذف نظرسنجی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                        <i ng-if="mes.SurveyState == 'true'" confirm="آیا مطمئن هستید که میخواهید به این نظرسنجی پایان بدید؟" class="fa fa-flag-checkered text-yellow link hvr-grow" ng-click="finishSurvey(mes.ID)"
+                                           title="پایان دادن به نظرسنجی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                         <i class="fa fa-eye text-blue link hvr-grow" ng-click="openSurveyModal(mes)" title="متن نظرسنجی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
-                                        <i class="fa fa-clock-o text-yellow link hvr-grow" ng-click="openSurveyUpdate(mes)" title="تمدید پاپ آپ" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                        <i class="fa fa-clock-o text-yellow link hvr-grow" ng-click="openSurveyUpdate(mes)" title="تمدید نظرسنجی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
+                                        <i ui-sref="new_survey({id:mes.ID})" class="fa fa-pencil text-green link hvr-grow" title="ویرایش نظرسنجی" data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"></i>
                                     </div>
                                 </td>
                             </tr>

@@ -8,6 +8,18 @@
         Extention.post("getQuestionByID", { QuestionID: $stateParams.id, UserID: $rootScope.user.UserID }).then(function (res) {
             if (res.Status == 'success') {
                 $scope.question = res.Data;
+                var bestIndex = null;
+                for(var i =0;i<$scope.question.Answers.length;i++){
+                    if($scope.question.Answers[i].BestAnswer !=0){
+                        bestIndex = i;
+                        break;
+                    }
+                }
+                if(bestIndex){
+                    var hand =  $scope.question.Answers[bestIndex];
+                    $scope.question.Answers[bestIndex] = $scope.question.Answers[0];
+                    $scope.question.Answers[0] = hand;
+                }
                 $scope.checkNowOnline();
             
                 $rootScope.breadcrumbs = [];
@@ -134,7 +146,9 @@
     });
 
     $scope.checkNowOnline = function () {
-        if(!$scope.question && !$scope.question.UserID)
+        if(!$scope.question)
+            return;
+        if(!$scope.question.UserID)
             return;
         var ous =  $scope.socketData.OnlineUsers;
         for (var i = 0 ; i < ous.length ; i++){

@@ -1,12 +1,12 @@
 ﻿<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
-        مدیریت نظرسنجی
+        {{(!editMode)?'ویرایش':'افزودن'}} نظرسنجی
     </h1>
 
     <ol class="breadcrumb">
         <li><a ui-sref="dashboard"><i class="fa fa-dashboard"></i>خانه</a></li>
-        <li class="active">مدیریت نظرسنجی</li>
+        <li class="active">{{(!editMode)?'ویرایش':'افزودن'}} نظرسنجی</li>
     </ol>
 </section>
 
@@ -104,7 +104,7 @@
                             <div class="col-xs-12">
                                 <div class="col-xs-12">
                                     <button class="btn btn-success pull-left" type="submit" ng-click="saveSurvey()" >
-                                        {{editMode?'ویرایش':'اضافه'}}
+                                        {{!editMode?'ویرایش':'اضافه'}}
                                     </button>
                                 </div>
                             </div>

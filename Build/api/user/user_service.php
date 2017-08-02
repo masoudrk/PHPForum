@@ -20,7 +20,7 @@ $app->post('/insertOrUpdateAssessment', function() use ($app)  {
         if($data->type == 1){
             $app->db->updateRecord('assessment',"AssessmentEducationID='$data->AssessmentEducationID'
             ".(isset($data->JobExperience)?",JobExperience='$data->JobExperience'":"").",JobRecordID='$data->JobRecordID'
-            ".(isset($data->Depo1ID)?",Depo1ID='$data->Depo1ID'":"").(isset($data->Depo2ID)?",Depo2ID='$data->Depo2ID'":"")
+            ".(isset($data->DepoID)?",DepoID='$data->DepoID'":"")
                 .",AssessmentEducationLevelID = '$data->AssessmentEducationLevelID',CurrentPositionID = '$data->CurrentPositionID'
                 ,BrithDate = '$data->BrithDate'".(isset($data->AssessmentEducationName)?",AssessmentEducationName='$data->AssessmentEducationName'":""), "ID='".$resq["ID"]."'");
 
@@ -36,8 +36,8 @@ $app->post('/insertOrUpdateAssessment', function() use ($app)  {
 
             foreach ($data->jobs as $value) {
                 $app->db->insertToTable('assessment_job_record_info'
-                    ,'AssessmentID,OrganPositionID,EndDate,StartDate,JobTitle,ContractorCompany'
-                    ,$resq["ID"].",$value->OrganPositionID,'$value->EndDate','$value->StartDate','$value->JobTitle','$value->ContractorCompany'");
+                    ,'AssessmentID,OrganPositionID,EndDate,StartDate,JobID,ContractorCompany'
+                    ,$resq["ID"].",$value->OrganPositionID,'$value->EndDate','$value->StartDate','$value->JobID','$value->ContractorCompany'");
             }
             echoSuccess();
         }else if($data->type == 3){
@@ -66,11 +66,10 @@ $app->post('/insertOrUpdateAssessment', function() use ($app)  {
         //Insert
         if($data->type == 1){
             $assessmentID =  $app->db->insertToTable('assessment'
-                ,'UserID,AssessmentEducationID ,JobExperience,JobRecordID,Depo1ID,Depo2ID
+                ,'UserID,AssessmentEducationID ,JobExperience,JobRecordID,DepoID
             ,AssessmentEducationLevelID,CurrentPositionID,BrithDate, AssessmentEducationName'
                 ,$sess->UserID.",$data->AssessmentEducationID,'".(isset($data->JobExperience)?$data->JobExperience:"")."'
-            ,$data->JobRecordID,".(isset($data->Depo1ID)?"$data->Depo1ID":"'0'").",".(isset($data->Depo2ID)?"$data->Depo2ID":"'0'")."
-            ,$data->AssessmentEducationLevelID,$data->CurrentPositionID,
+            ,$data->JobRecordID,".(isset($data->DepoID)?"$data->DepoID":"'0'").",$data->AssessmentEducationLevelID,$data->CurrentPositionID,
             '".$data->BrithDate."','".(isset($data->AssessmentEducationName)?$data->AssessmentEducationName:"")."'", true);
 
             foreach ($data->Positions as $value) {
@@ -84,7 +83,11 @@ $app->post('/insertOrUpdateAssessment', function() use ($app)  {
     }
 
 });
-
+$app->post('/getPositionDepos', function() use ($app)  {
+    $data = json_decode($app->request->getBody());
+    $res = $app->db->getRecords("SELECT * FROM `depo` WHERE depo.OrganPositionID = '$data->PositionID'");
+    echoSuccess($res);
+});
 
 $app->post('/getAssessmentData', function() use ($app)  {
     $data = json_decode($app->request->getBody());
@@ -94,7 +97,7 @@ $app->post('/getAssessmentData', function() use ($app)  {
     $res["AllEducationLevels"] = $app->db->getRecords("SELECT * FROM `assessment_education_level`");
     $res["AllJobRecords"] = $app->db->getRecords("SELECT * FROM `assessment_job_record`");
     $res["AllPositions"] = $app->db->getRecords("SELECT * FROM `organ_position`");
-    $res["Depos"] = $app->db->getRecords("SELECT * FROM `depo`");
+    $res["AllJobs"] = $app->db->getRecords("SELECT * FROM `assessment_job`");
     $res["AssessmentJobInfo"] = $app->db->getRecords("SELECT aj.* FROM `assessment_job_record_info` aj
 INNER JOIN assessment as a on a.ID = aj.AssessmentID
  WHERE a.UserID = '".$sess->UserID."'");
@@ -1731,7 +1734,7 @@ $app->post('/getUserProfile', function() use ($app)  {
 
 
     $resQ = $app->db->makeQuery("SELECT user.`ID`,user.Description, `FullName`, `Email`, `Username`, `PhoneNumber`, `Tel`, 
-    `SignupDate`,IsContractor,
+    `SignupDate`,IsContractor,score,
  `Gender` , FullPath as AvatarImagePath ,
  (SELECT count(*) FROM forum_question where forum_question.AuthorID='$sess->UserID') as QuestionsCount,
  (SELECT count(*) FROM forum_answer where forum_answer.AuthorID='$sess->UserID') as AnswersCount,
@@ -1941,18 +1944,18 @@ where lq.TargetQuestionID = '$r->QuestionID'");
             $Related[] = $item;
     $resp['RelatedQuestions'] = $Related;
 
-        $resQ = $app->db->makeQuery("select a.* , u.FullName ,u.ID as UserID, u.Email ,u.OrganizationID ,u.score, u.Description , f.FullPath, o.OrganizationName ,
-(SELECT count(*) FROM forum_question where AuthorID = u.ID) as QuestionsCount ,
-(SELECT count(*) FROM forum_answer where AuthorID = u.ID) as AnswerCount ,
-(SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID' and q.AnswerID = a.ID limit 1) as PersonAnswerRate ,
-(SELECT sum(RateValue) FROM answer_rate where AnswerID = a.ID) as AnswerScore ,
-(SELECT count(*) FROM person_follow where TargetUserID = a.AuthorID and UserID = '$r->UserID') as PersonFollow,
-(SELECT count(*) FROM forum_question as qst where qst.ID = '$r->QuestionID' and qst.BestAnswerID = a.ID) as BestAnswer
-FROM forum_answer as a
-inner join user as u on u.ID = a.AuthorID
-inner join file_storage as f on f.ID = u.AvatarID
-left join organ_position as o on u.OrganizationID = o.ID
-where a.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f.IsAvatar = 1 ORDER by a.CreationDate");
+        $resQ = $app->db->makeQuery("select a2.* , u1.FullName ,u1.ID as UserID, u1.Email ,u1.OrganizationID ,u1.score, u1.Description , f2.FullPath, o2.OrganizationName ,
+(SELECT count(*) FROM forum_question where AuthorID = u1.ID) as QuestionsCount ,
+(SELECT count(*) FROM forum_answer where AuthorID = u1.ID) as AnswerCount ,
+(SELECT q.RateValue FROM answer_rate as q where q.UserID = '$r->UserID' and q.AnswerID = a2.ID limit 1) as PersonAnswerRate ,
+(SELECT sum(RateValue) FROM answer_rate where AnswerID = a2.ID) as AnswerScore ,
+(SELECT count(*) FROM person_follow where TargetUserID = a2.AuthorID and UserID = '$r->UserID') as PersonFollow,
+(SELECT count(*) FROM forum_question as qst where qst.ID = '$r->QuestionID' and qst.BestAnswerID = a2.ID) as BestAnswer
+FROM forum_answer as a2
+inner join user as u1 on u1.ID = a2.AuthorID
+inner join file_storage as f2 on f2.ID = u1.AvatarID
+left join organ_position as o2 on u1.OrganizationID = o2.ID
+where a2.QuestionID = '$r->QuestionID' and AdminAccepted = 1 and f2.IsAvatar = 1 ORDER by a2.CreationDate");
 
     $Answers = [];
     while($item = $resQ->fetch_assoc()){

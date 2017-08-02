@@ -3,12 +3,18 @@ $app->post('/updatePopUp', function () use ($app) {
 
     $data = json_decode($app->request->getBody());
     checkPermission($app->db, $app->session);//Base admin
-    $qID = $app->db->updateRecord('pop_up', "ExpireDate='$data->ExpireDate'"
-        , "ID='$data->PopUpID'");
+    $qID = false;
+    if (isset($data->finishPopUp)) {
+        $qID = $app->db->updateRecord('pop_up', "ExpireDate= now()"
+            , "ID='$data->PopUpID'");
+    } else {
+        $qID = $app->db->updateRecord('pop_up', "ExpireDate='$data->ExpireDate'"
+            , "ID='$data->PopUpID'");
+    }
     if ($qID)
         echoSuccess();
     else
-        echoError();
+        echoError('somthing bad happend');
 });
 
 $app->post('/markAsReadMessage', function () use ($app) {
@@ -43,7 +49,7 @@ WHERE a.UserID = '$sess->UserID'LIMIT 1");
                 if ($data->State == 1) {
                     $app->db->updateRecord('user', "score=(score+1)", "ID = '$data->UserID'");
                     $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                        "'$sess->UserID','$data->UserID',NOW(),'" . 'تایید سوال' . "','" . 'سوال شما تایید شد' . "','2'");
+                        "'$sess->UserID','$data->UserID',NOW(),'" . 'تایید فایل' . "','" . 'فایل شما تایید شد' . "','2'");
                     if ($data->UserID != $sess->UserID)
                         $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID',
                             "$data->UserID,13,now(),$sess->UserID,0");
@@ -71,7 +77,7 @@ $app->post('/deletePopUp', function () use ($app) {
     if ($qID)
         echoSuccess();
     else
-        echoError();
+        echoError('somthing bad happend');
 });
 $app->post('/getAllPopUps', function () use ($app) {
     $data = json_decode($app->request->getBody());
@@ -80,7 +86,7 @@ $app->post('/getAllPopUps', function () use ($app) {
     if ($resq)
         echoResponse(200, $resq);
     else
-        echoError();
+        echoError('somthing bad happend');
 });
 $app->post('/checkPopUp', function () use ($app) {
     $r = json_decode($app->request->getBody());
@@ -88,17 +94,32 @@ $app->post('/checkPopUp', function () use ($app) {
     $res = $resq->fetch_assoc();
     echoSuccess($res);
 });
-$app->post('/saveNewPopUp', function () use ($app) {
+$app->post('/getPopUpByID', function () use ($app) {
+    $r = json_decode($app->request->getBody());
+    checkPermission($app->db, $app->session);//Base admin
+    $resq = $app->db->getOneRecord("SELECT * FROM pop_up WHERE ID='" . $r->popUpID . "'");
+    echoSuccess($resq);
+});
+$app->post('/saveOrUpdatePopUp', function () use ($app) {
 
     $data = json_decode($app->request->getBody());
     checkPermission($app->db, $app->session);//Base admin
+    if(isset($data->ID)){
+        $res = $app->db->updateRecord('pop_up', "Title='$data->Title',ModalText='$data->ModalText',ExpireDate='$data->ExpireDate'"
+            , "ID='$data->ID'");
+        if ($res)
+            echoSuccess();
+        else
+            echoError('somthing bad happend');
+    }else{
+        $qID = $app->db->insertToTable('pop_up', 'Title,ModalText,CreationDate,ExpireDate',
+            "'$data->Title','$data->ModalText',now(),'" . $data->ExpireDate . "'", true);
+        if ($qID)
+            echoSuccess();
+        else
+            echoError('somthing bad happend');
+    }
 
-    $qID = $app->db->insertToTable('pop_up', 'Title,ModalText,CreationDate,ExpireDate',
-        "'$data->Title','$data->ModalText',now(),'" . $data->ExpireDate . "'", true);
-    if ($qID)
-        echoSuccess();
-    else
-        echoError();
 });
 $app->post('/getAllUserReciveMessages', function () use ($app) {
 
@@ -292,12 +313,13 @@ $app->post('/getAllAwardedQuestions', function () use ($app) {
     $pr = new Pagination($data);
     $sess = new Session();
 
-    $pageRes = $pr->getPage($app->db, "SELECT fq.* ,aq.IsFinished,fs.Title as SubjectName ,u.FullName , lq.TargetQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID
+    $pageRes = $pr->getPage($app->db, "SELECT fq.* ,aq.IsFinished,fs.Title as SubjectName,u2.FullName as WinnerName ,u.FullName , lq.TargetQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID
 FROM forum_question as fq
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
 INNER join user as u on u.ID = fq.AuthorID
 INNER JOIN avarded_question aq on aq.ForumQuestionID = fq.ID
+LEFT JOIN user u2 on u2.ID = aq.AwardedUserID
 LEFT JOIN file_storage as fis on fis.ID = u.AvatarID
 LEFT JOIN link_question as lq on lq.LinkedQuestionID = fq.ID GROUP BY fq.ID ORDER BY fq.ID desc");
 
@@ -675,6 +697,48 @@ ORDER by organ_position.ID asc");
     $resp['MainSubjects'] = getAllMainSubjects($app->db);
     $resp['Organs'] = getAllPositions($app->db);
 
+    $resQ = $app->db->makeQuery("
+SELECT cd.IntervalDay as category,
+  (select count(*) FROM question_view
+  WHERE Date(question_view.ViewDate) = cd.IntervalDay) as visits
+FROM calendar_day as cd
+WHERE cd.ID BETWEEN " . ($cid - 10) . " and " . ($cid));
+
+    $cqDataInc = [];
+    $colors = ['FF0F00','FF6600','FF9E01','FCD202','F8FF01','B0DE09','04D215','0D8ECF','0D52D1','2A0CD0','8A0CCF','CD0D74'];
+    $colorCounter=0;
+    while ($r = $resQ->fetch_assoc()) {
+        $r['color'] = '#'.$colors[$colorCounter];
+        $cqDataInc[] = $r;
+        $colorCounter++;
+    }
+
+    $resp['CylinderData'] = $cqDataInc;
+
+    $resQ = $app->db->makeQuery("select organ_position.ID , organ_position.OrganizationName,
+  (SELECT (select count(*) FROM forum_question
+  WHERE forum_question.AuthorID = u.ID and forum_question.AdminAccepted =1) + (select count(*) FROM forum_answer
+    inner join forum_question on forum_question.ID=forum_answer.QuestionID
+  WHERE forum_answer.AuthorID=u.ID and forum_answer.AdminAccepted = 1
+        and forum_question.AdminAccepted =1) ) as Total
+FROM organ_position
+  LEFT JOIN user as u on u.OrganizationID=organ_position.ID
+GROUP BY organ_position.ID
+ORDER by Total DESC ");
+
+    $cqDataInc = [];
+    $colorCounter=0;
+    while ($r = $resQ->fetch_assoc()) {
+        if($colorCounter >=11)
+            $colorCounter=0;
+        $r['color']= '#'.$colors[$colorCounter];
+        $cqDataInc[] = $r;
+        $colorCounter++;
+    }
+
+    $resp['ColumnData'] = $cqDataInc;
+
+
     echoResponse(200, $resp);
 });
 
@@ -846,7 +910,7 @@ $app->post('/changeUserAccepted', function () use ($app) {
 
             if ($sess->UserID == $data->UserID)
                 echoError('You cannot change your own accepted state.');
-            checkPermission($app->db ,$app->session,['Base' , 'OrganAdmin']);
+            checkPermission($app->db, $app->session, ['Base', 'OrganAdmin']);
 
             if ($sess->AdminPermissionLevel == "OrganAdmin" && $data->State == "1")
                 $data->State = "2";
@@ -962,30 +1026,38 @@ LIMIT 1");
             if (!$sql)
                 echoError('You don\'t have permision to do this action');
 
-            $res = $app->db->updateRecord('forum_answer', "AdminAccepted='$data->State'", "ID='$data->AnswerID'");
-            if ($res) {
-                if ($data->State == 1) {
-                    $app->db->updateRecord('user', "score=(score+2)", "ID = '$data->UserID'");
-                    $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                        "'$sess->UserID','$data->UserID',NOW(),'" . 'تایید پیام' . "','" . 'پیام شما تایید شد' . "','2'");
-                    if ($data->UserID != $sess->UserID)
-                        $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', "$data->UserID,10,now(),$sess->UserID,$data->QuestionID");
-                    if ($data->AuthorID != $data->UserID)
-                        $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', "$data->AuthorID,8,now(),$data->UserID,$data->QuestionID");
-                    $pageRes = $app->db->makeQuery("SELECT qf.UserID FROM question_follow as qf WHERE qf.QuestionID = '$data->QuestionID'");
-                    $res = [];
-                    while ($r = $pageRes->fetch_assoc())
-                        $res[] = $r;
-                    foreach ($res as $value) {
-                        $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"] . ",9,now(),$data->UserID,$data->QuestionID");
-                    }
-                } else if ($data->State == -1 && isset($data->Message)) {
-                    $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                        "'$sess->UserID','$data->UserID',NOW(),'" . $data->Message->MessageTitle . "','" . $data->Message->Message . "','2'");
+            if ($data->State == 1) {
+                $res = $app->db->updateRecord('forum_answer', "AdminAccepted='$data->State',Score='$data->Score'", "ID='$data->AnswerID'");
+                $app->db->updateRecord('user', "score=(score+$data->Score)", "ID = '$data->UserID'");
+                $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    "'$sess->UserID','$data->UserID',NOW(),'" . 'تایید پیام' . "','" . 'پیام شما تایید شد' . "','2'");
+                if ($data->UserID != $sess->UserID)
+                    $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', "$data->UserID,10,now(),$sess->UserID,$data->QuestionID");
+                if ($data->AuthorID != $data->UserID)
+                    $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', "$data->AuthorID,8,now(),$data->UserID,$data->QuestionID");
+                $pageRes = $app->db->makeQuery("SELECT qf.UserID FROM question_follow as qf WHERE qf.QuestionID = '$data->QuestionID'");
+                $res = [];
+                while ($r = $pageRes->fetch_assoc())
+                    $res[] = $r;
+                foreach ($res as $value) {
+                    $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"] . ",9,now(),$data->UserID,$data->QuestionID");
                 }
-                echoSuccess();
-            } else
-                echoError("Cannot update record.");
+            } else if ($data->State == -1 && isset($data->Message)) {
+                $res = $app->db->updateRecord('forum_answer', "AdminAccepted='$data->State'", "ID='$data->AnswerID'");
+                $ans = $app->db->getOneRecord("SELECT * FROM forum_answer WHERE ID='$data->AnswerID'");
+                if ($ans['AdminAccepted'] == 1) {
+                    $app->db->updateRecord('user', "score=(score-" . $ans['Score'] . ")", "ID = '$data->UserID'");
+                }
+                $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    "'$sess->UserID','$data->UserID',NOW(),'" . $data->Message->MessageTitle . "','" . $data->Message->Message . "','2'");
+            } else {
+                $quest = $app->db->getOneRecord("SELECT * FROM forum_answer WHERE ID='$data->AnswerID'");
+                if ($quest['AdminAccepted'] == 1) {
+                    $app->db->updateRecord('user', "score=(score-" . $quest['Score'] . ")", "ID = '$data->UserID'");
+                }
+                $res = $app->db->updateRecord('forum_answer', "AdminAccepted='$data->State'", "ID='$data->AnswerID'");
+            }
+            echoSuccess();
         } else {
             echoError("Sended value:$data->State is not valid!");
         }
@@ -1284,41 +1356,50 @@ LIMIT 1");
             if (!$sql)
                 echoError('You don\'t have permision to do this action');
 
-            $res = $app->db->updateRecord('forum_question', "AdminAccepted='$data->State'", "ID='$data->QuestionID'");
-            if ($res) {
-                if ($data->State == 1) {
-                    $app->db->updateRecord('user', "score=(score+1)", "ID = '$data->UserID'");
-                    $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                        "'$sess->UserID','$data->UserID',NOW(),'" . 'تایید سوال' . "','" . 'سوال شما تایید شد' . "','2'");
-                    if ($data->UserID != $sess->UserID)
-                        $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', "$data->UserID,3,now(),$sess->UserID,$data->QuestionID");
-                    $pageRes = $app->db->makeQuery("SELECT pf.UserID FROM person_follow as pf WHERE pf.TargetUserID = '$data->UserID'");
-                    $res = [];
-                    while ($r = $pageRes->fetch_assoc())
-                        $res[] = $r;
-                    foreach ($res as $value) {
-                        $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"] . ",4,now(),$data->UserID,$data->QuestionID");
-                    }
-                    $pageRes = $app->db->makeQuery("SELECT msf.UserID FROM forum_subject as fs INNER JOIN
+            if ($data->State == 1) {
+                $res = $app->db->updateRecord('forum_question', "Score='$data->Score',AdminAccepted='$data->State'", "ID='$data->QuestionID'");
+                $app->db->updateRecord('user', "score=(score+$data->Score)", "ID = '$data->UserID'");
+                $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    "'$sess->UserID','$data->UserID',NOW(),'" . 'تایید سوال' . "','" . 'سوال شما تایید شد' . "','2'");
+                if ($data->UserID != $sess->UserID)
+                    $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', "$data->UserID,3,now(),$sess->UserID,$data->QuestionID");
+                $pageRes = $app->db->makeQuery("SELECT pf.UserID FROM person_follow as pf WHERE pf.TargetUserID = '$data->UserID'");
+                $res = [];
+                while ($r = $pageRes->fetch_assoc())
+                    $res[] = $r;
+                foreach ($res as $value) {
+                    $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"] . ",4,now(),$data->UserID,$data->QuestionID");
+                }
+                $pageRes = $app->db->makeQuery("SELECT msf.UserID FROM forum_subject as fs INNER JOIN
                         forum_main_subject as fms on fms.ID = fs.ParentSubjectID
                         INNER JOIN main_subject_follow as msf on msf.MainSubjectID = fms.ID WHERE fs.ID = '$data->QuestionSubjectID'
                         UNION
                         SELECT sf.UserID FROM forum_subject as fs
                         INNER JOIN subject_follow as sf on sf.SubjectID = fs.ID
                         WHERE fs.ID = '$data->QuestionSubjectID'");
-                    $res = [];
-                    while ($r = $pageRes->fetch_assoc())
-                        $res[] = $r;
-                    foreach ($res as $value) {
-                        $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"] . ",11,now(),$data->UserID,$data->QuestionID");
-                    }
-                } else if ($data->State == -1 && isset($data->Message)) {
-                    $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
-                        "'$sess->UserID','$data->UserID',NOW(),'" . $data->Message->MessageTitle . "','" . $data->Message->Message . "','2'");
+                $res = [];
+                while ($r = $pageRes->fetch_assoc())
+                    $res[] = $r;
+                foreach ($res as $value) {
+                    $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID , EvenLinkID', $value["UserID"] . ",11,now(),$data->UserID,$data->QuestionID");
                 }
-                echoSuccess();
-            } else
-                echoError("Cannot update record.");
+            } else if ($data->State == -1 && isset($data->Message)) {
+
+                $res = $app->db->updateRecord('forum_question', "AdminAccepted='$data->State'", "ID='$data->QuestionID'");
+                $quest = $app->db->getOneRecord("SELECT * FROM forum_question WHERE ID='$data->QuestionID'");
+                if ($quest['AdminAccepted'] == 1) {
+                    $app->db->updateRecord('user', "score=(score-" . $quest['Score'] . ")", "ID = '$data->UserID'");
+                }
+                $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
+                    "'$sess->UserID','$data->UserID',NOW(),'" . $data->Message->MessageTitle . "','" . $data->Message->Message . "','2'");
+            } else {
+                $quest = $app->db->getOneRecord("SELECT * FROM forum_question WHERE ID='$data->QuestionID'");
+                if ($quest['AdminAccepted'] == 1) {
+                    $app->db->updateRecord('user', "score=(score-" . $quest['Score'] . ")", "ID = '$data->UserID'");
+                }
+                $res = $app->db->updateRecord('forum_question', "AdminAccepted='$data->State'", "ID='$data->QuestionID'");
+            }
+            echoSuccess();
         } else {
             echoError("Sended value:$data->State is not valid!");
         }

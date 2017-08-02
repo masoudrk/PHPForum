@@ -138,7 +138,40 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
                 persianJs( " جواب" + value ).englishNumber().toString() + "</span>";
         }
     }];
+    $scope.CylinderChart3D = [{
+        "colorField": "color",
+        "type": "column",
+        "topRadius":1,
+        "valueField": "visits",
+        "fillAlphas": 0.8,
+        "lineAlpha": 0.2,
+        balloonFunction : function (graphDataItem, graph){
+            var value = graphDataItem.values.value;
+            var date = moment(graphDataItem.category);
+            var d =  date.format('jYYYY/jMM/jDD');
 
+            return "<b style=\"font-size: 13px\">" +
+                persianJs( value + " بازدید <br>" +'<span class="text-muted">'+
+                    d + '</span>').englishNumber().toString() + "</b>";
+        }
+    }];
+
+    $scope.ColumnChart3D= [{
+        "fillColorsField": "color",
+        "type": "column",
+        "topRadius":1,
+        "valueField": "Total",
+        "fillAlphas": 1,
+        "lineAlpha": 0.1,
+        balloonFunction : function (graphDataItem, graph){
+            var value = graphDataItem.values.value;
+            var category = graphDataItem.category;
+
+            return "<b style=\"font-size: 13px\">" +
+                persianJs( category + " &nbsp;&nbsp; <br>" +'<span class="text-muted">'+
+                    value + '</span>').englishNumber().toString() + "</b>";
+        }
+    }];
     $scope.stackChartOptions = [{
         "fillAlphas": 0.8,
         "lineAlpha": 0.2,
@@ -256,9 +289,11 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
     }
     */
     Extention.post('getDashboardData').then(function (res) {
+        console.log(res);
         res.MainSubjects.splice(0, 0, {ID : -1 , Title : 'همه انجمن ها'});
         res.Organs.splice(0, 0, {ID : -1 , OrganizationName : 'همه ناحیه ها'});
         $scope.dashboardData = res;
+
     });
 
 
