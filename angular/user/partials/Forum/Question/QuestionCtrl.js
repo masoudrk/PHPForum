@@ -29,6 +29,7 @@
                 $rootScope.breadcrumbs.push({ title: Extention.subString(res.Data.Title, 22) });
             } else {
                 $scope.question = null;
+                console.log(res);
             }
         });
     })();

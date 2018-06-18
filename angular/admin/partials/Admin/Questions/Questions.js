@@ -25,6 +25,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                 Extention.popSuccess("وضعیت سوال با موفقیت تغییر کرد!");
                 $scope.pagingController.update();
             } else {
+                console.log(res);
                 Extention.popError("مشکل در تغییر وضعیت سوال ، لطفا دوباره تلاش کنید.");
             }
         });

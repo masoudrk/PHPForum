@@ -1,6 +1,5 @@
 <?php
 $app->post('/updatePopUp', function () use ($app) {
-
     $data = json_decode($app->request->getBody());
     checkPermission($app->db, $app->session);//Base admin
     $qID = false;
@@ -699,8 +698,8 @@ ORDER by organ_position.ID asc");
 
     $resQ = $app->db->makeQuery("
 SELECT cd.IntervalDay as category,
-  (select count(*) FROM question_view
-  WHERE Date(question_view.ViewDate) = cd.IntervalDay) as visits
+  (select sum(question_visit.Visits) FROM question_visit
+  WHERE question_visit.CreationDate = cd.IntervalDay) as visits
 FROM calendar_day as cd
 WHERE cd.ID BETWEEN " . ($cid - 10) . " and " . ($cid));
 
@@ -716,13 +715,13 @@ WHERE cd.ID BETWEEN " . ($cid - 10) . " and " . ($cid));
     $resp['CylinderData'] = $cqDataInc;
 
     $resQ = $app->db->makeQuery("select organ_position.ID , organ_position.OrganizationName,
-  (SELECT (select count(*) FROM forum_question
+  (SELECT sum((select count(*) FROM forum_question
   WHERE forum_question.AuthorID = u.ID and forum_question.AdminAccepted =1) + (select count(*) FROM forum_answer
     inner join forum_question on forum_question.ID=forum_answer.QuestionID
   WHERE forum_answer.AuthorID=u.ID and forum_answer.AdminAccepted = 1
-        and forum_question.AdminAccepted =1) ) as Total
+        and forum_question.AdminAccepted =1)) ) as Total
 FROM organ_position
-  LEFT JOIN user as u on u.OrganizationID=organ_position.ID
+  LEFT JOIN user as u on u.OrganizationID = organ_position.ID
 GROUP BY organ_position.ID
 ORDER by Total DESC ");
 
@@ -903,7 +902,7 @@ $app->post('/changeUserAccepted', function () use ($app) {
 
 
     $data = json_decode($app->request->getBody());
-
+    require_once "../Services/MailService.php";
     if (isset($data->State)) {
         if ($data->State == '1' || $data->State == '-1') {
             $sess = new Session();
@@ -918,30 +917,7 @@ $app->post('/changeUserAccepted', function () use ($app) {
 
             if ($res) {
                 if ($data->State == 1) {
-                    $resQ = $app->db->makeQuery("SELECT u.Email,u.FullName FROM user as u WHERE u.ID = '$data->UserID'");
-                    $res = $resQ->fetch_assoc();
-                    $subject = 'Sepantarai.com';
-                    $message = '
-                <html>
-                <head>
-                  <title></title>
-                </head>
-                <body>
-<p style="direction: rtl">سلام ' . $res["FullName"] . '</p><br>
-                <p style="direction: rtl">
-اکانت شما تا??د شده . شما م? توان?د در انجمن شروع به فعال?ت کن?د
-<br>
-' . $res["Email"] . '
-                </p>
-                </body>
-                </html>
-';
-                    $headers = 'MIME-Version: 1.0' . "\r\n";
-                    $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-                    $headers .= 'From: sepantarai@sepantarai.com' . "\r\n" .
-                        'Reply-To: ' . $res["Email"] . "\r\n" .
-                        'X-Mailer: Sepantarai.com';
-                    mail($res["Email"], $subject, $message, $headers);
+                    sendActivatedAccountEmail($res["Email"],$res["FullName"]);
                 }
                 echoSuccess();
             } else
@@ -1148,7 +1124,7 @@ INNER JOIN forum_question as fq on fq.ID = fa.QuestionID
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
 INNER join user as u on u.ID = fa.AuthorID
-LEFT JOIN file_storage as fis on fis.ID = u.AvatarID " . $where . " ORDER BY fa.ID desc");
+LEFT JOIN file_storage as fis on fis.ID = u.AvatarID " . $where . " ORDER BY fa.CreationDate desc");
 
     echoResponse(200, $pageRes);
 });
@@ -1535,7 +1511,7 @@ $app->post('/deleteMessage', function () use ($app) {
 
 
     $data = json_decode($app->request->getBody());
-    checkPermission($app->db, $app->session);//Base admin
+    checkPermission($app->db, $app->session,['Base' , 'ForumManager' , 'OrganAdmin']);//Base admin
 
     $res = $app->db->deleteFromTable('message', "ID='$data->MessageID'");
     if ($res)
@@ -1581,7 +1557,7 @@ $app->post('/sendMessage', function () use ($app) {
     $data = json_decode($app->request->getBody());
     $sess = new Session();
 
-    checkPermission($app->db, $app->session);//Base admin
+    checkPermission($app->db, $app->session,['Base' , 'ForumManager' , 'OrganAdmin']);//Base admin
 
     foreach ($data->Users as $value) {
         $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
@@ -1590,28 +1566,8 @@ $app->post('/sendMessage', function () use ($app) {
         if ($value->ID != $sess->UserID)
             $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID', "$value->ID,5,now(),$sess->UserID");
         if ($data->Message->MessageType == 1) {
-            $subject = 'Sepantarai.com';
-            $message = '
-                        <html>
-                        <head>
-                          <title></title>
-                        </head>
-                        <body>
-                        <p style="direction: rtl">' . $data->Message->MessageTitle . '
-                        </p>
-                        <br>
-                        <br>
-                        <p style="direction: rtl">' . $data->Message->Message . '
-                        </p>
-                        </body>
-                        </html>
-        ';
-            $headers = 'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-            $headers .= 'From: sepantarai@sepantarai.com' . "\r\n" .
-                'Reply-To: ' . $value->Email . "\r\n" .
-                'X-Mailer: Sepantarai.com';
-            mail($value->Email, $subject, $message, $headers);
+            require_once "../Services/MailService.php";
+            sendEmailMessage($value->Email,$data->Message->MessageTitle,$data->Message->Message);
         }
     }
     echoSuccess();
@@ -1672,21 +1628,6 @@ forum_main_subject as fm on fm.ID = fs.ParentSubjectID");
     while ($r = $pageRes->fetch_assoc())
         $res[] = $r;
     echoSuccess($res);
-});
-
-$app->post('/deleteMessage', function () use ($app) {
-
-
-    $data = json_decode($app->request->getBody());
-
-    $sess = new Session();
-
-
-    $res = $app->db->deleteFromTable('message', "ID='$data->MessageID'");
-    if ($res) {
-        echoSuccess();
-    } else
-        echoError("Cannot update record.");
 });
 
 $app->post('/deleteMessages', function () use ($app) {

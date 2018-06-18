@@ -1880,11 +1880,16 @@ $app->post('/getQuestionByID', function() use ($app)  {
 
     $r = json_decode($app->request->getBody());
 
-
     if(!isset($r->UserID) || !isset($r->QuestionID))
         {echoError('bad request');}
-
-
+    $date = date('Y-m-d');
+    $ans = $app->db->getOneRecord("SELECT * FROM question_visit WHERE CreationDate = '$date' and QuestionID = $r->QuestionID");
+    if($ans){
+        $app->db->updateRecord('question_visit', "Visits = Visits+1", "ID=".$ans["ID"]);
+    }else{
+        $app->db->insertToTable('question_visit', 'Visits,CreationDate,QuestionID',
+            "1,now(),$r->QuestionID");
+    }
     $resQ =$app->db->makeQuery("select count(*) as val FROM forum_question where ID = '$r->QuestionID' and AdminAccepted = 1");
     $sql =$resQ->fetch_assoc();
     if($sql['val'] == 0)

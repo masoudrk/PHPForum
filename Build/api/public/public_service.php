@@ -64,38 +64,8 @@ $app->post('/savePerson', function() use ($app) {
 
     $linkID = generateRandomString(30);
     $dateplus_1 = strtotime("+1 day", time());
-    $subject = 'Sepantarai.com';
-// message
-    $message = '
-                <html>
-                <head>
-                  <title></title>
-                </head>
-                <body>
-                <p style="direction: rtl">سلام '.$r->FullName.'! لطفا برای فعال سازی حساب کاربری خود روی لینک زیر کلیک
-                 کنید:
-<br>
-                 ----> <a href="http://www.sepantarai.com/verify.php?link='.$linkID.'"> Verify account link </a> 
-                 <----
-                </p>
-<p style="direction: rtl">
-بعد از تایید مدیر، شما می توانید وارد انجمن شوید
-                </p>
-                </body>
-                </html>
-';
-    $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-    $headers .= 'From: offical@sepantarai.com' . "\r\n" .
-        'Reply-To: '.$r->Email."\r\n" .
-        'X-Mailer: Sepantarai.com';
-
-    //if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', "::1")))
-    {
-       $resm = mail($r->Email, $subject, $message, $headers);
-    }
-
-
+    require_once "../Services/MailService.php";
+    sendConfirmEmail($r->Email,$r->FullName,$linkID);
     $app->db->insertToTable('user_mail','UserID,LinkID,ExpireDate',"'$userID','$linkID','".date('M d, Y', $dateplus_1)."'");
 
     $result = [];
@@ -126,36 +96,12 @@ $app->post('/forgetPassword', function() use ($app)  {
     if(!$reqsql)
         echoError('failed to update password');
 
-    $subject = 'Sepantarai.com';
-// message
-    $message = '
-                <html>
-                <head>
-                  <title></title>
-                </head>
-                <body>
-<p style="direction: rtl">سلام '.$res["FullName"].'</p><br>
-                <p style="direction: rtl">پسورد جدید شما :
-<br>'.$newPassword.'
-<br> ایمیل شما:
-'.$data->Email.'
-                </p>
-                </body>
-                </html>
-';
-    $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-    $headers .=  'From: offical@sepantarai.com' . "\r\n" .
-        'Reply-To: '.$data->Email."\r\n" .
-        'X-Mailer: Sepantarai.com';
-
-    //if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', "::1")))
-    {
-        mail($data->Email, $subject, $message, $headers);
-    }
-
+    require_once "../Services/MailService.php";
+    sendForgetPasswordEmail($data->Email,$newPassword,$res["FullName"]);
     echoSuccess();
 });
+
+
 
 $app->post('/getAllPositions', function() use ($app)  {
     
@@ -237,7 +183,7 @@ $app->post('/signInUser', function() use ($app)  {
 
             $cookiePath = '/';
             $cookieTime = time() + 914748364;
-
+            $cookieTime =(int)$cookieTime;
             setcookie("SSN", $sessionID, $cookieTime ,$cookiePath);
             setcookie("FullName", $user['FullName'],$cookieTime,$cookiePath);
             setcookie("IsAdmin", ($IsAdmin)?1:0, $cookieTime,$cookiePath);
@@ -300,4 +246,30 @@ $app->post('/getSiteNameEN', function() use ($app)  {
     echoResponse(200, $res);
 });
 
-?>
+
+$app->get('/testEmail', function() use ($app)  {
+    $subject = 'Sepantarai.com';
+// message
+    $message = '
+                <html>
+                <head>
+                  <title></title>
+                </head>
+                <body>
+<p style="direction: rtl">سلام </p><br>
+                <p style="direction: rtl">پسورد جدید شما :
+<br>
+<br> ایمیل شما:
+                </p>
+                </body>
+                </html>
+';
+    $headers  = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+    $headers .=  'From: sepanta-domainadmin@sepantarai.com' . "\r\n" .
+        'Reply-To: sepanta-domainadmin@sepantarai.com'."\r\n" .
+        'X-Mailer: sepantarai.com' ;
+
+    mail("miladbonak@gmail.com", $subject, $message, $headers);
+    echoSuccess();
+});

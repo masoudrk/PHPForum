@@ -36,6 +36,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
             if (res && res.Status == 'success') {
                 $scope.users = res.Data;
             	}else{
+                console.log(res);
             		Extention.popError("مشکل در اتصال.");
             	}
             });
@@ -53,6 +54,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
                 $scope.user.selectedUser = [];
                 Extention.popSuccess("پیام های شما ارسال شد");
             } else {
+                console.log(res);
                 Extention.popError("مشکل در اتصال.");
             }
         }, function(err) {
@@ -66,6 +68,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
                 Extention.popSuccess("پیام با موفقیت حذف شد!");
                 $scope.messagesPagingController.update();
             } else {
+                console.log(res);
                 Extention.popError("مشکل در حذف پیام ، لطفا دوباره امتحان کنید.");
             }
         });
