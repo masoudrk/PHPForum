@@ -46,9 +46,11 @@ if($sql){
     $cols .= ',AdminAccepted';
     $values .= ",1";
 }
+$OrganUserQuery ='';
 if(isset($meta['MainSubjectID'])){
     $cols .= ',MainSubjectID';
     $values .= ",'".$meta['MainSubjectID']."'";
+    $OrganUserQuery = " OR ap.MainSubjectID = '".$meta['MainSubjectID']."'";
 }
 
 if(isset($meta['SubjectID'])){
@@ -63,6 +65,13 @@ if(isset($meta['Title'])){
 
 $libraryID = $db->insertToTable('library' , $cols, $values,true);
 
+$RelatedAdminIds = $db->getRecords("select distinct a.UserID from admin a inner join admin_permission ap on ap.ID = a.PermissionID
+where ap.PermissionLevel = 'Base' ".$OrganUserQuery);
+foreach($RelatedAdminIds as $NotifyUserId){
+    $libraryID = $db->insertToTable('event' , "EventUserID,EventTypeID,EventDate,EventCauseID,EventSeen",
+        $NotifyUserId['UserID'].",14,now(),$session->UserID,0");
+}
+
 if(isset($meta['Tags'])){
     $items = "";
     foreach ($meta['Tags'] as $tag) {
@@ -72,4 +81,3 @@ if(isset($meta['Tags'])){
     $resQ = $db->makeQuery("INSERT INTO `tag_library`(`LibraryID`, `TagID`) VALUES ".$items);
     $sql =$resQ->fetch_assoc();
 }
-?>

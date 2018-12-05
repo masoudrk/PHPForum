@@ -1,4 +1,4 @@
-﻿angular.module(appName).controller('HomeCtrl', function ($scope, $element, $rootScope, $routeParams, $state, $location, $timeout, Extention) {
+angular.module(appName).controller('HomeCtrl', function ($scope, $element, $rootScope, $routeParams, $state, $location, $timeout, Extention) {
 
 	$scope.changeView = function (id) {
 	    hideCMS(false);

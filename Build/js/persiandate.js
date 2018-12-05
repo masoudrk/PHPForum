@@ -1,4 +1,4 @@
-﻿angular.module('persianDate', [])
+angular.module('persianDate', [])
     .filter('persianDate', function ($locale,PersianDateService) {
 		function int(str) {
 		  return parseInt(str, 10);

@@ -103,14 +103,14 @@ $app->post('/saveOrUpdatePopUp', function () use ($app) {
 
     $data = json_decode($app->request->getBody());
     checkPermission($app->db, $app->session);//Base admin
-    if(isset($data->ID)){
+    if (isset($data->ID)) {
         $res = $app->db->updateRecord('pop_up', "Title='$data->Title',ModalText='$data->ModalText',ExpireDate='$data->ExpireDate'"
             , "ID='$data->ID'");
         if ($res)
             echoSuccess();
         else
             echoError('somthing bad happend');
-    }else{
+    } else {
         $qID = $app->db->insertToTable('pop_up', 'Title,ModalText,CreationDate,ExpireDate',
             "'$data->Title','$data->ModalText',now(),'" . $data->ExpireDate . "'", true);
         if ($qID)
@@ -704,10 +704,10 @@ FROM calendar_day as cd
 WHERE cd.ID BETWEEN " . ($cid - 10) . " and " . ($cid));
 
     $cqDataInc = [];
-    $colors = ['FF0F00','FF6600','FF9E01','FCD202','F8FF01','B0DE09','04D215','0D8ECF','0D52D1','2A0CD0','8A0CCF','CD0D74'];
-    $colorCounter=0;
+    $colors = ['FF0F00', 'FF6600', 'FF9E01', 'FCD202', 'F8FF01', 'B0DE09', '04D215', '0D8ECF', '0D52D1', '2A0CD0', '8A0CCF', 'CD0D74'];
+    $colorCounter = 0;
     while ($r = $resQ->fetch_assoc()) {
-        $r['color'] = '#'.$colors[$colorCounter];
+        $r['color'] = '#' . $colors[$colorCounter];
         $cqDataInc[] = $r;
         $colorCounter++;
     }
@@ -726,11 +726,11 @@ GROUP BY organ_position.ID
 ORDER by Total DESC ");
 
     $cqDataInc = [];
-    $colorCounter=0;
+    $colorCounter = 0;
     while ($r = $resQ->fetch_assoc()) {
-        if($colorCounter >=11)
-            $colorCounter=0;
-        $r['color']= '#'.$colors[$colorCounter];
+        if ($colorCounter >= 11)
+            $colorCounter = 0;
+        $r['color'] = '#' . $colors[$colorCounter];
         $cqDataInc[] = $r;
         $colorCounter++;
     }
@@ -917,7 +917,7 @@ $app->post('/changeUserAccepted', function () use ($app) {
 
             if ($res) {
                 if ($data->State == 1) {
-                    sendActivatedAccountEmail($res["Email"],$res["FullName"]);
+                    sendActivatedAccountEmail($res["Email"], $res["FullName"]);
                 }
                 echoSuccess();
             } else
@@ -1119,7 +1119,8 @@ $app->post('/getAllAnswers', function () use ($app) {
         $where .= "AND u.OrganizationID = " . $admin["OrganizationID"];
     }
 
-    $pageRes = $pr->getPage($app->db, "SELECT fa.*,fq.QuestionText ,fq.AuthorID as QuestionAuthorID , fq.ID as QuestionID ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID FROM forum_answer as fa 
+    $pageRes = $pr->getPage($app->db, "SELECT fa.*,fq.QuestionText ,fq.AuthorID as QuestionAuthorID , fq.ID as QuestionID ,u.FullName ,u.Email ,fis.FullPath ,u.ID as UserID ,(select count(*) from answer_attachment where AnswerID = fa.ID) as TotalAttachments 
+FROM forum_answer as fa 
 INNER JOIN forum_question as fq on fq.ID = fa.QuestionID
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
@@ -1173,7 +1174,8 @@ $app->post('/getAllQuestions', function () use ($app) {
         $admin = $admin->fetch_assoc();
         $where .= "AND u.OrganizationID = " . $admin["OrganizationID"];
     }
-    $pageRes = $pr->getPage($app->db, "SELECT DISTINCT fq.* ,fs.Title as SubjectName ,u.FullName , lq.TargetQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID
+    $pageRes = $pr->getPage($app->db, "SELECT DISTINCT fq.* ,fs.Title as SubjectName ,u.FullName , lq.TargetQuestionID ,u.Email ,fis.FullPath ,u.ID as UserID,
+(select count(*) from question_attachment where QuestionID = fq.ID) as TotalAttachments
 FROM forum_question as fq
 INNER JOIN forum_subject as fs on fs.ID = fq.SubjectID
 INNER JOIN forum_main_subject as fms on fms.ID = fs.ParentSubjectID
@@ -1511,7 +1513,7 @@ $app->post('/deleteMessage', function () use ($app) {
 
 
     $data = json_decode($app->request->getBody());
-    checkPermission($app->db, $app->session,['Base' , 'ForumManager' , 'OrganAdmin']);//Base admin
+    checkPermission($app->db, $app->session, ['Base', 'ForumManager', 'OrganAdmin']);//Base admin
 
     $res = $app->db->deleteFromTable('message', "ID='$data->MessageID'");
     if ($res)
@@ -1557,7 +1559,7 @@ $app->post('/sendMessage', function () use ($app) {
     $data = json_decode($app->request->getBody());
     $sess = new Session();
 
-    checkPermission($app->db, $app->session,['Base' , 'ForumManager' , 'OrganAdmin']);//Base admin
+    checkPermission($app->db, $app->session, ['Base', 'ForumManager', 'OrganAdmin']);//Base admin
 
     foreach ($data->Users as $value) {
         $app->db->insertToTable('message', 'SenderUserID,UserID,MessageDate,MessageTitle,Message,MessageType',
@@ -1567,7 +1569,7 @@ $app->post('/sendMessage', function () use ($app) {
             $app->db->insertToTable('event', 'EventUserID,EventTypeID , EventDate , EventCauseID', "$value->ID,5,now(),$sess->UserID");
         if ($data->Message->MessageType == 1) {
             require_once "../Services/MailService.php";
-            sendEmailMessage($value->Email,$data->Message->MessageTitle,$data->Message->Message);
+            sendEmailMessage($value->Email, $data->Message->MessageTitle, $data->Message->Message);
         }
     }
     echoSuccess();
@@ -1666,10 +1668,17 @@ LIMIT 1");
         if ($res) {
             echoSuccess();
         } else
-            echoError("Cannot update record.");
+            echoError("Cannot update  1q2.");
     }
 
     echoError("Bad request!");
+});
+
+$app->post('/markAsReadNotification', function() use ($app)  {
+    $sess = $app->session;
+    $data = json_decode($app->request->getBody());
+    $res = $app->db->updateRecord('event',"EventSeen='1'" , "ID='$data->EventID' and EventUserID='$sess->UserID'");
+    echoSuccess($res);
 });
 
 $app->post('/getUserNotifications', function () use ($app) {
@@ -1779,6 +1788,8 @@ WHERE u.ID='" . $sess->UserID . "'");
     $resp["User"] = $resQ->fetch_assoc();
     $resQ = $app->db->makeQuery("SELECT COUNT(*) as MessageCount FROM message as u WHERE u.UserID = '$sess->UserID' AND u.MessageViewed = 0");
     $resp["Message"] = $resQ->fetch_assoc();
+    $resp["Library"] =($sess->AdminPermissionLevel == "OrganAdmin" || $sess->AdminPermissionLevel == "Base")?
+        $app->db->getOneRecord("SELECT COUNT(*) as Total FROM library as l inner JOIN file_storage as f on f.ID = l.FileID and f.FileSize > 0 WHERE l.AdminAccepted = 0")['Total']:0;
     echoSuccess($resp);
 });
 

@@ -27,14 +27,14 @@ angular.module(appName).controller('FollowCtrl', function ($scope, $rootScope, $
 	$scope.removeFollow = function (id,vn) {
 
 		Extention.post('deleteFollow',{FollowType : vn , ID : id}).then(function (res) {
-			if(res && res.Status =='success'){
+			if(res && res.Status ==='success'){
 				Extention.popSuccess('با موفقیت حذف شد!');
 				$scope.updateView(res.Data);
 			}else{
 				Extention.popError('خطا لطفا دوباره امتحان کنید.');
 			}
 		});
-	}
+	};
 	
 	$scope.updateView = function (name) {
 
@@ -52,7 +52,7 @@ angular.module(appName).controller('FollowCtrl', function ($scope, $rootScope, $
 				$scope.pcfSubject.update();
 				break;
 		}
-	}
+	};
 
 	$timeout(function () {
 		if(!$stateParams.action){
@@ -63,5 +63,5 @@ angular.module(appName).controller('FollowCtrl', function ($scope, $rootScope, $
 		}
 	});
 
-	activeElement('#SQuestion','#SAnswers');
+	activeElement('#SFollowers');
 }); 

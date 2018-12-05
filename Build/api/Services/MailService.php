@@ -12,13 +12,17 @@ define('X_MAILER', 'sepantarai.com');
 function sendEmail(string $to, string $subject, string $message)
 {
 
-    $headers = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-    $headers .= 'From: ' . ADMIN_EMAIL . "\r\n" .
-        'Reply-To: ' . ADMIN_EMAIL . "\r\n" .
-        'X-Mailer: ' . X_MAILER;
+    try{
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+        $headers .= 'From: ' . ADMIN_EMAIL . "\r\n" .
+            'Reply-To: ' . ADMIN_EMAIL . "\r\n" .
+            'X-Mailer: ' . X_MAILER;
 
-    return mail($to, $subject, $message, $headers);
+        return mail($to, $subject, $message, $headers);
+    }catch (Exception $e) {
+        return false;
+    }
 }
 
 function sendActivatedAccountEmail($to, $fullName)
@@ -40,7 +44,7 @@ function sendActivatedAccountEmail($to, $fullName)
                 </html>
 ';
 
-    sendEmail($to, $subject, $message);
+    return sendEmail($to, $subject, $message);
 }
 
 function sendEmailMessage($to, $title, $message)
@@ -63,7 +67,7 @@ function sendEmailMessage($to, $title, $message)
                         </html>
         ';
 
-    sendEmail($to, $subject, $message);
+    return sendEmail($to, $subject, $message);
 }
 
 function sendForgetPasswordEmail($to, $newPassword, $fullName)
@@ -85,7 +89,7 @@ function sendForgetPasswordEmail($to, $newPassword, $fullName)
                 </body>
                 </html>
 ';
-    sendEmail($to, $subject, $message);
+    return sendEmail($to, $subject, $message);
 }
 
 function sendConfirmEmail($to, $fullName, $linkID)
@@ -111,5 +115,5 @@ function sendConfirmEmail($to, $fullName, $linkID)
                 </html>
 ';
 
-    sendEmail($to, $subject, $message);
+    return sendEmail($to, $subject, $message);
 }

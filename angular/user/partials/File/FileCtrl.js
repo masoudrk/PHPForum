@@ -1,4 +1,4 @@
-﻿
+
 angular.module(appName).controller('FileCtrl', function ($scope, $rootScope, $stateParams, $state, $location,
                                                             $timeout, Extention, Upload, clipboard) {
     $scope.file = {};

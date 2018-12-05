@@ -12,7 +12,7 @@ $app->post('/savePerson', function() use ($app) {
     $r = json_decode($app->request->getBody());
 
     $url = 'https://www.google.com/recaptcha/api/siteverify';
-    $postfields = array('secret'=>'6LcPBSATAAAAAKqQ2Bl5Y5_rNmX0NelIHchT1ztZ',
+    $postfields = array('secret'=>'6LcX8F0UAAAAAOqhK3oIV389gKXy76XktzMJN_tj',
         'response'=>$r->myRecaptchaResponse);
 
     $ch = curl_init( $url );

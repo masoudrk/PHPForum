@@ -1,7 +1,7 @@
-﻿var appName = 'adminApp';
+var appName = 'adminApp';
 var uploadURL = '../api/upload/';
 var serviceBaseURL = '../api/admin/';
-var debugMode = false;
+var debugMode = true;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
@@ -18,7 +18,7 @@ app.config([
         });
         ADMdtp.setOptions({
             calType: 'jalali',
-            format: 'YYYY/MM/DD hh:mm',
+            format: 'YYYY/MM/DD hh:mm'
             // default: 'today'
         });
 
@@ -377,23 +377,21 @@ app.config([
 
                                     $scope.getTab = function (tabId) {
                                         $scope.activeTab = tabId;
-                                    }
+                                    };
 
                                     $scope.addImageLink = function (link) {
                                         $uibModalInstance.close(link);
-                                    }
+                                    };
 
                                     $scope.filesChanged = function (files, file) {
                                         var url = uploadURL;
                                         url += 'upload_inline_attachment.php';
                                         var data = {file: file};
                                         data.Type = state.current.name;
-
                                         file.uploader = Upload.upload({
                                             url: url,
                                             data: data
                                         });
-
                                         file.uploader.then(function (resp) {
 
                                             $uibModalInstance.close(resp.data);
@@ -401,12 +399,11 @@ app.config([
                                         }, function (resp) {
                                             console.log('Error status: ' + resp.status);
                                         }, function (evt) {
-                                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                            evt.config.data.file.percent = progressPercentage;
+                                            evt.config.data.file.percent = parseInt(100.0 * evt.loaded / evt.total);
                                             // evt.config.data.file.loaded = $scope.sizeFilter(evt.loaded);
                                             //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
                                         });
-                                    }
+                                    };
 
                                     $scope.stopUploadImage = function (file) {
                                         file.uploader.abort();
@@ -464,15 +461,15 @@ var traverse = function (el) {
     for (var i = 0; i < el.childNodes.length; i++) {
         traverse(el.childNodes[i]);
     }
-}
+};
 
 var fixPersianNumbers = function () {
     traverse(document.body);
-}
+};
 
 var fixFooter = function () {
     traverse(document.body);
-}
+};
 
 var activeElement = function (parent, name) {
     if (name) {
@@ -481,7 +478,7 @@ var activeElement = function (parent, name) {
     }
     var elemP = $(parent);
     elemP.addClass('active').siblings().removeClass('active');
-}
+};
 
 var cmsVars = {};
 var hideCMS = function (hide) {
@@ -501,7 +498,7 @@ var hideCMS = function (hide) {
         $('.main-header').css('display', cmsVars.v3);
         $('.main-sidebar').css('display', cmsVars.v4);
     }
-}
+};
 
 
 app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$stateParams', 'toaster', '$uibModal',
@@ -515,7 +512,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                     obj.popError('مشکل ، لطفا دوباره امتحان کنید.');
                 }
             });
-        }
+        };
 
         $rootScope.session = session;
 
@@ -543,29 +540,29 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.toast = function (data) {
             toaster.pop(data.status, "", data.message, 10000, 'trustedHtml');
-        }
+        };
 
         obj.pop = function (status, msg, delay) {
             if (!delay)
                 delay = 7000;
             toaster.pop(status, "", msg, delay, 'trustedHtml');
-        }
+        };
 
         obj.popError = function (msg, delay) {
             if (!delay)
                 delay = 7000;
             toaster.pop('error', "", msg, delay, 'trustedHtml');
-        }
+        };
         obj.popSuccess = function (msg, delay) {
             if (!delay)
                 delay = 7000;
             toaster.pop('success', "", msg, delay, 'trustedHtml');
-        }
+        };
         obj.popInfo = function (msg, delay) {
             if (!delay)
                 delay = 7000;
             toaster.pop('info', "", msg, delay, 'trustedHtml');
-        }
+        };
 
         obj.get = function (q) {
             obj.setBusy(true);
@@ -640,14 +637,14 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.disableLoading = function () {
             $rootScope.spinner.active = false;
-        }
+        };
 
         obj.popModal = function (data) {
             $uibModal.open({
                 animation: true,
                 templateUrl: 'notifyModal.html',
-                controller: function ($scope , $uibModalInstance , data) {
-                    $scope.data =  data;
+                controller: function ($scope, $uibModalInstance, data) {
+                    $scope.data = data;
                 },
                 size: 'md',
                 resolve: {
@@ -656,28 +653,28 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                     }
                 }
             });
-        }
+        };
         obj.authUser = function (user) {
             $rootScope.authenticated = true;
             $rootScope.user = {};
             $rootScope.user.UserID = user.UserID;
             $rootScope.user.lastName = user.LastName;
             $rootScope.user.firstName = user.FirstName;
-        }
+        };
 
         obj.unAuthUser = function () {
             $rootScope.authenticated = false;
             $rootScope.isAdmin = false;
             $rootScope.user = {};
-        }
+        };
 
         obj.isAdmin = function () {
             return $rootScope.isAdmin;
-        }
+        };
 
         obj.getAuth = function () {
             return {authenticated: $rootScope.authenticated, isAdmin: $rootScope.isAdmin};
-        }
+        };
 
         obj.openSignupPanel = function (lang) {
             var template;
@@ -692,7 +689,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 controller: 'authCtrl',
                 size: 'md'
             });
-        }
+        };
 
         obj.openSigninPanel = function (lang) {
             var template;
@@ -707,7 +704,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 controller: 'authCtrl',
                 size: 'md'
             });
-        }
+        };
 
         obj.scrollTo = function (y) {
 
@@ -826,7 +823,7 @@ app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
                 });
                 obj.getData();
             });
-        }
+        };
 
         obj.fetch();
 
@@ -859,7 +856,7 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention, Onli
     $rootScope.$on('$stateNotFound',
         function (event, unfoundState, fromState, fromParams) {
             Extention.setBusy(false);
-        })
+        });
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
         Extention.setBusy(true);

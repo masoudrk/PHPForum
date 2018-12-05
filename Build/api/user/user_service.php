@@ -703,10 +703,8 @@ $app->post('/getUserNotifications', function() use ($app)  {
 });
 
 $app->post('/markAsReadNotification', function() use ($app)  {
-
     $sess = $app->session;
     $data = json_decode($app->request->getBody());
-
     $res = $app->db->updateRecord('event',"EventSeen='1'" , "ID='$data->EventID' and EventUserID='$sess->UserID'");
     echoSuccess($res);
 });

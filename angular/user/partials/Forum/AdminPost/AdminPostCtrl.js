@@ -1,4 +1,4 @@
-﻿angular.module(appName).controller('AdminPostCtrl', function ($scope, $element, $rootScope, $uibModal,
+angular.module(appName).controller('AdminPostCtrl', function ($scope, $element, $rootScope, $uibModal,
                                                              $routeParams, $state, $location, $timeout, $stateParams, Extention ) {
 
     $scope.isOnline = false;

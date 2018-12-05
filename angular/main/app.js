@@ -1,4 +1,4 @@
-﻿var appName = 'myApp';
+var appName = 'myApp';
 var serviceBaseURL = 'api/public/';
 var app = angular.module(appName, ['ngRoute', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router', 'fullPage.js', 'oc.lazyLoad', 'angular-confirm', 'ADM-dateTimePicker', 'ngFileUpload', 'ui.select', '720kb.tooltips', 'ngCkeditor', 'treasure-overlay-spinner', 'cfp.hotkeys', 'vcRecaptcha', 'ui.router.title', 'ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'pageslide-directive', 'ngCookies']);
 
@@ -12,7 +12,7 @@ app.config([
 function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, tooltipsConfProvider, ADMdtp, vcRecaptchaServiceProvider) {
         // Add nested user links to the "foo" menu.
 
-        vcRecaptchaServiceProvider.setSiteKey('6LcPBSATAAAAAE9InyEnMt9Y5BNCVJqspU9N1bsR');
+        vcRecaptchaServiceProvider.setSiteKey('6LcX8F0UAAAAAAsz8wJTigfIcMJQD_mTpXd9UbS5');
 
         tooltipsConfProvider.configure({
             'smart': true,

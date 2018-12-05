@@ -1,4 +1,4 @@
-﻿angular.module('ui.navbar', ['ui.bootstrap'])
+angular.module('ui.navbar', ['ui.bootstrap'])
 
     .directive('tree', function () {
         return {

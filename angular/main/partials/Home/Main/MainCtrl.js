@@ -1,8 +1,9 @@
-﻿angular.module('myApp').controller('MainCtrl', function($scope, $templateCache, $state, $rootScope, $routeParams, $uibModal, Extention ,$cookies) {
+angular.module('myApp').controller('MainCtrl', function ($scope, $templateCache, $state, $rootScope, $routeParams, $uibModal, Extention, $cookies) {
 
     Extention.postAsync('checkPopUp', {}).then(function (msg) {
-        console.log(msg);return;
-        if (msg.Status == 'success'&& msg.Data !=null) {
+        console.log(msg);
+        return;
+        if (msg.Status == 'success' && msg.Data != null) {
             var popUp = $cookies.get("popup");
             if (popUp) {
                 return;
@@ -10,7 +11,7 @@
                 var expireDate = new Date();
                 expireDate.setDate(expireDate.getDate() + 1);
                 // Setting a cookie
-                $cookies.put('popup', 'true', {'expires': expireDate , 'path':'/' });
+                $cookies.put('popup', 'true', {'expires': expireDate, 'path': '/'});
                 $uibModal.open({
                     animation: true,
                     templateUrl: 'popUp.html',
@@ -39,8 +40,8 @@
 
     $scope.checkEmail = function (value) {
         if (value) {
-            Extention.postAsync('checkEmail', { value: value }).then(function (msg) {
-                if (msg.Status == 'success') {
+            Extention.postAsync('checkEmail', {value: value}).then(function (msg) {
+                if (msg.Status === 'success') {
                     $scope.emailError = !msg.Data;
                     if ($scope.emailError)
                         Extention.popError('این ایمیل قبلا ثبت شده است');
@@ -50,9 +51,9 @@
                 }
             });
         }
-    }
+    };
 
-    $scope.openRoleModal = function() {
+    $scope.openRoleModal = function () {
         $uibModal.open({
             animation: true,
             templateUrl: 'myModalContent.html',
@@ -67,17 +68,17 @@
             },
             size: 'md'
         });
-    }
+    };
 
     $scope.savePerson = function () {
         if ($scope.user.roleAccepted && $scope.signUpForm.$valid && !$scope.user.emailError) {
             $scope.user.OrganizationID = $scope.Position.selected.ID;
             Extention.post('savePerson', $scope.user).then(function (msg) {
                 console.log(msg);
-                if (msg.Status == 'success') {
+                if (msg.Status === 'success') {
                     $scope.user = {};
-                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد .لطفا ایمیل خود را بررسی کنید. ',10000);
-                } else if (msg.Status == 'emailError') {
+                    Extention.popSuccess('اطلاعات شما با موفقیت ثبت شد .لطفا ایمیل خود را بررسی کنید. ', 10000);
+                } else if (msg.Status === 'emailError') {
                     Extention.popError('این ایمیل قبلا ثبت شده است');
                 } else {
                     Extention.popError('اطلاعات شما نا معتبر است');
@@ -88,30 +89,30 @@
         } else {
             Extention.popError('لطفا تمام اطلاعات را وارد کنید');
         }
-    }
+    };
 
     $scope.logInUser = function () {
         getPage('Forum/home.php');
-    }
+    };
 
     $scope.signOutUser = function () {
         Extention.post('logout', {}).then(function (msg) {
             $rootScope.userSession = {};
         });
-    }
+    };
 
     $scope.signInFunc = function () {
         if ($scope.signInForm.$valid) {
             Extention.post('signInUser', $scope.signIn).then(function (msg) {
                 //console.log(msg);
-                if (msg.Status == 'success') {
+                if (msg.Status === 'success') {
                     if (msg.IsAdmin) {
                         getPage('Admin');
                     } else {
                         //getPage('Forum');
                         getPage('Forum/home.php');
                     }
-                } else if (msg.Status == 'notAccepted') {
+                } else if (msg.Status === 'notAccepted') {
                     Extention.popError('اکانت شما هنوز  توسط ادمین تایید نشده است');
                 } else {
                     console.log(msg);
@@ -119,7 +120,7 @@
                 }
             });
         }
-    }
+    };
 
     $scope.mainOptions = {
         anchors: ['firstPage'/*, 'secondPage', '3rdPage', '4thpage', 'lastPage'*/],
@@ -131,10 +132,10 @@
             animation: true,
             templateUrl: 'passModal.html',
             controller: function ($scope, $uibModalInstance) {
-                $scope.sentPassToEmail = function() {
+                $scope.sentPassToEmail = function () {
                     if ($scope.Email) {
-                        Extention.post('forgetPassword', {Email :$scope.Email}).then(function (msg) {
-                            if (msg.Status == 'success') {
+                        Extention.post('forgetPassword', {Email: $scope.Email}).then(function (msg) {
+                            if (msg.Status === 'success') {
                                 Extention.popSuccess('پسورد جدید برای ایمیل شما ارسال شده است');
                             } else {
                                 console.log(msg);
@@ -142,7 +143,7 @@
                             }
                         });
                     }
-                }
+                };
 
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
@@ -153,7 +154,7 @@
     }
 
     //$scope.moog = function (merg) { console.log(merg); };
-    
+
 
     //TODO slide properties : 
     //$scope.slides = [

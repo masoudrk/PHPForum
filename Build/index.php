@@ -42,8 +42,6 @@
     <div ui-view  class="container" ></div>
     <toaster-container toaster-options="{'time-out': 10000, 'position-class': 'toast-bottom-right', 'close-button':true, 'animation-class': 'toast-bottom-right'}"></toaster-container>
 </body>
-<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit&hl=en"
-        async defer></script>
 <!-- jqurey libs -->
 <script src="js/jquery.js"></script>
 <script src="js/jquery.slimscroll.min.js"></script>
@@ -98,12 +96,13 @@
 <script src="app/templates.min.js"></script>
 <script src="js/angular-clipboard.js"></script>
 <script src="app/directives/auto-pagination.js"></script>
-
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/moment-jalaali.js"></script>
 <script type="text/javascript" src="js/angular-confirm.min.js"></script>
 <script type="text/javascript" src="js/ADM-dateTimePicker.min.js"></script>
 
 <script src="js/bootstrap-toolkit.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit&hl=fa"
+        async defer></script>
 </html>
 

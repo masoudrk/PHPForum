@@ -1,0 +1,1 @@
+nativefier --name "sepanta" --icon "logo.ico" --single-instance --maximize "http://sepantarai.com"

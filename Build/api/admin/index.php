@@ -14,9 +14,9 @@ $app->session = new Session();
 $app->db = new DbHandler($app->session ,true ,true);
 
 require_once 'admin_service.php';
+require_once 'partials/Attachment.php';
 require_once 'partials/Survey.php';
 require_once 'partials/Assessment.php';
 require_once '../generic_service.php';
 
 $app->run();
-?>

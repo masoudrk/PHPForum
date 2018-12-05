@@ -1,4 +1,4 @@
-﻿<!-- Content Header (Page header) -->
+<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
         <small> اعضا</small>
@@ -34,7 +34,7 @@
                         </tr>
                         <tr ng-repeat="u in question.all">
                             <td>
-                                <img ng-src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle" alt="User Image" style="width: 38px;">
+                                <img ng-src="{{u.FullPath}}" err-src="../images/Avatar.jpg" class="img-circle" alt="User Image" style="width: 38px;">
                             </td>
                             <td>{{u.FullName| pNumber}}</td>
                             <td>{{u.CreationDate | jalaliDate :'jYYYY/jMM/jDD' | pNumber}}</td>

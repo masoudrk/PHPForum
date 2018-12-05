@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT

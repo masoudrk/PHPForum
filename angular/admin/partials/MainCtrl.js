@@ -1,7 +1,7 @@
-angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention,$cookies,$uibModal) {
+angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $log, Extention, $cookies, $uibModal) {
 
     Extention.postAsync('checkPopUp', {}).then(function (msg) {
-        if (msg.Status == 'success'&& msg.Data !=null) {
+        if (msg.Status == 'success' && msg.Data != null) {
             var popUp = $cookies.get("popup");
             if (popUp) {
                 return;
@@ -9,7 +9,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
                 var expireDate = new Date();
                 expireDate.setDate(expireDate.getDate() + 1);
                 // Setting a cookie
-                $cookies.put('popup', 'true', {'expires': expireDate , 'path':'/' });
+                $cookies.put('popup', 'true', {'expires': expireDate, 'path': '/'});
                 $uibModal.open({
                     animation: true,
                     templateUrl: 'popUp.html',
@@ -28,6 +28,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     $scope.AnswerBadge = {};
     $scope.QuestionBadge = {};
     $scope.UserBadge = {};
+    $scope.Library = 0;
     // $rootScope.$on("socketDataChanged", function(){
     //     if($rootScope.globalSearchActive && $scope.pagingParams.searchType==1)
     //         $scope.checkNowOnline();
@@ -40,8 +41,8 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     $scope.checkNowOnline = function () {
         return
         var ous = $scope.socketData.OnlineUsers;
-        for (var i = 0 ; i < ous.length ; i++) {
-            for (var j = 0 ; j < $rootScope.searchResult.length; j++) {
+        for (var i = 0; i < ous.length; i++) {
+            for (var j = 0; j < $rootScope.searchResult.length; j++) {
                 if ($scope.searchResult[j].UserID == ous[i].ID) {
                     $scope.searchResult[j].isOnline = true;
                 } else {
@@ -49,17 +50,17 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
                 }
             }
         }
-    }
+    };
 
     $scope.notificationsUpdating = true;
     $scope.messagesUpdating = true;
-    
+
     Extention.post("getAdminBadges").then(function (res) {
-        console.log(res);
         $scope.AnswerBadge = res.Data.Answer;
         $scope.QuestionBadge = res.Data.Question;
         $scope.UserBadge = res.Data.User;
         $scope.Message = res.Data.Message;
+        $scope.Library = res.Data.Library;
     });
     Extention.post("getUserNotifications").then(function (res) {
         $scope.notifications = res.Data;
@@ -72,7 +73,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
     });
 
 
-    $scope.fullSearchData = { SearchType: '0' };
+    $scope.fullSearchData = {SearchType: '0'};
 
     $scope.search = function () {
         if (!$scope.pagingParams.searchValue) {
@@ -83,30 +84,27 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         $rootScope.globalSearchActive = true;
         $scope.pageTitle = $state.current.resolve.$title();
 
-    }
+    };
 
     $scope.searchBoxChanged = function () {
         if (!$scope.pagingParams.searchValue && $rootScope.globalSearchActive) {
             $rootScope.globalSearchActive = false;
-            return;
         }
-    }
+    };
 
     $scope.searchTypeChanges = function (type) {
         $scope.pagingParams.searchType = type;
         $scope.search();
-    }
+    };
 
     $scope.backFromSearch = function () {
         $rootScope.globalSearchActive = false;
         $scope.searchResult = [];
-    }
+    };
     $scope.getRandomColorClass = function (id) {
         var i = id % $scope.bgColorArray.length;
         return $scope.bgColorArray[i];
-    }
-
-
+    };
     $scope.updateMessages = function (event) {
         if (event)
             event.stopPropagation();
@@ -120,7 +118,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         } else {
             Extention.popInfo('لطفا کمی صبر کنید...');
         }
-    }
+    };
 
     $scope.updateNotifications = function (event) {
         if (event)
@@ -135,8 +133,7 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
         } else {
             Extention.popInfo('لطفا کمی صبر کنید...');
         }
-
-    }
+    };
 
     $scope.markLastNotifications = function (event) {
         event.stopPropagation();
@@ -151,5 +148,15 @@ angular.module(appName).controller('MainCtrl', function ($scope, $rootScope, $ro
             Extention.popInfo('لطفا کمی صبر کنید...');
         }
     }
+
+
+    $scope.markAsReadNotification = function (event, eventObj) {
+        event.stopPropagation();
+        var index = $scope.notifications.All.indexOf(eventObj);
+        $scope.notifications.All.splice(index, 1);
+        $scope.notifications.Total -= 1;
+        Extention.postAsync("markAsReadNotification", {EventID: eventObj.EventID}).then(function (res) {
+        });
+    };
 
 });

@@ -1,4 +1,4 @@
-﻿<!-- Content Header (Page header) -->
+<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1 class="content-header vazir-font">
         <small> اعضا</small>
@@ -85,7 +85,7 @@
                         </tr>
                         <tr ng-repeat="u in answer.all">
                             <td>
-                                <img ng-src="{{u.FullPath || '../images/Avatar.jpg'}}" class="img-circle"
+                                <img ng-src="{{u.FullPath}}" err-src="../images/Avatar.jpg" class="img-circle"
                                      alt="User Image" style="width: 38px;">
                             </td>
                             <td>{{u.FullName| pNumber}}</td>
@@ -127,6 +127,11 @@
                                             data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left"
                                             tooltip-placement="top" tooltip-class="vazir-font"
                                             tooltip-append-to-body="true"></i></a>
+                                    <a ng-if="u.TotalAttachments!=0" ng-click="openAttachmentsModal(u.ID)" class="link"><i
+                                            class="fa fa-paperclip text-gray link hvr-pulse" title="{{u.TotalAttachments}} فایل زمیمه"
+                                            data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left"
+                                            tooltip-placement="top" tooltip-class="vazir-font"
+                                            tooltip-append-to-body="true"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -156,6 +161,15 @@
                class="fa fa-pencil text-green link hvr-grow" title="" data-toggle="tooltip" data-placement="top"
                tooltip="Tooltip on left" tooltip-placement="top" tooltip-class="vazir-font"
                tooltip-append-to-body="true" ng-click="changeEditMode()" data-original-title="ویرایش جواب"></i>
+            <i ng-if="(Answer.AdminAccepted==1 || Answer.AdminAccepted==0)&&(session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)"
+               ng-click="openDiscardModal()" class="fa fa-times link hvr-grow" title=""
+               data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top"
+               tooltip-class="vazir-font" tooltip-append-to-body="true" data-original-title="رد کردن جواب"></i>
+            <i ng-click="openScoreModal()" class="fa fa-check text-green link hvr-grow"
+               ng-if="(Answer.AdminAccepted==-1 || Answer.AdminAccepted==0)&& (session.AdminPermissionLevel=='Base' || session.AdminPermission == adminType)"
+               title=""
+               data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left" tooltip-placement="top"
+               tooltip-class="vazir-font" tooltip-append-to-body="true" data-original-title="تایید جواب"></i>
             متن جواب
         </h3>
     </div>
@@ -221,7 +235,9 @@
                     </td>
                     <td>
                         <div class="table-action-icons">
-                            <button class="btn btn-sm" ng-click="send({MessageTitle:'رد جواب',Message:Message})">رد جواب</button>
+                            <button class="btn btn-sm" ng-click="send({MessageTitle:'رد جواب',Message:Message})">رد
+                                جواب
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -235,7 +251,6 @@
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
     </div>
 </script>
-
 
 <script type="text/ng-template" id="ScoreModal.html">
     <div class="modal-header vazir-font text-right">
@@ -293,11 +308,47 @@
             </table>
         </div>
     </div>
-
     <div class="modal-footer vazir-font">
         <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
     </div>
+</script>
 
+<script type="text/ng-template" id="AttachmentModal.html">
+    <div class="modal-header vazir-font text-right">
+        <label class="modal-title text-danger" style="font-size:15px">لیست فایل های زمیمه</label>
+    </div>
+    <div class="modal-body vazir-font text-right persian-rtl">
+        <div class="table-responsive mailbox-messages">
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <th>نام</th>
+                    <th>حجم</th>
+                    <th style="width : 125px"></th>
+                </tr>
+                <tr class="link" ng-repeat="u in attachments">
+                    <td class="persian-rtl">
+                        {{u.Filename | pNumber}}
+                    </td>
+                    <td class="persian-rtl">
+                        {{u.FileSize | fileSizeFilter}}
+                    </td>
+                    <td>
+                        <div class="table-action-icons">
+                            <a ng-href="{{u.FullPath}}" class="fa fa-download text-green link hvr-grow" title="دانلود"
+                               data-toggle="tooltip" data-placement="top" tooltip="Tooltip on left"
+                               tooltip-placement="top" tooltip-class="vazir-font" tooltip-append-to-body="true"
+                               download="{{u.Filename}}"></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer vazir-font">
+        <button class="btn btn-info pull-left" type="button" ng-click="cancel()">بستن</button>
+    </div>
 </script>
 
 

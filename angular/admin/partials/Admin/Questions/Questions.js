@@ -10,7 +10,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
 
     $scope.search = function () {
         $scope.pagingController.update();
-    }
+    };
 
     $scope.changeQuestionState = function (uid, s) {
         Extention.post('changeQuestionAccepted', {
@@ -29,7 +29,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                 Extention.popError("مشکل در تغییر وضعیت سوال ، لطفا دوباره تلاش کنید.");
             }
         });
-    }
+    };
 
     $scope.removeQuestion = function (uid, AuthorID) {
         Extention.post('deleteQuestion', {
@@ -45,7 +45,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                 Extention.popError("مشکل در حذف سوال ، لطفا دوباره امتحان کنید.");
             }
         });
-    }
+    };
 
     $scope.changeTypeFilter = function (type) {
         $scope.pagingParams.questionType = type;
@@ -67,7 +67,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                 break;
         }
         $scope.search();
-    }
+    };
 
     $scope.openRoleModal = function (Question, adminType) {
         var modalInstance = $uibModal.open({
@@ -85,6 +85,12 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                 $scope.changeEditMode = function () {
                     $scope.editMode = !$scope.editMode;
                 };
+                $scope.openDiscardModal = function () {
+                    $uibModalInstance.close({message: 'openDiscardModal', data: $scope.Question});
+                };
+                $scope.openScoreModal = function () {
+                    $uibModalInstance.close({message: 'openScoreModal', data: $scope.Question});
+                };
                 $scope.editQuestion = function () {
                     if ($scope.Title && $scope.QuestionText) {
                         Extention.post('editQuestion', {
@@ -92,7 +98,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                             QuestionText: $scope.QuestionText,
                             Title: $scope.Title
                         }).then(function (res) {
-                            if (res && res.Status == 'success') {
+                            if (res && res.Status === 'success') {
                                 Extention.popSuccess("سوال با موفقیت ویرایش شد!");
                                 $scope.editMode = false;
                                 $uibModalInstance.close("success");
@@ -106,12 +112,16 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
             size: 'md'
         });
         modalInstance.result.then(function (res) {
-            if (res == 'success') {
+            if (res === 'success') {
                 $scope.pagingController.update();
+            } else if (res && res.message === 'openDiscardModal') {
+                $scope.openDiscardModal(res.data.ID, res.data.AuthorID)
+            } else if (res && res.message === 'openScoreModal') {
+                $scope.openScoreModal(res.data);
             }
         }, function () {
         });
-    }
+    };
 
     $scope.openQuestionModal = function (question) {
         var modalInstance = $uibModal.open({
@@ -126,8 +136,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                 };
                 $scope.search = function () {
                     $scope.questionsQagingController.update();
-                }
-
+                };
                 $scope.Link = function (question) {
                     Extention.post('linkQuestion', {
                         TargetQuestionID: question.ID,
@@ -135,7 +144,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                         UserID: $scope.question.AuthorID
                     }).then(function (res) {
                         console.log(res);
-                        if (res && res.Status == 'success') {
+                        if (res && res.Status === 'success') {
                             Extention.popSuccess("سوال با موفقیت لینک داده شد!");
                             $uibModalInstance.close("success");
                         } else {
@@ -148,16 +157,16 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
         });
 
         modalInstance.result.then(function (res) {
-            if (res == 'success') {
+            if (res === 'success') {
                 $scope.pagingController.update();
             }
         }, function () {
         });
-    }
+    };
 
     $scope.openExchangeModal = function (question) {
         Extention.postAsync('getSubjects', {}).then(function (res) {
-            if (res && res.Status == 'success') {
+            if (res && res.Status === 'success') {
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'ExchangeModal.html',
@@ -172,7 +181,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                                 SubjectID: subject.ID,
                                 QuestionID: $scope.question.ID
                             }).then(function (res) {
-                                if (res && res.Status == 'success') {
+                                if (res && res.Status === 'success') {
                                     Extention.popSuccess("سوال با موفقیت انتقال داده شد!");
                                     $uibModalInstance.close("success");
                                 } else {
@@ -185,21 +194,41 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                 });
 
                 modalInstance.result.then(function (res) {
-                    if (res == 'success') {
+                    if (res === 'success') {
                         $scope.pagingController.update();
                     }
                 }, function () {
                 });
 
             } else {
-                return;
+
             }
         });
-    }
+    };
+
+    $scope.openAttachmentsModal = function (QuestionID) {
+        Extention.post('Attachments/getAllAttachments', {QuestionID: QuestionID}).then(function (res) {
+            if (res && res.Status === 'success') {
+                $uibModal.open({
+                    animation: true,
+                    templateUrl: 'AttachmentModal.html',
+                    controller: function ($scope, $uibModalInstance) {
+                        $scope.attachments = res.Data;
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                    },
+                    size: 'md'
+                });
+            } else {
+                console.log(res);
+            }
+        });
+    };
 
     $scope.openDiscardModal = function (questionID, authorID) {
         Extention.postAsync('getCommonMessages', {filter: 'رد سوال'}).then(function (res) {
-            if (res && res.Status == 'success') {
+            if (res && res.Status === 'success') {
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'DiscardQuestionModal.html',
@@ -213,7 +242,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                         };
 
                         $scope.send = function (message) {
-                            if(!message.Message){
+                            if (message != null && !message.Message) {
                                 Extention.popError('متن رد سوال خالی است');
                                 return;
                             }
@@ -224,7 +253,7 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                                 UserID: $scope.authorID,
                                 Message: message
                             }).then(function (res) {
-                                if (res && res.Status == 'success') {
+                                if (res && res.Status === 'success') {
                                     Extention.popSuccess("وضعیت سوال با موفقیت تغییر کرد!");
                                     $uibModalInstance.close("success");
                                 } else {
@@ -236,17 +265,14 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
                     size: 'md'
                 });
                 modalInstance.result.then(function (res) {
-                    if (res == 'success') {
+                    if (res === 'success') {
                         $scope.pagingController.update();
                     }
                 }, function () {
                 });
-            } else {
-                return;
             }
-
         });
-    }
+    };
     $scope.openScoreModal = function (quest) {
         var modalInstance = $uibModal.open({
             animation: true,
@@ -272,12 +298,12 @@ angular.module(appName).controller('QuestionsCtrl', function ($scope, $rootScope
         }, function () {
 
         });
-    }
+    };
 
     $scope.changePosition = function () {
         $scope.pagingParams.OrganizationID = ($scope.Position.selected) ? $scope.Position.selected.ID : null;
         $scope.search();
-    }
+    };
 
     activeElement('#SQuestions', '#SS' + $stateParams.id);
     fixFooter();

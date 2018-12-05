@@ -161,7 +161,7 @@
                                     event -->
                                             <a>
                                                 <div class="pull-right link" ui-sref="question({id:item.QuestionID})">
-                                                    <img err-src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
+                                                    <img err-src="../images/Avatar.jpg" ng-src="{{item.FullPath}}"
                                                          class="img-circle"
                                                          alt="User Image"
                                                          style="border: solid 2px #1abc9c;margin-top: " />
@@ -270,13 +270,13 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a class="dropdown-toggle link" data-toggle="dropdown">
-                                <img ng-src="{{session.Image}}" src="../images/Avatar.jpg" class="user-image" alt="User Image" />
+                                <img err-src="../images/Avatar.jpg" ng-src="{{session.Image}}" class="user-image" alt="User Image" />
                                 <span class="hidden-xs" ng-bind="session.FullName"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img ng-src="{{session.Image}}" src="../images/Avatar.jpg" class="img-circle link"
+                                    <img err-src="../images/Avatar.jpg" ng-src="{{session.Image}}" class="img-circle link"
                                         alt="User Image" />
                                     <p>
                                         <span ng-bind="session.FullName"></span>
@@ -308,7 +308,7 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-right image">
-                        <img ng-src="{{session.Image}}" src="../images/Avatar.jpg" class="img-circle" alt="User Image" />
+                        <img err-src="../images/Avatar.jpg" ng-src="{{session.Image}}" class="img-circle" alt="User Image" />
                     </div>
                     <div class="pull-left info">
                         <p ng-bind="session.FullName"></p>
@@ -631,6 +631,9 @@
                         <a class="link">
                             <i class="fa fa-book"></i>
                             <span>کتابخانه</span>
+                            <small ng-show="Library != 0" class="label bg-green">
+                                <span ng-bind="Library | pNumber"></span>
+                            </small>
                             <i class="fa fa-angle-right pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
@@ -644,6 +647,9 @@
                                 <a ui-sref="manage_library">
                                     <i class="fa fa-circle-o"></i>
                                     مدیریت فایل ها
+                                    <small ng-show="Library != 0" class="label pull-left bg-orange">
+                                        <span ng-bind="Library | pNumber"></span>
+                                    </small>
                                 </a>
                             </li>
                         </ul>

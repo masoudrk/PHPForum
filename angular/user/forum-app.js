@@ -1,4 +1,4 @@
-﻿var appName = 'forumApp';
+var appName = 'forumApp';
 var serviceBaseURL = '../api/user/';
 var uploadURL = '../api/upload/';
 var debugMode = false;

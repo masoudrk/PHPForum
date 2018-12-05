@@ -1,4 +1,4 @@
-﻿app.controller('authCtrl', function ($scope, $rootScope,$state, $routeParams, $uibModalInstance, $location, $http, Extention) {
+app.controller('authCtrl', function ($scope, $rootScope,$state, $routeParams, $uibModalInstance, $location, $http, Extention) {
     //initially set those objects to null to avoid undefined error
 
     $scope.login = {};
@@ -65,10 +65,7 @@
     };
 
     $scope.checkEmail = function (value) {
-        if ($scope.EMAIL_REGEXP.test(value))
-            return true;
-        else
-            return false;
+        return $scope.EMAIL_REGEXP.test(value);
     };
 
     $scope.EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
