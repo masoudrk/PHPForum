@@ -580,9 +580,6 @@ $app->post('/getDashboardData', function () use ($app) {
     require_once "../db/forum_subject.php";
     require_once "../db/organ_position.php";
 
-    $r = json_decode($app->request->getBody());
-    $session = $app->session;
-
     $curDate = date('Y-m-d');
     $resCQ = $app->db->makeQuery("select * FROM calendar_day WHERE calendar_day.IntervalDay='$curDate'");
     $cid = $resCQ->fetch_assoc()['ID'];

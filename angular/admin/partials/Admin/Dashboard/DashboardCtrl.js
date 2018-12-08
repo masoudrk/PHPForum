@@ -289,7 +289,6 @@ angular.module(appName).controller('DashboardCtrl', function ($scope, ADMdtpConv
     }
     */
     Extention.post('getDashboardData').then(function (res) {
-        console.log(res);
         res.MainSubjects.splice(0, 0, {ID : -1 , Title : 'همه انجمن ها'});
         res.Organs.splice(0, 0, {ID : -1 , OrganizationName : 'همه ناحیه ها'});
         $scope.dashboardData = res;
