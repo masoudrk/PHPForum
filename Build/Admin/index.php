@@ -159,18 +159,18 @@
                                             ng-hide="notificationsUpdating">
                                             <!-- start
                                     event -->
-                                            <a>
-                                                <div class="pull-right link" ui-sref="question({id:item.QuestionID})">
+                                            <a ng-href="{{(item.HasQuestion == '1')?'../Forum/#/Question/'+item.QuestionID : '../Forum/#/Messages/'}}">
+                                                <div class="pull-right link">
                                                     <img err-src="../images/Avatar.jpg" ng-src="{{item.FullPath}}"
                                                          class="img-circle"
                                                          alt="User Image"
-                                                         style="border: solid 2px #1abc9c;margin-top: " />
+                                                         style="border: solid 2px #1abc9c;margin-top: "/>
                                                     <div class="text-center" style="margin: -12px -15px auto 10px;">
                                                         <i class="fa fa-bell palette-sun-flower" style="font-size: 19px;"></i>
                                                     </div>
                                                 </div>
                                                 <h4>
-                                                    <span class="link" ui-sref="question({id:item.QuestionID})">
+                                                    <span class="link">
                                                         {{item.FullName}}
                                                     </span>
                                                     <small class="persian-rtl" style="margin-top: 2px;margin-left: 20px;">
@@ -184,14 +184,12 @@
                                                     </small>
                                                 </h4>
                                                 <p class="text-right persian-rtl link"
-                                                   ui-sref="question({id:item.QuestionID})"
                                                    style="margin-top: 8px;margin-bottom:5px;">
                                                     <span class="palette-turquoise"
                                                           ng-bind="item.EventTypeFA"></span>
                                                 </p>
                                                 <p class="text-right text-info link"
-                                                   ui-sref="question({id:item.QuestionID})"
-                                                   style="margin-top: 5px;" ng-if="item.HasQuestion">
+                                                   style="margin-top: 5px;" ng-if="item.HasQuestion == '1'">
                                                     <span class="persian-rtl">
                                                         سرتیتر سوال : {{item.Title | subString :100|pNumber}}
                                                     </span>

@@ -1,9 +1,9 @@
 
 angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $stateParams, $uibModal, Extention) {
 
-    $scope.showInbux = true;
+    $scope.showInbux = false;
     $scope.showSendMessage = false;
-    $scope.showReciveMessage= false;
+    $scope.showReciveMessage = true;
 
     $scope.dropDwonTitle = 'نمایش پیام ها';
     $scope.user = {};

@@ -5,44 +5,44 @@ var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
-    'ngFileUpload','anim-in-out','am-charts','ng-fx','ngImgCrop','ADM-dateTimePicker','ngSanitize',
+    'ngFileUpload', 'anim-in-out', 'am-charts', 'ng-fx', 'ngImgCrop', 'ADM-dateTimePicker', 'ngSanitize',
     'textAngular', 'ngCookies']);
 
 app.config([
-    '$provide','$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
-function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
+    '$provide', '$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
+    function ($provide, $stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
 
-    $ocLazyLoadProvider.config({
-        debug: debugMode,
-        events: true
-    });
+        $ocLazyLoadProvider.config({
+            debug: debugMode,
+            events: true
+        });
 
-    $stateProvider
-        .state("dashboard", {
-            url: "/Dashboard",
-            templateUrl: "angular.partial.Dashboard.html",
-            controller: 'DashboardCtrl',
+        $stateProvider
+            .state("dashboard", {
+                url: "/Dashboard",
+                templateUrl: "angular.partial.Dashboard.html",
+                controller: 'DashboardCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'داشبورد';
+                    }
+                }
+            }).state("upload_library", {
+            url: "/UploadLibrary",
+            templateUrl: "angular.partial.UploadLibrary.html",
+            controller: 'UploadLibraryCtrl',
             resolve: {
                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([ ]);
+                    return $ocLazyLoad.load([]);
                 }],
                 $title: function () {
-                    return 'داشبورد';
+                    return 'آپلود فایل';
                 }
             }
-        }).state("upload_library", {
-        url: "/UploadLibrary",
-        templateUrl: "angular.partial.UploadLibrary.html",
-        controller: 'UploadLibraryCtrl',
-        resolve: {
-            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                return $ocLazyLoad.load([]);
-            }],
-            $title: function () {
-                return 'آپلود فایل';
-            }
-        }
-    })
+        })
         // .state("forum_home", {
         //     url: "/Home",
         //     templateUrl: "partials/Forum/_Home/Home.html",
@@ -56,99 +56,99 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
         //         }
         //     }
         // })
-        .state("main_forum", {
-            url: "/MainForum/:id",
-            templateUrl: "angular.partial.MainForum.html",
-            controller: 'MainForumCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'انجمن';
-                }
-            }
-        })
-        .state("forum", {
-            url: "/Forum/:id",
-            templateUrl: "angular.partial.Forum.html",
-            controller: 'ForumCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'انجمن';
-                }
-            }
-        })
-        .state("new_question", {
-            url: "/NewQuestion/:id",
-            templateUrl: "angular.partial.NewQuestion.html",
-            controller: 'NewQuestionCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'سوال جدید';
-                }
-            }
-        })
-        .state("questions", {
-            url: "/MyQuestions",
-            templateUrl: "angular.partial.Questions.html",
-            controller: 'QuestionsCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'سوالات شما';
-                }
-            }
-        })
-        .state("my_answers", {
-            url: "/MyAnswers",
-            templateUrl: "angular.partial.Answers.html",
-            controller: 'AnswersCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'جواب های شما';
-                }
-            }
-        })
-        .state("my_following", {
-            url: "/Follow/:action",
-            templateUrl: "angular.partial.Follow.html",
-            controller: 'FollowCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'دنبال شده ها';
-                }
-            }
-        })
-        .state("question", {
-            url: "/Question/:id",
-            templateUrl: "angular.partial.Question.html",
-            controller: 'QuestionCtrl',
-            resolve: {
-                deps: [
-                    '$ocLazyLoad', function ($ocLazyLoad) {
+            .state("main_forum", {
+                url: "/MainForum/:id",
+                templateUrl: "angular.partial.MainForum.html",
+                controller: 'MainForumCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'انجمن';
                     }
-                ],
-                $title: function () {
-                    return 'سوال';
                 }
-            }
-        }).state("UserProfile", {
+            })
+            .state("forum", {
+                url: "/Forum/:id",
+                templateUrl: "angular.partial.Forum.html",
+                controller: 'ForumCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'انجمن';
+                    }
+                }
+            })
+            .state("new_question", {
+                url: "/NewQuestion/:id",
+                templateUrl: "angular.partial.NewQuestion.html",
+                controller: 'NewQuestionCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'سوال جدید';
+                    }
+                }
+            })
+            .state("questions", {
+                url: "/MyQuestions",
+                templateUrl: "angular.partial.Questions.html",
+                controller: 'QuestionsCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'سوالات شما';
+                    }
+                }
+            })
+            .state("my_answers", {
+                url: "/MyAnswers",
+                templateUrl: "angular.partial.Answers.html",
+                controller: 'AnswersCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'جواب های شما';
+                    }
+                }
+            })
+            .state("my_following", {
+                url: "/Follow/:action",
+                templateUrl: "angular.partial.Follow.html",
+                controller: 'FollowCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'دنبال شده ها';
+                    }
+                }
+            })
+            .state("question", {
+                url: "/Question/:id",
+                templateUrl: "angular.partial.Question.html",
+                controller: 'QuestionCtrl',
+                resolve: {
+                    deps: [
+                        '$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([]);
+                        }
+                    ],
+                    $title: function () {
+                        return 'سوال';
+                    }
+                }
+            }).state("UserProfile", {
             url: "/UserProfile/:id",
             templateUrl: "angular.partial.UserProfile.html",
             controller: 'UserProfileCtrl',
@@ -163,49 +163,49 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
-        .state("messages", {
-            url: "/Messages/:id",
-            templateUrl: "angular.partial.Message.html",
-            controller: 'MessageCtrl',
-            resolve: {
-                deps: [
-                    '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([]);
+            .state("messages", {
+                url: "/Messages/:id",
+                templateUrl: "angular.partial.Message.html",
+                controller: 'MessageCtrl',
+                resolve: {
+                    deps: [
+                        '$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([]);
+                        }
+                    ],
+                    $title: function () {
+                        return 'مدیریت پیام ها';
                     }
-                ],
-                $title: function () {
-                    return 'مدیریت پیام ها';
                 }
-            }
-        })
-        .state("profile", {
-            url: "/Profile/:action",
-            templateUrl: "angular.partial.Profile.html",
-            controller: 'ProfileCtrl',
-            resolve: {
-                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([]);
-                }],
-                $title: function () {
-                    return 'پروفایل من';
-                }
-            }
-        })
-        .state("rating", {
-            url: "/Rating/:id",
-            templateUrl: "angular.partial.Rating.html",
-            controller: 'RatingCtrl',
-            resolve: {
-                deps: [
-                    '$ocLazyLoad', function ($ocLazyLoad) {
+            })
+            .state("profile", {
+                url: "/Profile/:action",
+                templateUrl: "angular.partial.Profile.html",
+                controller: 'ProfileCtrl',
+                resolve: {
+                    deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                         return $ocLazyLoad.load([]);
+                    }],
+                    $title: function () {
+                        return 'پروفایل من';
                     }
-                ],
-                $title: function () {
-                    return 'نظرسنجی';
                 }
-            }
-        }).state("library", {
+            })
+            .state("rating", {
+                url: "/Rating/:id",
+                templateUrl: "angular.partial.Rating.html",
+                controller: 'RatingCtrl',
+                resolve: {
+                    deps: [
+                        '$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([]);
+                        }
+                    ],
+                    $title: function () {
+                        return 'نظرسنجی';
+                    }
+                }
+            }).state("library", {
             url: "/Library",
             templateUrl: "angular.partial.Library.html",
             controller: 'LibraryCtrl',
@@ -220,68 +220,68 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
-        .state("quiz", {
-            url: "/Quiz/:id",
-            templateUrl: "angular.partial.Quiz.html",
-            controller: 'QuizCtrl',
-            resolve: {
-                deps: [
-                    '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([]);
+            .state("quiz", {
+                url: "/Quiz/:id",
+                templateUrl: "angular.partial.Quiz.html",
+                controller: 'QuizCtrl',
+                resolve: {
+                    deps: [
+                        '$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([]);
+                        }
+                    ],
+                    $title: function () {
+                        return 'آزمون';
                     }
-                ],
-                $title: function () {
-                    return 'آزمون';
                 }
-            }
-        })
-        .state("about", {
-            url: "/About",
-            templateUrl: "angular.partial.About.html" ,
-            controller: 'AboutCtrl',
-            resolve: {
-                deps: [
-                    '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([]);
+            })
+            .state("about", {
+                url: "/About",
+                templateUrl: "angular.partial.About.html",
+                controller: 'AboutCtrl',
+                resolve: {
+                    deps: [
+                        '$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([]);
+                        }
+                    ],
+                    $title: function () {
+                        return 'درباره ما';
                     }
-                ],
-                $title: function () {
-                    return 'درباره ما';
                 }
-            }
-        })
-        .state("file", {
-            url: "/File/:id",
-            templateUrl: "angular.partial.File.html" ,
-            controller: 'FileCtrl',
-            resolve: {
-                deps: [
-                    '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load(['../js/angular-clipboard.js']);
+            })
+            .state("file", {
+                url: "/File/:id",
+                templateUrl: "angular.partial.File.html",
+                controller: 'FileCtrl',
+                resolve: {
+                    deps: [
+                        '$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load(['../js/angular-clipboard.js']);
+                        }
+                    ],
+                    $title: function () {
+                        return 'مشخصات فایل';
                     }
-                ],
-                $title: function () {
-                    return 'مشخصات فایل';
                 }
-            }
-        })
-        .state("help", {
-            url: "/Help",
-            templateUrl: "angular.partial.Help.html" ,
-            controller: 'HelpCtrl',
-            resolve: {
-                deps: [
-                    '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([]);
+            })
+            .state("help", {
+                url: "/Help",
+                templateUrl: "angular.partial.Help.html",
+                controller: 'HelpCtrl',
+                resolve: {
+                    deps: [
+                        '$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([]);
+                        }
+                    ],
+                    $title: function () {
+                        return 'راهنمای سایت';
                     }
-                ],
-                $title: function () {
-                    return 'راهنمای سایت';
                 }
-            }
-        }).state("admin_post", {
+            }).state("admin_post", {
             url: "/AdminPost/:id",
-            templateUrl: "angular.partial.AdminPost.html" ,
+            templateUrl: "angular.partial.AdminPost.html",
             controller: 'AdminPostCtrl',
             resolve: {
                 deps: [
@@ -294,47 +294,47 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 }
             }
         })
-        .state("survey", {
-            url: "/Survey/:id",
-            templateUrl: "angular.partial.Survey.html",
-            controller: 'SurveyCtrl',
-            resolve: {
-                deps: [
-                    '$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load([]);
+            .state("survey", {
+                url: "/Survey/:id",
+                templateUrl: "angular.partial.Survey.html",
+                controller: 'SurveyCtrl',
+                resolve: {
+                    deps: [
+                        '$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([]);
+                        }
+                    ],
+                    $title: function () {
+                        return 'نظرسنجی';
                     }
-                ],
-                $title: function () {
-                    return 'نظرسنجی';
                 }
-            }
-        });
+            });
 
         $urlRouterProvider.otherwise(function ($injector, $location) {
             var $state = $injector.get('$state');
-            $state.go('main_forum',{id:'Transition'});
+            $state.go('main_forum', {id: 'Transition'});
         });
 
-        $provide.decorator('taOptions', ['taRegisterTool', '$uibModal' , '$delegate',
-            function(taRegisterTool,$uibModal, taOptions) {
+        $provide.decorator('taOptions', ['taRegisterTool', '$uibModal', '$delegate',
+            function (taRegisterTool, $uibModal, taOptions) {
 
                 taOptions.toolbar = [
                     ['h1', 'h4', 'h6', 'p', 'pre', 'quote'],
-                    ['html', 'customInsertImage','insertLink', 'wordcount', 'charcount'],
+                    ['html', 'customInsertImage', 'insertLink', 'wordcount', 'charcount'],
                     ['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
                     ['justifyLeft', 'justifyCenter', 'justifyRight'],
-                    ['dirLtr','dirRtl']
+                    ['dirLtr', 'dirRtl']
                 ];
 
                 taRegisterTool('dirLtr', {
                     iconclass: "fa fa-indent",
-                    action: function(){
+                    action: function () {
                         return this.$editor().wrapSelection("formatBlock", '<P style="direction:ltr">');
                     }
                 });
                 taRegisterTool('dirRtl', {
                     iconclass: "fa fa-dedent",
-                    action: function(){
+                    action: function () {
                         return this.$editor().wrapSelection("formatBlock", '<P style="direction:rtl">');
                     }
                 });
@@ -342,7 +342,7 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                 // Create our own insertImage button
                 taRegisterTool('customInsertImage', {
                     iconclass: "fa fa-picture-o",
-                    action: function($deferred) {
+                    action: function ($deferred) {
                         var textAngular = this;
                         var savedSelection = rangy.saveSelection();
                         var modalInstance = $uibModal.open({
@@ -350,34 +350,34 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                             templateUrl: '../js/text-angular/CustomSelectImageModal.tmpl.html',
                             size: 'md',
                             controller: ['$uibModalInstance', '$scope', 'Upload', '$state',
-                                function($uibModalInstance, $scope , Upload , state) {
+                                function ($uibModalInstance, $scope, Upload, state) {
                                     $scope.activeTab = 0;
                                     $scope.img = {
                                         url: ''
                                     };
-                                    $scope.submit = function() {
+                                    $scope.submit = function () {
                                         $uibModalInstance.close($scope.img.url);
                                     };
-                                    $scope.cancel = function() {
+                                    $scope.cancel = function () {
                                         $uibModalInstance.close();
                                     };
 
-                                    $scope.getTab= function (tabId) {
+                                    $scope.getTab = function (tabId) {
                                         $scope.activeTab = tabId;
                                     }
 
-                                    $scope.addImageLink= function (link) {
+                                    $scope.addImageLink = function (link) {
                                         $uibModalInstance.close(link);
                                     }
 
                                     $scope.filesChanged = function (files, file) {
                                         var url = uploadURL;
                                         url += 'upload_inline_attachment.php';
-                                        var data = {file : file};
+                                        var data = {file: file};
                                         data.Type = state.current.name;
 
                                         file.uploader = Upload.upload({
-                                            url:  url ,
+                                            url: url,
                                             data: data
                                         });
 
@@ -394,7 +394,7 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                                             //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
                                         });
                                     }
-                                    
+
                                     $scope.stopUploadImage = function (file) {
                                         file.uploader.abort();
                                     }
@@ -402,15 +402,15 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                             ]
                         });
 
-                        modalInstance.result.then(function(imgUrl) {
-                            if(!imgUrl)
+                        modalInstance.result.then(function (imgUrl) {
+                            if (!imgUrl)
                                 return;
 
                             rangy.restoreSelection(savedSelection);
 
-                            var embed = '<a href="'+imgUrl+'" target="_blank">' +
+                            var embed = '<a href="' + imgUrl + '" target="_blank">' +
                                 '<img class="img-responsive link attachment-inline-img" '
-                                + ' src="'+imgUrl+'"  /></a>';
+                                + ' src="' + imgUrl + '"  /></a>';
                             // insert
                             textAngular.$editor().wrapSelection('insertHtml', embed);
 
@@ -419,10 +419,10 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                         });
                         return false;
                     },
-                //     // activeState: function(commonElement) {
-                //     // return angular.element(taSelection.getSelectionElement()).attr('ng-click');
-                // }
-            });
+                    //     // activeState: function(commonElement) {
+                    //     // return angular.element(taSelection.getSelectionElement()).attr('ng-click');
+                    // }
+                });
 
                 // Now add the button to the default toolbar definition
                 // Note: It'll be the last button
@@ -431,26 +431,25 @@ function ($provide,$stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
             }]
         );
 
-}
+    }
 ]);
 
 
-var activeElement = function (parent , name) {
-    if(name){
+var activeElement = function (parent, name) {
+    if (name) {
         var elem = $(name);
         elem.addClass('active').siblings().removeClass('active');
     }
     var elemP = $(parent);
     elemP.addClass('active').siblings().removeClass('active');
-}
-
+};
 
 app.run(function ($rootScope, $templateCache, $state, $location, Extention, OnlineSocket) {
-    
-    $rootScope.breadcrumbs = [];
-    $rootScope.breadcrumbs.push({title : 'خانه' , url : 'home.php'});
 
-    $rootScope.spinner ={};
+    $rootScope.breadcrumbs = [];
+    $rootScope.breadcrumbs.push({title: 'خانه', url: 'home.php'});
+
+    $rootScope.spinner = {};
 
     $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
         Extention.setBusy(false);
@@ -458,20 +457,20 @@ app.run(function ($rootScope, $templateCache, $state, $location, Extention, Onli
     });
 
     $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error){
-        Extention.setBusy(false);
-    });
+        function (event, toState, toParams, fromState, fromParams, error) {
+            Extention.setBusy(false);
+        });
 
     $rootScope.$on('$stateNotFound',
-        function(event, unfoundState, fromState, fromParams){
-        Extention.setBusy(false);
-    });
+        function (event, unfoundState, fromState, fromParams) {
+            Extention.setBusy(false);
+        });
 
     $rootScope.$on("$stateChangeStart", function (event, next, current) {
 
         Extention.setBusy(true);
 
-        if($rootScope.globalSearchActive)
+        if ($rootScope.globalSearchActive)
             $rootScope.globalSearchActive = false;
 
     });
@@ -483,13 +482,13 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         $rootScope.logout = function () {
             obj.post('logout').then(function (res) {
-                if(res&&res.Status=='success'){
+                if (res && res.Status === 'success') {
                     window.location = "../";
-                }else{
+                } else {
                     obj.popError('مشکل ، لطفا دوباره امتحان کنید.');
                 }
             });
-        }
+        };
 
         $rootScope.user = session;
 
@@ -503,20 +502,20 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.noImageClass = 'fa fa-2x fa-user';
 
-        obj.addRoute = function (title , url) {
+        obj.addRoute = function (title, url) {
 
-            $rootScope.breadcrumbs.push({title :title  , url:url});
-            if($rootScope.breadcrumbs.length > 2)
-                $rootScope.breadcrumbs.splice(0,1);
-        }
+            $rootScope.breadcrumbs.push({title: title, url: url});
+            if ($rootScope.breadcrumbs.length > 2)
+                $rootScope.breadcrumbs.splice(0, 1);
+        };
 
         obj.subString = function (text, length) {
             if (text && text.length > length) {
                 return text.substr(0, length) + "...";
             }
             return text;
-        }
-        
+        };
+
         obj.setBusy = function (en) {
             if (en) {
                 if (obj.workers === 0)
@@ -535,35 +534,35 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             if (!delay)
                 delay = 7000;
             toaster.pop(status, "", msg, delay, 'trustedHtml');
-        }
+        };
 
         obj.popError = function (msg, delay) {
             if (!delay)
                 delay = 7000;
             toaster.pop('error', "", msg, delay, 'trustedHtml');
-        }
+        };
         obj.popSuccess = function (msg, delay) {
             if (!delay)
                 delay = 7000;
             toaster.pop('success', "", msg, delay, 'trustedHtml');
-        }
+        };
         obj.popInfo = function (msg, delay) {
             if (!delay)
                 delay = 7000;
             toaster.pop('info', "", msg, delay, 'trustedHtml');
-        }
+        };
         obj.popWarning = function (msg, delay) {
             if (!delay)
                 delay = 7000;
             toaster.pop('warning', "", msg, delay, 'trustedHtml');
-        }
+        };
 
         obj.popModal = function (data) {
             $uibModal.open({
                 animation: true,
                 templateUrl: 'notifyModal.html',
-                controller: function ($scope , $uibModalInstance , data) {
-                    $scope.data =  data;
+                controller: function ($scope, $uibModalInstance, data) {
+                    $scope.data = data;
                 },
                 size: 'md',
                 resolve: {
@@ -572,7 +571,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                     }
                 }
             });
-        }
+        };
 
         obj.get = function (q) {
             obj.setBusy(true);
@@ -600,15 +599,15 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             obj.setBusy(true);
             return $http.post(serviceBase + q, object).then(function (results) {
 
-                if(obj.debugMode ){
+                if (obj.debugMode) {
                     console.log(results.data);
 
-                    if(results.status != 200)
+                    if (results.status != 200)
                         obj.popModal(results);
                 }
                 obj.setBusy(false);
 
-                if(results.data.AuthState && results.data.AuthState == 'UN_AUTH'){
+                if (results.data.AuthState && results.data.AuthState == 'UN_AUTH') {
                     console.log('State : UN_AUTHORIZED_USER');
                     window.location = '../';
                 }
@@ -616,12 +615,12 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 return results.data;
             }, function (err) {
 
-                if(obj.debugMode){
+                if (obj.debugMode) {
                     console.log(err.data);
                     obj.popModal(err.data);
                 }
 
-                if(err.data.AuthState && err.data.AuthState == 'UN_AUTH'){
+                if (err.data.AuthState && err.data.AuthState == 'UN_AUTH') {
                     console.log('State : UN_AUTHORIZED_USER');
                     window.location = '../';
                 }
@@ -634,12 +633,12 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
         obj.postAsync = function (q, object) {
             return $http.post(serviceBase + q, object).then(function (results) {
 
-                if(obj.debugMode && results.status != 200){
+                if (obj.debugMode && results.status != 200) {
                     obj.popModal(results);
                 }
                 return results.data;
             }, function (err) {
-                if(obj.debugMode)
+                if (obj.debugMode)
                     obj.popModal(err.data);
                 return err;
             });
@@ -647,35 +646,36 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         obj.disableLoading = function () {
             $rootScope.spinner.active = false;
-        }
+        };
 
         obj.authUser = function (sess) {
-            if(!sess.Valid){
+            if (!sess.Valid) {
                 obj.unAuthUser();
                 return;
             }
 
             $rootScope.user = sess.Session;
-        }
+        };
 
         obj.unAuthUser = function () {
             $rootScope.user = undefined;
-        }
+        };
 
         obj.isAdmin = function () {
             return $rootScope.isAdmin;
-        }
+        };
 
         obj.getAuth = function () {
-            return { authenticated: $rootScope.authenticated, isAdmin: $rootScope.isAdmin };
-        }
+            return {authenticated: $rootScope.authenticated, isAdmin: $rootScope.isAdmin};
+        };
         obj.scrollTo = function (y) {
 
             var startY = currentYPosition();
             var stopY = y;//elmYPosition(eID);
             var distance = stopY > startY ? stopY - startY : startY - stopY;
             if (distance < 100) {
-                scrollTo(0, stopY); return;
+                scrollTo(0, stopY);
+                return;
             }
             var speed = Math.round(distance / 10);
             if (speed >= 5) speed = 5;
@@ -685,12 +685,17 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             if (stopY > startY) {
                 for (var i = startY; i < stopY; i += step) {
                     setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                    leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-                } return;
+                    leapY += step;
+                    if (leapY > stopY) leapY = stopY;
+                    timer++;
+                }
+                return;
             }
             for (var i = startY; i > stopY; i -= step) {
                 setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
+                leapY -= step;
+                if (leapY < stopY) leapY = stopY;
+                timer++;
             }
 
             function currentYPosition() {
@@ -711,7 +716,8 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             var stopY = elmYPosition(element) + offsetY;
             var distance = stopY > startY ? stopY - startY : startY - stopY;
             if (distance < 100) {
-                scrollTo(0, stopY); return;
+                scrollTo(0, stopY);
+                return;
             }
             var speed = Math.round(distance / 10);
             if (speed >= 5) speed = 5;
@@ -721,12 +727,17 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
             if (stopY > startY) {
                 for (var i = startY; i < stopY; i += step) {
                     setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                    leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-                } return;
+                    leapY += step;
+                    if (leapY > stopY) leapY = stopY;
+                    timer++;
+                }
+                return;
             }
             for (var i = startY; i > stopY; i -= step) {
                 setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
-                leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
+                leapY -= step;
+                if (leapY < stopY) leapY = stopY;
+                timer++;
             }
 
             function currentYPosition() {
@@ -747,7 +758,8 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
                 while (node.offsetParent && node.offsetParent != document.body) {
                     node = node.offsetParent;
                     y += node.offsetTop;
-                } return y;
+                }
+                return y;
             }
 
         };
@@ -756,13 +768,13 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
     }]);
 
 app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
-    function ($http, $timeout,$rootScope, Extention) { // This service connects to our REST API
+    function ($http, $timeout, $rootScope, Extention) { // This service connects to our REST API
 
         var obj = {};
         obj.getData = function () {
             $timeout(function () {
                 obj.fetch();
-            },50000);
+            }, 50000);
         };
 
         obj.fetch = function () {
@@ -773,40 +785,40 @@ app.factory("OnlineSocket", ['$http', '$timeout', '$rootScope', 'Extention',
                 });
                 obj.getData();
             });
-        }
+        };
 
         obj.fetch();
 
         return obj;
     }]);
 
-app.filter('fileSizeFilter', function() {
-    return function(bytes, precision) {
+app.filter('fileSizeFilter', function () {
+    return function (bytes, precision) {
         if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
         if (typeof precision === 'undefined') precision = 1;
         var units = ['بایت', 'کیلوبایت', 'مگابایت', 'گیگابایت', 'ترابایت', 'پتابایت'],
             number = Math.floor(Math.log(bytes) / Math.log(1024));
         return persianJs((bytes / Math.pow(1024, Math.floor(number))).toFixed(precision)).englishNumber().toString() +
-            ' '+units[number] ;
+            ' ' + units[number];
     }
 });
-app.filter('fileSizeFilterEnglish', function() {
-    return function(bytes, precision) {
+app.filter('fileSizeFilterEnglish', function () {
+    return function (bytes, precision) {
         if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
         if (typeof precision === 'undefined') precision = 1;
         var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PT'],
             number = Math.floor(Math.log(bytes) / Math.log(1024));
-        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' '+units[number] ;
+        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' ' + units[number];
     }
 });
-app.filter('propsFilter', function() {
-    return function(items, props) {
+app.filter('propsFilter', function () {
+    return function (items, props) {
         var out = [];
 
         if (angular.isArray(items)) {
             var keys = Object.keys(props);
 
-            items.forEach(function(item) {
+            items.forEach(function (item) {
                 var itemMatches = false;
 
                 for (var i = 0; i < keys.length; i++) {
@@ -841,7 +853,7 @@ app.filter('jalaliDate', function () {
 app.filter('fromNow', function () {
     return function (inputDate) {
         var date = moment(inputDate);
-        return date.fromNow() ;
+        return date.fromNow();
     }
 });
 
@@ -888,17 +900,19 @@ app.filter('split', function () {
     }
 });
 
-app.filter('capitalize', function() {
-    return function(input, all) {
+app.filter('capitalize', function () {
+    return function (input, all) {
         var reg = (all) ? /([^\W_]+[^\s-]*) */g : /([^\W_]+[^\s-]*)/;
-        return (!!input) ? input.replace(reg, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) : '';
+        return (!!input) ? input.replace(reg, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }) : '';
     }
 });
 
-app.directive('errSrc', function() {
+app.directive('errSrc', function () {
     return {
-        link: function(scope, element, attrs) {
-            element.bind('error', function() {
+        link: function (scope, element, attrs) {
+            element.bind('error', function () {
                 if (attrs.src != attrs.errSrc) {
                     attrs.$set('src', attrs.errSrc);
                 }
@@ -980,56 +994,56 @@ app.directive('compile', [
 
 
 angular.module("ui.router.title", ["ui.router"])
-	.run(["$rootScope", "$timeout", "$state", "Extention", function ($rootScope, $timeout, $state, Extention) {
+    .run(["$rootScope", "$timeout", "$state", "Extention", function ($rootScope, $timeout, $state, Extention) {
 
-	    $rootScope.$on("$stateChangeSuccess", function () {
-	        var title = $state.$current.locals.globals.$title;
-	        var isAsync = $state.$current.locals.globals.$isAsyncTitle;
-	        if (isAsync) {
-	            Extention.post(title).then(function (res) {
-	                $timeout(function () {
-	                    $rootScope.$title = res.SiteName;
-	                });
+        $rootScope.$on("$stateChangeSuccess", function () {
+            var title = $state.$current.locals.globals.$title;
+            var isAsync = $state.$current.locals.globals.$isAsyncTitle;
+            if (isAsync) {
+                Extention.post(title).then(function (res) {
+                    $timeout(function () {
+                        $rootScope.$title = res.SiteName;
+                    });
 
-	                $rootScope.$breadcrumbs = [];
-	                var state = $state.$current;
-	                while (state) {
-	                    if (state.resolve && state.resolve.$title) {
-	                        $rootScope.$breadcrumbs.unshift({
-	                            title: getTitleValue(state.locals.globals.$title),
-	                            state: state.self.name,
-	                            stateParams: state.locals.globals.$stateParams
-	                        });
-	                    }
-	                    state = state.parent;
-	                }
-	            });
-	        } else {
-	            var t = getTitleValue(title);
-	            $timeout(function () {
-	                $rootScope.$title = t;
-	            });
+                    $rootScope.$breadcrumbs = [];
+                    var state = $state.$current;
+                    while (state) {
+                        if (state.resolve && state.resolve.$title) {
+                            $rootScope.$breadcrumbs.unshift({
+                                title: getTitleValue(state.locals.globals.$title),
+                                state: state.self.name,
+                                stateParams: state.locals.globals.$stateParams
+                            });
+                        }
+                        state = state.parent;
+                    }
+                });
+            } else {
+                var t = getTitleValue(title);
+                $timeout(function () {
+                    $rootScope.$title = t;
+                });
 
-	            $rootScope.$breadcrumbs = [];
-	            var state = $state.$current;
-	            while (state) {
-	                if (state.resolve && state.resolve.$title) {
-	                    $rootScope.$breadcrumbs.unshift({
-	                        title: getTitleValue(state.locals.globals.$title),
-	                        state: state.self.name,
-	                        stateParams: state.locals.globals.$stateParams
-	                    });
-	                }
-	                state = state.parent;
-	            }
-	        }
-	    });
+                $rootScope.$breadcrumbs = [];
+                var state = $state.$current;
+                while (state) {
+                    if (state.resolve && state.resolve.$title) {
+                        $rootScope.$breadcrumbs.unshift({
+                            title: getTitleValue(state.locals.globals.$title),
+                            state: state.self.name,
+                            stateParams: state.locals.globals.$stateParams
+                        });
+                    }
+                    state = state.parent;
+                }
+            }
+        });
 
-	    function getTitleValue(title) {
-	        return angular.isFunction(title) ? title() : title;
-	    }
+        function getTitleValue(title) {
+            return angular.isFunction(title) ? title() : title;
+        }
 
-	}]);
+    }]);
 
 app.directive('ngEnter', function () {
     return function (scope, element, attrs) {

@@ -145,9 +145,9 @@
                                         class="fx-bounce-normal fx-dur-50 fx-ease-none fx-stagger-150"
                                         ng-hide="notificationsUpdating"><!-- start
                                     event -->
-                                        <a>
-                                            <div class="pull-right link" ui-sref="question({id:item.QuestionID})">
-                                                <img err-src="../images/Avatar.jpg" ng-src="{{ou.FullPath}}"
+                                        <a ng-href="{{(item.HasQuestion == '1')?'#/Question/'+item.QuestionID : '#/Messages/'}}">
+                                            <div class="pull-right link">
+                                                <img err-src="../images/Avatar.jpg" ng-src="{{item.FullPath}}"
                                                      class="img-circle"
                                                      alt="User Image"
                                                      style="border: solid 2px #1abc9c;margin-top: ">
@@ -157,7 +157,7 @@
                                                 </div>
                                             </div>
                                             <h4>
-                                                <span class="link" ui-sref="question({id:item.QuestionID})">
+                                                <span class="link">
                                                 {{item.FullName}}
                                                 </span>
                                                 <small class="persian-rtl" style="margin-top: 2px;margin-left: 20px;">
@@ -171,14 +171,12 @@
                                                 </small>
                                             </h4>
                                             <p class="text-right persian-rtl link"
-                                               ui-sref="question({id:item.QuestionID})"
                                                style="margin-top: 8px;margin-bottom:5px;">
                                                 <span class="palette-turquoise"
                                                       ng-bind="item.EventTypeFA"></span>
                                             </p>
                                             <p class="text-right text-info link"
-                                               ui-sref="question({id:item.QuestionID})"
-                                               style="margin-top: 5px;"  ng-if="item.HasQuestion">
+                                               style="margin-top: 5px;" ng-if="item.HasQuestion == '1'">
                                                 <span class="persian-rtl">
                                                                     سرتیتر سوال : {{item.Title | subString :100|pNumber}}
                                                 </span>

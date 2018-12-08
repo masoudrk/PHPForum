@@ -1,7 +1,7 @@
 var appName = 'adminApp';
 var uploadURL = '../api/upload/';
 var serviceBaseURL = '../api/admin/';
-var debugMode = true;
+var debugMode = false;
 
 var app = angular.module(appName, ['ngRoute', 'treasure-overlay-spinner', 'ui.router', 'angular-confirm',
     'oc.lazyLoad', 'ngAnimate', 'toaster', 'ui.bootstrap', 'ui.router.title', 'ui.select', 'ngPersian',
@@ -428,7 +428,7 @@ app.config([
                             $deferred.resolve();
                         });
                         return false;
-                    },
+                    }
                     //     // activeState: function(commonElement) {
                     //     // return angular.element(taSelection.getSelectionElement()).attr('ng-click');
                     // }
@@ -506,7 +506,7 @@ app.factory("Extention", ['$http', '$timeout', '$rootScope', '$state', '$statePa
 
         $rootScope.logout = function () {
             obj.post('logout').then(function (res) {
-                if (res && res.Status == 'success') {
+                if (res && res.Status === 'success') {
                     window.location = "../";
                 } else {
                     obj.popError('مشکل ، لطفا دوباره امتحان کنید.');

@@ -1,46 +1,44 @@
-
 angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, $routeParams, $state, $location, $timeout, $stateParams, $uibModal, Extention) {
 
-
-    $scope.showInbux = true;
+    $scope.showInbux = false;
     $scope.showSendMessage = false;
-    $scope.showReciveMessage= false;
-    
+    $scope.showReciveMessage = true;
+
     if ($stateParams.id == $rootScope.session.UserID)
-        $scope.pagingParams = { UserID: $stateParams.id, MessageType: null, searchValue: '' };
+        $scope.pagingParams = {UserID: $stateParams.id, MessageType: null, searchValue: ''};
 
     $scope.dropDwonTitle = 'نمایش پیام ها';
     $scope.user = {};
     $scope.pagingController = {};
-    $scope.messagesPagingController ={};
+    $scope.messagesPagingController = {};
     $scope.user.selectedUser = [];
     $scope.users = [];
     $scope.Message = {};
     $scope.Messages = [];
     $scope.all = {};
-    $scope.checkAll = function() {
+    $scope.checkAll = function () {
         if ($scope.all.checked) {
             for (var i = 0; i < $scope.Messages.length; i++) {
                 $scope.Messages[i].checked = true;
             }
         }
-    }
+    };
 
     $scope.clearMiniSpace = function () {
         $scope.Message.MessageIn = $scope.Message.MessageIn.replace(/¬/g, " ").replace(/&#173;/g, " ").replace(/&#8204;/g, " ").replace(/&#34;/g, "\"");
-    }
-    
+    };
+
     $scope.getPersons = function (filter) {
         console.log(filter);
-        Extention.postAsync('getUsersByName', { filter: filter }).then(function (res) {
-            if (res && res.Status == 'success') {
+        Extention.postAsync('getUsersByName', {filter: filter}).then(function (res) {
+            if (res && res.Status === 'success') {
                 $scope.users = res.Data;
-            	}else{
+            } else {
                 console.log(res);
-            		Extention.popError("مشکل در اتصال.");
-            	}
-            });
-    }
+                Extention.popError("مشکل در اتصال.");
+            }
+        });
+    };
     $scope.sentMessage = function (messageType) {
         if ($scope.user.selectedUser.length == 0 || !$scope.Message.MessageIn || !$scope.Message.MessageTitle) return;
         if (messageType == 1) {
@@ -49,22 +47,22 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
             $scope.Message.MessageType = 0;
         }
         $scope.Message.Message = $scope.Message.MessageIn.replace(/\r\n|\r|\n/g, "<br />");
-        Extention.post('sendMessage', { Message: $scope.Message, Users: $scope.user.selectedUser }).then(function (res) {
-            if (res && res.Status == 'success') {
+        Extention.post('sendMessage', {Message: $scope.Message, Users: $scope.user.selectedUser}).then(function (res) {
+            if (res && res.Status === 'success') {
                 $scope.user.selectedUser = [];
                 Extention.popSuccess("پیام های شما ارسال شد");
             } else {
                 console.log(res);
                 Extention.popError("مشکل در اتصال.");
             }
-        }, function(err) {
+        }, function (err) {
             console.log(err);
         });
-    }
+    };
 
     $scope.deleteMessage = function (message) {
-        Extention.post('deleteMessage', { MessageID: message.ID}).then(function (res) {
-            if (res && res.Status == 'success') {
+        Extention.post('deleteMessage', {MessageID: message.ID}).then(function (res) {
+            if (res && res.Status === 'success') {
                 Extention.popSuccess("پیام با موفقیت حذف شد!");
                 $scope.messagesPagingController.update();
             } else {
@@ -72,10 +70,10 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
                 Extention.popError("مشکل در حذف پیام ، لطفا دوباره امتحان کنید.");
             }
         });
-    }
+    };
     $scope.deleteMessages = function () {
         var first = true;
-        var query ='';
+        var query = '';
         for (var i = 0; i < $scope.Messages.length; i++) {
             if (first && $scope.Messages[i].checked) {
                 first = false;
@@ -86,9 +84,9 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
         }
         if (!first)
             query += ')';
-        if (!query)return;
-        Extention.post('deleteMessages', { MessagesID: query }).then(function (res) {
-            if (res && res.Status == 'success') {
+        if (!query) return;
+        Extention.post('deleteMessages', {MessagesID: query}).then(function (res) {
+            if (res && res.Status === 'success') {
                 Extention.popSuccess("پیام با موفقیت حذف شد!");
                 $scope.messagesPagingController.update();
             } else {
@@ -96,8 +94,8 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
                 Extention.popError("مشکل در حذف پیام ، لطفا دوباره امتحان کنید.");
             }
         });
-    }
-    
+    };
+
 
     $scope.changeTypeFilter = function (type) {
         $scope.pagingParams.MessageType = type;
@@ -116,7 +114,7 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
                 break;
         }
         $scope.search();
-    }
+    };
 
 
     $scope.openMessageModal = function (message) {
@@ -132,23 +130,23 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
             },
             size: 'md'
         });
-    }
+    };
     $scope.showMessage = function (message) {
 
-        if(message.MessageViewed==0){
-            Extention.postAsync('markAsReadMessage',{MessageID : message.ID}).then(function (res) {
-                for(var i = 0 ; i < $scope.message.all.length ; i++ ){
-                    if($scope.message.all[i].ID == res.Data){
-                        $scope.message.all[i].MessageViewed = 1;
+        if (message.MessageViewed == 0) {
+            Extention.postAsync('markAsReadMessage', {MessageID: message.ID}).then(function (res) {
+                for (var j = 0; j < $scope.message.all.length; j++) {
+                    if ($scope.message.all[j].ID == res.Data) {
+                        $scope.message.all[j].MessageViewed = 1;
                         break;
                     }
                 }
 
                 var notifyMessages = $scope.$parent.messages.All;
-                for(var i = 0 ; i < notifyMessages.length ; i++ ){
-                    if(notifyMessages[i].ID == res.Data){
-                        notifyMessages.splice(i,1);
-                        var notifyMessages = $scope.$parent.messages.Total -=1;
+                for (var i = 0; i < notifyMessages.length; i++) {
+                    if (notifyMessages[i].ID == res.Data) {
+                        notifyMessages.splice(i, 1);
+                        var notifyMessages = $scope.$parent.messages.Total -= 1;
                         break;
                     }
                 }
@@ -158,14 +156,16 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
         $uibModal.open({
             animation: true,
             templateUrl: 'MessageModal.html',
-            controller: function ($scope , $uibModalInstance , Message) {
-                $scope.message =  Message;
+            controller: function ($scope, $uibModalInstance, Message) {
+                $scope.message = Message;
 
                 $scope.getAdmin = function () {
-                    $state.go('UserProfile',{id : message.SenderUserID});
+                    $state.go('UserProfile', {id: message.SenderUserID});
+                    $uibModalInstance.dismiss('cancel');
+                };
+                $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 }
-                $scope.cancel = function () { $uibModalInstance.dismiss('cancel'); }
             },
             size: 'md',
             resolve: {
@@ -174,9 +174,9 @@ angular.module(appName).controller('MessageCtrl', function ($scope, $rootScope, 
                 }
             }
         });
-    }
+    };
     $scope.search = function () {
         $scope.messagesPagingController.update();
-    }
+    };
     activeElement('#SContact');
 });
